@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8421170d3fcf4ee19af40e46ad78fd45, type: 3}
+  m_Name: "\u661F\u4E91\u5203"
+  m_EditorClassIdentifier: 
+  definition:
+    ItemId: weapon_xingyun_001_item
+    EquipmentId: weapon_xingyun_001
+    EquipmentCategory: 1
+    DisplayName: "\u661F\u4E91\u5203"
+    Description: "\u661F\u9668\u4E4B\u94C1\uFF0C\u4E91\u706B\u953B\u5203"
+    Icon: {fileID: 0}
+    RemoteIconAddress: item/icon/weapon_xingyun_001_item
+    Category: 1
+    Quality: 0
+    QualityColor: {r: 1, g: 0.9398438, b: 0, a: 1}
+    MaxStack: 1
+    IsCurrency: 0
+    WorldPrefab: {fileID: 949667627940910289, guid: 1f4e1cd68b6d2ce43a6063a59f8af985, type: 3}
+    PickupSound: {fileID: 0}

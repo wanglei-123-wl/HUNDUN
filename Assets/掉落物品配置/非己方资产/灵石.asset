@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8421170d3fcf4ee19af40e46ad78fd45, type: 3}
+  m_Name: "\u7075\u77F3"
+  m_EditorClassIdentifier: 
+  definition:
+    ItemId: ling_shi
+    EquipmentId: 
+    EquipmentCategory: 0
+    DisplayName: "\u7075\u77F3"
+    Description: "\u8574\u542B\u6D53\u90C1\u7075\u6C14\u7684\u5947\u77F3\uFF0C\u5999\u7528\u65E0\u7A77\u3002\u7A81\u7834\u7EC3\u6C14\u671F\u540E\u53EF\u70BC\u5316\u7075\u77F3\u83B7\u53D6\u4FEE\u4E3A\uFF0C\u66F4\u662F\u4FEE\u58EB\u4E4B\u95F4\u7684\u91CD\u8981\u4EA4\u6613\u8D27\u5E01\u3002"
+    Icon: {fileID: 0}
+    RemoteIconAddress: item/icon/ling_shi
+    Category: 3
+    LinkedSkillId: 
+    Quality: 0
+    QualityColor: {r: 1, g: 1, b: 1, a: 1}
+    MaxStack: 99
+    IsCurrency: 0
+    DisplayCategory: 5
+    DetailText: "\u7075\u6C14\uFF1A10\u70B9"
+    DetailEntries: []
+    WorldPrefab: {fileID: 949667627940910289, guid: 1f4e1cd68b6d2ce43a6063a59f8af985, type: 3}
+    PickupSound: {fileID: 0}

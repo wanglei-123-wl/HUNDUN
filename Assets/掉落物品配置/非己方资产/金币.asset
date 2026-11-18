@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8421170d3fcf4ee19af40e46ad78fd45, type: 3}
+  m_Name: "\u91D1\u5E01"
+  m_EditorClassIdentifier: 
+  definition:
+    ItemId: gold_coin
+    EquipmentId: 
+    EquipmentCategory: 0
+    DisplayName: "\u94B1\u5305\u8D27\u5E01"
+    Description: "\u76D7\u5893\u8D3C\u7684\u6700\u7231"
+    Icon: {fileID: 0}
+    RemoteIconAddress: item/icon/gold_coin
+    Category: 4
+    Quality: 0
+    QualityColor: {r: 0.990566, g: 0.07943219, b: 0.07943219, a: 0}
+    MaxStack: 99
+    IsCurrency: 1
+    WorldPrefab: {fileID: 949667627940910289, guid: 1f4e1cd68b6d2ce43a6063a59f8af985, type: 3}
+    PickupSound: {fileID: 8300000, guid: 43f2c9d0d35852645b96d9dbe11a8c52, type: 3}
