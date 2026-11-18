@@ -1,0 +1,8 @@
+PASS main 登岭主线: 12 complete standard waypoint legs, 1324.6 m. Direct full-map query returns PathPartial.
+PASS side 东沟回路: complete path, 178.6 m.
+PASS side 西麓观景支路: complete path, 135.4 m.
+PASS 3 routes, 0 bridge crossings, 764 navigation probes.
+PASS boundaries and 3468 blocked-zone/water facets. 12020 NavMesh triangles, 433559.2 m².
+Unity 2022.3.62f1; agent type 0 (Humanoid); radius .36 m, height 1.84 m, climb .35 m, slope 43°, voxel .12 m.
+PASS 1 long route(s) via standard waypoint legs. RouteWaypoints.json stores snapped map-local points.
+PASS prefab data, translation, yaw rotation, disable and re-enable.

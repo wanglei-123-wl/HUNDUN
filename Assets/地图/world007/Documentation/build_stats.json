@@ -1,0 +1,21 @@
+{
+  "id": "world007",
+  "revision": "V04-Boundary01",
+  "dimensions_m": [
+    600,
+    600
+  ],
+  "triangles": 160990,
+  "working_ceiling": null,
+  "mesh_objects": 398,
+  "trees": 0,
+  "plants": 2010,
+  "breakdown": {
+    "Terrain": 18614,
+    "Solid": 32416,
+    "Decor": 21270,
+    "Art": 75758,
+    "Plant": 12932
+  },
+  "boundary_triangles": 16520
+}

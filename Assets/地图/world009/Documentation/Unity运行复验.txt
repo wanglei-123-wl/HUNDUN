@@ -1,0 +1,1 @@
+PASS Play mode URP camera generated east lake planar reflection and updated it after moving. Both textures contained distinct non-empty color samples. Mist renderers restored.

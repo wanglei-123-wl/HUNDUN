@@ -1,0 +1,4786 @@
+{
+  "version": "LOD3",
+  "near": 160990,
+  "mid": 99678,
+  "far": 19052,
+  "lod1": [
+    {
+      "name": "Art_BrokenTombRing",
+      "triangles": 8,
+      "mesh": "LODMesh_0000",
+      "exported": "LODMesh_0000"
+    },
+    {
+      "name": "Art_BrokenTombRing.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0001",
+      "exported": "LODMesh_0001"
+    },
+    {
+      "name": "Art_BrokenTombRing.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0002",
+      "exported": "LODMesh_0002"
+    },
+    {
+      "name": "Art_BrokenTombRing.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0003",
+      "exported": "LODMesh_0003"
+    },
+    {
+      "name": "Art_BrokenTombRing.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0004",
+      "exported": "LODMesh_0004"
+    },
+    {
+      "name": "Art_BrokenTombRing.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0005",
+      "exported": "LODMesh_0005"
+    },
+    {
+      "name": "Art_BrokenTombRing.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0006",
+      "exported": "LODMesh_0006"
+    },
+    {
+      "name": "Art_BrokenTombRing.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0007",
+      "exported": "LODMesh_0007"
+    },
+    {
+      "name": "Art_BrokenTombRing.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0008",
+      "exported": "LODMesh_0008"
+    },
+    {
+      "name": "Art_BrokenTombRing.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0009",
+      "exported": "LODMesh_0009"
+    },
+    {
+      "name": "Art_BrokenTombRing.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0010",
+      "exported": "LODMesh_0010"
+    },
+    {
+      "name": "Art_BrokenTombRing.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0011",
+      "exported": "LODMesh_0011"
+    },
+    {
+      "name": "Art_BrokenTombRing.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0012",
+      "exported": "LODMesh_0012"
+    },
+    {
+      "name": "Art_BrokenTombRing.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0013",
+      "exported": "LODMesh_0013"
+    },
+    {
+      "name": "Art_BrokenTombRing.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0014",
+      "exported": "LODMesh_0014"
+    },
+    {
+      "name": "Art_BrokenTombRing.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0015",
+      "exported": "LODMesh_0015"
+    },
+    {
+      "name": "Art_CenotaphMasonry",
+      "triangles": 48,
+      "mesh": "LODMesh_0016",
+      "exported": "LODMesh_0016"
+    },
+    {
+      "name": "Art_CenotaphMasonry.001",
+      "triangles": 48,
+      "mesh": "LODMesh_0017",
+      "exported": "LODMesh_0017"
+    },
+    {
+      "name": "Art_CenotaphMasonry.002",
+      "triangles": 48,
+      "mesh": "LODMesh_0018",
+      "exported": "LODMesh_0018"
+    },
+    {
+      "name": "Art_CenotaphMasonry.003",
+      "triangles": 48,
+      "mesh": "LODMesh_0019",
+      "exported": "LODMesh_0019"
+    },
+    {
+      "name": "Art_CenotaphMasonry.004",
+      "triangles": 48,
+      "mesh": "LODMesh_0020",
+      "exported": "LODMesh_0020"
+    },
+    {
+      "name": "Art_CenotaphMasonry.005",
+      "triangles": 48,
+      "mesh": "LODMesh_0021",
+      "exported": "LODMesh_0021"
+    },
+    {
+      "name": "Art_CenotaphMasonry.006",
+      "triangles": 48,
+      "mesh": "LODMesh_0022",
+      "exported": "LODMesh_0022"
+    },
+    {
+      "name": "Art_CenotaphMasonry.007",
+      "triangles": 48,
+      "mesh": "LODMesh_0023",
+      "exported": "LODMesh_0023"
+    },
+    {
+      "name": "Art_CenotaphMasonry.008",
+      "triangles": 48,
+      "mesh": "LODMesh_0024",
+      "exported": "LODMesh_0024"
+    },
+    {
+      "name": "Art_CenotaphMasonry.009",
+      "triangles": 48,
+      "mesh": "LODMesh_0025",
+      "exported": "LODMesh_0025"
+    },
+    {
+      "name": "Art_CenotaphMasonry.010",
+      "triangles": 48,
+      "mesh": "LODMesh_0026",
+      "exported": "LODMesh_0026"
+    },
+    {
+      "name": "Art_CenotaphMasonry.011",
+      "triangles": 48,
+      "mesh": "LODMesh_0027",
+      "exported": "LODMesh_0027"
+    },
+    {
+      "name": "Art_CenotaphMasonry.012",
+      "triangles": 48,
+      "mesh": "LODMesh_0028",
+      "exported": "LODMesh_0028"
+    },
+    {
+      "name": "Art_CenotaphMasonry.013",
+      "triangles": 48,
+      "mesh": "LODMesh_0029",
+      "exported": "LODMesh_0029"
+    },
+    {
+      "name": "Art_CenotaphMasonry.014",
+      "triangles": 48,
+      "mesh": "LODMesh_0030",
+      "exported": "LODMesh_0030"
+    },
+    {
+      "name": "Art_CenotaphMasonry.015",
+      "triangles": 48,
+      "mesh": "LODMesh_0031",
+      "exported": "LODMesh_0031"
+    },
+    {
+      "name": "Art_CenotaphMasonry.016",
+      "triangles": 48,
+      "mesh": "LODMesh_0032",
+      "exported": "LODMesh_0032"
+    },
+    {
+      "name": "Art_CenotaphMasonry.017",
+      "triangles": 48,
+      "mesh": "LODMesh_0033",
+      "exported": "LODMesh_0033"
+    },
+    {
+      "name": "Art_CenotaphMasonry.018",
+      "triangles": 48,
+      "mesh": "LODMesh_0034",
+      "exported": "LODMesh_0034"
+    },
+    {
+      "name": "Art_CenotaphMasonry.019",
+      "triangles": 48,
+      "mesh": "LODMesh_0035",
+      "exported": "LODMesh_0035"
+    },
+    {
+      "name": "Art_CenotaphMasonry.020",
+      "triangles": 48,
+      "mesh": "LODMesh_0036",
+      "exported": "LODMesh_0036"
+    },
+    {
+      "name": "Art_CenotaphMasonry.021",
+      "triangles": 48,
+      "mesh": "LODMesh_0037",
+      "exported": "LODMesh_0037"
+    },
+    {
+      "name": "Art_CenotaphMasonry.022",
+      "triangles": 48,
+      "mesh": "LODMesh_0038",
+      "exported": "LODMesh_0038"
+    },
+    {
+      "name": "Art_CenotaphMasonry.023",
+      "triangles": 48,
+      "mesh": "LODMesh_0039",
+      "exported": "LODMesh_0039"
+    },
+    {
+      "name": "Art_CenotaphMasonry.024",
+      "triangles": 48,
+      "mesh": "LODMesh_0040",
+      "exported": "LODMesh_0040"
+    },
+    {
+      "name": "Art_CenotaphMasonry.025",
+      "triangles": 48,
+      "mesh": "LODMesh_0041",
+      "exported": "LODMesh_0041"
+    },
+    {
+      "name": "Art_CenotaphMasonry.026",
+      "triangles": 48,
+      "mesh": "LODMesh_0042",
+      "exported": "LODMesh_0042"
+    },
+    {
+      "name": "Art_CenotaphMasonry.027",
+      "triangles": 48,
+      "mesh": "LODMesh_0043",
+      "exported": "LODMesh_0043"
+    },
+    {
+      "name": "Art_CenotaphMasonry.028",
+      "triangles": 48,
+      "mesh": "LODMesh_0044",
+      "exported": "LODMesh_0044"
+    },
+    {
+      "name": "Art_CenotaphMasonry.029",
+      "triangles": 48,
+      "mesh": "LODMesh_0045",
+      "exported": "LODMesh_0045"
+    },
+    {
+      "name": "Art_CenotaphMasonry.030",
+      "triangles": 48,
+      "mesh": "LODMesh_0046",
+      "exported": "LODMesh_0046"
+    },
+    {
+      "name": "Art_CenotaphMasonry.031",
+      "triangles": 48,
+      "mesh": "LODMesh_0047",
+      "exported": "LODMesh_0047"
+    },
+    {
+      "name": "Art_CenotaphMasonry.032",
+      "triangles": 48,
+      "mesh": "LODMesh_0048",
+      "exported": "LODMesh_0048"
+    },
+    {
+      "name": "Art_CenotaphMasonry.033",
+      "triangles": 48,
+      "mesh": "LODMesh_0049",
+      "exported": "LODMesh_0049"
+    },
+    {
+      "name": "Art_CenotaphMasonry.034",
+      "triangles": 48,
+      "mesh": "LODMesh_0050",
+      "exported": "LODMesh_0050"
+    },
+    {
+      "name": "Art_CenotaphMasonry.035",
+      "triangles": 48,
+      "mesh": "LODMesh_0051",
+      "exported": "LODMesh_0051"
+    },
+    {
+      "name": "Art_CenotaphMasonry.036",
+      "triangles": 48,
+      "mesh": "LODMesh_0052",
+      "exported": "LODMesh_0052"
+    },
+    {
+      "name": "Art_CenotaphMasonry.037",
+      "triangles": 48,
+      "mesh": "LODMesh_0053",
+      "exported": "LODMesh_0053"
+    },
+    {
+      "name": "Art_CenotaphMasonry.038",
+      "triangles": 48,
+      "mesh": "LODMesh_0054",
+      "exported": "LODMesh_0054"
+    },
+    {
+      "name": "Art_CenotaphMasonry.039",
+      "triangles": 48,
+      "mesh": "LODMesh_0055",
+      "exported": "LODMesh_0055"
+    },
+    {
+      "name": "Art_CenotaphMasonry.040",
+      "triangles": 48,
+      "mesh": "LODMesh_0056",
+      "exported": "LODMesh_0056"
+    },
+    {
+      "name": "Art_CenotaphMasonry.041",
+      "triangles": 48,
+      "mesh": "LODMesh_0057",
+      "exported": "LODMesh_0057"
+    },
+    {
+      "name": "Art_CenotaphMasonry.042",
+      "triangles": 48,
+      "mesh": "LODMesh_0058",
+      "exported": "LODMesh_0058"
+    },
+    {
+      "name": "Art_CenotaphMasonry.043",
+      "triangles": 48,
+      "mesh": "LODMesh_0059",
+      "exported": "LODMesh_0059"
+    },
+    {
+      "name": "Art_DistantMesa",
+      "triangles": 172,
+      "mesh": "LODMesh_0060",
+      "exported": "LODMesh_0060"
+    },
+    {
+      "name": "Art_DistantMesa.001",
+      "triangles": 270,
+      "mesh": "LODMesh_0061",
+      "exported": "LODMesh_0061"
+    },
+    {
+      "name": "Art_DistantMesa.002",
+      "triangles": 302,
+      "mesh": "LODMesh_0062",
+      "exported": "LODMesh_0062"
+    },
+    {
+      "name": "Art_Jian_BrokenJian",
+      "triangles": 76,
+      "mesh": "LODMesh_0063",
+      "exported": "LODMesh_0063"
+    },
+    {
+      "name": "Art_Jian_BronzeLeaf",
+      "triangles": 318,
+      "mesh": "LODMesh_0064",
+      "exported": "LODMesh_0064"
+    },
+    {
+      "name": "Art_Jian_BronzeLeaf.001",
+      "triangles": 318,
+      "mesh": "LODMesh_0065",
+      "exported": "LODMesh_0065"
+    },
+    {
+      "name": "Art_Jian_JadeJian",
+      "triangles": 318,
+      "mesh": "LODMesh_0066",
+      "exported": "LODMesh_0066"
+    },
+    {
+      "name": "Art_Jian_JadeJian.001",
+      "triangles": 318,
+      "mesh": "LODMesh_0067",
+      "exported": "LODMesh_0067"
+    },
+    {
+      "name": "Art_Jian_LongRidge",
+      "triangles": 318,
+      "mesh": "LODMesh_0068",
+      "exported": "LODMesh_0068"
+    },
+    {
+      "name": "Art_Jian_TempleJian",
+      "triangles": 326,
+      "mesh": "LODMesh_0069",
+      "exported": "LODMesh_0069"
+    },
+    {
+      "name": "Art_Jian_TempleJian.001",
+      "triangles": 326,
+      "mesh": "LODMesh_0070",
+      "exported": "LODMesh_0070"
+    },
+    {
+      "name": "Art_Ledge",
+      "triangles": 56,
+      "mesh": "LODMesh_0071",
+      "exported": "LODMesh_0071"
+    },
+    {
+      "name": "Art_Ledge.001",
+      "triangles": 62,
+      "mesh": "LODMesh_0072",
+      "exported": "LODMesh_0072"
+    },
+    {
+      "name": "Art_Ledge.002",
+      "triangles": 48,
+      "mesh": "LODMesh_0073",
+      "exported": "LODMesh_0073"
+    },
+    {
+      "name": "Art_Ledge.003",
+      "triangles": 56,
+      "mesh": "LODMesh_0074",
+      "exported": "LODMesh_0074"
+    },
+    {
+      "name": "Art_Ledge.004",
+      "triangles": 56,
+      "mesh": "LODMesh_0075",
+      "exported": "LODMesh_0075"
+    },
+    {
+      "name": "Art_Ledge.005",
+      "triangles": 48,
+      "mesh": "LODMesh_0076",
+      "exported": "LODMesh_0076"
+    },
+    {
+      "name": "Art_Ledge.006",
+      "triangles": 56,
+      "mesh": "LODMesh_0077",
+      "exported": "LODMesh_0077"
+    },
+    {
+      "name": "Art_Ledge.007",
+      "triangles": 56,
+      "mesh": "LODMesh_0078",
+      "exported": "LODMesh_0078"
+    },
+    {
+      "name": "Art_Ledge.008",
+      "triangles": 56,
+      "mesh": "LODMesh_0079",
+      "exported": "LODMesh_0079"
+    },
+    {
+      "name": "Art_Ledge.009",
+      "triangles": 56,
+      "mesh": "LODMesh_0080",
+      "exported": "LODMesh_0080"
+    },
+    {
+      "name": "Art_Ledge.010",
+      "triangles": 62,
+      "mesh": "LODMesh_0081",
+      "exported": "LODMesh_0081"
+    },
+    {
+      "name": "Art_Ledge.011",
+      "triangles": 62,
+      "mesh": "LODMesh_0082",
+      "exported": "LODMesh_0082"
+    },
+    {
+      "name": "Art_Ledge.012",
+      "triangles": 56,
+      "mesh": "LODMesh_0083",
+      "exported": "LODMesh_0083"
+    },
+    {
+      "name": "Art_Ledge.013",
+      "triangles": 56,
+      "mesh": "LODMesh_0084",
+      "exported": "LODMesh_0084"
+    },
+    {
+      "name": "Art_Ledge.014",
+      "triangles": 56,
+      "mesh": "LODMesh_0085",
+      "exported": "LODMesh_0085"
+    },
+    {
+      "name": "Art_Ledge.015",
+      "triangles": 56,
+      "mesh": "LODMesh_0086",
+      "exported": "LODMesh_0086"
+    },
+    {
+      "name": "Art_Ledge.016",
+      "triangles": 56,
+      "mesh": "LODMesh_0087",
+      "exported": "LODMesh_0087"
+    },
+    {
+      "name": "Art_Ledge.017",
+      "triangles": 56,
+      "mesh": "LODMesh_0088",
+      "exported": "LODMesh_0088"
+    },
+    {
+      "name": "Art_Ledge.018",
+      "triangles": 56,
+      "mesh": "LODMesh_0089",
+      "exported": "LODMesh_0089"
+    },
+    {
+      "name": "Art_Ledge.019",
+      "triangles": 56,
+      "mesh": "LODMesh_0090",
+      "exported": "LODMesh_0090"
+    },
+    {
+      "name": "Art_Ledge.020",
+      "triangles": 56,
+      "mesh": "LODMesh_0091",
+      "exported": "LODMesh_0091"
+    },
+    {
+      "name": "Art_Ledge.021",
+      "triangles": 56,
+      "mesh": "LODMesh_0092",
+      "exported": "LODMesh_0092"
+    },
+    {
+      "name": "Art_NativeGrass_1",
+      "triangles": 544,
+      "mesh": "LODMesh_0093",
+      "exported": "LODMesh_0093"
+    },
+    {
+      "name": "Art_NativeGrass_3",
+      "triangles": 1008,
+      "mesh": "LODMesh_0094",
+      "exported": "LODMesh_0094"
+    },
+    {
+      "name": "Art_NativeGrass_4",
+      "triangles": 144,
+      "mesh": "LODMesh_0095",
+      "exported": "LODMesh_0095"
+    },
+    {
+      "name": "Art_NativeGrass_5",
+      "triangles": 1616,
+      "mesh": "LODMesh_0096",
+      "exported": "LODMesh_0096"
+    },
+    {
+      "name": "Art_NativeGrass_6",
+      "triangles": 1360,
+      "mesh": "LODMesh_0097",
+      "exported": "LODMesh_0097"
+    },
+    {
+      "name": "Art_NativeGrass_7",
+      "triangles": 240,
+      "mesh": "LODMesh_0098",
+      "exported": "LODMesh_0098"
+    },
+    {
+      "name": "Art_NativeGrass_8",
+      "triangles": 1552,
+      "mesh": "LODMesh_0099",
+      "exported": "LODMesh_0099"
+    },
+    {
+      "name": "Art_RingFoundation",
+      "triangles": 62,
+      "mesh": "LODMesh_0100",
+      "exported": "LODMesh_0100"
+    },
+    {
+      "name": "Art_RingFoundation.001",
+      "triangles": 62,
+      "mesh": "LODMesh_0101",
+      "exported": "LODMesh_0101"
+    },
+    {
+      "name": "Art_RingFoundation.002",
+      "triangles": 56,
+      "mesh": "LODMesh_0102",
+      "exported": "LODMesh_0102"
+    },
+    {
+      "name": "Art_RingFoundation.003",
+      "triangles": 62,
+      "mesh": "LODMesh_0103",
+      "exported": "LODMesh_0103"
+    },
+    {
+      "name": "Art_RingFoundation.004",
+      "triangles": 62,
+      "mesh": "LODMesh_0104",
+      "exported": "LODMesh_0104"
+    },
+    {
+      "name": "Art_RingFoundation.005",
+      "triangles": 62,
+      "mesh": "LODMesh_0105",
+      "exported": "LODMesh_0105"
+    },
+    {
+      "name": "Art_RingFoundation.006",
+      "triangles": 56,
+      "mesh": "LODMesh_0106",
+      "exported": "LODMesh_0106"
+    },
+    {
+      "name": "Art_RingFoundation.007",
+      "triangles": 56,
+      "mesh": "LODMesh_0107",
+      "exported": "LODMesh_0107"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_0",
+      "triangles": 1572,
+      "mesh": "LODMesh_0108",
+      "exported": "LODMesh_0108"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_1",
+      "triangles": 1572,
+      "mesh": "LODMesh_0109",
+      "exported": "LODMesh_0109"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_2",
+      "triangles": 1572,
+      "mesh": "LODMesh_0110",
+      "exported": "LODMesh_0110"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_3",
+      "triangles": 1572,
+      "mesh": "LODMesh_0111",
+      "exported": "LODMesh_0111"
+    },
+    {
+      "name": "Art_TombRingBand",
+      "triangles": 8,
+      "mesh": "LODMesh_0112",
+      "exported": "LODMesh_0112"
+    },
+    {
+      "name": "Art_TombRingBand.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0113",
+      "exported": "LODMesh_0113"
+    },
+    {
+      "name": "Art_TombRingBand.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0114",
+      "exported": "LODMesh_0114"
+    },
+    {
+      "name": "Art_TombRingBand.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0115",
+      "exported": "LODMesh_0115"
+    },
+    {
+      "name": "Art_TombRingBand.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0116",
+      "exported": "LODMesh_0116"
+    },
+    {
+      "name": "Art_TombStairRuins_0",
+      "triangles": 6278,
+      "mesh": "LODMesh_0117",
+      "exported": "LODMesh_0117"
+    },
+    {
+      "name": "Art_TombStairRuins_1",
+      "triangles": 11210,
+      "mesh": "LODMesh_0118",
+      "exported": "LODMesh_0118"
+    },
+    {
+      "name": "Art_WeatheredGraveRocks_0",
+      "triangles": 896,
+      "mesh": "LODMesh_0119",
+      "exported": "LODMesh_0119"
+    },
+    {
+      "name": "Art_WeatheredGraveRocks_1",
+      "triangles": 896,
+      "mesh": "LODMesh_0120",
+      "exported": "LODMesh_0120"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian",
+      "triangles": 20,
+      "mesh": "LODMesh_0121",
+      "exported": "LODMesh_0121"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.001",
+      "triangles": 20,
+      "mesh": "LODMesh_0122",
+      "exported": "LODMesh_0122"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.002",
+      "triangles": 20,
+      "mesh": "LODMesh_0123",
+      "exported": "LODMesh_0123"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.003",
+      "triangles": 20,
+      "mesh": "LODMesh_0124",
+      "exported": "LODMesh_0124"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.004",
+      "triangles": 20,
+      "mesh": "LODMesh_0125",
+      "exported": "LODMesh_0125"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.005",
+      "triangles": 20,
+      "mesh": "LODMesh_0126",
+      "exported": "LODMesh_0126"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.006",
+      "triangles": 20,
+      "mesh": "LODMesh_0127",
+      "exported": "LODMesh_0127"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.007",
+      "triangles": 20,
+      "mesh": "LODMesh_0128",
+      "exported": "LODMesh_0128"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.008",
+      "triangles": 20,
+      "mesh": "LODMesh_0129",
+      "exported": "LODMesh_0129"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.009",
+      "triangles": 20,
+      "mesh": "LODMesh_0130",
+      "exported": "LODMesh_0130"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.010",
+      "triangles": 20,
+      "mesh": "LODMesh_0131",
+      "exported": "LODMesh_0131"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.011",
+      "triangles": 20,
+      "mesh": "LODMesh_0132",
+      "exported": "LODMesh_0132"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.012",
+      "triangles": 20,
+      "mesh": "LODMesh_0133",
+      "exported": "LODMesh_0133"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.013",
+      "triangles": 20,
+      "mesh": "LODMesh_0134",
+      "exported": "LODMesh_0134"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.014",
+      "triangles": 20,
+      "mesh": "LODMesh_0135",
+      "exported": "LODMesh_0135"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.015",
+      "triangles": 20,
+      "mesh": "LODMesh_0136",
+      "exported": "LODMesh_0136"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.016",
+      "triangles": 20,
+      "mesh": "LODMesh_0137",
+      "exported": "LODMesh_0137"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.017",
+      "triangles": 20,
+      "mesh": "LODMesh_0138",
+      "exported": "LODMesh_0138"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf",
+      "triangles": 98,
+      "mesh": "LODMesh_0139",
+      "exported": "LODMesh_0139"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.001",
+      "triangles": 98,
+      "mesh": "LODMesh_0140",
+      "exported": "LODMesh_0140"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.002",
+      "triangles": 98,
+      "mesh": "LODMesh_0141",
+      "exported": "LODMesh_0141"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.003",
+      "triangles": 98,
+      "mesh": "LODMesh_0142",
+      "exported": "LODMesh_0142"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.004",
+      "triangles": 98,
+      "mesh": "LODMesh_0143",
+      "exported": "LODMesh_0143"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.005",
+      "triangles": 98,
+      "mesh": "LODMesh_0144",
+      "exported": "LODMesh_0144"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.006",
+      "triangles": 98,
+      "mesh": "LODMesh_0145",
+      "exported": "LODMesh_0145"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.007",
+      "triangles": 98,
+      "mesh": "LODMesh_0146",
+      "exported": "LODMesh_0146"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.008",
+      "triangles": 98,
+      "mesh": "LODMesh_0147",
+      "exported": "LODMesh_0147"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.009",
+      "triangles": 98,
+      "mesh": "LODMesh_0148",
+      "exported": "LODMesh_0148"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.010",
+      "triangles": 98,
+      "mesh": "LODMesh_0149",
+      "exported": "LODMesh_0149"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.011",
+      "triangles": 98,
+      "mesh": "LODMesh_0150",
+      "exported": "LODMesh_0150"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.012",
+      "triangles": 98,
+      "mesh": "LODMesh_0151",
+      "exported": "LODMesh_0151"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.013",
+      "triangles": 98,
+      "mesh": "LODMesh_0152",
+      "exported": "LODMesh_0152"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.014",
+      "triangles": 98,
+      "mesh": "LODMesh_0153",
+      "exported": "LODMesh_0153"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.015",
+      "triangles": 98,
+      "mesh": "LODMesh_0154",
+      "exported": "LODMesh_0154"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.016",
+      "triangles": 98,
+      "mesh": "LODMesh_0155",
+      "exported": "LODMesh_0155"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.017",
+      "triangles": 98,
+      "mesh": "LODMesh_0156",
+      "exported": "LODMesh_0156"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.018",
+      "triangles": 98,
+      "mesh": "LODMesh_0157",
+      "exported": "LODMesh_0157"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian",
+      "triangles": 98,
+      "mesh": "LODMesh_0158",
+      "exported": "LODMesh_0158"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.001",
+      "triangles": 98,
+      "mesh": "LODMesh_0159",
+      "exported": "LODMesh_0159"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.002",
+      "triangles": 98,
+      "mesh": "LODMesh_0160",
+      "exported": "LODMesh_0160"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.003",
+      "triangles": 98,
+      "mesh": "LODMesh_0161",
+      "exported": "LODMesh_0161"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.004",
+      "triangles": 98,
+      "mesh": "LODMesh_0162",
+      "exported": "LODMesh_0162"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.005",
+      "triangles": 98,
+      "mesh": "LODMesh_0163",
+      "exported": "LODMesh_0163"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.006",
+      "triangles": 98,
+      "mesh": "LODMesh_0164",
+      "exported": "LODMesh_0164"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.007",
+      "triangles": 98,
+      "mesh": "LODMesh_0165",
+      "exported": "LODMesh_0165"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.008",
+      "triangles": 98,
+      "mesh": "LODMesh_0166",
+      "exported": "LODMesh_0166"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.009",
+      "triangles": 98,
+      "mesh": "LODMesh_0167",
+      "exported": "LODMesh_0167"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.010",
+      "triangles": 98,
+      "mesh": "LODMesh_0168",
+      "exported": "LODMesh_0168"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.011",
+      "triangles": 98,
+      "mesh": "LODMesh_0169",
+      "exported": "LODMesh_0169"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.012",
+      "triangles": 98,
+      "mesh": "LODMesh_0170",
+      "exported": "LODMesh_0170"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.013",
+      "triangles": 98,
+      "mesh": "LODMesh_0171",
+      "exported": "LODMesh_0171"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.014",
+      "triangles": 98,
+      "mesh": "LODMesh_0172",
+      "exported": "LODMesh_0172"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.015",
+      "triangles": 98,
+      "mesh": "LODMesh_0173",
+      "exported": "LODMesh_0173"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.016",
+      "triangles": 98,
+      "mesh": "LODMesh_0174",
+      "exported": "LODMesh_0174"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.017",
+      "triangles": 98,
+      "mesh": "LODMesh_0175",
+      "exported": "LODMesh_0175"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.018",
+      "triangles": 98,
+      "mesh": "LODMesh_0176",
+      "exported": "LODMesh_0176"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge",
+      "triangles": 98,
+      "mesh": "LODMesh_0177",
+      "exported": "LODMesh_0177"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.001",
+      "triangles": 98,
+      "mesh": "LODMesh_0178",
+      "exported": "LODMesh_0178"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.002",
+      "triangles": 98,
+      "mesh": "LODMesh_0179",
+      "exported": "LODMesh_0179"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.003",
+      "triangles": 98,
+      "mesh": "LODMesh_0180",
+      "exported": "LODMesh_0180"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.004",
+      "triangles": 98,
+      "mesh": "LODMesh_0181",
+      "exported": "LODMesh_0181"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.005",
+      "triangles": 98,
+      "mesh": "LODMesh_0182",
+      "exported": "LODMesh_0182"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.006",
+      "triangles": 98,
+      "mesh": "LODMesh_0183",
+      "exported": "LODMesh_0183"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.007",
+      "triangles": 98,
+      "mesh": "LODMesh_0184",
+      "exported": "LODMesh_0184"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.008",
+      "triangles": 98,
+      "mesh": "LODMesh_0185",
+      "exported": "LODMesh_0185"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.009",
+      "triangles": 98,
+      "mesh": "LODMesh_0186",
+      "exported": "LODMesh_0186"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.010",
+      "triangles": 98,
+      "mesh": "LODMesh_0187",
+      "exported": "LODMesh_0187"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.011",
+      "triangles": 98,
+      "mesh": "LODMesh_0188",
+      "exported": "LODMesh_0188"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.012",
+      "triangles": 98,
+      "mesh": "LODMesh_0189",
+      "exported": "LODMesh_0189"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.013",
+      "triangles": 98,
+      "mesh": "LODMesh_0190",
+      "exported": "LODMesh_0190"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.014",
+      "triangles": 98,
+      "mesh": "LODMesh_0191",
+      "exported": "LODMesh_0191"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.015",
+      "triangles": 98,
+      "mesh": "LODMesh_0192",
+      "exported": "LODMesh_0192"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.016",
+      "triangles": 98,
+      "mesh": "LODMesh_0193",
+      "exported": "LODMesh_0193"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.017",
+      "triangles": 98,
+      "mesh": "LODMesh_0194",
+      "exported": "LODMesh_0194"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.018",
+      "triangles": 98,
+      "mesh": "LODMesh_0195",
+      "exported": "LODMesh_0195"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan",
+      "triangles": 98,
+      "mesh": "LODMesh_0196",
+      "exported": "LODMesh_0196"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.001",
+      "triangles": 98,
+      "mesh": "LODMesh_0197",
+      "exported": "LODMesh_0197"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.002",
+      "triangles": 98,
+      "mesh": "LODMesh_0198",
+      "exported": "LODMesh_0198"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.003",
+      "triangles": 98,
+      "mesh": "LODMesh_0199",
+      "exported": "LODMesh_0199"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.004",
+      "triangles": 98,
+      "mesh": "LODMesh_0200",
+      "exported": "LODMesh_0200"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.005",
+      "triangles": 98,
+      "mesh": "LODMesh_0201",
+      "exported": "LODMesh_0201"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.006",
+      "triangles": 98,
+      "mesh": "LODMesh_0202",
+      "exported": "LODMesh_0202"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.007",
+      "triangles": 98,
+      "mesh": "LODMesh_0203",
+      "exported": "LODMesh_0203"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.008",
+      "triangles": 98,
+      "mesh": "LODMesh_0204",
+      "exported": "LODMesh_0204"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.009",
+      "triangles": 98,
+      "mesh": "LODMesh_0205",
+      "exported": "LODMesh_0205"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.010",
+      "triangles": 98,
+      "mesh": "LODMesh_0206",
+      "exported": "LODMesh_0206"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.011",
+      "triangles": 98,
+      "mesh": "LODMesh_0207",
+      "exported": "LODMesh_0207"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.012",
+      "triangles": 98,
+      "mesh": "LODMesh_0208",
+      "exported": "LODMesh_0208"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.013",
+      "triangles": 98,
+      "mesh": "LODMesh_0209",
+      "exported": "LODMesh_0209"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.014",
+      "triangles": 98,
+      "mesh": "LODMesh_0210",
+      "exported": "LODMesh_0210"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.015",
+      "triangles": 98,
+      "mesh": "LODMesh_0211",
+      "exported": "LODMesh_0211"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.016",
+      "triangles": 98,
+      "mesh": "LODMesh_0212",
+      "exported": "LODMesh_0212"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.017",
+      "triangles": 98,
+      "mesh": "LODMesh_0213",
+      "exported": "LODMesh_0213"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian",
+      "triangles": 98,
+      "mesh": "LODMesh_0214",
+      "exported": "LODMesh_0214"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.001",
+      "triangles": 98,
+      "mesh": "LODMesh_0215",
+      "exported": "LODMesh_0215"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.002",
+      "triangles": 98,
+      "mesh": "LODMesh_0216",
+      "exported": "LODMesh_0216"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.003",
+      "triangles": 98,
+      "mesh": "LODMesh_0217",
+      "exported": "LODMesh_0217"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.004",
+      "triangles": 98,
+      "mesh": "LODMesh_0218",
+      "exported": "LODMesh_0218"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.005",
+      "triangles": 98,
+      "mesh": "LODMesh_0219",
+      "exported": "LODMesh_0219"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.006",
+      "triangles": 98,
+      "mesh": "LODMesh_0220",
+      "exported": "LODMesh_0220"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.007",
+      "triangles": 98,
+      "mesh": "LODMesh_0221",
+      "exported": "LODMesh_0221"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.008",
+      "triangles": 98,
+      "mesh": "LODMesh_0222",
+      "exported": "LODMesh_0222"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.009",
+      "triangles": 98,
+      "mesh": "LODMesh_0223",
+      "exported": "LODMesh_0223"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.010",
+      "triangles": 98,
+      "mesh": "LODMesh_0224",
+      "exported": "LODMesh_0224"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.011",
+      "triangles": 98,
+      "mesh": "LODMesh_0225",
+      "exported": "LODMesh_0225"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.012",
+      "triangles": 98,
+      "mesh": "LODMesh_0226",
+      "exported": "LODMesh_0226"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.013",
+      "triangles": 98,
+      "mesh": "LODMesh_0227",
+      "exported": "LODMesh_0227"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.014",
+      "triangles": 98,
+      "mesh": "LODMesh_0228",
+      "exported": "LODMesh_0228"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.015",
+      "triangles": 98,
+      "mesh": "LODMesh_0229",
+      "exported": "LODMesh_0229"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.016",
+      "triangles": 98,
+      "mesh": "LODMesh_0230",
+      "exported": "LODMesh_0230"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.017",
+      "triangles": 98,
+      "mesh": "LODMesh_0231",
+      "exported": "LODMesh_0231"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.018",
+      "triangles": 98,
+      "mesh": "LODMesh_0232",
+      "exported": "LODMesh_0232"
+    },
+    {
+      "name": "Decor_Rubble_0_0",
+      "triangles": 32,
+      "mesh": "LODMesh_0233",
+      "exported": "LODMesh_0233"
+    },
+    {
+      "name": "Decor_Rubble_0_1",
+      "triangles": 100,
+      "mesh": "LODMesh_0234",
+      "exported": "LODMesh_0234"
+    },
+    {
+      "name": "Decor_Rubble_0_2",
+      "triangles": 16,
+      "mesh": "LODMesh_0235",
+      "exported": "LODMesh_0235"
+    },
+    {
+      "name": "Decor_Rubble_0_3",
+      "triangles": 118,
+      "mesh": "LODMesh_0236",
+      "exported": "LODMesh_0236"
+    },
+    {
+      "name": "Decor_Rubble_0_4",
+      "triangles": 136,
+      "mesh": "LODMesh_0237",
+      "exported": "LODMesh_0237"
+    },
+    {
+      "name": "Decor_Rubble_0_5",
+      "triangles": 36,
+      "mesh": "LODMesh_0238",
+      "exported": "LODMesh_0238"
+    },
+    {
+      "name": "Decor_Rubble_1_0",
+      "triangles": 118,
+      "mesh": "LODMesh_0239",
+      "exported": "LODMesh_0239"
+    },
+    {
+      "name": "Decor_Rubble_1_1",
+      "triangles": 118,
+      "mesh": "LODMesh_0240",
+      "exported": "LODMesh_0240"
+    },
+    {
+      "name": "Decor_Rubble_1_2",
+      "triangles": 104,
+      "mesh": "LODMesh_0241",
+      "exported": "LODMesh_0241"
+    },
+    {
+      "name": "Decor_Rubble_1_3",
+      "triangles": 190,
+      "mesh": "LODMesh_0242",
+      "exported": "LODMesh_0242"
+    },
+    {
+      "name": "Decor_Rubble_1_4",
+      "triangles": 64,
+      "mesh": "LODMesh_0243",
+      "exported": "LODMesh_0243"
+    },
+    {
+      "name": "Decor_Rubble_2_1",
+      "triangles": 174,
+      "mesh": "LODMesh_0244",
+      "exported": "LODMesh_0244"
+    },
+    {
+      "name": "Decor_Rubble_2_2",
+      "triangles": 120,
+      "mesh": "LODMesh_0245",
+      "exported": "LODMesh_0245"
+    },
+    {
+      "name": "Decor_Rubble_2_3",
+      "triangles": 100,
+      "mesh": "LODMesh_0246",
+      "exported": "LODMesh_0246"
+    },
+    {
+      "name": "Decor_Rubble_2_4",
+      "triangles": 88,
+      "mesh": "LODMesh_0247",
+      "exported": "LODMesh_0247"
+    },
+    {
+      "name": "Decor_Rubble_2_5",
+      "triangles": 56,
+      "mesh": "LODMesh_0248",
+      "exported": "LODMesh_0248"
+    },
+    {
+      "name": "Decor_Rubble_3_0",
+      "triangles": 16,
+      "mesh": "LODMesh_0249",
+      "exported": "LODMesh_0249"
+    },
+    {
+      "name": "Decor_Rubble_3_1",
+      "triangles": 108,
+      "mesh": "LODMesh_0250",
+      "exported": "LODMesh_0250"
+    },
+    {
+      "name": "Decor_Rubble_3_2",
+      "triangles": 56,
+      "mesh": "LODMesh_0251",
+      "exported": "LODMesh_0251"
+    },
+    {
+      "name": "Decor_Rubble_3_3",
+      "triangles": 108,
+      "mesh": "LODMesh_0252",
+      "exported": "LODMesh_0252"
+    },
+    {
+      "name": "Decor_Rubble_3_4",
+      "triangles": 144,
+      "mesh": "LODMesh_0253",
+      "exported": "LODMesh_0253"
+    },
+    {
+      "name": "Decor_Rubble_3_5",
+      "triangles": 48,
+      "mesh": "LODMesh_0254",
+      "exported": "LODMesh_0254"
+    },
+    {
+      "name": "Decor_Rubble_4_0",
+      "triangles": 84,
+      "mesh": "LODMesh_0255",
+      "exported": "LODMesh_0255"
+    },
+    {
+      "name": "Decor_Rubble_4_1",
+      "triangles": 18,
+      "mesh": "LODMesh_0256",
+      "exported": "LODMesh_0256"
+    },
+    {
+      "name": "Decor_Rubble_4_2",
+      "triangles": 78,
+      "mesh": "LODMesh_0257",
+      "exported": "LODMesh_0257"
+    },
+    {
+      "name": "Decor_Rubble_4_3",
+      "triangles": 108,
+      "mesh": "LODMesh_0258",
+      "exported": "LODMesh_0258"
+    },
+    {
+      "name": "Decor_Rubble_4_4",
+      "triangles": 222,
+      "mesh": "LODMesh_0259",
+      "exported": "LODMesh_0259"
+    },
+    {
+      "name": "Decor_Rubble_4_5",
+      "triangles": 32,
+      "mesh": "LODMesh_0260",
+      "exported": "LODMesh_0260"
+    },
+    {
+      "name": "Decor_Rubble_5_0",
+      "triangles": 32,
+      "mesh": "LODMesh_0261",
+      "exported": "LODMesh_0261"
+    },
+    {
+      "name": "Decor_Rubble_5_1",
+      "triangles": 38,
+      "mesh": "LODMesh_0262",
+      "exported": "LODMesh_0262"
+    },
+    {
+      "name": "Decor_Rubble_5_2",
+      "triangles": 52,
+      "mesh": "LODMesh_0263",
+      "exported": "LODMesh_0263"
+    },
+    {
+      "name": "Decor_Rubble_5_3",
+      "triangles": 64,
+      "mesh": "LODMesh_0264",
+      "exported": "LODMesh_0264"
+    },
+    {
+      "name": "Decor_Rubble_5_4",
+      "triangles": 16,
+      "mesh": "LODMesh_0265",
+      "exported": "LODMesh_0265"
+    },
+    {
+      "name": "Plant_0_0_Plant3",
+      "triangles": 36,
+      "mesh": "LODMesh_0266",
+      "exported": "LODMesh_0266"
+    },
+    {
+      "name": "Plant_0_1_Plant3",
+      "triangles": 62,
+      "mesh": "LODMesh_0267",
+      "exported": "LODMesh_0267"
+    },
+    {
+      "name": "Plant_0_2_Plant3",
+      "triangles": 26,
+      "mesh": "LODMesh_0268",
+      "exported": "LODMesh_0268"
+    },
+    {
+      "name": "Plant_0_3_Plant3",
+      "triangles": 44,
+      "mesh": "LODMesh_0269",
+      "exported": "LODMesh_0269"
+    },
+    {
+      "name": "Plant_0_4_Plant3",
+      "triangles": 58,
+      "mesh": "LODMesh_0270",
+      "exported": "LODMesh_0270"
+    },
+    {
+      "name": "Plant_0_5_Plant3",
+      "triangles": 20,
+      "mesh": "LODMesh_0271",
+      "exported": "LODMesh_0271"
+    },
+    {
+      "name": "Plant_1_0_Plant3",
+      "triangles": 26,
+      "mesh": "LODMesh_0272",
+      "exported": "LODMesh_0272"
+    },
+    {
+      "name": "Plant_1_1_Plant3",
+      "triangles": 242,
+      "mesh": "LODMesh_0273",
+      "exported": "LODMesh_0273"
+    },
+    {
+      "name": "Plant_1_2_Plant3",
+      "triangles": 88,
+      "mesh": "LODMesh_0274",
+      "exported": "LODMesh_0274"
+    },
+    {
+      "name": "Plant_1_3_Plant3",
+      "triangles": 58,
+      "mesh": "LODMesh_0275",
+      "exported": "LODMesh_0275"
+    },
+    {
+      "name": "Plant_1_4_Plant3",
+      "triangles": 40,
+      "mesh": "LODMesh_0276",
+      "exported": "LODMesh_0276"
+    },
+    {
+      "name": "Plant_1_5_Plant3",
+      "triangles": 4,
+      "mesh": "LODMesh_0277",
+      "exported": "LODMesh_0277"
+    },
+    {
+      "name": "Plant_2_0_Plant3",
+      "triangles": 20,
+      "mesh": "LODMesh_0278",
+      "exported": "LODMesh_0278"
+    },
+    {
+      "name": "Plant_2_1_Plant3",
+      "triangles": 82,
+      "mesh": "LODMesh_0279",
+      "exported": "LODMesh_0279"
+    },
+    {
+      "name": "Plant_2_2_Plant3",
+      "triangles": 162,
+      "mesh": "LODMesh_0280",
+      "exported": "LODMesh_0280"
+    },
+    {
+      "name": "Plant_2_3_Plant3",
+      "triangles": 60,
+      "mesh": "LODMesh_0281",
+      "exported": "LODMesh_0281"
+    },
+    {
+      "name": "Plant_2_4_Plant3",
+      "triangles": 52,
+      "mesh": "LODMesh_0282",
+      "exported": "LODMesh_0282"
+    },
+    {
+      "name": "Plant_2_5_Plant3",
+      "triangles": 12,
+      "mesh": "LODMesh_0283",
+      "exported": "LODMesh_0283"
+    },
+    {
+      "name": "Plant_3_0_Plant3",
+      "triangles": 8,
+      "mesh": "LODMesh_0284",
+      "exported": "LODMesh_0284"
+    },
+    {
+      "name": "Plant_3_1_Plant3",
+      "triangles": 14,
+      "mesh": "LODMesh_0285",
+      "exported": "LODMesh_0285"
+    },
+    {
+      "name": "Plant_3_2_Plant3",
+      "triangles": 74,
+      "mesh": "LODMesh_0286",
+      "exported": "LODMesh_0286"
+    },
+    {
+      "name": "Plant_3_3_Plant3",
+      "triangles": 48,
+      "mesh": "LODMesh_0287",
+      "exported": "LODMesh_0287"
+    },
+    {
+      "name": "Plant_3_4_Plant3",
+      "triangles": 66,
+      "mesh": "LODMesh_0288",
+      "exported": "LODMesh_0288"
+    },
+    {
+      "name": "Plant_3_5_Plant3",
+      "triangles": 22,
+      "mesh": "LODMesh_0289",
+      "exported": "LODMesh_0289"
+    },
+    {
+      "name": "Plant_4_0_Plant3",
+      "triangles": 42,
+      "mesh": "LODMesh_0290",
+      "exported": "LODMesh_0290"
+    },
+    {
+      "name": "Plant_4_1_Plant3",
+      "triangles": 16,
+      "mesh": "LODMesh_0291",
+      "exported": "LODMesh_0291"
+    },
+    {
+      "name": "Plant_4_2_Plant3",
+      "triangles": 210,
+      "mesh": "LODMesh_0292",
+      "exported": "LODMesh_0292"
+    },
+    {
+      "name": "Plant_4_3_Plant3",
+      "triangles": 36,
+      "mesh": "LODMesh_0293",
+      "exported": "LODMesh_0293"
+    },
+    {
+      "name": "Plant_4_4_Plant3",
+      "triangles": 84,
+      "mesh": "LODMesh_0294",
+      "exported": "LODMesh_0294"
+    },
+    {
+      "name": "Plant_4_5_Plant3",
+      "triangles": 32,
+      "mesh": "LODMesh_0295",
+      "exported": "LODMesh_0295"
+    },
+    {
+      "name": "Plant_5_0_Plant3",
+      "triangles": 20,
+      "mesh": "LODMesh_0296",
+      "exported": "LODMesh_0296"
+    },
+    {
+      "name": "Plant_5_1_Plant3",
+      "triangles": 16,
+      "mesh": "LODMesh_0297",
+      "exported": "LODMesh_0297"
+    },
+    {
+      "name": "Plant_5_2_Plant3",
+      "triangles": 14,
+      "mesh": "LODMesh_0298",
+      "exported": "LODMesh_0298"
+    },
+    {
+      "name": "Plant_5_3_Plant3",
+      "triangles": 52,
+      "mesh": "LODMesh_0299",
+      "exported": "LODMesh_0299"
+    },
+    {
+      "name": "Plant_5_4_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0300",
+      "exported": "LODMesh_0300"
+    },
+    {
+      "name": "Plant_5_5_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0301",
+      "exported": "LODMesh_0301"
+    },
+    {
+      "name": "Plant_Art_LongDryGrass",
+      "triangles": 82,
+      "mesh": "LODMesh_0302",
+      "exported": "LODMesh_0302"
+    },
+    {
+      "name": "Plant_Art_Swordgrass",
+      "triangles": 436,
+      "mesh": "LODMesh_0303",
+      "exported": "LODMesh_0303"
+    },
+    {
+      "name": "Solid_BoundaryTerrainEast",
+      "triangles": 4130,
+      "mesh": "",
+      "exported": "LODMesh_0304"
+    },
+    {
+      "name": "Solid_BoundaryTerrainNorth",
+      "triangles": 4130,
+      "mesh": "",
+      "exported": "LODMesh_0305"
+    },
+    {
+      "name": "Solid_BoundaryTerrainSouth",
+      "triangles": 4130,
+      "mesh": "",
+      "exported": "LODMesh_0306"
+    },
+    {
+      "name": "Solid_BoundaryTerrainWest",
+      "triangles": 4130,
+      "mesh": "",
+      "exported": "LODMesh_0307"
+    },
+    {
+      "name": "Solid_EngravedSword",
+      "triangles": 412,
+      "mesh": "",
+      "exported": "LODMesh_0308"
+    },
+    {
+      "name": "Solid_MainTombPlinth",
+      "triangles": 62,
+      "mesh": "LODMesh_0309",
+      "exported": "LODMesh_0309"
+    },
+    {
+      "name": "Solid_Rubble_0_0",
+      "triangles": 290,
+      "mesh": "LODMesh_0310",
+      "exported": "LODMesh_0310"
+    },
+    {
+      "name": "Solid_Rubble_0_1",
+      "triangles": 440,
+      "mesh": "LODMesh_0311",
+      "exported": "LODMesh_0311"
+    },
+    {
+      "name": "Solid_Rubble_0_2",
+      "triangles": 210,
+      "mesh": "LODMesh_0312",
+      "exported": "LODMesh_0312"
+    },
+    {
+      "name": "Solid_Rubble_0_3",
+      "triangles": 334,
+      "mesh": "LODMesh_0313",
+      "exported": "LODMesh_0313"
+    },
+    {
+      "name": "Solid_Rubble_0_4",
+      "triangles": 432,
+      "mesh": "LODMesh_0314",
+      "exported": "LODMesh_0314"
+    },
+    {
+      "name": "Solid_Rubble_0_5",
+      "triangles": 154,
+      "mesh": "LODMesh_0315",
+      "exported": "LODMesh_0315"
+    },
+    {
+      "name": "Solid_Rubble_1_0",
+      "triangles": 228,
+      "mesh": "LODMesh_0316",
+      "exported": "LODMesh_0316"
+    },
+    {
+      "name": "Solid_Rubble_1_1",
+      "triangles": 546,
+      "mesh": "LODMesh_0317",
+      "exported": "LODMesh_0317"
+    },
+    {
+      "name": "Solid_Rubble_1_2",
+      "triangles": 576,
+      "mesh": "LODMesh_0318",
+      "exported": "LODMesh_0318"
+    },
+    {
+      "name": "Solid_Rubble_1_3",
+      "triangles": 556,
+      "mesh": "LODMesh_0319",
+      "exported": "LODMesh_0319"
+    },
+    {
+      "name": "Solid_Rubble_1_4",
+      "triangles": 290,
+      "mesh": "LODMesh_0320",
+      "exported": "LODMesh_0320"
+    },
+    {
+      "name": "Solid_Rubble_1_5",
+      "triangles": 122,
+      "mesh": "LODMesh_0321",
+      "exported": "LODMesh_0321"
+    },
+    {
+      "name": "Solid_Rubble_2_0",
+      "triangles": 142,
+      "mesh": "LODMesh_0322",
+      "exported": "LODMesh_0322"
+    },
+    {
+      "name": "Solid_Rubble_2_1",
+      "triangles": 352,
+      "mesh": "LODMesh_0323",
+      "exported": "LODMesh_0323"
+    },
+    {
+      "name": "Solid_Rubble_2_2",
+      "triangles": 290,
+      "mesh": "LODMesh_0324",
+      "exported": "LODMesh_0324"
+    },
+    {
+      "name": "Solid_Rubble_2_3",
+      "triangles": 210,
+      "mesh": "LODMesh_0325",
+      "exported": "LODMesh_0325"
+    },
+    {
+      "name": "Solid_Rubble_2_4",
+      "triangles": 670,
+      "mesh": "LODMesh_0326",
+      "exported": "LODMesh_0326"
+    },
+    {
+      "name": "Solid_Rubble_2_5",
+      "triangles": 136,
+      "mesh": "LODMesh_0327",
+      "exported": "LODMesh_0327"
+    },
+    {
+      "name": "Solid_Rubble_3_0",
+      "triangles": 180,
+      "mesh": "LODMesh_0328",
+      "exported": "LODMesh_0328"
+    },
+    {
+      "name": "Solid_Rubble_3_1",
+      "triangles": 136,
+      "mesh": "LODMesh_0329",
+      "exported": "LODMesh_0329"
+    },
+    {
+      "name": "Solid_Rubble_3_2",
+      "triangles": 706,
+      "mesh": "LODMesh_0330",
+      "exported": "LODMesh_0330"
+    },
+    {
+      "name": "Solid_Rubble_3_3",
+      "triangles": 550,
+      "mesh": "LODMesh_0331",
+      "exported": "LODMesh_0331"
+    },
+    {
+      "name": "Solid_Rubble_3_4",
+      "triangles": 270,
+      "mesh": "LODMesh_0332",
+      "exported": "LODMesh_0332"
+    },
+    {
+      "name": "Solid_Rubble_3_5",
+      "triangles": 210,
+      "mesh": "LODMesh_0333",
+      "exported": "LODMesh_0333"
+    },
+    {
+      "name": "Solid_Rubble_4_0",
+      "triangles": 246,
+      "mesh": "LODMesh_0334",
+      "exported": "LODMesh_0334"
+    },
+    {
+      "name": "Solid_Rubble_4_1",
+      "triangles": 36,
+      "mesh": "LODMesh_0335",
+      "exported": "LODMesh_0335"
+    },
+    {
+      "name": "Solid_Rubble_4_2",
+      "triangles": 426,
+      "mesh": "LODMesh_0336",
+      "exported": "LODMesh_0336"
+    },
+    {
+      "name": "Solid_Rubble_4_3",
+      "triangles": 340,
+      "mesh": "LODMesh_0337",
+      "exported": "LODMesh_0337"
+    },
+    {
+      "name": "Solid_Rubble_4_4",
+      "triangles": 476,
+      "mesh": "LODMesh_0338",
+      "exported": "LODMesh_0338"
+    },
+    {
+      "name": "Solid_Rubble_4_5",
+      "triangles": 296,
+      "mesh": "LODMesh_0339",
+      "exported": "LODMesh_0339"
+    },
+    {
+      "name": "Solid_Rubble_5_0",
+      "triangles": 136,
+      "mesh": "LODMesh_0340",
+      "exported": "LODMesh_0340"
+    },
+    {
+      "name": "Solid_Rubble_5_1",
+      "triangles": 236,
+      "mesh": "LODMesh_0341",
+      "exported": "LODMesh_0341"
+    },
+    {
+      "name": "Solid_Rubble_5_2",
+      "triangles": 160,
+      "mesh": "LODMesh_0342",
+      "exported": "LODMesh_0342"
+    },
+    {
+      "name": "Solid_Rubble_5_3",
+      "triangles": 712,
+      "mesh": "LODMesh_0343",
+      "exported": "LODMesh_0343"
+    },
+    {
+      "name": "Solid_Rubble_5_4",
+      "triangles": 36,
+      "mesh": "LODMesh_0344",
+      "exported": "LODMesh_0344"
+    },
+    {
+      "name": "Solid_StandingMarker_LongRidge",
+      "triangles": 134,
+      "mesh": "LODMesh_0345",
+      "exported": "LODMesh_0345"
+    },
+    {
+      "name": "Solid_StandingMarker_LongRidge.001",
+      "triangles": 134,
+      "mesh": "LODMesh_0346",
+      "exported": "LODMesh_0346"
+    },
+    {
+      "name": "Solid_StandingMarker_LongRidge.002",
+      "triangles": 134,
+      "mesh": "LODMesh_0347",
+      "exported": "LODMesh_0347"
+    },
+    {
+      "name": "Solid_StandingMarker_TempleJian",
+      "triangles": 134,
+      "mesh": "LODMesh_0348",
+      "exported": "LODMesh_0348"
+    },
+    {
+      "name": "Solid_StandingMarker_TempleJian.001",
+      "triangles": 134,
+      "mesh": "LODMesh_0349",
+      "exported": "LODMesh_0349"
+    },
+    {
+      "name": "Solid_StandingMarker_TempleJian.002",
+      "triangles": 134,
+      "mesh": "LODMesh_0350",
+      "exported": "LODMesh_0350"
+    },
+    {
+      "name": "Solid_SwordCenotaph",
+      "triangles": 36,
+      "mesh": "LODMesh_0351",
+      "exported": "LODMesh_0351"
+    },
+    {
+      "name": "Solid_SwordCenotaph.001",
+      "triangles": 30,
+      "mesh": "LODMesh_0352",
+      "exported": "LODMesh_0352"
+    },
+    {
+      "name": "Solid_SwordCenotaph.002",
+      "triangles": 36,
+      "mesh": "LODMesh_0353",
+      "exported": "LODMesh_0353"
+    },
+    {
+      "name": "Solid_SwordCenotaph.003",
+      "triangles": 30,
+      "mesh": "LODMesh_0354",
+      "exported": "LODMesh_0354"
+    },
+    {
+      "name": "Solid_SwordCenotaph.004",
+      "triangles": 42,
+      "mesh": "LODMesh_0355",
+      "exported": "LODMesh_0355"
+    },
+    {
+      "name": "Solid_SwordCenotaph.005",
+      "triangles": 42,
+      "mesh": "LODMesh_0356",
+      "exported": "LODMesh_0356"
+    },
+    {
+      "name": "Solid_SwordCenotaph.006",
+      "triangles": 36,
+      "mesh": "LODMesh_0357",
+      "exported": "LODMesh_0357"
+    },
+    {
+      "name": "Solid_SwordCenotaph.007",
+      "triangles": 42,
+      "mesh": "LODMesh_0358",
+      "exported": "LODMesh_0358"
+    },
+    {
+      "name": "Solid_SwordCenotaph.008",
+      "triangles": 36,
+      "mesh": "LODMesh_0359",
+      "exported": "LODMesh_0359"
+    },
+    {
+      "name": "Solid_SwordCenotaph.009",
+      "triangles": 36,
+      "mesh": "LODMesh_0360",
+      "exported": "LODMesh_0360"
+    },
+    {
+      "name": "Solid_SwordCenotaph.010",
+      "triangles": 30,
+      "mesh": "LODMesh_0361",
+      "exported": "LODMesh_0361"
+    },
+    {
+      "name": "Terrain_0_0",
+      "triangles": 506,
+      "mesh": "LODMesh_0362",
+      "exported": "LODMesh_0362"
+    },
+    {
+      "name": "Terrain_0_1",
+      "triangles": 502,
+      "mesh": "LODMesh_0363",
+      "exported": "LODMesh_0363"
+    },
+    {
+      "name": "Terrain_0_2",
+      "triangles": 507,
+      "mesh": "LODMesh_0364",
+      "exported": "LODMesh_0364"
+    },
+    {
+      "name": "Terrain_0_3",
+      "triangles": 300,
+      "mesh": "LODMesh_0365",
+      "exported": "LODMesh_0365"
+    },
+    {
+      "name": "Terrain_0_4",
+      "triangles": 300,
+      "mesh": "LODMesh_0366",
+      "exported": "LODMesh_0366"
+    },
+    {
+      "name": "Terrain_0_5",
+      "triangles": 300,
+      "mesh": "LODMesh_0367",
+      "exported": "LODMesh_0367"
+    },
+    {
+      "name": "Terrain_1_0",
+      "triangles": 313,
+      "mesh": "LODMesh_0368",
+      "exported": "LODMesh_0368"
+    },
+    {
+      "name": "Terrain_1_1",
+      "triangles": 913,
+      "mesh": "LODMesh_0369",
+      "exported": "LODMesh_0369"
+    },
+    {
+      "name": "Terrain_1_2",
+      "triangles": 320,
+      "mesh": "LODMesh_0370",
+      "exported": "LODMesh_0370"
+    },
+    {
+      "name": "Terrain_1_3",
+      "triangles": 373,
+      "mesh": "LODMesh_0371",
+      "exported": "LODMesh_0371"
+    },
+    {
+      "name": "Terrain_1_4",
+      "triangles": 300,
+      "mesh": "LODMesh_0372",
+      "exported": "LODMesh_0372"
+    },
+    {
+      "name": "Terrain_1_5",
+      "triangles": 300,
+      "mesh": "LODMesh_0373",
+      "exported": "LODMesh_0373"
+    },
+    {
+      "name": "Terrain_2_0",
+      "triangles": 300,
+      "mesh": "LODMesh_0374",
+      "exported": "LODMesh_0374"
+    },
+    {
+      "name": "Terrain_2_1",
+      "triangles": 645,
+      "mesh": "LODMesh_0375",
+      "exported": "LODMesh_0375"
+    },
+    {
+      "name": "Terrain_2_2",
+      "triangles": 823,
+      "mesh": "LODMesh_0376",
+      "exported": "LODMesh_0376"
+    },
+    {
+      "name": "Terrain_2_3",
+      "triangles": 642,
+      "mesh": "LODMesh_0377",
+      "exported": "LODMesh_0377"
+    },
+    {
+      "name": "Terrain_2_4",
+      "triangles": 604,
+      "mesh": "LODMesh_0378",
+      "exported": "LODMesh_0378"
+    },
+    {
+      "name": "Terrain_2_5",
+      "triangles": 300,
+      "mesh": "LODMesh_0379",
+      "exported": "LODMesh_0379"
+    },
+    {
+      "name": "Terrain_3_0",
+      "triangles": 300,
+      "mesh": "LODMesh_0380",
+      "exported": "LODMesh_0380"
+    },
+    {
+      "name": "Terrain_3_1",
+      "triangles": 431,
+      "mesh": "LODMesh_0381",
+      "exported": "LODMesh_0381"
+    },
+    {
+      "name": "Terrain_3_2",
+      "triangles": 597,
+      "mesh": "LODMesh_0382",
+      "exported": "LODMesh_0382"
+    },
+    {
+      "name": "Terrain_3_3",
+      "triangles": 386,
+      "mesh": "LODMesh_0383",
+      "exported": "LODMesh_0383"
+    },
+    {
+      "name": "Terrain_3_4",
+      "triangles": 1043,
+      "mesh": "LODMesh_0384",
+      "exported": "LODMesh_0384"
+    },
+    {
+      "name": "Terrain_3_5",
+      "triangles": 300,
+      "mesh": "LODMesh_0385",
+      "exported": "LODMesh_0385"
+    },
+    {
+      "name": "Terrain_4_0",
+      "triangles": 300,
+      "mesh": "LODMesh_0386",
+      "exported": "LODMesh_0386"
+    },
+    {
+      "name": "Terrain_4_1",
+      "triangles": 300,
+      "mesh": "LODMesh_0387",
+      "exported": "LODMesh_0387"
+    },
+    {
+      "name": "Terrain_4_2",
+      "triangles": 650,
+      "mesh": "LODMesh_0388",
+      "exported": "LODMesh_0388"
+    },
+    {
+      "name": "Terrain_4_3",
+      "triangles": 994,
+      "mesh": "LODMesh_0389",
+      "exported": "LODMesh_0389"
+    },
+    {
+      "name": "Terrain_4_4",
+      "triangles": 485,
+      "mesh": "LODMesh_0390",
+      "exported": "LODMesh_0390"
+    },
+    {
+      "name": "Terrain_4_5",
+      "triangles": 549,
+      "mesh": "LODMesh_0391",
+      "exported": "LODMesh_0391"
+    },
+    {
+      "name": "Terrain_5_0",
+      "triangles": 300,
+      "mesh": "LODMesh_0392",
+      "exported": "LODMesh_0392"
+    },
+    {
+      "name": "Terrain_5_1",
+      "triangles": 300,
+      "mesh": "LODMesh_0393",
+      "exported": "LODMesh_0393"
+    },
+    {
+      "name": "Terrain_5_2",
+      "triangles": 300,
+      "mesh": "LODMesh_0394",
+      "exported": "LODMesh_0394"
+    },
+    {
+      "name": "Terrain_5_3",
+      "triangles": 435,
+      "mesh": "LODMesh_0395",
+      "exported": "LODMesh_0395"
+    },
+    {
+      "name": "Terrain_5_4",
+      "triangles": 307,
+      "mesh": "LODMesh_0396",
+      "exported": "LODMesh_0396"
+    },
+    {
+      "name": "Terrain_5_5",
+      "triangles": 309,
+      "mesh": "LODMesh_0397",
+      "exported": "LODMesh_0397"
+    }
+  ],
+  "lod2": [
+    {
+      "name": "Art_BrokenTombRing",
+      "triangles": 8,
+      "mesh": "LODMesh_0000",
+      "exported": "LODMesh_0000"
+    },
+    {
+      "name": "Art_BrokenTombRing.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0001",
+      "exported": "LODMesh_0001"
+    },
+    {
+      "name": "Art_BrokenTombRing.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0002",
+      "exported": "LODMesh_0002"
+    },
+    {
+      "name": "Art_BrokenTombRing.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0003",
+      "exported": "LODMesh_0003"
+    },
+    {
+      "name": "Art_BrokenTombRing.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0004",
+      "exported": "LODMesh_0004"
+    },
+    {
+      "name": "Art_BrokenTombRing.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0005",
+      "exported": "LODMesh_0005"
+    },
+    {
+      "name": "Art_BrokenTombRing.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0006",
+      "exported": "LODMesh_0006"
+    },
+    {
+      "name": "Art_BrokenTombRing.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0007",
+      "exported": "LODMesh_0007"
+    },
+    {
+      "name": "Art_BrokenTombRing.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0008",
+      "exported": "LODMesh_0008"
+    },
+    {
+      "name": "Art_BrokenTombRing.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0009",
+      "exported": "LODMesh_0009"
+    },
+    {
+      "name": "Art_BrokenTombRing.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0010",
+      "exported": "LODMesh_0010"
+    },
+    {
+      "name": "Art_BrokenTombRing.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0011",
+      "exported": "LODMesh_0011"
+    },
+    {
+      "name": "Art_BrokenTombRing.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0012",
+      "exported": "LODMesh_0012"
+    },
+    {
+      "name": "Art_BrokenTombRing.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0013",
+      "exported": "LODMesh_0013"
+    },
+    {
+      "name": "Art_BrokenTombRing.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0014",
+      "exported": "LODMesh_0014"
+    },
+    {
+      "name": "Art_BrokenTombRing.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0015",
+      "exported": "LODMesh_0015"
+    },
+    {
+      "name": "Art_CenotaphMasonry",
+      "triangles": 10,
+      "mesh": "LODMesh_0016",
+      "exported": "LODMesh_0016"
+    },
+    {
+      "name": "Art_CenotaphMasonry.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0017",
+      "exported": "LODMesh_0017"
+    },
+    {
+      "name": "Art_CenotaphMasonry.002",
+      "triangles": 10,
+      "mesh": "LODMesh_0018",
+      "exported": "LODMesh_0018"
+    },
+    {
+      "name": "Art_CenotaphMasonry.003",
+      "triangles": 10,
+      "mesh": "LODMesh_0019",
+      "exported": "LODMesh_0019"
+    },
+    {
+      "name": "Art_CenotaphMasonry.004",
+      "triangles": 10,
+      "mesh": "LODMesh_0020",
+      "exported": "LODMesh_0020"
+    },
+    {
+      "name": "Art_CenotaphMasonry.005",
+      "triangles": 10,
+      "mesh": "LODMesh_0021",
+      "exported": "LODMesh_0021"
+    },
+    {
+      "name": "Art_CenotaphMasonry.006",
+      "triangles": 10,
+      "mesh": "LODMesh_0022",
+      "exported": "LODMesh_0022"
+    },
+    {
+      "name": "Art_CenotaphMasonry.007",
+      "triangles": 10,
+      "mesh": "LODMesh_0023",
+      "exported": "LODMesh_0023"
+    },
+    {
+      "name": "Art_CenotaphMasonry.008",
+      "triangles": 10,
+      "mesh": "LODMesh_0024",
+      "exported": "LODMesh_0024"
+    },
+    {
+      "name": "Art_CenotaphMasonry.009",
+      "triangles": 10,
+      "mesh": "LODMesh_0025",
+      "exported": "LODMesh_0025"
+    },
+    {
+      "name": "Art_CenotaphMasonry.010",
+      "triangles": 10,
+      "mesh": "LODMesh_0026",
+      "exported": "LODMesh_0026"
+    },
+    {
+      "name": "Art_CenotaphMasonry.011",
+      "triangles": 10,
+      "mesh": "LODMesh_0027",
+      "exported": "LODMesh_0027"
+    },
+    {
+      "name": "Art_CenotaphMasonry.012",
+      "triangles": 10,
+      "mesh": "LODMesh_0028",
+      "exported": "LODMesh_0028"
+    },
+    {
+      "name": "Art_CenotaphMasonry.013",
+      "triangles": 10,
+      "mesh": "LODMesh_0029",
+      "exported": "LODMesh_0029"
+    },
+    {
+      "name": "Art_CenotaphMasonry.014",
+      "triangles": 10,
+      "mesh": "LODMesh_0030",
+      "exported": "LODMesh_0030"
+    },
+    {
+      "name": "Art_CenotaphMasonry.015",
+      "triangles": 10,
+      "mesh": "LODMesh_0031",
+      "exported": "LODMesh_0031"
+    },
+    {
+      "name": "Art_CenotaphMasonry.016",
+      "triangles": 10,
+      "mesh": "LODMesh_0032",
+      "exported": "LODMesh_0032"
+    },
+    {
+      "name": "Art_CenotaphMasonry.017",
+      "triangles": 10,
+      "mesh": "LODMesh_0033",
+      "exported": "LODMesh_0033"
+    },
+    {
+      "name": "Art_CenotaphMasonry.018",
+      "triangles": 10,
+      "mesh": "LODMesh_0034",
+      "exported": "LODMesh_0034"
+    },
+    {
+      "name": "Art_CenotaphMasonry.019",
+      "triangles": 10,
+      "mesh": "LODMesh_0035",
+      "exported": "LODMesh_0035"
+    },
+    {
+      "name": "Art_CenotaphMasonry.020",
+      "triangles": 10,
+      "mesh": "LODMesh_0036",
+      "exported": "LODMesh_0036"
+    },
+    {
+      "name": "Art_CenotaphMasonry.021",
+      "triangles": 10,
+      "mesh": "LODMesh_0037",
+      "exported": "LODMesh_0037"
+    },
+    {
+      "name": "Art_CenotaphMasonry.022",
+      "triangles": 10,
+      "mesh": "LODMesh_0038",
+      "exported": "LODMesh_0038"
+    },
+    {
+      "name": "Art_CenotaphMasonry.023",
+      "triangles": 10,
+      "mesh": "LODMesh_0039",
+      "exported": "LODMesh_0039"
+    },
+    {
+      "name": "Art_CenotaphMasonry.024",
+      "triangles": 10,
+      "mesh": "LODMesh_0040",
+      "exported": "LODMesh_0040"
+    },
+    {
+      "name": "Art_CenotaphMasonry.025",
+      "triangles": 10,
+      "mesh": "LODMesh_0041",
+      "exported": "LODMesh_0041"
+    },
+    {
+      "name": "Art_CenotaphMasonry.026",
+      "triangles": 10,
+      "mesh": "LODMesh_0042",
+      "exported": "LODMesh_0042"
+    },
+    {
+      "name": "Art_CenotaphMasonry.027",
+      "triangles": 10,
+      "mesh": "LODMesh_0043",
+      "exported": "LODMesh_0043"
+    },
+    {
+      "name": "Art_CenotaphMasonry.028",
+      "triangles": 10,
+      "mesh": "LODMesh_0044",
+      "exported": "LODMesh_0044"
+    },
+    {
+      "name": "Art_CenotaphMasonry.029",
+      "triangles": 10,
+      "mesh": "LODMesh_0045",
+      "exported": "LODMesh_0045"
+    },
+    {
+      "name": "Art_CenotaphMasonry.030",
+      "triangles": 10,
+      "mesh": "LODMesh_0046",
+      "exported": "LODMesh_0046"
+    },
+    {
+      "name": "Art_CenotaphMasonry.031",
+      "triangles": 10,
+      "mesh": "LODMesh_0047",
+      "exported": "LODMesh_0047"
+    },
+    {
+      "name": "Art_CenotaphMasonry.032",
+      "triangles": 10,
+      "mesh": "LODMesh_0048",
+      "exported": "LODMesh_0048"
+    },
+    {
+      "name": "Art_CenotaphMasonry.033",
+      "triangles": 10,
+      "mesh": "LODMesh_0049",
+      "exported": "LODMesh_0049"
+    },
+    {
+      "name": "Art_CenotaphMasonry.034",
+      "triangles": 10,
+      "mesh": "LODMesh_0050",
+      "exported": "LODMesh_0050"
+    },
+    {
+      "name": "Art_CenotaphMasonry.035",
+      "triangles": 10,
+      "mesh": "LODMesh_0051",
+      "exported": "LODMesh_0051"
+    },
+    {
+      "name": "Art_CenotaphMasonry.036",
+      "triangles": 10,
+      "mesh": "LODMesh_0052",
+      "exported": "LODMesh_0052"
+    },
+    {
+      "name": "Art_CenotaphMasonry.037",
+      "triangles": 10,
+      "mesh": "LODMesh_0053",
+      "exported": "LODMesh_0053"
+    },
+    {
+      "name": "Art_CenotaphMasonry.038",
+      "triangles": 10,
+      "mesh": "LODMesh_0054",
+      "exported": "LODMesh_0054"
+    },
+    {
+      "name": "Art_CenotaphMasonry.039",
+      "triangles": 10,
+      "mesh": "LODMesh_0055",
+      "exported": "LODMesh_0055"
+    },
+    {
+      "name": "Art_CenotaphMasonry.040",
+      "triangles": 10,
+      "mesh": "LODMesh_0056",
+      "exported": "LODMesh_0056"
+    },
+    {
+      "name": "Art_CenotaphMasonry.041",
+      "triangles": 10,
+      "mesh": "LODMesh_0057",
+      "exported": "LODMesh_0057"
+    },
+    {
+      "name": "Art_CenotaphMasonry.042",
+      "triangles": 10,
+      "mesh": "LODMesh_0058",
+      "exported": "LODMesh_0058"
+    },
+    {
+      "name": "Art_CenotaphMasonry.043",
+      "triangles": 10,
+      "mesh": "LODMesh_0059",
+      "exported": "LODMesh_0059"
+    },
+    {
+      "name": "Art_DistantMesa",
+      "triangles": 38,
+      "mesh": "LODMesh_0060",
+      "exported": "LODMesh_0060"
+    },
+    {
+      "name": "Art_DistantMesa.001",
+      "triangles": 60,
+      "mesh": "LODMesh_0061",
+      "exported": "LODMesh_0061"
+    },
+    {
+      "name": "Art_DistantMesa.002",
+      "triangles": 66,
+      "mesh": "LODMesh_0062",
+      "exported": "LODMesh_0062"
+    },
+    {
+      "name": "Art_Jian_BrokenJian",
+      "triangles": 16,
+      "mesh": "LODMesh_0063",
+      "exported": "LODMesh_0063"
+    },
+    {
+      "name": "Art_Jian_BronzeLeaf",
+      "triangles": 66,
+      "mesh": "LODMesh_0064",
+      "exported": "LODMesh_0064"
+    },
+    {
+      "name": "Art_Jian_BronzeLeaf.001",
+      "triangles": 70,
+      "mesh": "LODMesh_0065",
+      "exported": "LODMesh_0065"
+    },
+    {
+      "name": "Art_Jian_JadeJian",
+      "triangles": 69,
+      "mesh": "LODMesh_0066",
+      "exported": "LODMesh_0066"
+    },
+    {
+      "name": "Art_Jian_JadeJian.001",
+      "triangles": 68,
+      "mesh": "LODMesh_0067",
+      "exported": "LODMesh_0067"
+    },
+    {
+      "name": "Art_Jian_LongRidge",
+      "triangles": 66,
+      "mesh": "LODMesh_0068",
+      "exported": "LODMesh_0068"
+    },
+    {
+      "name": "Art_Jian_TempleJian",
+      "triangles": 66,
+      "mesh": "LODMesh_0069",
+      "exported": "LODMesh_0069"
+    },
+    {
+      "name": "Art_Jian_TempleJian.001",
+      "triangles": 72,
+      "mesh": "LODMesh_0070",
+      "exported": "LODMesh_0070"
+    },
+    {
+      "name": "Art_Ledge",
+      "triangles": 12,
+      "mesh": "LODMesh_0071",
+      "exported": "LODMesh_0071"
+    },
+    {
+      "name": "Art_Ledge.001",
+      "triangles": 12,
+      "mesh": "LODMesh_0072",
+      "exported": "LODMesh_0072"
+    },
+    {
+      "name": "Art_Ledge.002",
+      "triangles": 10,
+      "mesh": "LODMesh_0073",
+      "exported": "LODMesh_0073"
+    },
+    {
+      "name": "Art_Ledge.003",
+      "triangles": 12,
+      "mesh": "LODMesh_0074",
+      "exported": "LODMesh_0074"
+    },
+    {
+      "name": "Art_Ledge.004",
+      "triangles": 12,
+      "mesh": "LODMesh_0075",
+      "exported": "LODMesh_0075"
+    },
+    {
+      "name": "Art_Ledge.005",
+      "triangles": 10,
+      "mesh": "LODMesh_0076",
+      "exported": "LODMesh_0076"
+    },
+    {
+      "name": "Art_Ledge.006",
+      "triangles": 12,
+      "mesh": "LODMesh_0077",
+      "exported": "LODMesh_0077"
+    },
+    {
+      "name": "Art_Ledge.007",
+      "triangles": 12,
+      "mesh": "LODMesh_0078",
+      "exported": "LODMesh_0078"
+    },
+    {
+      "name": "Art_Ledge.008",
+      "triangles": 12,
+      "mesh": "LODMesh_0079",
+      "exported": "LODMesh_0079"
+    },
+    {
+      "name": "Art_Ledge.009",
+      "triangles": 12,
+      "mesh": "LODMesh_0080",
+      "exported": "LODMesh_0080"
+    },
+    {
+      "name": "Art_Ledge.010",
+      "triangles": 12,
+      "mesh": "LODMesh_0081",
+      "exported": "LODMesh_0081"
+    },
+    {
+      "name": "Art_Ledge.011",
+      "triangles": 12,
+      "mesh": "LODMesh_0082",
+      "exported": "LODMesh_0082"
+    },
+    {
+      "name": "Art_Ledge.012",
+      "triangles": 12,
+      "mesh": "LODMesh_0083",
+      "exported": "LODMesh_0083"
+    },
+    {
+      "name": "Art_Ledge.013",
+      "triangles": 12,
+      "mesh": "LODMesh_0084",
+      "exported": "LODMesh_0084"
+    },
+    {
+      "name": "Art_Ledge.014",
+      "triangles": 12,
+      "mesh": "LODMesh_0085",
+      "exported": "LODMesh_0085"
+    },
+    {
+      "name": "Art_Ledge.015",
+      "triangles": 12,
+      "mesh": "LODMesh_0086",
+      "exported": "LODMesh_0086"
+    },
+    {
+      "name": "Art_Ledge.016",
+      "triangles": 12,
+      "mesh": "LODMesh_0087",
+      "exported": "LODMesh_0087"
+    },
+    {
+      "name": "Art_Ledge.017",
+      "triangles": 12,
+      "mesh": "LODMesh_0088",
+      "exported": "LODMesh_0088"
+    },
+    {
+      "name": "Art_Ledge.018",
+      "triangles": 12,
+      "mesh": "LODMesh_0089",
+      "exported": "LODMesh_0089"
+    },
+    {
+      "name": "Art_Ledge.019",
+      "triangles": 12,
+      "mesh": "LODMesh_0090",
+      "exported": "LODMesh_0090"
+    },
+    {
+      "name": "Art_Ledge.020",
+      "triangles": 12,
+      "mesh": "LODMesh_0091",
+      "exported": "LODMesh_0091"
+    },
+    {
+      "name": "Art_Ledge.021",
+      "triangles": 12,
+      "mesh": "LODMesh_0092",
+      "exported": "LODMesh_0092"
+    },
+    {
+      "name": "Art_NativeGrass_1",
+      "triangles": 48,
+      "mesh": "LODMesh_0093",
+      "exported": "LODMesh_0093"
+    },
+    {
+      "name": "Art_NativeGrass_3",
+      "triangles": 96,
+      "mesh": "LODMesh_0094",
+      "exported": "LODMesh_0094"
+    },
+    {
+      "name": "Art_NativeGrass_4",
+      "triangles": 16,
+      "mesh": "LODMesh_0095",
+      "exported": "LODMesh_0095"
+    },
+    {
+      "name": "Art_NativeGrass_5",
+      "triangles": 160,
+      "mesh": "LODMesh_0096",
+      "exported": "LODMesh_0096"
+    },
+    {
+      "name": "Art_NativeGrass_6",
+      "triangles": 128,
+      "mesh": "LODMesh_0097",
+      "exported": "LODMesh_0097"
+    },
+    {
+      "name": "Art_NativeGrass_7",
+      "triangles": 16,
+      "mesh": "LODMesh_0098",
+      "exported": "LODMesh_0098"
+    },
+    {
+      "name": "Art_NativeGrass_8",
+      "triangles": 160,
+      "mesh": "LODMesh_0099",
+      "exported": "LODMesh_0099"
+    },
+    {
+      "name": "Art_RingFoundation",
+      "triangles": 12,
+      "mesh": "LODMesh_0100",
+      "exported": "LODMesh_0100"
+    },
+    {
+      "name": "Art_RingFoundation.001",
+      "triangles": 12,
+      "mesh": "LODMesh_0101",
+      "exported": "LODMesh_0101"
+    },
+    {
+      "name": "Art_RingFoundation.002",
+      "triangles": 12,
+      "mesh": "LODMesh_0102",
+      "exported": "LODMesh_0102"
+    },
+    {
+      "name": "Art_RingFoundation.003",
+      "triangles": 12,
+      "mesh": "LODMesh_0103",
+      "exported": "LODMesh_0103"
+    },
+    {
+      "name": "Art_RingFoundation.004",
+      "triangles": 12,
+      "mesh": "LODMesh_0104",
+      "exported": "LODMesh_0104"
+    },
+    {
+      "name": "Art_RingFoundation.005",
+      "triangles": 12,
+      "mesh": "LODMesh_0105",
+      "exported": "LODMesh_0105"
+    },
+    {
+      "name": "Art_RingFoundation.006",
+      "triangles": 12,
+      "mesh": "LODMesh_0106",
+      "exported": "LODMesh_0106"
+    },
+    {
+      "name": "Art_RingFoundation.007",
+      "triangles": 12,
+      "mesh": "LODMesh_0107",
+      "exported": "LODMesh_0107"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_0",
+      "triangles": 350,
+      "mesh": "LODMesh_0108",
+      "exported": "LODMesh_0108"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_1",
+      "triangles": 350,
+      "mesh": "LODMesh_0109",
+      "exported": "LODMesh_0109"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_2",
+      "triangles": 350,
+      "mesh": "LODMesh_0110",
+      "exported": "LODMesh_0110"
+    },
+    {
+      "name": "Art_SwordHorizonMesa_3",
+      "triangles": 350,
+      "mesh": "LODMesh_0111",
+      "exported": "LODMesh_0111"
+    },
+    {
+      "name": "Art_TombRingBand",
+      "triangles": 8,
+      "mesh": "LODMesh_0112",
+      "exported": "LODMesh_0112"
+    },
+    {
+      "name": "Art_TombRingBand.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0113",
+      "exported": "LODMesh_0113"
+    },
+    {
+      "name": "Art_TombRingBand.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0114",
+      "exported": "LODMesh_0114"
+    },
+    {
+      "name": "Art_TombRingBand.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0115",
+      "exported": "LODMesh_0115"
+    },
+    {
+      "name": "Art_TombRingBand.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0116",
+      "exported": "LODMesh_0116"
+    },
+    {
+      "name": "Art_TombStairRuins_0",
+      "triangles": 1400,
+      "mesh": "LODMesh_0117",
+      "exported": "LODMesh_0117"
+    },
+    {
+      "name": "Art_TombStairRuins_1",
+      "triangles": 2500,
+      "mesh": "LODMesh_0118",
+      "exported": "LODMesh_0118"
+    },
+    {
+      "name": "Art_WeatheredGraveRocks_0",
+      "triangles": 200,
+      "mesh": "LODMesh_0119",
+      "exported": "LODMesh_0119"
+    },
+    {
+      "name": "Art_WeatheredGraveRocks_1",
+      "triangles": 200,
+      "mesh": "LODMesh_0120",
+      "exported": "LODMesh_0120"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian",
+      "triangles": 4,
+      "mesh": "LODMesh_0121",
+      "exported": "LODMesh_0121"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0122",
+      "exported": "LODMesh_0122"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0123",
+      "exported": "LODMesh_0123"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0124",
+      "exported": "LODMesh_0124"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0125",
+      "exported": "LODMesh_0125"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0126",
+      "exported": "LODMesh_0126"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0127",
+      "exported": "LODMesh_0127"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0128",
+      "exported": "LODMesh_0128"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.008",
+      "triangles": 4,
+      "mesh": "LODMesh_0129",
+      "exported": "LODMesh_0129"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.009",
+      "triangles": 4,
+      "mesh": "LODMesh_0130",
+      "exported": "LODMesh_0130"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.010",
+      "triangles": 4,
+      "mesh": "LODMesh_0131",
+      "exported": "LODMesh_0131"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.011",
+      "triangles": 4,
+      "mesh": "LODMesh_0132",
+      "exported": "LODMesh_0132"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.012",
+      "triangles": 4,
+      "mesh": "LODMesh_0133",
+      "exported": "LODMesh_0133"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.013",
+      "triangles": 4,
+      "mesh": "LODMesh_0134",
+      "exported": "LODMesh_0134"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.014",
+      "triangles": 4,
+      "mesh": "LODMesh_0135",
+      "exported": "LODMesh_0135"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.015",
+      "triangles": 4,
+      "mesh": "LODMesh_0136",
+      "exported": "LODMesh_0136"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.016",
+      "triangles": 4,
+      "mesh": "LODMesh_0137",
+      "exported": "LODMesh_0137"
+    },
+    {
+      "name": "Decor_BuriedSword_BrokenJian.017",
+      "triangles": 4,
+      "mesh": "LODMesh_0138",
+      "exported": "LODMesh_0138"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf",
+      "triangles": 9,
+      "mesh": "LODMesh_0139",
+      "exported": "LODMesh_0139"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.001",
+      "triangles": 9,
+      "mesh": "LODMesh_0140",
+      "exported": "LODMesh_0140"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.002",
+      "triangles": 9,
+      "mesh": "LODMesh_0141",
+      "exported": "LODMesh_0141"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.003",
+      "triangles": 9,
+      "mesh": "LODMesh_0142",
+      "exported": "LODMesh_0142"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.004",
+      "triangles": 9,
+      "mesh": "LODMesh_0143",
+      "exported": "LODMesh_0143"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.005",
+      "triangles": 9,
+      "mesh": "LODMesh_0144",
+      "exported": "LODMesh_0144"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.006",
+      "triangles": 9,
+      "mesh": "LODMesh_0145",
+      "exported": "LODMesh_0145"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.007",
+      "triangles": 9,
+      "mesh": "LODMesh_0146",
+      "exported": "LODMesh_0146"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.008",
+      "triangles": 9,
+      "mesh": "LODMesh_0147",
+      "exported": "LODMesh_0147"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.009",
+      "triangles": 9,
+      "mesh": "LODMesh_0148",
+      "exported": "LODMesh_0148"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.010",
+      "triangles": 9,
+      "mesh": "LODMesh_0149",
+      "exported": "LODMesh_0149"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.011",
+      "triangles": 9,
+      "mesh": "LODMesh_0150",
+      "exported": "LODMesh_0150"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.012",
+      "triangles": 9,
+      "mesh": "LODMesh_0151",
+      "exported": "LODMesh_0151"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.013",
+      "triangles": 9,
+      "mesh": "LODMesh_0152",
+      "exported": "LODMesh_0152"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.014",
+      "triangles": 9,
+      "mesh": "LODMesh_0153",
+      "exported": "LODMesh_0153"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.015",
+      "triangles": 9,
+      "mesh": "LODMesh_0154",
+      "exported": "LODMesh_0154"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.016",
+      "triangles": 9,
+      "mesh": "LODMesh_0155",
+      "exported": "LODMesh_0155"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.017",
+      "triangles": 9,
+      "mesh": "LODMesh_0156",
+      "exported": "LODMesh_0156"
+    },
+    {
+      "name": "Decor_BuriedSword_BronzeLeaf.018",
+      "triangles": 9,
+      "mesh": "LODMesh_0157",
+      "exported": "LODMesh_0157"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian",
+      "triangles": 9,
+      "mesh": "LODMesh_0158",
+      "exported": "LODMesh_0158"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.001",
+      "triangles": 9,
+      "mesh": "LODMesh_0159",
+      "exported": "LODMesh_0159"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.002",
+      "triangles": 9,
+      "mesh": "LODMesh_0160",
+      "exported": "LODMesh_0160"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.003",
+      "triangles": 9,
+      "mesh": "LODMesh_0161",
+      "exported": "LODMesh_0161"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.004",
+      "triangles": 9,
+      "mesh": "LODMesh_0162",
+      "exported": "LODMesh_0162"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.005",
+      "triangles": 9,
+      "mesh": "LODMesh_0163",
+      "exported": "LODMesh_0163"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.006",
+      "triangles": 9,
+      "mesh": "LODMesh_0164",
+      "exported": "LODMesh_0164"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.007",
+      "triangles": 9,
+      "mesh": "LODMesh_0165",
+      "exported": "LODMesh_0165"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.008",
+      "triangles": 9,
+      "mesh": "LODMesh_0166",
+      "exported": "LODMesh_0166"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.009",
+      "triangles": 9,
+      "mesh": "LODMesh_0167",
+      "exported": "LODMesh_0167"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.010",
+      "triangles": 9,
+      "mesh": "LODMesh_0168",
+      "exported": "LODMesh_0168"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.011",
+      "triangles": 9,
+      "mesh": "LODMesh_0169",
+      "exported": "LODMesh_0169"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.012",
+      "triangles": 9,
+      "mesh": "LODMesh_0170",
+      "exported": "LODMesh_0170"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.013",
+      "triangles": 9,
+      "mesh": "LODMesh_0171",
+      "exported": "LODMesh_0171"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.014",
+      "triangles": 9,
+      "mesh": "LODMesh_0172",
+      "exported": "LODMesh_0172"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.015",
+      "triangles": 9,
+      "mesh": "LODMesh_0173",
+      "exported": "LODMesh_0173"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.016",
+      "triangles": 9,
+      "mesh": "LODMesh_0174",
+      "exported": "LODMesh_0174"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.017",
+      "triangles": 9,
+      "mesh": "LODMesh_0175",
+      "exported": "LODMesh_0175"
+    },
+    {
+      "name": "Decor_BuriedSword_JadeJian.018",
+      "triangles": 9,
+      "mesh": "LODMesh_0176",
+      "exported": "LODMesh_0176"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge",
+      "triangles": 9,
+      "mesh": "LODMesh_0177",
+      "exported": "LODMesh_0177"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.001",
+      "triangles": 9,
+      "mesh": "LODMesh_0178",
+      "exported": "LODMesh_0178"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.002",
+      "triangles": 9,
+      "mesh": "LODMesh_0179",
+      "exported": "LODMesh_0179"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.003",
+      "triangles": 9,
+      "mesh": "LODMesh_0180",
+      "exported": "LODMesh_0180"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.004",
+      "triangles": 9,
+      "mesh": "LODMesh_0181",
+      "exported": "LODMesh_0181"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.005",
+      "triangles": 9,
+      "mesh": "LODMesh_0182",
+      "exported": "LODMesh_0182"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.006",
+      "triangles": 9,
+      "mesh": "LODMesh_0183",
+      "exported": "LODMesh_0183"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.007",
+      "triangles": 9,
+      "mesh": "LODMesh_0184",
+      "exported": "LODMesh_0184"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.008",
+      "triangles": 9,
+      "mesh": "LODMesh_0185",
+      "exported": "LODMesh_0185"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.009",
+      "triangles": 9,
+      "mesh": "LODMesh_0186",
+      "exported": "LODMesh_0186"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.010",
+      "triangles": 9,
+      "mesh": "LODMesh_0187",
+      "exported": "LODMesh_0187"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.011",
+      "triangles": 9,
+      "mesh": "LODMesh_0188",
+      "exported": "LODMesh_0188"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.012",
+      "triangles": 9,
+      "mesh": "LODMesh_0189",
+      "exported": "LODMesh_0189"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.013",
+      "triangles": 9,
+      "mesh": "LODMesh_0190",
+      "exported": "LODMesh_0190"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.014",
+      "triangles": 9,
+      "mesh": "LODMesh_0191",
+      "exported": "LODMesh_0191"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.015",
+      "triangles": 9,
+      "mesh": "LODMesh_0192",
+      "exported": "LODMesh_0192"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.016",
+      "triangles": 9,
+      "mesh": "LODMesh_0193",
+      "exported": "LODMesh_0193"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.017",
+      "triangles": 9,
+      "mesh": "LODMesh_0194",
+      "exported": "LODMesh_0194"
+    },
+    {
+      "name": "Decor_BuriedSword_LongRidge.018",
+      "triangles": 9,
+      "mesh": "LODMesh_0195",
+      "exported": "LODMesh_0195"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan",
+      "triangles": 9,
+      "mesh": "LODMesh_0196",
+      "exported": "LODMesh_0196"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.001",
+      "triangles": 9,
+      "mesh": "LODMesh_0197",
+      "exported": "LODMesh_0197"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.002",
+      "triangles": 9,
+      "mesh": "LODMesh_0198",
+      "exported": "LODMesh_0198"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.003",
+      "triangles": 9,
+      "mesh": "LODMesh_0199",
+      "exported": "LODMesh_0199"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.004",
+      "triangles": 9,
+      "mesh": "LODMesh_0200",
+      "exported": "LODMesh_0200"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.005",
+      "triangles": 9,
+      "mesh": "LODMesh_0201",
+      "exported": "LODMesh_0201"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.006",
+      "triangles": 9,
+      "mesh": "LODMesh_0202",
+      "exported": "LODMesh_0202"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.007",
+      "triangles": 9,
+      "mesh": "LODMesh_0203",
+      "exported": "LODMesh_0203"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.008",
+      "triangles": 9,
+      "mesh": "LODMesh_0204",
+      "exported": "LODMesh_0204"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.009",
+      "triangles": 9,
+      "mesh": "LODMesh_0205",
+      "exported": "LODMesh_0205"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.010",
+      "triangles": 9,
+      "mesh": "LODMesh_0206",
+      "exported": "LODMesh_0206"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.011",
+      "triangles": 9,
+      "mesh": "LODMesh_0207",
+      "exported": "LODMesh_0207"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.012",
+      "triangles": 9,
+      "mesh": "LODMesh_0208",
+      "exported": "LODMesh_0208"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.013",
+      "triangles": 9,
+      "mesh": "LODMesh_0209",
+      "exported": "LODMesh_0209"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.014",
+      "triangles": 9,
+      "mesh": "LODMesh_0210",
+      "exported": "LODMesh_0210"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.015",
+      "triangles": 9,
+      "mesh": "LODMesh_0211",
+      "exported": "LODMesh_0211"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.016",
+      "triangles": 9,
+      "mesh": "LODMesh_0212",
+      "exported": "LODMesh_0212"
+    },
+    {
+      "name": "Decor_BuriedSword_ShortDuan.017",
+      "triangles": 9,
+      "mesh": "LODMesh_0213",
+      "exported": "LODMesh_0213"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian",
+      "triangles": 9,
+      "mesh": "LODMesh_0214",
+      "exported": "LODMesh_0214"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.001",
+      "triangles": 9,
+      "mesh": "LODMesh_0215",
+      "exported": "LODMesh_0215"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.002",
+      "triangles": 9,
+      "mesh": "LODMesh_0216",
+      "exported": "LODMesh_0216"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.003",
+      "triangles": 9,
+      "mesh": "LODMesh_0217",
+      "exported": "LODMesh_0217"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.004",
+      "triangles": 9,
+      "mesh": "LODMesh_0218",
+      "exported": "LODMesh_0218"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.005",
+      "triangles": 9,
+      "mesh": "LODMesh_0219",
+      "exported": "LODMesh_0219"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.006",
+      "triangles": 9,
+      "mesh": "LODMesh_0220",
+      "exported": "LODMesh_0220"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.007",
+      "triangles": 9,
+      "mesh": "LODMesh_0221",
+      "exported": "LODMesh_0221"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.008",
+      "triangles": 9,
+      "mesh": "LODMesh_0222",
+      "exported": "LODMesh_0222"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.009",
+      "triangles": 9,
+      "mesh": "LODMesh_0223",
+      "exported": "LODMesh_0223"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.010",
+      "triangles": 9,
+      "mesh": "LODMesh_0224",
+      "exported": "LODMesh_0224"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.011",
+      "triangles": 9,
+      "mesh": "LODMesh_0225",
+      "exported": "LODMesh_0225"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.012",
+      "triangles": 9,
+      "mesh": "LODMesh_0226",
+      "exported": "LODMesh_0226"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.013",
+      "triangles": 9,
+      "mesh": "LODMesh_0227",
+      "exported": "LODMesh_0227"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.014",
+      "triangles": 9,
+      "mesh": "LODMesh_0228",
+      "exported": "LODMesh_0228"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.015",
+      "triangles": 9,
+      "mesh": "LODMesh_0229",
+      "exported": "LODMesh_0229"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.016",
+      "triangles": 9,
+      "mesh": "LODMesh_0230",
+      "exported": "LODMesh_0230"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.017",
+      "triangles": 9,
+      "mesh": "LODMesh_0231",
+      "exported": "LODMesh_0231"
+    },
+    {
+      "name": "Decor_BuriedSword_TempleJian.018",
+      "triangles": 9,
+      "mesh": "LODMesh_0232",
+      "exported": "LODMesh_0232"
+    },
+    {
+      "name": "Decor_Rubble_0_0",
+      "triangles": 2,
+      "mesh": "LODMesh_0233",
+      "exported": "LODMesh_0233"
+    },
+    {
+      "name": "Decor_Rubble_0_1",
+      "triangles": 12,
+      "mesh": "LODMesh_0234",
+      "exported": "LODMesh_0234"
+    },
+    {
+      "name": "Decor_Rubble_0_2",
+      "triangles": 4,
+      "mesh": "LODMesh_0235",
+      "exported": "LODMesh_0235"
+    },
+    {
+      "name": "Decor_Rubble_0_3",
+      "triangles": 13,
+      "mesh": "LODMesh_0236",
+      "exported": "LODMesh_0236"
+    },
+    {
+      "name": "Decor_Rubble_0_4",
+      "triangles": 14,
+      "mesh": "LODMesh_0237",
+      "exported": "LODMesh_0237"
+    },
+    {
+      "name": "Decor_Rubble_0_5",
+      "triangles": 2,
+      "mesh": "LODMesh_0238",
+      "exported": "LODMesh_0238"
+    },
+    {
+      "name": "Decor_Rubble_1_0",
+      "triangles": 13,
+      "mesh": "LODMesh_0239",
+      "exported": "LODMesh_0239"
+    },
+    {
+      "name": "Decor_Rubble_1_1",
+      "triangles": 13,
+      "mesh": "LODMesh_0240",
+      "exported": "LODMesh_0240"
+    },
+    {
+      "name": "Decor_Rubble_1_2",
+      "triangles": 12,
+      "mesh": "LODMesh_0241",
+      "exported": "LODMesh_0241"
+    },
+    {
+      "name": "Decor_Rubble_1_3",
+      "triangles": 23,
+      "mesh": "LODMesh_0242",
+      "exported": "LODMesh_0242"
+    },
+    {
+      "name": "Decor_Rubble_1_4",
+      "triangles": 7,
+      "mesh": "LODMesh_0243",
+      "exported": "LODMesh_0243"
+    },
+    {
+      "name": "Decor_Rubble_2_1",
+      "triangles": 19,
+      "mesh": "LODMesh_0244",
+      "exported": "LODMesh_0244"
+    },
+    {
+      "name": "Decor_Rubble_2_2",
+      "triangles": 13,
+      "mesh": "LODMesh_0245",
+      "exported": "LODMesh_0245"
+    },
+    {
+      "name": "Decor_Rubble_2_3",
+      "triangles": 11,
+      "mesh": "LODMesh_0246",
+      "exported": "LODMesh_0246"
+    },
+    {
+      "name": "Decor_Rubble_2_4",
+      "triangles": 11,
+      "mesh": "LODMesh_0247",
+      "exported": "LODMesh_0247"
+    },
+    {
+      "name": "Decor_Rubble_2_5",
+      "triangles": 6,
+      "mesh": "LODMesh_0248",
+      "exported": "LODMesh_0248"
+    },
+    {
+      "name": "Decor_Rubble_3_0",
+      "triangles": 4,
+      "mesh": "LODMesh_0249",
+      "exported": "LODMesh_0249"
+    },
+    {
+      "name": "Decor_Rubble_3_1",
+      "triangles": 12,
+      "mesh": "LODMesh_0250",
+      "exported": "LODMesh_0250"
+    },
+    {
+      "name": "Decor_Rubble_3_2",
+      "triangles": 6,
+      "mesh": "LODMesh_0251",
+      "exported": "LODMesh_0251"
+    },
+    {
+      "name": "Decor_Rubble_3_3",
+      "triangles": 12,
+      "mesh": "LODMesh_0252",
+      "exported": "LODMesh_0252"
+    },
+    {
+      "name": "Decor_Rubble_3_4",
+      "triangles": 17,
+      "mesh": "LODMesh_0253",
+      "exported": "LODMesh_0253"
+    },
+    {
+      "name": "Decor_Rubble_3_5",
+      "triangles": 3,
+      "mesh": "LODMesh_0254",
+      "exported": "LODMesh_0254"
+    },
+    {
+      "name": "Decor_Rubble_4_0",
+      "triangles": 8,
+      "mesh": "LODMesh_0255",
+      "exported": "LODMesh_0255"
+    },
+    {
+      "name": "Decor_Rubble_4_1",
+      "triangles": 4,
+      "mesh": "LODMesh_0256",
+      "exported": "LODMesh_0256"
+    },
+    {
+      "name": "Decor_Rubble_4_2",
+      "triangles": 10,
+      "mesh": "LODMesh_0257",
+      "exported": "LODMesh_0257"
+    },
+    {
+      "name": "Decor_Rubble_4_3",
+      "triangles": 12,
+      "mesh": "LODMesh_0258",
+      "exported": "LODMesh_0258"
+    },
+    {
+      "name": "Decor_Rubble_4_4",
+      "triangles": 25,
+      "mesh": "LODMesh_0259",
+      "exported": "LODMesh_0259"
+    },
+    {
+      "name": "Decor_Rubble_4_5",
+      "triangles": 2,
+      "mesh": "LODMesh_0260",
+      "exported": "LODMesh_0260"
+    },
+    {
+      "name": "Decor_Rubble_5_0",
+      "triangles": 2,
+      "mesh": "LODMesh_0261",
+      "exported": "LODMesh_0261"
+    },
+    {
+      "name": "Decor_Rubble_5_1",
+      "triangles": 5,
+      "mesh": "LODMesh_0262",
+      "exported": "LODMesh_0262"
+    },
+    {
+      "name": "Decor_Rubble_5_2",
+      "triangles": 6,
+      "mesh": "LODMesh_0263",
+      "exported": "LODMesh_0263"
+    },
+    {
+      "name": "Decor_Rubble_5_3",
+      "triangles": 7,
+      "mesh": "LODMesh_0264",
+      "exported": "LODMesh_0264"
+    },
+    {
+      "name": "Decor_Rubble_5_4",
+      "triangles": 4,
+      "mesh": "LODMesh_0265",
+      "exported": "LODMesh_0265"
+    },
+    {
+      "name": "Plant_0_0_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0266",
+      "exported": "LODMesh_0266"
+    },
+    {
+      "name": "Plant_0_1_Plant3",
+      "triangles": 6,
+      "mesh": "LODMesh_0267",
+      "exported": "LODMesh_0267"
+    },
+    {
+      "name": "Plant_0_2_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0268",
+      "exported": "LODMesh_0268"
+    },
+    {
+      "name": "Plant_0_3_Plant3",
+      "triangles": 4,
+      "mesh": "LODMesh_0269",
+      "exported": "LODMesh_0269"
+    },
+    {
+      "name": "Plant_0_4_Plant3",
+      "triangles": 6,
+      "mesh": "LODMesh_0270",
+      "exported": "LODMesh_0270"
+    },
+    {
+      "name": "Plant_0_5_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0271",
+      "exported": "LODMesh_0271"
+    },
+    {
+      "name": "Plant_1_0_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0272",
+      "exported": "LODMesh_0272"
+    },
+    {
+      "name": "Plant_1_1_Plant3",
+      "triangles": 24,
+      "mesh": "LODMesh_0273",
+      "exported": "LODMesh_0273"
+    },
+    {
+      "name": "Plant_1_2_Plant3",
+      "triangles": 8,
+      "mesh": "LODMesh_0274",
+      "exported": "LODMesh_0274"
+    },
+    {
+      "name": "Plant_1_3_Plant3",
+      "triangles": 6,
+      "mesh": "LODMesh_0275",
+      "exported": "LODMesh_0275"
+    },
+    {
+      "name": "Plant_1_4_Plant3",
+      "triangles": 4,
+      "mesh": "LODMesh_0276",
+      "exported": "LODMesh_0276"
+    },
+    {
+      "name": "Plant_1_5_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0277",
+      "exported": "LODMesh_0277"
+    },
+    {
+      "name": "Plant_2_0_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0278",
+      "exported": "LODMesh_0278"
+    },
+    {
+      "name": "Plant_2_1_Plant3",
+      "triangles": 8,
+      "mesh": "LODMesh_0279",
+      "exported": "LODMesh_0279"
+    },
+    {
+      "name": "Plant_2_2_Plant3",
+      "triangles": 16,
+      "mesh": "LODMesh_0280",
+      "exported": "LODMesh_0280"
+    },
+    {
+      "name": "Plant_2_3_Plant3",
+      "triangles": 6,
+      "mesh": "LODMesh_0281",
+      "exported": "LODMesh_0281"
+    },
+    {
+      "name": "Plant_2_4_Plant3",
+      "triangles": 4,
+      "mesh": "LODMesh_0282",
+      "exported": "LODMesh_0282"
+    },
+    {
+      "name": "Plant_2_5_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0283",
+      "exported": "LODMesh_0283"
+    },
+    {
+      "name": "Plant_3_0_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0284",
+      "exported": "LODMesh_0284"
+    },
+    {
+      "name": "Plant_3_1_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0285",
+      "exported": "LODMesh_0285"
+    },
+    {
+      "name": "Plant_3_2_Plant3",
+      "triangles": 6,
+      "mesh": "LODMesh_0286",
+      "exported": "LODMesh_0286"
+    },
+    {
+      "name": "Plant_3_3_Plant3",
+      "triangles": 4,
+      "mesh": "LODMesh_0287",
+      "exported": "LODMesh_0287"
+    },
+    {
+      "name": "Plant_3_4_Plant3",
+      "triangles": 6,
+      "mesh": "LODMesh_0288",
+      "exported": "LODMesh_0288"
+    },
+    {
+      "name": "Plant_3_5_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0289",
+      "exported": "LODMesh_0289"
+    },
+    {
+      "name": "Plant_4_0_Plant3",
+      "triangles": 4,
+      "mesh": "LODMesh_0290",
+      "exported": "LODMesh_0290"
+    },
+    {
+      "name": "Plant_4_1_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0291",
+      "exported": "LODMesh_0291"
+    },
+    {
+      "name": "Plant_4_2_Plant3",
+      "triangles": 22,
+      "mesh": "LODMesh_0292",
+      "exported": "LODMesh_0292"
+    },
+    {
+      "name": "Plant_4_3_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0293",
+      "exported": "LODMesh_0293"
+    },
+    {
+      "name": "Plant_4_4_Plant3",
+      "triangles": 8,
+      "mesh": "LODMesh_0294",
+      "exported": "LODMesh_0294"
+    },
+    {
+      "name": "Plant_4_5_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0295",
+      "exported": "LODMesh_0295"
+    },
+    {
+      "name": "Plant_5_0_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0296",
+      "exported": "LODMesh_0296"
+    },
+    {
+      "name": "Plant_5_1_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0297",
+      "exported": "LODMesh_0297"
+    },
+    {
+      "name": "Plant_5_2_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0298",
+      "exported": "LODMesh_0298"
+    },
+    {
+      "name": "Plant_5_3_Plant3",
+      "triangles": 4,
+      "mesh": "LODMesh_0299",
+      "exported": "LODMesh_0299"
+    },
+    {
+      "name": "Plant_5_4_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0300",
+      "exported": "LODMesh_0300"
+    },
+    {
+      "name": "Plant_5_5_Plant3",
+      "triangles": 2,
+      "mesh": "LODMesh_0301",
+      "exported": "LODMesh_0301"
+    },
+    {
+      "name": "Plant_Art_LongDryGrass",
+      "triangles": 8,
+      "mesh": "LODMesh_0302",
+      "exported": "LODMesh_0302"
+    },
+    {
+      "name": "Plant_Art_Swordgrass",
+      "triangles": 44,
+      "mesh": "LODMesh_0303",
+      "exported": "LODMesh_0303"
+    },
+    {
+      "name": "Solid_BoundaryTerrainEast",
+      "triangles": 624,
+      "mesh": "LODMesh_0304",
+      "exported": "LODMesh_0304"
+    },
+    {
+      "name": "Solid_BoundaryTerrainNorth",
+      "triangles": 624,
+      "mesh": "LODMesh_0305",
+      "exported": "LODMesh_0305"
+    },
+    {
+      "name": "Solid_BoundaryTerrainSouth",
+      "triangles": 624,
+      "mesh": "LODMesh_0306",
+      "exported": "LODMesh_0306"
+    },
+    {
+      "name": "Solid_BoundaryTerrainWest",
+      "triangles": 624,
+      "mesh": "LODMesh_0307",
+      "exported": "LODMesh_0307"
+    },
+    {
+      "name": "Solid_EngravedSword",
+      "triangles": 226,
+      "mesh": "LODMesh_0308",
+      "exported": "LODMesh_0308"
+    },
+    {
+      "name": "Solid_MainTombPlinth",
+      "triangles": 12,
+      "mesh": "LODMesh_0309",
+      "exported": "LODMesh_0309"
+    },
+    {
+      "name": "Solid_Rubble_0_0",
+      "triangles": 64,
+      "mesh": "LODMesh_0310",
+      "exported": "LODMesh_0310"
+    },
+    {
+      "name": "Solid_Rubble_0_1",
+      "triangles": 98,
+      "mesh": "LODMesh_0311",
+      "exported": "LODMesh_0311"
+    },
+    {
+      "name": "Solid_Rubble_0_2",
+      "triangles": 46,
+      "mesh": "LODMesh_0312",
+      "exported": "LODMesh_0312"
+    },
+    {
+      "name": "Solid_Rubble_0_3",
+      "triangles": 74,
+      "mesh": "LODMesh_0313",
+      "exported": "LODMesh_0313"
+    },
+    {
+      "name": "Solid_Rubble_0_4",
+      "triangles": 96,
+      "mesh": "LODMesh_0314",
+      "exported": "LODMesh_0314"
+    },
+    {
+      "name": "Solid_Rubble_0_5",
+      "triangles": 34,
+      "mesh": "LODMesh_0315",
+      "exported": "LODMesh_0315"
+    },
+    {
+      "name": "Solid_Rubble_1_0",
+      "triangles": 50,
+      "mesh": "LODMesh_0316",
+      "exported": "LODMesh_0316"
+    },
+    {
+      "name": "Solid_Rubble_1_1",
+      "triangles": 120,
+      "mesh": "LODMesh_0317",
+      "exported": "LODMesh_0317"
+    },
+    {
+      "name": "Solid_Rubble_1_2",
+      "triangles": 128,
+      "mesh": "LODMesh_0318",
+      "exported": "LODMesh_0318"
+    },
+    {
+      "name": "Solid_Rubble_1_3",
+      "triangles": 124,
+      "mesh": "LODMesh_0319",
+      "exported": "LODMesh_0319"
+    },
+    {
+      "name": "Solid_Rubble_1_4",
+      "triangles": 64,
+      "mesh": "LODMesh_0320",
+      "exported": "LODMesh_0320"
+    },
+    {
+      "name": "Solid_Rubble_1_5",
+      "triangles": 26,
+      "mesh": "LODMesh_0321",
+      "exported": "LODMesh_0321"
+    },
+    {
+      "name": "Solid_Rubble_2_0",
+      "triangles": 30,
+      "mesh": "LODMesh_0322",
+      "exported": "LODMesh_0322"
+    },
+    {
+      "name": "Solid_Rubble_2_1",
+      "triangles": 78,
+      "mesh": "LODMesh_0323",
+      "exported": "LODMesh_0323"
+    },
+    {
+      "name": "Solid_Rubble_2_2",
+      "triangles": 64,
+      "mesh": "LODMesh_0324",
+      "exported": "LODMesh_0324"
+    },
+    {
+      "name": "Solid_Rubble_2_3",
+      "triangles": 46,
+      "mesh": "LODMesh_0325",
+      "exported": "LODMesh_0325"
+    },
+    {
+      "name": "Solid_Rubble_2_4",
+      "triangles": 147,
+      "mesh": "LODMesh_0326",
+      "exported": "LODMesh_0326"
+    },
+    {
+      "name": "Solid_Rubble_2_5",
+      "triangles": 30,
+      "mesh": "LODMesh_0327",
+      "exported": "LODMesh_0327"
+    },
+    {
+      "name": "Solid_Rubble_3_0",
+      "triangles": 40,
+      "mesh": "LODMesh_0328",
+      "exported": "LODMesh_0328"
+    },
+    {
+      "name": "Solid_Rubble_3_1",
+      "triangles": 30,
+      "mesh": "LODMesh_0329",
+      "exported": "LODMesh_0329"
+    },
+    {
+      "name": "Solid_Rubble_3_2",
+      "triangles": 156,
+      "mesh": "LODMesh_0330",
+      "exported": "LODMesh_0330"
+    },
+    {
+      "name": "Solid_Rubble_3_3",
+      "triangles": 122,
+      "mesh": "LODMesh_0331",
+      "exported": "LODMesh_0331"
+    },
+    {
+      "name": "Solid_Rubble_3_4",
+      "triangles": 60,
+      "mesh": "LODMesh_0332",
+      "exported": "LODMesh_0332"
+    },
+    {
+      "name": "Solid_Rubble_3_5",
+      "triangles": 46,
+      "mesh": "LODMesh_0333",
+      "exported": "LODMesh_0333"
+    },
+    {
+      "name": "Solid_Rubble_4_0",
+      "triangles": 54,
+      "mesh": "LODMesh_0334",
+      "exported": "LODMesh_0334"
+    },
+    {
+      "name": "Solid_Rubble_4_1",
+      "triangles": 8,
+      "mesh": "LODMesh_0335",
+      "exported": "LODMesh_0335"
+    },
+    {
+      "name": "Solid_Rubble_4_2",
+      "triangles": 94,
+      "mesh": "LODMesh_0336",
+      "exported": "LODMesh_0336"
+    },
+    {
+      "name": "Solid_Rubble_4_3",
+      "triangles": 76,
+      "mesh": "LODMesh_0337",
+      "exported": "LODMesh_0337"
+    },
+    {
+      "name": "Solid_Rubble_4_4",
+      "triangles": 106,
+      "mesh": "LODMesh_0338",
+      "exported": "LODMesh_0338"
+    },
+    {
+      "name": "Solid_Rubble_4_5",
+      "triangles": 66,
+      "mesh": "LODMesh_0339",
+      "exported": "LODMesh_0339"
+    },
+    {
+      "name": "Solid_Rubble_5_0",
+      "triangles": 30,
+      "mesh": "LODMesh_0340",
+      "exported": "LODMesh_0340"
+    },
+    {
+      "name": "Solid_Rubble_5_1",
+      "triangles": 52,
+      "mesh": "LODMesh_0341",
+      "exported": "LODMesh_0341"
+    },
+    {
+      "name": "Solid_Rubble_5_2",
+      "triangles": 34,
+      "mesh": "LODMesh_0342",
+      "exported": "LODMesh_0342"
+    },
+    {
+      "name": "Solid_Rubble_5_3",
+      "triangles": 158,
+      "mesh": "LODMesh_0343",
+      "exported": "LODMesh_0343"
+    },
+    {
+      "name": "Solid_Rubble_5_4",
+      "triangles": 8,
+      "mesh": "LODMesh_0344",
+      "exported": "LODMesh_0344"
+    },
+    {
+      "name": "Solid_StandingMarker_LongRidge",
+      "triangles": 28,
+      "mesh": "LODMesh_0345",
+      "exported": "LODMesh_0345"
+    },
+    {
+      "name": "Solid_StandingMarker_LongRidge.001",
+      "triangles": 28,
+      "mesh": "LODMesh_0346",
+      "exported": "LODMesh_0346"
+    },
+    {
+      "name": "Solid_StandingMarker_LongRidge.002",
+      "triangles": 28,
+      "mesh": "LODMesh_0347",
+      "exported": "LODMesh_0347"
+    },
+    {
+      "name": "Solid_StandingMarker_TempleJian",
+      "triangles": 28,
+      "mesh": "LODMesh_0348",
+      "exported": "LODMesh_0348"
+    },
+    {
+      "name": "Solid_StandingMarker_TempleJian.001",
+      "triangles": 28,
+      "mesh": "LODMesh_0349",
+      "exported": "LODMesh_0349"
+    },
+    {
+      "name": "Solid_StandingMarker_TempleJian.002",
+      "triangles": 28,
+      "mesh": "LODMesh_0350",
+      "exported": "LODMesh_0350"
+    },
+    {
+      "name": "Solid_SwordCenotaph",
+      "triangles": 8,
+      "mesh": "LODMesh_0351",
+      "exported": "LODMesh_0351"
+    },
+    {
+      "name": "Solid_SwordCenotaph.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0352",
+      "exported": "LODMesh_0352"
+    },
+    {
+      "name": "Solid_SwordCenotaph.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0353",
+      "exported": "LODMesh_0353"
+    },
+    {
+      "name": "Solid_SwordCenotaph.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0354",
+      "exported": "LODMesh_0354"
+    },
+    {
+      "name": "Solid_SwordCenotaph.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0355",
+      "exported": "LODMesh_0355"
+    },
+    {
+      "name": "Solid_SwordCenotaph.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0356",
+      "exported": "LODMesh_0356"
+    },
+    {
+      "name": "Solid_SwordCenotaph.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0357",
+      "exported": "LODMesh_0357"
+    },
+    {
+      "name": "Solid_SwordCenotaph.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0358",
+      "exported": "LODMesh_0358"
+    },
+    {
+      "name": "Solid_SwordCenotaph.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0359",
+      "exported": "LODMesh_0359"
+    },
+    {
+      "name": "Solid_SwordCenotaph.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0360",
+      "exported": "LODMesh_0360"
+    },
+    {
+      "name": "Solid_SwordCenotaph.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0361",
+      "exported": "LODMesh_0361"
+    },
+    {
+      "name": "Terrain_0_0",
+      "triangles": 122,
+      "mesh": "LODMesh_0362",
+      "exported": "LODMesh_0362"
+    },
+    {
+      "name": "Terrain_0_1",
+      "triangles": 122,
+      "mesh": "LODMesh_0363",
+      "exported": "LODMesh_0363"
+    },
+    {
+      "name": "Terrain_0_2",
+      "triangles": 123,
+      "mesh": "LODMesh_0364",
+      "exported": "LODMesh_0364"
+    },
+    {
+      "name": "Terrain_0_3",
+      "triangles": 78,
+      "mesh": "LODMesh_0365",
+      "exported": "LODMesh_0365"
+    },
+    {
+      "name": "Terrain_0_4",
+      "triangles": 78,
+      "mesh": "LODMesh_0366",
+      "exported": "LODMesh_0366"
+    },
+    {
+      "name": "Terrain_0_5",
+      "triangles": 78,
+      "mesh": "LODMesh_0367",
+      "exported": "LODMesh_0367"
+    },
+    {
+      "name": "Terrain_1_0",
+      "triangles": 87,
+      "mesh": "LODMesh_0368",
+      "exported": "LODMesh_0368"
+    },
+    {
+      "name": "Terrain_1_1",
+      "triangles": 221,
+      "mesh": "LODMesh_0369",
+      "exported": "LODMesh_0369"
+    },
+    {
+      "name": "Terrain_1_2",
+      "triangles": 100,
+      "mesh": "LODMesh_0370",
+      "exported": "LODMesh_0370"
+    },
+    {
+      "name": "Terrain_1_3",
+      "triangles": 121,
+      "mesh": "LODMesh_0371",
+      "exported": "LODMesh_0371"
+    },
+    {
+      "name": "Terrain_1_4",
+      "triangles": 78,
+      "mesh": "LODMesh_0372",
+      "exported": "LODMesh_0372"
+    },
+    {
+      "name": "Terrain_1_5",
+      "triangles": 78,
+      "mesh": "LODMesh_0373",
+      "exported": "LODMesh_0373"
+    },
+    {
+      "name": "Terrain_2_0",
+      "triangles": 78,
+      "mesh": "LODMesh_0374",
+      "exported": "LODMesh_0374"
+    },
+    {
+      "name": "Terrain_2_1",
+      "triangles": 155,
+      "mesh": "LODMesh_0375",
+      "exported": "LODMesh_0375"
+    },
+    {
+      "name": "Terrain_2_2",
+      "triangles": 199,
+      "mesh": "LODMesh_0376",
+      "exported": "LODMesh_0376"
+    },
+    {
+      "name": "Terrain_2_3",
+      "triangles": 156,
+      "mesh": "LODMesh_0377",
+      "exported": "LODMesh_0377"
+    },
+    {
+      "name": "Terrain_2_4",
+      "triangles": 146,
+      "mesh": "LODMesh_0378",
+      "exported": "LODMesh_0378"
+    },
+    {
+      "name": "Terrain_2_5",
+      "triangles": 78,
+      "mesh": "LODMesh_0379",
+      "exported": "LODMesh_0379"
+    },
+    {
+      "name": "Terrain_3_0",
+      "triangles": 78,
+      "mesh": "LODMesh_0380",
+      "exported": "LODMesh_0380"
+    },
+    {
+      "name": "Terrain_3_1",
+      "triangles": 121,
+      "mesh": "LODMesh_0381",
+      "exported": "LODMesh_0381"
+    },
+    {
+      "name": "Terrain_3_2",
+      "triangles": 145,
+      "mesh": "LODMesh_0382",
+      "exported": "LODMesh_0382"
+    },
+    {
+      "name": "Terrain_3_3",
+      "triangles": 108,
+      "mesh": "LODMesh_0383",
+      "exported": "LODMesh_0383"
+    },
+    {
+      "name": "Terrain_3_4",
+      "triangles": 253,
+      "mesh": "LODMesh_0384",
+      "exported": "LODMesh_0384"
+    },
+    {
+      "name": "Terrain_3_5",
+      "triangles": 78,
+      "mesh": "LODMesh_0385",
+      "exported": "LODMesh_0385"
+    },
+    {
+      "name": "Terrain_4_0",
+      "triangles": 78,
+      "mesh": "LODMesh_0386",
+      "exported": "LODMesh_0386"
+    },
+    {
+      "name": "Terrain_4_1",
+      "triangles": 78,
+      "mesh": "LODMesh_0387",
+      "exported": "LODMesh_0387"
+    },
+    {
+      "name": "Terrain_4_2",
+      "triangles": 158,
+      "mesh": "LODMesh_0388",
+      "exported": "LODMesh_0388"
+    },
+    {
+      "name": "Terrain_4_3",
+      "triangles": 240,
+      "mesh": "LODMesh_0389",
+      "exported": "LODMesh_0389"
+    },
+    {
+      "name": "Terrain_4_4",
+      "triangles": 117,
+      "mesh": "LODMesh_0390",
+      "exported": "LODMesh_0390"
+    },
+    {
+      "name": "Terrain_4_5",
+      "triangles": 133,
+      "mesh": "LODMesh_0391",
+      "exported": "LODMesh_0391"
+    },
+    {
+      "name": "Terrain_5_0",
+      "triangles": 78,
+      "mesh": "LODMesh_0392",
+      "exported": "LODMesh_0392"
+    },
+    {
+      "name": "Terrain_5_1",
+      "triangles": 78,
+      "mesh": "LODMesh_0393",
+      "exported": "LODMesh_0393"
+    },
+    {
+      "name": "Terrain_5_2",
+      "triangles": 78,
+      "mesh": "LODMesh_0394",
+      "exported": "LODMesh_0394"
+    },
+    {
+      "name": "Terrain_5_3",
+      "triangles": 105,
+      "mesh": "LODMesh_0395",
+      "exported": "LODMesh_0395"
+    },
+    {
+      "name": "Terrain_5_4",
+      "triangles": 83,
+      "mesh": "LODMesh_0396",
+      "exported": "LODMesh_0396"
+    },
+    {
+      "name": "Terrain_5_5",
+      "triangles": 85,
+      "mesh": "LODMesh_0397",
+      "exported": "LODMesh_0397"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+PASS main 贴壁主路: complete path, 445.5 m.
+PASS side 冷却台回路: complete path, 64.0 m.
+PASS side 北侧观熔台: complete path, 49.6 m.
+PASS 3 routes, 0 bridge crossings, 269 navigation probes.
+PASS boundaries and 2305 blocked-zone/water facets. 4092 NavMesh triangles, 40125.7 m².
+Unity 2022.3.62f1; agent type 0 (Humanoid); radius .36 m, height 1.84 m, climb .35 m, slope 43°, voxel .12 m.
+PASS prefab data, translation, yaw rotation, disable and re-enable.

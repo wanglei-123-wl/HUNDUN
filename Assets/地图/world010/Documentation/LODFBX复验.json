@@ -1,0 +1,8 @@
+{
+  "near": 192312,
+  "terrain_tiles": 36,
+  "status": "PASS",
+  "mid": 99762,
+  "far": 19848,
+  "max_terrain_seam_offset_m": 0.0
+}

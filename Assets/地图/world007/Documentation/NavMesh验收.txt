@@ -1,0 +1,8 @@
+PASS main 主冢西环: complete path, 704.5 m.
+PASS side 东侧剑林回路: complete path, 278.2 m.
+PASS side 风蚀祭台支路: complete path, 137.9 m.
+PASS side 东荒断剑台: complete path, 118.3 m.
+PASS 4 routes, 0 bridge crossings, 579 navigation probes.
+PASS boundaries and 2430 blocked-zone/water facets. 6362 NavMesh triangles, 269227.8 m².
+Unity 2022.3.62f1; agent type 0 (Humanoid); radius .36 m, height 1.84 m, climb .35 m, slope 43°, voxel .12 m.
+PASS prefab data, translation, yaw rotation, disable and re-enable.

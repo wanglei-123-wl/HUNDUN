@@ -1,0 +1,21 @@
+{
+  "id": "world010",
+  "revision": "V04",
+  "dimensions_m": [
+    300,
+    300
+  ],
+  "triangles": 192312,
+  "working_ceiling": null,
+  "mesh_objects": 331,
+  "trees": 0,
+  "plants": 0,
+  "breakdown": {
+    "Terrain": 8798,
+    "Surface": 16,
+    "Decor": 40288,
+    "Solid": 88414,
+    "Effect": 9156,
+    "Art": 45640
+  }
+}

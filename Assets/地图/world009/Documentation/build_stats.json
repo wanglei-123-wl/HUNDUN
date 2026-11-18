@@ -1,0 +1,23 @@
+{
+  "id": "world009",
+  "revision": "V06-Boundary02",
+  "dimensions_m": [
+    400,
+    400
+  ],
+  "triangles": 662189,
+  "working_ceiling": null,
+  "mesh_objects": 420,
+  "trees": 0,
+  "plants": 740,
+  "breakdown": {
+    "Terrain": 13582,
+    "Surface": 22,
+    "Solid": 42552,
+    "Decor": 3226,
+    "Art": 588303,
+    "Effect": 10766,
+    "Plant": 3738
+  },
+  "boundary_triangles": 11112
+}

@@ -1,0 +1,3982 @@
+{
+  "version": "LOD3",
+  "near": 192312,
+  "mid": 99762,
+  "far": 19848,
+  "lod1": [
+    {
+      "name": "Art_BasaltPaving",
+      "triangles": 9962,
+      "mesh": "LODMesh_0000",
+      "exported": "LODMesh_0000"
+    },
+    {
+      "name": "Art_BrazierBowls",
+      "triangles": 1348,
+      "mesh": "LODMesh_0001",
+      "exported": "LODMesh_0001"
+    },
+    {
+      "name": "Art_BrazierMasonry",
+      "triangles": 562,
+      "mesh": "LODMesh_0002",
+      "exported": "LODMesh_0002"
+    },
+    {
+      "name": "Art_IncisedMarks",
+      "triangles": 917,
+      "mesh": "LODMesh_0003",
+      "exported": "LODMesh_0003"
+    },
+    {
+      "name": "Decor_CaveBrazier",
+      "triangles": 36,
+      "mesh": "LODMesh_0004",
+      "exported": "LODMesh_0004"
+    },
+    {
+      "name": "Decor_CaveBrazier.001",
+      "triangles": 36,
+      "mesh": "LODMesh_0005",
+      "exported": "LODMesh_0005"
+    },
+    {
+      "name": "Decor_CaveBrazier.002",
+      "triangles": 36,
+      "mesh": "LODMesh_0006",
+      "exported": "LODMesh_0006"
+    },
+    {
+      "name": "Decor_CaveBrazier.003",
+      "triangles": 36,
+      "mesh": "LODMesh_0007",
+      "exported": "LODMesh_0007"
+    },
+    {
+      "name": "Decor_CaveBrazier.004",
+      "triangles": 36,
+      "mesh": "LODMesh_0008",
+      "exported": "LODMesh_0008"
+    },
+    {
+      "name": "Decor_CaveBrazier.005",
+      "triangles": 36,
+      "mesh": "LODMesh_0009",
+      "exported": "LODMesh_0009"
+    },
+    {
+      "name": "Decor_CavernPerimeter",
+      "triangles": 43,
+      "mesh": "LODMesh_0010",
+      "exported": "LODMesh_0010"
+    },
+    {
+      "name": "Decor_CeilingStalactite",
+      "triangles": 10,
+      "mesh": "LODMesh_0011",
+      "exported": "LODMesh_0011"
+    },
+    {
+      "name": "Decor_CeilingStalactite.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0012",
+      "exported": "LODMesh_0012"
+    },
+    {
+      "name": "Decor_CeilingStalactite.002",
+      "triangles": 10,
+      "mesh": "LODMesh_0013",
+      "exported": "LODMesh_0013"
+    },
+    {
+      "name": "Decor_CeilingStalactite.003",
+      "triangles": 10,
+      "mesh": "LODMesh_0014",
+      "exported": "LODMesh_0014"
+    },
+    {
+      "name": "Decor_CeilingStalactite.004",
+      "triangles": 10,
+      "mesh": "LODMesh_0015",
+      "exported": "LODMesh_0015"
+    },
+    {
+      "name": "Decor_CeilingStalactite.005",
+      "triangles": 10,
+      "mesh": "LODMesh_0016",
+      "exported": "LODMesh_0016"
+    },
+    {
+      "name": "Decor_CeilingStalactite.006",
+      "triangles": 10,
+      "mesh": "LODMesh_0017",
+      "exported": "LODMesh_0017"
+    },
+    {
+      "name": "Decor_CeilingStalactite.007",
+      "triangles": 10,
+      "mesh": "LODMesh_0018",
+      "exported": "LODMesh_0018"
+    },
+    {
+      "name": "Decor_CeilingStalactite.008",
+      "triangles": 10,
+      "mesh": "LODMesh_0019",
+      "exported": "LODMesh_0019"
+    },
+    {
+      "name": "Decor_CeilingStalactite.009",
+      "triangles": 10,
+      "mesh": "LODMesh_0020",
+      "exported": "LODMesh_0020"
+    },
+    {
+      "name": "Decor_CeilingStalactite.010",
+      "triangles": 10,
+      "mesh": "LODMesh_0021",
+      "exported": "LODMesh_0021"
+    },
+    {
+      "name": "Decor_CeilingStalactite.011",
+      "triangles": 10,
+      "mesh": "LODMesh_0022",
+      "exported": "LODMesh_0022"
+    },
+    {
+      "name": "Decor_CeilingStalactite.012",
+      "triangles": 10,
+      "mesh": "LODMesh_0023",
+      "exported": "LODMesh_0023"
+    },
+    {
+      "name": "Decor_CeilingStalactite.013",
+      "triangles": 10,
+      "mesh": "LODMesh_0024",
+      "exported": "LODMesh_0024"
+    },
+    {
+      "name": "Decor_CeilingStalactite.014",
+      "triangles": 10,
+      "mesh": "LODMesh_0025",
+      "exported": "LODMesh_0025"
+    },
+    {
+      "name": "Decor_CeilingStalactite.015",
+      "triangles": 10,
+      "mesh": "LODMesh_0026",
+      "exported": "LODMesh_0026"
+    },
+    {
+      "name": "Decor_CeilingStalactite.016",
+      "triangles": 10,
+      "mesh": "LODMesh_0027",
+      "exported": "LODMesh_0027"
+    },
+    {
+      "name": "Decor_CeilingStalactite.017",
+      "triangles": 10,
+      "mesh": "LODMesh_0028",
+      "exported": "LODMesh_0028"
+    },
+    {
+      "name": "Decor_CeilingStalactite.018",
+      "triangles": 10,
+      "mesh": "LODMesh_0029",
+      "exported": "LODMesh_0029"
+    },
+    {
+      "name": "Decor_CeilingStalactite.019",
+      "triangles": 10,
+      "mesh": "LODMesh_0030",
+      "exported": "LODMesh_0030"
+    },
+    {
+      "name": "Decor_CeilingStalactite.020",
+      "triangles": 10,
+      "mesh": "LODMesh_0031",
+      "exported": "LODMesh_0031"
+    },
+    {
+      "name": "Decor_CeilingStalactite.021",
+      "triangles": 10,
+      "mesh": "LODMesh_0032",
+      "exported": "LODMesh_0032"
+    },
+    {
+      "name": "Decor_CeilingStalactite.022",
+      "triangles": 10,
+      "mesh": "LODMesh_0033",
+      "exported": "LODMesh_0033"
+    },
+    {
+      "name": "Decor_CeilingStalactite.023",
+      "triangles": 10,
+      "mesh": "LODMesh_0034",
+      "exported": "LODMesh_0034"
+    },
+    {
+      "name": "Decor_CeilingStalactite.024",
+      "triangles": 10,
+      "mesh": "LODMesh_0035",
+      "exported": "LODMesh_0035"
+    },
+    {
+      "name": "Decor_CeilingStalactite.025",
+      "triangles": 10,
+      "mesh": "LODMesh_0036",
+      "exported": "LODMesh_0036"
+    },
+    {
+      "name": "Decor_CeilingStalactite.026",
+      "triangles": 10,
+      "mesh": "LODMesh_0037",
+      "exported": "LODMesh_0037"
+    },
+    {
+      "name": "Decor_CeilingStalactite.027",
+      "triangles": 10,
+      "mesh": "LODMesh_0038",
+      "exported": "LODMesh_0038"
+    },
+    {
+      "name": "Decor_CeilingStalactite.028",
+      "triangles": 10,
+      "mesh": "LODMesh_0039",
+      "exported": "LODMesh_0039"
+    },
+    {
+      "name": "Decor_CeilingStalactite.029",
+      "triangles": 10,
+      "mesh": "LODMesh_0040",
+      "exported": "LODMesh_0040"
+    },
+    {
+      "name": "Decor_CeilingStalactite.030",
+      "triangles": 10,
+      "mesh": "LODMesh_0041",
+      "exported": "LODMesh_0041"
+    },
+    {
+      "name": "Decor_CeilingStalactite.031",
+      "triangles": 10,
+      "mesh": "LODMesh_0042",
+      "exported": "LODMesh_0042"
+    },
+    {
+      "name": "Decor_CeilingStalactite.032",
+      "triangles": 10,
+      "mesh": "LODMesh_0043",
+      "exported": "LODMesh_0043"
+    },
+    {
+      "name": "Decor_CeilingStalactite.033",
+      "triangles": 10,
+      "mesh": "LODMesh_0044",
+      "exported": "LODMesh_0044"
+    },
+    {
+      "name": "Decor_CeilingStalactite.034",
+      "triangles": 10,
+      "mesh": "LODMesh_0045",
+      "exported": "LODMesh_0045"
+    },
+    {
+      "name": "Decor_CeilingStalactite.035",
+      "triangles": 10,
+      "mesh": "LODMesh_0046",
+      "exported": "LODMesh_0046"
+    },
+    {
+      "name": "Decor_CeilingStalactite.036",
+      "triangles": 10,
+      "mesh": "LODMesh_0047",
+      "exported": "LODMesh_0047"
+    },
+    {
+      "name": "Decor_CeilingStalactite.037",
+      "triangles": 10,
+      "mesh": "LODMesh_0048",
+      "exported": "LODMesh_0048"
+    },
+    {
+      "name": "Decor_CeilingStalactite.038",
+      "triangles": 10,
+      "mesh": "LODMesh_0049",
+      "exported": "LODMesh_0049"
+    },
+    {
+      "name": "Decor_CeilingStalactite.039",
+      "triangles": 10,
+      "mesh": "LODMesh_0050",
+      "exported": "LODMesh_0050"
+    },
+    {
+      "name": "Decor_CeilingStalactite.040",
+      "triangles": 10,
+      "mesh": "LODMesh_0051",
+      "exported": "LODMesh_0051"
+    },
+    {
+      "name": "Decor_CeilingStalactite.041",
+      "triangles": 10,
+      "mesh": "LODMesh_0052",
+      "exported": "LODMesh_0052"
+    },
+    {
+      "name": "Decor_CeilingStalactite.042",
+      "triangles": 10,
+      "mesh": "LODMesh_0053",
+      "exported": "LODMesh_0053"
+    },
+    {
+      "name": "Decor_CeilingStalactite.043",
+      "triangles": 10,
+      "mesh": "LODMesh_0054",
+      "exported": "LODMesh_0054"
+    },
+    {
+      "name": "Decor_CeilingStalactite.044",
+      "triangles": 10,
+      "mesh": "LODMesh_0055",
+      "exported": "LODMesh_0055"
+    },
+    {
+      "name": "Decor_CeilingStalactite.045",
+      "triangles": 10,
+      "mesh": "LODMesh_0056",
+      "exported": "LODMesh_0056"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_0",
+      "triangles": 6974,
+      "mesh": "LODMesh_0057",
+      "exported": "LODMesh_0057"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_1",
+      "triangles": 1742,
+      "mesh": "LODMesh_0058",
+      "exported": "LODMesh_0058"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_2",
+      "triangles": 434,
+      "mesh": "LODMesh_0059",
+      "exported": "LODMesh_0059"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_3",
+      "triangles": 434,
+      "mesh": "LODMesh_0060",
+      "exported": "LODMesh_0060"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_4",
+      "triangles": 870,
+      "mesh": "LODMesh_0061",
+      "exported": "LODMesh_0061"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_5",
+      "triangles": 434,
+      "mesh": "LODMesh_0062",
+      "exported": "LODMesh_0062"
+    },
+    {
+      "name": "Decor_Rubble_0_0",
+      "triangles": 30,
+      "mesh": "LODMesh_0063",
+      "exported": "LODMesh_0063"
+    },
+    {
+      "name": "Decor_Rubble_0_1",
+      "triangles": 58,
+      "mesh": "LODMesh_0064",
+      "exported": "LODMesh_0064"
+    },
+    {
+      "name": "Decor_Rubble_0_2",
+      "triangles": 84,
+      "mesh": "LODMesh_0065",
+      "exported": "LODMesh_0065"
+    },
+    {
+      "name": "Decor_Rubble_0_3",
+      "triangles": 90,
+      "mesh": "LODMesh_0066",
+      "exported": "LODMesh_0066"
+    },
+    {
+      "name": "Decor_Rubble_1_0",
+      "triangles": 122,
+      "mesh": "LODMesh_0067",
+      "exported": "LODMesh_0067"
+    },
+    {
+      "name": "Decor_Rubble_1_1",
+      "triangles": 80,
+      "mesh": "LODMesh_0068",
+      "exported": "LODMesh_0068"
+    },
+    {
+      "name": "Decor_Rubble_1_2",
+      "triangles": 40,
+      "mesh": "LODMesh_0069",
+      "exported": "LODMesh_0069"
+    },
+    {
+      "name": "Decor_Rubble_1_3",
+      "triangles": 72,
+      "mesh": "LODMesh_0070",
+      "exported": "LODMesh_0070"
+    },
+    {
+      "name": "Decor_Rubble_1_4",
+      "triangles": 136,
+      "mesh": "LODMesh_0071",
+      "exported": "LODMesh_0071"
+    },
+    {
+      "name": "Decor_Rubble_2_0",
+      "triangles": 30,
+      "mesh": "LODMesh_0072",
+      "exported": "LODMesh_0072"
+    },
+    {
+      "name": "Decor_Rubble_2_1",
+      "triangles": 50,
+      "mesh": "LODMesh_0073",
+      "exported": "LODMesh_0073"
+    },
+    {
+      "name": "Decor_Rubble_2_3",
+      "triangles": 10,
+      "mesh": "LODMesh_0074",
+      "exported": "LODMesh_0074"
+    },
+    {
+      "name": "Decor_Rubble_2_4",
+      "triangles": 115,
+      "mesh": "LODMesh_0075",
+      "exported": "LODMesh_0075"
+    },
+    {
+      "name": "Decor_Rubble_2_5",
+      "triangles": 42,
+      "mesh": "LODMesh_0076",
+      "exported": "LODMesh_0076"
+    },
+    {
+      "name": "Decor_Rubble_3_0",
+      "triangles": 154,
+      "mesh": "LODMesh_0077",
+      "exported": "LODMesh_0077"
+    },
+    {
+      "name": "Decor_Rubble_3_1",
+      "triangles": 20,
+      "mesh": "LODMesh_0078",
+      "exported": "LODMesh_0078"
+    },
+    {
+      "name": "Decor_Rubble_3_3",
+      "triangles": 28,
+      "mesh": "LODMesh_0079",
+      "exported": "LODMesh_0079"
+    },
+    {
+      "name": "Decor_Rubble_3_4",
+      "triangles": 106,
+      "mesh": "LODMesh_0080",
+      "exported": "LODMesh_0080"
+    },
+    {
+      "name": "Decor_Rubble_3_5",
+      "triangles": 56,
+      "mesh": "LODMesh_0081",
+      "exported": "LODMesh_0081"
+    },
+    {
+      "name": "Decor_Rubble_4_0",
+      "triangles": 10,
+      "mesh": "LODMesh_0082",
+      "exported": "LODMesh_0082"
+    },
+    {
+      "name": "Decor_Rubble_4_1",
+      "triangles": 48,
+      "mesh": "LODMesh_0083",
+      "exported": "LODMesh_0083"
+    },
+    {
+      "name": "Decor_Rubble_4_2",
+      "triangles": 20,
+      "mesh": "LODMesh_0084",
+      "exported": "LODMesh_0084"
+    },
+    {
+      "name": "Decor_Rubble_4_3",
+      "triangles": 20,
+      "mesh": "LODMesh_0085",
+      "exported": "LODMesh_0085"
+    },
+    {
+      "name": "Decor_Rubble_4_4",
+      "triangles": 40,
+      "mesh": "LODMesh_0086",
+      "exported": "LODMesh_0086"
+    },
+    {
+      "name": "Decor_Rubble_4_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0087",
+      "exported": "LODMesh_0087"
+    },
+    {
+      "name": "Decor_Rubble_5_0",
+      "triangles": 112,
+      "mesh": "LODMesh_0088",
+      "exported": "LODMesh_0088"
+    },
+    {
+      "name": "Decor_Rubble_5_1",
+      "triangles": 60,
+      "mesh": "LODMesh_0089",
+      "exported": "LODMesh_0089"
+    },
+    {
+      "name": "Decor_Rubble_5_2",
+      "triangles": 40,
+      "mesh": "LODMesh_0090",
+      "exported": "LODMesh_0090"
+    },
+    {
+      "name": "Decor_Rubble_5_3",
+      "triangles": 48,
+      "mesh": "LODMesh_0091",
+      "exported": "LODMesh_0091"
+    },
+    {
+      "name": "Decor_Rubble_5_5",
+      "triangles": 40,
+      "mesh": "LODMesh_0092",
+      "exported": "LODMesh_0092"
+    },
+    {
+      "name": "Decor_Stalactite",
+      "triangles": 12,
+      "mesh": "LODMesh_0093",
+      "exported": "LODMesh_0093"
+    },
+    {
+      "name": "Decor_Stalactite.001",
+      "triangles": 12,
+      "mesh": "LODMesh_0094",
+      "exported": "LODMesh_0094"
+    },
+    {
+      "name": "Decor_Stalactite.002",
+      "triangles": 12,
+      "mesh": "LODMesh_0095",
+      "exported": "LODMesh_0095"
+    },
+    {
+      "name": "Decor_Stalactite.003",
+      "triangles": 12,
+      "mesh": "LODMesh_0096",
+      "exported": "LODMesh_0096"
+    },
+    {
+      "name": "Decor_Stalactite.004",
+      "triangles": 12,
+      "mesh": "LODMesh_0097",
+      "exported": "LODMesh_0097"
+    },
+    {
+      "name": "Decor_Stalactite.005",
+      "triangles": 12,
+      "mesh": "LODMesh_0098",
+      "exported": "LODMesh_0098"
+    },
+    {
+      "name": "Decor_Stalactite.006",
+      "triangles": 12,
+      "mesh": "LODMesh_0099",
+      "exported": "LODMesh_0099"
+    },
+    {
+      "name": "Decor_Stalactite.007",
+      "triangles": 12,
+      "mesh": "LODMesh_0100",
+      "exported": "LODMesh_0100"
+    },
+    {
+      "name": "Decor_Stalactite.008",
+      "triangles": 12,
+      "mesh": "LODMesh_0101",
+      "exported": "LODMesh_0101"
+    },
+    {
+      "name": "Decor_Stalactite.009",
+      "triangles": 12,
+      "mesh": "LODMesh_0102",
+      "exported": "LODMesh_0102"
+    },
+    {
+      "name": "Decor_Stalactite.010",
+      "triangles": 12,
+      "mesh": "LODMesh_0103",
+      "exported": "LODMesh_0103"
+    },
+    {
+      "name": "Decor_Stalactite.011",
+      "triangles": 12,
+      "mesh": "LODMesh_0104",
+      "exported": "LODMesh_0104"
+    },
+    {
+      "name": "Decor_Stalactite.012",
+      "triangles": 12,
+      "mesh": "LODMesh_0105",
+      "exported": "LODMesh_0105"
+    },
+    {
+      "name": "Decor_Stalactite.013",
+      "triangles": 12,
+      "mesh": "LODMesh_0106",
+      "exported": "LODMesh_0106"
+    },
+    {
+      "name": "Decor_Stalactite.014",
+      "triangles": 12,
+      "mesh": "LODMesh_0107",
+      "exported": "LODMesh_0107"
+    },
+    {
+      "name": "Decor_Stalactite.015",
+      "triangles": 12,
+      "mesh": "LODMesh_0108",
+      "exported": "LODMesh_0108"
+    },
+    {
+      "name": "Decor_Stalactite.016",
+      "triangles": 12,
+      "mesh": "LODMesh_0109",
+      "exported": "LODMesh_0109"
+    },
+    {
+      "name": "Decor_Stalactite.017",
+      "triangles": 12,
+      "mesh": "LODMesh_0110",
+      "exported": "LODMesh_0110"
+    },
+    {
+      "name": "Decor_Stalactite.018",
+      "triangles": 12,
+      "mesh": "LODMesh_0111",
+      "exported": "LODMesh_0111"
+    },
+    {
+      "name": "Decor_Stalactite.019",
+      "triangles": 12,
+      "mesh": "LODMesh_0112",
+      "exported": "LODMesh_0112"
+    },
+    {
+      "name": "Effect_BasinLavafall",
+      "triangles": 38,
+      "mesh": "LODMesh_0113",
+      "exported": "LODMesh_0113"
+    },
+    {
+      "name": "Effect_BasinLavafall.001",
+      "triangles": 38,
+      "mesh": "LODMesh_0114",
+      "exported": "LODMesh_0114"
+    },
+    {
+      "name": "Effect_BasinLavafall.002",
+      "triangles": 37,
+      "mesh": "LODMesh_0115",
+      "exported": "LODMesh_0115"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament",
+      "triangles": 37,
+      "mesh": "LODMesh_0116",
+      "exported": "LODMesh_0116"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.001",
+      "triangles": 38,
+      "mesh": "LODMesh_0117",
+      "exported": "LODMesh_0117"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.002",
+      "triangles": 38,
+      "mesh": "LODMesh_0118",
+      "exported": "LODMesh_0118"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.003",
+      "triangles": 37,
+      "mesh": "LODMesh_0119",
+      "exported": "LODMesh_0119"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.004",
+      "triangles": 38,
+      "mesh": "LODMesh_0120",
+      "exported": "LODMesh_0120"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.005",
+      "triangles": 38,
+      "mesh": "LODMesh_0121",
+      "exported": "LODMesh_0121"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.006",
+      "triangles": 37,
+      "mesh": "LODMesh_0122",
+      "exported": "LODMesh_0122"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.007",
+      "triangles": 38,
+      "mesh": "LODMesh_0123",
+      "exported": "LODMesh_0123"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.008",
+      "triangles": 37,
+      "mesh": "LODMesh_0124",
+      "exported": "LODMesh_0124"
+    },
+    {
+      "name": "Effect_BrazierCoal",
+      "triangles": 680,
+      "mesh": "LODMesh_0125",
+      "exported": "LODMesh_0125"
+    },
+    {
+      "name": "Effect_Core",
+      "triangles": 34,
+      "mesh": "LODMesh_0126",
+      "exported": "LODMesh_0126"
+    },
+    {
+      "name": "Effect_DeepLavafall",
+      "triangles": 32,
+      "mesh": "LODMesh_0127",
+      "exported": "LODMesh_0127"
+    },
+    {
+      "name": "Effect_DeepLavafall.001",
+      "triangles": 32,
+      "mesh": "LODMesh_0128",
+      "exported": "LODMesh_0128"
+    },
+    {
+      "name": "Effect_DeepLavafall.002",
+      "triangles": 32,
+      "mesh": "LODMesh_0129",
+      "exported": "LODMesh_0129"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament",
+      "triangles": 31,
+      "mesh": "LODMesh_0130",
+      "exported": "LODMesh_0130"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.001",
+      "triangles": 32,
+      "mesh": "LODMesh_0131",
+      "exported": "LODMesh_0131"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.002",
+      "triangles": 32,
+      "mesh": "LODMesh_0132",
+      "exported": "LODMesh_0132"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.003",
+      "triangles": 32,
+      "mesh": "LODMesh_0133",
+      "exported": "LODMesh_0133"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.004",
+      "triangles": 32,
+      "mesh": "LODMesh_0134",
+      "exported": "LODMesh_0134"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.005",
+      "triangles": 32,
+      "mesh": "LODMesh_0135",
+      "exported": "LODMesh_0135"
+    },
+    {
+      "name": "Effect_EastLavafall",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0136"
+    },
+    {
+      "name": "Effect_EastLavafall.001",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0137"
+    },
+    {
+      "name": "Effect_EastLavafall.002",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0138"
+    },
+    {
+      "name": "Effect_EastLavafallFilament",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0139"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.001",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0140"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.002",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0141"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.003",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0142"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.004",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0143"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.005",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0144"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.006",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0145"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.007",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0146"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.008",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0147"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.009",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0148"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.010",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0149"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.011",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0150"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.012",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0151"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.013",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0152"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.014",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0153"
+    },
+    {
+      "name": "Effect_GalleryFlame",
+      "triangles": 27,
+      "mesh": "LODMesh_0154",
+      "exported": "LODMesh_0154"
+    },
+    {
+      "name": "Effect_IncandescentFaults",
+      "triangles": 198,
+      "mesh": "LODMesh_0155",
+      "exported": "LODMesh_0155"
+    },
+    {
+      "name": "Effect_LavaSeams",
+      "triangles": 149,
+      "mesh": "LODMesh_0156",
+      "exported": "LODMesh_0156"
+    },
+    {
+      "name": "Effect_RimLavafall",
+      "triangles": 42,
+      "mesh": "LODMesh_0157",
+      "exported": "LODMesh_0157"
+    },
+    {
+      "name": "Effect_RimLavafall.001",
+      "triangles": 43,
+      "mesh": "LODMesh_0158",
+      "exported": "LODMesh_0158"
+    },
+    {
+      "name": "Effect_RimLavafall.002",
+      "triangles": 43,
+      "mesh": "LODMesh_0159",
+      "exported": "LODMesh_0159"
+    },
+    {
+      "name": "Effect_RimLavafallFilament",
+      "triangles": 42,
+      "mesh": "LODMesh_0160",
+      "exported": "LODMesh_0160"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.001",
+      "triangles": 42,
+      "mesh": "LODMesh_0161",
+      "exported": "LODMesh_0161"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.002",
+      "triangles": 43,
+      "mesh": "LODMesh_0162",
+      "exported": "LODMesh_0162"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.003",
+      "triangles": 42,
+      "mesh": "LODMesh_0163",
+      "exported": "LODMesh_0163"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.004",
+      "triangles": 43,
+      "mesh": "LODMesh_0164",
+      "exported": "LODMesh_0164"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.005",
+      "triangles": 43,
+      "mesh": "LODMesh_0165",
+      "exported": "LODMesh_0165"
+    },
+    {
+      "name": "Solid_CaveGuard",
+      "triangles": 28,
+      "mesh": "LODMesh_0166",
+      "exported": "LODMesh_0166"
+    },
+    {
+      "name": "Solid_CaveGuard.001",
+      "triangles": 28,
+      "mesh": "LODMesh_0167",
+      "exported": "LODMesh_0167"
+    },
+    {
+      "name": "Solid_CaveGuard.002",
+      "triangles": 28,
+      "mesh": "LODMesh_0168",
+      "exported": "LODMesh_0168"
+    },
+    {
+      "name": "Solid_CaveGuard.003",
+      "triangles": 28,
+      "mesh": "LODMesh_0169",
+      "exported": "LODMesh_0169"
+    },
+    {
+      "name": "Solid_CaveGuard.004",
+      "triangles": 28,
+      "mesh": "LODMesh_0170",
+      "exported": "LODMesh_0170"
+    },
+    {
+      "name": "Solid_CaveGuard.005",
+      "triangles": 28,
+      "mesh": "LODMesh_0171",
+      "exported": "LODMesh_0171"
+    },
+    {
+      "name": "Solid_CaveGuard.006",
+      "triangles": 28,
+      "mesh": "LODMesh_0172",
+      "exported": "LODMesh_0172"
+    },
+    {
+      "name": "Solid_CaveGuard.007",
+      "triangles": 28,
+      "mesh": "LODMesh_0173",
+      "exported": "LODMesh_0173"
+    },
+    {
+      "name": "Solid_CaveGuard.008",
+      "triangles": 28,
+      "mesh": "LODMesh_0174",
+      "exported": "LODMesh_0174"
+    },
+    {
+      "name": "Solid_CaveGuard.009",
+      "triangles": 28,
+      "mesh": "LODMesh_0175",
+      "exported": "LODMesh_0175"
+    },
+    {
+      "name": "Solid_CaveGuard.010",
+      "triangles": 28,
+      "mesh": "LODMesh_0176",
+      "exported": "LODMesh_0176"
+    },
+    {
+      "name": "Solid_CaveGuard.011",
+      "triangles": 28,
+      "mesh": "LODMesh_0177",
+      "exported": "LODMesh_0177"
+    },
+    {
+      "name": "Solid_CaveGuard.012",
+      "triangles": 28,
+      "mesh": "LODMesh_0178",
+      "exported": "LODMesh_0178"
+    },
+    {
+      "name": "Solid_CaveGuard.013",
+      "triangles": 28,
+      "mesh": "LODMesh_0179",
+      "exported": "LODMesh_0179"
+    },
+    {
+      "name": "Solid_CaveGuard.014",
+      "triangles": 28,
+      "mesh": "LODMesh_0180",
+      "exported": "LODMesh_0180"
+    },
+    {
+      "name": "Solid_CaveGuard.015",
+      "triangles": 28,
+      "mesh": "LODMesh_0181",
+      "exported": "LODMesh_0181"
+    },
+    {
+      "name": "Solid_CaveGuard.016",
+      "triangles": 28,
+      "mesh": "LODMesh_0182",
+      "exported": "LODMesh_0182"
+    },
+    {
+      "name": "Solid_CaveGuard.017",
+      "triangles": 28,
+      "mesh": "LODMesh_0183",
+      "exported": "LODMesh_0183"
+    },
+    {
+      "name": "Solid_CaveGuard.018",
+      "triangles": 28,
+      "mesh": "LODMesh_0184",
+      "exported": "LODMesh_0184"
+    },
+    {
+      "name": "Solid_CaveGuard.019",
+      "triangles": 28,
+      "mesh": "LODMesh_0185",
+      "exported": "LODMesh_0185"
+    },
+    {
+      "name": "Solid_CaveGuard.020",
+      "triangles": 28,
+      "mesh": "LODMesh_0186",
+      "exported": "LODMesh_0186"
+    },
+    {
+      "name": "Solid_CaveGuard.021",
+      "triangles": 28,
+      "mesh": "LODMesh_0187",
+      "exported": "LODMesh_0187"
+    },
+    {
+      "name": "Solid_CaveGuard.022",
+      "triangles": 28,
+      "mesh": "LODMesh_0188",
+      "exported": "LODMesh_0188"
+    },
+    {
+      "name": "Solid_CaveGuard.023",
+      "triangles": 28,
+      "mesh": "LODMesh_0189",
+      "exported": "LODMesh_0189"
+    },
+    {
+      "name": "Solid_CaveGuard.024",
+      "triangles": 28,
+      "mesh": "LODMesh_0190",
+      "exported": "LODMesh_0190"
+    },
+    {
+      "name": "Solid_CaveGuard.025",
+      "triangles": 28,
+      "mesh": "LODMesh_0191",
+      "exported": "LODMesh_0191"
+    },
+    {
+      "name": "Solid_CaveGuard.026",
+      "triangles": 28,
+      "mesh": "LODMesh_0192",
+      "exported": "LODMesh_0192"
+    },
+    {
+      "name": "Solid_CaveGuard.027",
+      "triangles": 28,
+      "mesh": "LODMesh_0193",
+      "exported": "LODMesh_0193"
+    },
+    {
+      "name": "Solid_CaveGuard.028",
+      "triangles": 28,
+      "mesh": "LODMesh_0194",
+      "exported": "LODMesh_0194"
+    },
+    {
+      "name": "Solid_CaveGuard.029",
+      "triangles": 28,
+      "mesh": "LODMesh_0195",
+      "exported": "LODMesh_0195"
+    },
+    {
+      "name": "Solid_CaveWall",
+      "triangles": 28,
+      "mesh": "LODMesh_0196",
+      "exported": "LODMesh_0196"
+    },
+    {
+      "name": "Solid_CaveWall.001",
+      "triangles": 28,
+      "mesh": "LODMesh_0197",
+      "exported": "LODMesh_0197"
+    },
+    {
+      "name": "Solid_CaveWall.002",
+      "triangles": 28,
+      "mesh": "LODMesh_0198",
+      "exported": "LODMesh_0198"
+    },
+    {
+      "name": "Solid_CaveWall.003",
+      "triangles": 28,
+      "mesh": "LODMesh_0199",
+      "exported": "LODMesh_0199"
+    },
+    {
+      "name": "Solid_CaveWall.004",
+      "triangles": 24,
+      "mesh": "LODMesh_0200",
+      "exported": "LODMesh_0200"
+    },
+    {
+      "name": "Solid_CaveWall.005",
+      "triangles": 32,
+      "mesh": "LODMesh_0201",
+      "exported": "LODMesh_0201"
+    },
+    {
+      "name": "Solid_CaveWall.006",
+      "triangles": 32,
+      "mesh": "LODMesh_0202",
+      "exported": "LODMesh_0202"
+    },
+    {
+      "name": "Solid_CaveWall.007",
+      "triangles": 32,
+      "mesh": "LODMesh_0203",
+      "exported": "LODMesh_0203"
+    },
+    {
+      "name": "Solid_CaveWall.008",
+      "triangles": 28,
+      "mesh": "LODMesh_0204",
+      "exported": "LODMesh_0204"
+    },
+    {
+      "name": "Solid_CaveWall.009",
+      "triangles": 24,
+      "mesh": "LODMesh_0205",
+      "exported": "LODMesh_0205"
+    },
+    {
+      "name": "Solid_CaveWall.010",
+      "triangles": 28,
+      "mesh": "LODMesh_0206",
+      "exported": "LODMesh_0206"
+    },
+    {
+      "name": "Solid_CaveWall.011",
+      "triangles": 32,
+      "mesh": "LODMesh_0207",
+      "exported": "LODMesh_0207"
+    },
+    {
+      "name": "Solid_CaveWall.012",
+      "triangles": 32,
+      "mesh": "LODMesh_0208",
+      "exported": "LODMesh_0208"
+    },
+    {
+      "name": "Solid_CaveWall.013",
+      "triangles": 32,
+      "mesh": "LODMesh_0209",
+      "exported": "LODMesh_0209"
+    },
+    {
+      "name": "Solid_CaveWall.014",
+      "triangles": 24,
+      "mesh": "LODMesh_0210",
+      "exported": "LODMesh_0210"
+    },
+    {
+      "name": "Solid_CaveWall.015",
+      "triangles": 32,
+      "mesh": "LODMesh_0211",
+      "exported": "LODMesh_0211"
+    },
+    {
+      "name": "Solid_CaveWall.016",
+      "triangles": 24,
+      "mesh": "LODMesh_0212",
+      "exported": "LODMesh_0212"
+    },
+    {
+      "name": "Solid_CaveWall.017",
+      "triangles": 32,
+      "mesh": "LODMesh_0213",
+      "exported": "LODMesh_0213"
+    },
+    {
+      "name": "Solid_CaveWall.018",
+      "triangles": 28,
+      "mesh": "LODMesh_0214",
+      "exported": "LODMesh_0214"
+    },
+    {
+      "name": "Solid_CaveWall.019",
+      "triangles": 24,
+      "mesh": "LODMesh_0215",
+      "exported": "LODMesh_0215"
+    },
+    {
+      "name": "Solid_Ceiling",
+      "triangles": 566,
+      "mesh": "LODMesh_0216",
+      "exported": "LODMesh_0216"
+    },
+    {
+      "name": "Solid_CorePlinth",
+      "triangles": 32,
+      "mesh": "LODMesh_0217",
+      "exported": "LODMesh_0217"
+    },
+    {
+      "name": "Solid_GalleryPosts",
+      "triangles": 8316,
+      "mesh": "LODMesh_0218",
+      "exported": "LODMesh_0218"
+    },
+    {
+      "name": "Solid_GalleryRails",
+      "triangles": 3844,
+      "mesh": "LODMesh_0219",
+      "exported": "LODMesh_0219"
+    },
+    {
+      "name": "Solid_LavaRail",
+      "triangles": 8,
+      "mesh": "LODMesh_0220",
+      "exported": "LODMesh_0220"
+    },
+    {
+      "name": "Solid_LavaRail.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0221",
+      "exported": "LODMesh_0221"
+    },
+    {
+      "name": "Solid_LavaRail.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0222",
+      "exported": "LODMesh_0222"
+    },
+    {
+      "name": "Solid_LavaRail.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0223",
+      "exported": "LODMesh_0223"
+    },
+    {
+      "name": "Solid_LavaRail.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0224",
+      "exported": "LODMesh_0224"
+    },
+    {
+      "name": "Solid_LavaRail.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0225",
+      "exported": "LODMesh_0225"
+    },
+    {
+      "name": "Solid_LavaRail.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0226",
+      "exported": "LODMesh_0226"
+    },
+    {
+      "name": "Solid_LavaRail.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0227",
+      "exported": "LODMesh_0227"
+    },
+    {
+      "name": "Solid_LavaRail.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0228",
+      "exported": "LODMesh_0228"
+    },
+    {
+      "name": "Solid_LavaRail.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0229",
+      "exported": "LODMesh_0229"
+    },
+    {
+      "name": "Solid_LavaRail.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0230",
+      "exported": "LODMesh_0230"
+    },
+    {
+      "name": "Solid_LavaRail.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0231",
+      "exported": "LODMesh_0231"
+    },
+    {
+      "name": "Solid_LavaRail.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0232",
+      "exported": "LODMesh_0232"
+    },
+    {
+      "name": "Solid_LavaRail.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0233",
+      "exported": "LODMesh_0233"
+    },
+    {
+      "name": "Solid_LavaRail.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0234",
+      "exported": "LODMesh_0234"
+    },
+    {
+      "name": "Solid_LavaRail.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0235",
+      "exported": "LODMesh_0235"
+    },
+    {
+      "name": "Solid_LavaRail.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0236",
+      "exported": "LODMesh_0236"
+    },
+    {
+      "name": "Solid_LavaRail.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0237",
+      "exported": "LODMesh_0237"
+    },
+    {
+      "name": "Solid_LavaRail.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0238",
+      "exported": "LODMesh_0238"
+    },
+    {
+      "name": "Solid_LavaRail.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0239",
+      "exported": "LODMesh_0239"
+    },
+    {
+      "name": "Solid_LavaRail.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0240",
+      "exported": "LODMesh_0240"
+    },
+    {
+      "name": "Solid_LavaRail.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0241",
+      "exported": "LODMesh_0241"
+    },
+    {
+      "name": "Solid_LavaRail.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0242",
+      "exported": "LODMesh_0242"
+    },
+    {
+      "name": "Solid_LavaRail.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0243",
+      "exported": "LODMesh_0243"
+    },
+    {
+      "name": "Solid_LavaRail.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0244",
+      "exported": "LODMesh_0244"
+    },
+    {
+      "name": "Solid_LavaRail.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0245",
+      "exported": "LODMesh_0245"
+    },
+    {
+      "name": "Solid_LavaRail.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0246",
+      "exported": "LODMesh_0246"
+    },
+    {
+      "name": "Solid_Rubble_0_0",
+      "triangles": 78,
+      "mesh": "LODMesh_0247",
+      "exported": "LODMesh_0247"
+    },
+    {
+      "name": "Solid_Rubble_0_1",
+      "triangles": 54,
+      "mesh": "LODMesh_0248",
+      "exported": "LODMesh_0248"
+    },
+    {
+      "name": "Solid_Rubble_0_2",
+      "triangles": 198,
+      "mesh": "LODMesh_0249",
+      "exported": "LODMesh_0249"
+    },
+    {
+      "name": "Solid_Rubble_0_3",
+      "triangles": 208,
+      "mesh": "LODMesh_0250",
+      "exported": "LODMesh_0250"
+    },
+    {
+      "name": "Solid_Rubble_1_0",
+      "triangles": 458,
+      "mesh": "LODMesh_0251",
+      "exported": "LODMesh_0251"
+    },
+    {
+      "name": "Solid_Rubble_1_1",
+      "triangles": 114,
+      "mesh": "LODMesh_0252",
+      "exported": "LODMesh_0252"
+    },
+    {
+      "name": "Solid_Rubble_1_2",
+      "triangles": 306,
+      "mesh": "LODMesh_0253",
+      "exported": "LODMesh_0253"
+    },
+    {
+      "name": "Solid_Rubble_1_3",
+      "triangles": 548,
+      "mesh": "LODMesh_0254",
+      "exported": "LODMesh_0254"
+    },
+    {
+      "name": "Solid_Rubble_1_4",
+      "triangles": 244,
+      "mesh": "LODMesh_0255",
+      "exported": "LODMesh_0255"
+    },
+    {
+      "name": "Solid_Rubble_1_5",
+      "triangles": 24,
+      "mesh": "LODMesh_0256",
+      "exported": "LODMesh_0256"
+    },
+    {
+      "name": "Solid_Rubble_2_0",
+      "triangles": 72,
+      "mesh": "LODMesh_0257",
+      "exported": "LODMesh_0257"
+    },
+    {
+      "name": "Solid_Rubble_2_1",
+      "triangles": 108,
+      "mesh": "LODMesh_0258",
+      "exported": "LODMesh_0258"
+    },
+    {
+      "name": "Solid_Rubble_2_3",
+      "triangles": 164,
+      "mesh": "LODMesh_0259",
+      "exported": "LODMesh_0259"
+    },
+    {
+      "name": "Solid_Rubble_2_4",
+      "triangles": 278,
+      "mesh": "LODMesh_0260",
+      "exported": "LODMesh_0260"
+    },
+    {
+      "name": "Solid_Rubble_2_5",
+      "triangles": 202,
+      "mesh": "LODMesh_0261",
+      "exported": "LODMesh_0261"
+    },
+    {
+      "name": "Solid_Rubble_3_0",
+      "triangles": 146,
+      "mesh": "LODMesh_0262",
+      "exported": "LODMesh_0262"
+    },
+    {
+      "name": "Solid_Rubble_3_1",
+      "triangles": 172,
+      "mesh": "LODMesh_0263",
+      "exported": "LODMesh_0263"
+    },
+    {
+      "name": "Solid_Rubble_3_3",
+      "triangles": 244,
+      "mesh": "LODMesh_0264",
+      "exported": "LODMesh_0264"
+    },
+    {
+      "name": "Solid_Rubble_3_4",
+      "triangles": 372,
+      "mesh": "LODMesh_0265",
+      "exported": "LODMesh_0265"
+    },
+    {
+      "name": "Solid_Rubble_3_5",
+      "triangles": 144,
+      "mesh": "LODMesh_0266",
+      "exported": "LODMesh_0266"
+    },
+    {
+      "name": "Solid_Rubble_4_0",
+      "triangles": 126,
+      "mesh": "LODMesh_0267",
+      "exported": "LODMesh_0267"
+    },
+    {
+      "name": "Solid_Rubble_4_1",
+      "triangles": 82,
+      "mesh": "LODMesh_0268",
+      "exported": "LODMesh_0268"
+    },
+    {
+      "name": "Solid_Rubble_4_2",
+      "triangles": 118,
+      "mesh": "LODMesh_0269",
+      "exported": "LODMesh_0269"
+    },
+    {
+      "name": "Solid_Rubble_4_3",
+      "triangles": 50,
+      "mesh": "LODMesh_0270",
+      "exported": "LODMesh_0270"
+    },
+    {
+      "name": "Solid_Rubble_4_4",
+      "triangles": 426,
+      "mesh": "LODMesh_0271",
+      "exported": "LODMesh_0271"
+    },
+    {
+      "name": "Solid_Rubble_4_5",
+      "triangles": 68,
+      "mesh": "LODMesh_0272",
+      "exported": "LODMesh_0272"
+    },
+    {
+      "name": "Solid_Rubble_5_0",
+      "triangles": 390,
+      "mesh": "LODMesh_0273",
+      "exported": "LODMesh_0273"
+    },
+    {
+      "name": "Solid_Rubble_5_1",
+      "triangles": 336,
+      "mesh": "LODMesh_0274",
+      "exported": "LODMesh_0274"
+    },
+    {
+      "name": "Solid_Rubble_5_2",
+      "triangles": 122,
+      "mesh": "LODMesh_0275",
+      "exported": "LODMesh_0275"
+    },
+    {
+      "name": "Solid_Rubble_5_3",
+      "triangles": 184,
+      "mesh": "LODMesh_0276",
+      "exported": "LODMesh_0276"
+    },
+    {
+      "name": "Solid_Rubble_5_4",
+      "triangles": 54,
+      "mesh": "LODMesh_0277",
+      "exported": "LODMesh_0277"
+    },
+    {
+      "name": "Solid_Rubble_5_5",
+      "triangles": 252,
+      "mesh": "LODMesh_0278",
+      "exported": "LODMesh_0278"
+    },
+    {
+      "name": "Solid_SculptedCavern_0",
+      "triangles": 9114,
+      "mesh": "LODMesh_0279",
+      "exported": "LODMesh_0279"
+    },
+    {
+      "name": "Solid_SculptedCavern_1",
+      "triangles": 6836,
+      "mesh": "LODMesh_0280",
+      "exported": "LODMesh_0280"
+    },
+    {
+      "name": "Solid_SculptedCavern_10",
+      "triangles": 2278,
+      "mesh": "LODMesh_0281",
+      "exported": "LODMesh_0281"
+    },
+    {
+      "name": "Solid_SculptedCavern_11",
+      "triangles": 1138,
+      "mesh": "LODMesh_0282",
+      "exported": "LODMesh_0282"
+    },
+    {
+      "name": "Solid_SculptedCavern_12",
+      "triangles": 1138,
+      "mesh": "LODMesh_0283",
+      "exported": "LODMesh_0283"
+    },
+    {
+      "name": "Solid_SculptedCavern_13",
+      "triangles": 1138,
+      "mesh": "LODMesh_0284",
+      "exported": "LODMesh_0284"
+    },
+    {
+      "name": "Solid_SculptedCavern_2",
+      "triangles": 2278,
+      "mesh": "LODMesh_0285",
+      "exported": "LODMesh_0285"
+    },
+    {
+      "name": "Solid_SculptedCavern_3",
+      "triangles": 4556,
+      "mesh": "LODMesh_0286",
+      "exported": "LODMesh_0286"
+    },
+    {
+      "name": "Solid_SculptedCavern_4",
+      "triangles": 2278,
+      "mesh": "LODMesh_0287",
+      "exported": "LODMesh_0287"
+    },
+    {
+      "name": "Solid_SculptedCavern_5",
+      "triangles": 4556,
+      "mesh": "LODMesh_0288",
+      "exported": "LODMesh_0288"
+    },
+    {
+      "name": "Solid_SculptedCavern_6",
+      "triangles": 3418,
+      "mesh": "LODMesh_0289",
+      "exported": "LODMesh_0289"
+    },
+    {
+      "name": "Solid_SculptedCavern_7",
+      "triangles": 1138,
+      "mesh": "LODMesh_0290",
+      "exported": "LODMesh_0290"
+    },
+    {
+      "name": "Solid_SculptedCavern_8",
+      "triangles": 1138,
+      "mesh": "LODMesh_0291",
+      "exported": "LODMesh_0291"
+    },
+    {
+      "name": "Solid_SculptedCavern_9",
+      "triangles": 2278,
+      "mesh": "LODMesh_0292",
+      "exported": "LODMesh_0292"
+    },
+    {
+      "name": "Surface_lava_0",
+      "triangles": 10,
+      "mesh": "",
+      "exported": "LODMesh_0293"
+    },
+    {
+      "name": "Surface_lava_1",
+      "triangles": 6,
+      "mesh": "",
+      "exported": "LODMesh_0294"
+    },
+    {
+      "name": "Terrain_0_0",
+      "triangles": 110,
+      "mesh": "LODMesh_0295",
+      "exported": "LODMesh_0295"
+    },
+    {
+      "name": "Terrain_0_1",
+      "triangles": 81,
+      "mesh": "LODMesh_0296",
+      "exported": "LODMesh_0296"
+    },
+    {
+      "name": "Terrain_0_2",
+      "triangles": 80,
+      "mesh": "LODMesh_0297",
+      "exported": "LODMesh_0297"
+    },
+    {
+      "name": "Terrain_0_3",
+      "triangles": 80,
+      "mesh": "LODMesh_0298",
+      "exported": "LODMesh_0298"
+    },
+    {
+      "name": "Terrain_0_4",
+      "triangles": 81,
+      "mesh": "LODMesh_0299",
+      "exported": "LODMesh_0299"
+    },
+    {
+      "name": "Terrain_0_5",
+      "triangles": 84,
+      "mesh": "LODMesh_0300",
+      "exported": "LODMesh_0300"
+    },
+    {
+      "name": "Terrain_1_0",
+      "triangles": 172,
+      "mesh": "LODMesh_0301",
+      "exported": "LODMesh_0301"
+    },
+    {
+      "name": "Terrain_1_1",
+      "triangles": 92,
+      "mesh": "LODMesh_0302",
+      "exported": "LODMesh_0302"
+    },
+    {
+      "name": "Terrain_1_2",
+      "triangles": 93,
+      "mesh": "LODMesh_0303",
+      "exported": "LODMesh_0303"
+    },
+    {
+      "name": "Terrain_1_3",
+      "triangles": 186,
+      "mesh": "LODMesh_0304",
+      "exported": "LODMesh_0304"
+    },
+    {
+      "name": "Terrain_1_4",
+      "triangles": 78,
+      "mesh": "LODMesh_0305",
+      "exported": "LODMesh_0305"
+    },
+    {
+      "name": "Terrain_1_5",
+      "triangles": 82,
+      "mesh": "LODMesh_0306",
+      "exported": "LODMesh_0306"
+    },
+    {
+      "name": "Terrain_2_0",
+      "triangles": 176,
+      "mesh": "LODMesh_0307",
+      "exported": "LODMesh_0307"
+    },
+    {
+      "name": "Terrain_2_1",
+      "triangles": 180,
+      "mesh": "LODMesh_0308",
+      "exported": "LODMesh_0308"
+    },
+    {
+      "name": "Terrain_2_2",
+      "triangles": 85,
+      "mesh": "LODMesh_0309",
+      "exported": "LODMesh_0309"
+    },
+    {
+      "name": "Terrain_2_3",
+      "triangles": 125,
+      "mesh": "LODMesh_0310",
+      "exported": "LODMesh_0310"
+    },
+    {
+      "name": "Terrain_2_4",
+      "triangles": 187,
+      "mesh": "LODMesh_0311",
+      "exported": "LODMesh_0311"
+    },
+    {
+      "name": "Terrain_2_5",
+      "triangles": 79,
+      "mesh": "LODMesh_0312",
+      "exported": "LODMesh_0312"
+    },
+    {
+      "name": "Terrain_3_0",
+      "triangles": 227,
+      "mesh": "LODMesh_0313",
+      "exported": "LODMesh_0313"
+    },
+    {
+      "name": "Terrain_3_1",
+      "triangles": 231,
+      "mesh": "LODMesh_0314",
+      "exported": "LODMesh_0314"
+    },
+    {
+      "name": "Terrain_3_2",
+      "triangles": 76,
+      "mesh": "LODMesh_0315",
+      "exported": "LODMesh_0315"
+    },
+    {
+      "name": "Terrain_3_3",
+      "triangles": 99,
+      "mesh": "LODMesh_0316",
+      "exported": "LODMesh_0316"
+    },
+    {
+      "name": "Terrain_3_4",
+      "triangles": 247,
+      "mesh": "LODMesh_0317",
+      "exported": "LODMesh_0317"
+    },
+    {
+      "name": "Terrain_3_5",
+      "triangles": 146,
+      "mesh": "LODMesh_0318",
+      "exported": "LODMesh_0318"
+    },
+    {
+      "name": "Terrain_4_0",
+      "triangles": 80,
+      "mesh": "LODMesh_0319",
+      "exported": "LODMesh_0319"
+    },
+    {
+      "name": "Terrain_4_1",
+      "triangles": 195,
+      "mesh": "LODMesh_0320",
+      "exported": "LODMesh_0320"
+    },
+    {
+      "name": "Terrain_4_2",
+      "triangles": 208,
+      "mesh": "LODMesh_0321",
+      "exported": "LODMesh_0321"
+    },
+    {
+      "name": "Terrain_4_3",
+      "triangles": 206,
+      "mesh": "LODMesh_0322",
+      "exported": "LODMesh_0322"
+    },
+    {
+      "name": "Terrain_4_4",
+      "triangles": 119,
+      "mesh": "LODMesh_0323",
+      "exported": "LODMesh_0323"
+    },
+    {
+      "name": "Terrain_4_5",
+      "triangles": 82,
+      "mesh": "LODMesh_0324",
+      "exported": "LODMesh_0324"
+    },
+    {
+      "name": "Terrain_5_0",
+      "triangles": 84,
+      "mesh": "LODMesh_0325",
+      "exported": "LODMesh_0325"
+    },
+    {
+      "name": "Terrain_5_1",
+      "triangles": 83,
+      "mesh": "LODMesh_0326",
+      "exported": "LODMesh_0326"
+    },
+    {
+      "name": "Terrain_5_2",
+      "triangles": 114,
+      "mesh": "LODMesh_0327",
+      "exported": "LODMesh_0327"
+    },
+    {
+      "name": "Terrain_5_3",
+      "triangles": 117,
+      "mesh": "LODMesh_0328",
+      "exported": "LODMesh_0328"
+    },
+    {
+      "name": "Terrain_5_4",
+      "triangles": 81,
+      "mesh": "LODMesh_0329",
+      "exported": "LODMesh_0329"
+    },
+    {
+      "name": "Terrain_5_5",
+      "triangles": 84,
+      "mesh": "LODMesh_0330",
+      "exported": "LODMesh_0330"
+    }
+  ],
+  "lod2": [
+    {
+      "name": "Art_BasaltPaving",
+      "triangles": 1200,
+      "mesh": "LODMesh_0000",
+      "exported": "LODMesh_0000"
+    },
+    {
+      "name": "Art_BrazierBowls",
+      "triangles": 124,
+      "mesh": "LODMesh_0001",
+      "exported": "LODMesh_0001"
+    },
+    {
+      "name": "Art_BrazierMasonry",
+      "triangles": 38,
+      "mesh": "LODMesh_0002",
+      "exported": "LODMesh_0002"
+    },
+    {
+      "name": "Art_IncisedMarks",
+      "triangles": 85,
+      "mesh": "LODMesh_0003",
+      "exported": "LODMesh_0003"
+    },
+    {
+      "name": "Decor_CaveBrazier",
+      "triangles": 3,
+      "mesh": "LODMesh_0004",
+      "exported": "LODMesh_0004"
+    },
+    {
+      "name": "Decor_CaveBrazier.001",
+      "triangles": 3,
+      "mesh": "LODMesh_0005",
+      "exported": "LODMesh_0005"
+    },
+    {
+      "name": "Decor_CaveBrazier.002",
+      "triangles": 3,
+      "mesh": "LODMesh_0006",
+      "exported": "LODMesh_0006"
+    },
+    {
+      "name": "Decor_CaveBrazier.003",
+      "triangles": 3,
+      "mesh": "LODMesh_0007",
+      "exported": "LODMesh_0007"
+    },
+    {
+      "name": "Decor_CaveBrazier.004",
+      "triangles": 3,
+      "mesh": "LODMesh_0008",
+      "exported": "LODMesh_0008"
+    },
+    {
+      "name": "Decor_CaveBrazier.005",
+      "triangles": 3,
+      "mesh": "LODMesh_0009",
+      "exported": "LODMesh_0009"
+    },
+    {
+      "name": "Decor_CavernPerimeter",
+      "triangles": 4,
+      "mesh": "LODMesh_0010",
+      "exported": "LODMesh_0010"
+    },
+    {
+      "name": "Decor_CeilingStalactite",
+      "triangles": 4,
+      "mesh": "LODMesh_0011",
+      "exported": "LODMesh_0011"
+    },
+    {
+      "name": "Decor_CeilingStalactite.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0012",
+      "exported": "LODMesh_0012"
+    },
+    {
+      "name": "Decor_CeilingStalactite.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0013",
+      "exported": "LODMesh_0013"
+    },
+    {
+      "name": "Decor_CeilingStalactite.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0014",
+      "exported": "LODMesh_0014"
+    },
+    {
+      "name": "Decor_CeilingStalactite.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0015",
+      "exported": "LODMesh_0015"
+    },
+    {
+      "name": "Decor_CeilingStalactite.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0016",
+      "exported": "LODMesh_0016"
+    },
+    {
+      "name": "Decor_CeilingStalactite.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0017",
+      "exported": "LODMesh_0017"
+    },
+    {
+      "name": "Decor_CeilingStalactite.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0018",
+      "exported": "LODMesh_0018"
+    },
+    {
+      "name": "Decor_CeilingStalactite.008",
+      "triangles": 4,
+      "mesh": "LODMesh_0019",
+      "exported": "LODMesh_0019"
+    },
+    {
+      "name": "Decor_CeilingStalactite.009",
+      "triangles": 4,
+      "mesh": "LODMesh_0020",
+      "exported": "LODMesh_0020"
+    },
+    {
+      "name": "Decor_CeilingStalactite.010",
+      "triangles": 4,
+      "mesh": "LODMesh_0021",
+      "exported": "LODMesh_0021"
+    },
+    {
+      "name": "Decor_CeilingStalactite.011",
+      "triangles": 4,
+      "mesh": "LODMesh_0022",
+      "exported": "LODMesh_0022"
+    },
+    {
+      "name": "Decor_CeilingStalactite.012",
+      "triangles": 4,
+      "mesh": "LODMesh_0023",
+      "exported": "LODMesh_0023"
+    },
+    {
+      "name": "Decor_CeilingStalactite.013",
+      "triangles": 4,
+      "mesh": "LODMesh_0024",
+      "exported": "LODMesh_0024"
+    },
+    {
+      "name": "Decor_CeilingStalactite.014",
+      "triangles": 4,
+      "mesh": "LODMesh_0025",
+      "exported": "LODMesh_0025"
+    },
+    {
+      "name": "Decor_CeilingStalactite.015",
+      "triangles": 4,
+      "mesh": "LODMesh_0026",
+      "exported": "LODMesh_0026"
+    },
+    {
+      "name": "Decor_CeilingStalactite.016",
+      "triangles": 4,
+      "mesh": "LODMesh_0027",
+      "exported": "LODMesh_0027"
+    },
+    {
+      "name": "Decor_CeilingStalactite.017",
+      "triangles": 4,
+      "mesh": "LODMesh_0028",
+      "exported": "LODMesh_0028"
+    },
+    {
+      "name": "Decor_CeilingStalactite.018",
+      "triangles": 4,
+      "mesh": "LODMesh_0029",
+      "exported": "LODMesh_0029"
+    },
+    {
+      "name": "Decor_CeilingStalactite.019",
+      "triangles": 4,
+      "mesh": "LODMesh_0030",
+      "exported": "LODMesh_0030"
+    },
+    {
+      "name": "Decor_CeilingStalactite.020",
+      "triangles": 4,
+      "mesh": "LODMesh_0031",
+      "exported": "LODMesh_0031"
+    },
+    {
+      "name": "Decor_CeilingStalactite.021",
+      "triangles": 4,
+      "mesh": "LODMesh_0032",
+      "exported": "LODMesh_0032"
+    },
+    {
+      "name": "Decor_CeilingStalactite.022",
+      "triangles": 4,
+      "mesh": "LODMesh_0033",
+      "exported": "LODMesh_0033"
+    },
+    {
+      "name": "Decor_CeilingStalactite.023",
+      "triangles": 4,
+      "mesh": "LODMesh_0034",
+      "exported": "LODMesh_0034"
+    },
+    {
+      "name": "Decor_CeilingStalactite.024",
+      "triangles": 4,
+      "mesh": "LODMesh_0035",
+      "exported": "LODMesh_0035"
+    },
+    {
+      "name": "Decor_CeilingStalactite.025",
+      "triangles": 4,
+      "mesh": "LODMesh_0036",
+      "exported": "LODMesh_0036"
+    },
+    {
+      "name": "Decor_CeilingStalactite.026",
+      "triangles": 4,
+      "mesh": "LODMesh_0037",
+      "exported": "LODMesh_0037"
+    },
+    {
+      "name": "Decor_CeilingStalactite.027",
+      "triangles": 4,
+      "mesh": "LODMesh_0038",
+      "exported": "LODMesh_0038"
+    },
+    {
+      "name": "Decor_CeilingStalactite.028",
+      "triangles": 4,
+      "mesh": "LODMesh_0039",
+      "exported": "LODMesh_0039"
+    },
+    {
+      "name": "Decor_CeilingStalactite.029",
+      "triangles": 4,
+      "mesh": "LODMesh_0040",
+      "exported": "LODMesh_0040"
+    },
+    {
+      "name": "Decor_CeilingStalactite.030",
+      "triangles": 4,
+      "mesh": "LODMesh_0041",
+      "exported": "LODMesh_0041"
+    },
+    {
+      "name": "Decor_CeilingStalactite.031",
+      "triangles": 4,
+      "mesh": "LODMesh_0042",
+      "exported": "LODMesh_0042"
+    },
+    {
+      "name": "Decor_CeilingStalactite.032",
+      "triangles": 4,
+      "mesh": "LODMesh_0043",
+      "exported": "LODMesh_0043"
+    },
+    {
+      "name": "Decor_CeilingStalactite.033",
+      "triangles": 4,
+      "mesh": "LODMesh_0044",
+      "exported": "LODMesh_0044"
+    },
+    {
+      "name": "Decor_CeilingStalactite.034",
+      "triangles": 4,
+      "mesh": "LODMesh_0045",
+      "exported": "LODMesh_0045"
+    },
+    {
+      "name": "Decor_CeilingStalactite.035",
+      "triangles": 4,
+      "mesh": "LODMesh_0046",
+      "exported": "LODMesh_0046"
+    },
+    {
+      "name": "Decor_CeilingStalactite.036",
+      "triangles": 4,
+      "mesh": "LODMesh_0047",
+      "exported": "LODMesh_0047"
+    },
+    {
+      "name": "Decor_CeilingStalactite.037",
+      "triangles": 4,
+      "mesh": "LODMesh_0048",
+      "exported": "LODMesh_0048"
+    },
+    {
+      "name": "Decor_CeilingStalactite.038",
+      "triangles": 4,
+      "mesh": "LODMesh_0049",
+      "exported": "LODMesh_0049"
+    },
+    {
+      "name": "Decor_CeilingStalactite.039",
+      "triangles": 4,
+      "mesh": "LODMesh_0050",
+      "exported": "LODMesh_0050"
+    },
+    {
+      "name": "Decor_CeilingStalactite.040",
+      "triangles": 4,
+      "mesh": "LODMesh_0051",
+      "exported": "LODMesh_0051"
+    },
+    {
+      "name": "Decor_CeilingStalactite.041",
+      "triangles": 4,
+      "mesh": "LODMesh_0052",
+      "exported": "LODMesh_0052"
+    },
+    {
+      "name": "Decor_CeilingStalactite.042",
+      "triangles": 4,
+      "mesh": "LODMesh_0053",
+      "exported": "LODMesh_0053"
+    },
+    {
+      "name": "Decor_CeilingStalactite.043",
+      "triangles": 4,
+      "mesh": "LODMesh_0054",
+      "exported": "LODMesh_0054"
+    },
+    {
+      "name": "Decor_CeilingStalactite.044",
+      "triangles": 4,
+      "mesh": "LODMesh_0055",
+      "exported": "LODMesh_0055"
+    },
+    {
+      "name": "Decor_CeilingStalactite.045",
+      "triangles": 4,
+      "mesh": "LODMesh_0056",
+      "exported": "LODMesh_0056"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_0",
+      "triangles": 1648,
+      "mesh": "LODMesh_0057",
+      "exported": "LODMesh_0057"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_1",
+      "triangles": 412,
+      "mesh": "LODMesh_0058",
+      "exported": "LODMesh_0058"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_2",
+      "triangles": 102,
+      "mesh": "LODMesh_0059",
+      "exported": "LODMesh_0059"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_3",
+      "triangles": 102,
+      "mesh": "LODMesh_0060",
+      "exported": "LODMesh_0060"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_4",
+      "triangles": 206,
+      "mesh": "LODMesh_0061",
+      "exported": "LODMesh_0061"
+    },
+    {
+      "name": "Decor_CeilingStalactite_Gallery_5",
+      "triangles": 102,
+      "mesh": "LODMesh_0062",
+      "exported": "LODMesh_0062"
+    },
+    {
+      "name": "Decor_Rubble_0_0",
+      "triangles": 3,
+      "mesh": "LODMesh_0063",
+      "exported": "LODMesh_0063"
+    },
+    {
+      "name": "Decor_Rubble_0_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0064",
+      "exported": "LODMesh_0064"
+    },
+    {
+      "name": "Decor_Rubble_0_2",
+      "triangles": 2,
+      "mesh": "LODMesh_0065",
+      "exported": "LODMesh_0065"
+    },
+    {
+      "name": "Decor_Rubble_0_3",
+      "triangles": 3,
+      "mesh": "LODMesh_0066",
+      "exported": "LODMesh_0066"
+    },
+    {
+      "name": "Decor_Rubble_1_0",
+      "triangles": 4,
+      "mesh": "LODMesh_0067",
+      "exported": "LODMesh_0067"
+    },
+    {
+      "name": "Decor_Rubble_1_1",
+      "triangles": 2,
+      "mesh": "LODMesh_0068",
+      "exported": "LODMesh_0068"
+    },
+    {
+      "name": "Decor_Rubble_1_2",
+      "triangles": 4,
+      "mesh": "LODMesh_0069",
+      "exported": "LODMesh_0069"
+    },
+    {
+      "name": "Decor_Rubble_1_3",
+      "triangles": 2,
+      "mesh": "LODMesh_0070",
+      "exported": "LODMesh_0070"
+    },
+    {
+      "name": "Decor_Rubble_1_4",
+      "triangles": 4,
+      "mesh": "LODMesh_0071",
+      "exported": "LODMesh_0071"
+    },
+    {
+      "name": "Decor_Rubble_2_0",
+      "triangles": 3,
+      "mesh": "LODMesh_0072",
+      "exported": "LODMesh_0072"
+    },
+    {
+      "name": "Decor_Rubble_2_1",
+      "triangles": 5,
+      "mesh": "LODMesh_0073",
+      "exported": "LODMesh_0073"
+    },
+    {
+      "name": "Decor_Rubble_2_3",
+      "triangles": 4,
+      "mesh": "LODMesh_0074",
+      "exported": "LODMesh_0074"
+    },
+    {
+      "name": "Decor_Rubble_2_4",
+      "triangles": 3,
+      "mesh": "LODMesh_0075",
+      "exported": "LODMesh_0075"
+    },
+    {
+      "name": "Decor_Rubble_2_5",
+      "triangles": 4,
+      "mesh": "LODMesh_0076",
+      "exported": "LODMesh_0076"
+    },
+    {
+      "name": "Decor_Rubble_3_0",
+      "triangles": 5,
+      "mesh": "LODMesh_0077",
+      "exported": "LODMesh_0077"
+    },
+    {
+      "name": "Decor_Rubble_3_1",
+      "triangles": 2,
+      "mesh": "LODMesh_0078",
+      "exported": "LODMesh_0078"
+    },
+    {
+      "name": "Decor_Rubble_3_3",
+      "triangles": 3,
+      "mesh": "LODMesh_0079",
+      "exported": "LODMesh_0079"
+    },
+    {
+      "name": "Decor_Rubble_3_4",
+      "triangles": 3,
+      "mesh": "LODMesh_0080",
+      "exported": "LODMesh_0080"
+    },
+    {
+      "name": "Decor_Rubble_3_5",
+      "triangles": 6,
+      "mesh": "LODMesh_0081",
+      "exported": "LODMesh_0081"
+    },
+    {
+      "name": "Decor_Rubble_4_0",
+      "triangles": 4,
+      "mesh": "LODMesh_0082",
+      "exported": "LODMesh_0082"
+    },
+    {
+      "name": "Decor_Rubble_4_1",
+      "triangles": 5,
+      "mesh": "LODMesh_0083",
+      "exported": "LODMesh_0083"
+    },
+    {
+      "name": "Decor_Rubble_4_2",
+      "triangles": 2,
+      "mesh": "LODMesh_0084",
+      "exported": "LODMesh_0084"
+    },
+    {
+      "name": "Decor_Rubble_4_3",
+      "triangles": 2,
+      "mesh": "LODMesh_0085",
+      "exported": "LODMesh_0085"
+    },
+    {
+      "name": "Decor_Rubble_4_4",
+      "triangles": 4,
+      "mesh": "LODMesh_0086",
+      "exported": "LODMesh_0086"
+    },
+    {
+      "name": "Decor_Rubble_4_5",
+      "triangles": 4,
+      "mesh": "LODMesh_0087",
+      "exported": "LODMesh_0087"
+    },
+    {
+      "name": "Decor_Rubble_5_0",
+      "triangles": 3,
+      "mesh": "LODMesh_0088",
+      "exported": "LODMesh_0088"
+    },
+    {
+      "name": "Decor_Rubble_5_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0089",
+      "exported": "LODMesh_0089"
+    },
+    {
+      "name": "Decor_Rubble_5_2",
+      "triangles": 4,
+      "mesh": "LODMesh_0090",
+      "exported": "LODMesh_0090"
+    },
+    {
+      "name": "Decor_Rubble_5_3",
+      "triangles": 5,
+      "mesh": "LODMesh_0091",
+      "exported": "LODMesh_0091"
+    },
+    {
+      "name": "Decor_Rubble_5_5",
+      "triangles": 4,
+      "mesh": "LODMesh_0092",
+      "exported": "LODMesh_0092"
+    },
+    {
+      "name": "Decor_Stalactite",
+      "triangles": 4,
+      "mesh": "LODMesh_0093",
+      "exported": "LODMesh_0093"
+    },
+    {
+      "name": "Decor_Stalactite.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0094",
+      "exported": "LODMesh_0094"
+    },
+    {
+      "name": "Decor_Stalactite.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0095",
+      "exported": "LODMesh_0095"
+    },
+    {
+      "name": "Decor_Stalactite.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0096",
+      "exported": "LODMesh_0096"
+    },
+    {
+      "name": "Decor_Stalactite.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0097",
+      "exported": "LODMesh_0097"
+    },
+    {
+      "name": "Decor_Stalactite.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0098",
+      "exported": "LODMesh_0098"
+    },
+    {
+      "name": "Decor_Stalactite.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0099",
+      "exported": "LODMesh_0099"
+    },
+    {
+      "name": "Decor_Stalactite.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0100",
+      "exported": "LODMesh_0100"
+    },
+    {
+      "name": "Decor_Stalactite.008",
+      "triangles": 4,
+      "mesh": "LODMesh_0101",
+      "exported": "LODMesh_0101"
+    },
+    {
+      "name": "Decor_Stalactite.009",
+      "triangles": 4,
+      "mesh": "LODMesh_0102",
+      "exported": "LODMesh_0102"
+    },
+    {
+      "name": "Decor_Stalactite.010",
+      "triangles": 4,
+      "mesh": "LODMesh_0103",
+      "exported": "LODMesh_0103"
+    },
+    {
+      "name": "Decor_Stalactite.011",
+      "triangles": 4,
+      "mesh": "LODMesh_0104",
+      "exported": "LODMesh_0104"
+    },
+    {
+      "name": "Decor_Stalactite.012",
+      "triangles": 4,
+      "mesh": "LODMesh_0105",
+      "exported": "LODMesh_0105"
+    },
+    {
+      "name": "Decor_Stalactite.013",
+      "triangles": 4,
+      "mesh": "LODMesh_0106",
+      "exported": "LODMesh_0106"
+    },
+    {
+      "name": "Decor_Stalactite.014",
+      "triangles": 4,
+      "mesh": "LODMesh_0107",
+      "exported": "LODMesh_0107"
+    },
+    {
+      "name": "Decor_Stalactite.015",
+      "triangles": 4,
+      "mesh": "LODMesh_0108",
+      "exported": "LODMesh_0108"
+    },
+    {
+      "name": "Decor_Stalactite.016",
+      "triangles": 4,
+      "mesh": "LODMesh_0109",
+      "exported": "LODMesh_0109"
+    },
+    {
+      "name": "Decor_Stalactite.017",
+      "triangles": 4,
+      "mesh": "LODMesh_0110",
+      "exported": "LODMesh_0110"
+    },
+    {
+      "name": "Decor_Stalactite.018",
+      "triangles": 4,
+      "mesh": "LODMesh_0111",
+      "exported": "LODMesh_0111"
+    },
+    {
+      "name": "Decor_Stalactite.019",
+      "triangles": 4,
+      "mesh": "LODMesh_0112",
+      "exported": "LODMesh_0112"
+    },
+    {
+      "name": "Effect_BasinLavafall",
+      "triangles": 4,
+      "mesh": "LODMesh_0113",
+      "exported": "LODMesh_0113"
+    },
+    {
+      "name": "Effect_BasinLavafall.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0114",
+      "exported": "LODMesh_0114"
+    },
+    {
+      "name": "Effect_BasinLavafall.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0115",
+      "exported": "LODMesh_0115"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament",
+      "triangles": 4,
+      "mesh": "LODMesh_0116",
+      "exported": "LODMesh_0116"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0117",
+      "exported": "LODMesh_0117"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0118",
+      "exported": "LODMesh_0118"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0119",
+      "exported": "LODMesh_0119"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0120",
+      "exported": "LODMesh_0120"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0121",
+      "exported": "LODMesh_0121"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.006",
+      "triangles": 3,
+      "mesh": "LODMesh_0122",
+      "exported": "LODMesh_0122"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.007",
+      "triangles": 3,
+      "mesh": "LODMesh_0123",
+      "exported": "LODMesh_0123"
+    },
+    {
+      "name": "Effect_BasinLavafallFilament.008",
+      "triangles": 4,
+      "mesh": "LODMesh_0124",
+      "exported": "LODMesh_0124"
+    },
+    {
+      "name": "Effect_BrazierCoal",
+      "triangles": 43,
+      "mesh": "LODMesh_0125",
+      "exported": "LODMesh_0125"
+    },
+    {
+      "name": "Effect_Core",
+      "triangles": 4,
+      "mesh": "LODMesh_0126",
+      "exported": "LODMesh_0126"
+    },
+    {
+      "name": "Effect_DeepLavafall",
+      "triangles": 4,
+      "mesh": "LODMesh_0127",
+      "exported": "LODMesh_0127"
+    },
+    {
+      "name": "Effect_DeepLavafall.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0128",
+      "exported": "LODMesh_0128"
+    },
+    {
+      "name": "Effect_DeepLavafall.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0129",
+      "exported": "LODMesh_0129"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament",
+      "triangles": 3,
+      "mesh": "LODMesh_0130",
+      "exported": "LODMesh_0130"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0131",
+      "exported": "LODMesh_0131"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0132",
+      "exported": "LODMesh_0132"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0133",
+      "exported": "LODMesh_0133"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0134",
+      "exported": "LODMesh_0134"
+    },
+    {
+      "name": "Effect_DeepLavafallFilament.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0135",
+      "exported": "LODMesh_0135"
+    },
+    {
+      "name": "Effect_EastLavafall",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0136"
+    },
+    {
+      "name": "Effect_EastLavafall.001",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0137"
+    },
+    {
+      "name": "Effect_EastLavafall.002",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0138"
+    },
+    {
+      "name": "Effect_EastLavafallFilament",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0139"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.001",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0140"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.002",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0141"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.003",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0142"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.004",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0143"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.005",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0144"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.006",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0145"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.007",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0146"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.008",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0147"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.009",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0148"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.010",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0149"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.011",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0150"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.012",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0151"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.013",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0152"
+    },
+    {
+      "name": "Effect_EastLavafallFilament.014",
+      "triangles": 144,
+      "mesh": "",
+      "exported": "LODMesh_0153"
+    },
+    {
+      "name": "Effect_GalleryFlame",
+      "triangles": 4,
+      "mesh": "LODMesh_0154",
+      "exported": "LODMesh_0154"
+    },
+    {
+      "name": "Effect_IncandescentFaults",
+      "triangles": 13,
+      "mesh": "LODMesh_0155",
+      "exported": "LODMesh_0155"
+    },
+    {
+      "name": "Effect_LavaSeams",
+      "triangles": 8,
+      "mesh": "LODMesh_0156",
+      "exported": "LODMesh_0156"
+    },
+    {
+      "name": "Effect_RimLavafall",
+      "triangles": 4,
+      "mesh": "LODMesh_0157",
+      "exported": "LODMesh_0157"
+    },
+    {
+      "name": "Effect_RimLavafall.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0158",
+      "exported": "LODMesh_0158"
+    },
+    {
+      "name": "Effect_RimLavafall.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0159",
+      "exported": "LODMesh_0159"
+    },
+    {
+      "name": "Effect_RimLavafallFilament",
+      "triangles": 4,
+      "mesh": "LODMesh_0160",
+      "exported": "LODMesh_0160"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0161",
+      "exported": "LODMesh_0161"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.002",
+      "triangles": 3,
+      "mesh": "LODMesh_0162",
+      "exported": "LODMesh_0162"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.003",
+      "triangles": 3,
+      "mesh": "LODMesh_0163",
+      "exported": "LODMesh_0163"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0164",
+      "exported": "LODMesh_0164"
+    },
+    {
+      "name": "Effect_RimLavafallFilament.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0165",
+      "exported": "LODMesh_0165"
+    },
+    {
+      "name": "Solid_CaveGuard",
+      "triangles": 8,
+      "mesh": "LODMesh_0166",
+      "exported": "LODMesh_0166"
+    },
+    {
+      "name": "Solid_CaveGuard.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0167",
+      "exported": "LODMesh_0167"
+    },
+    {
+      "name": "Solid_CaveGuard.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0168",
+      "exported": "LODMesh_0168"
+    },
+    {
+      "name": "Solid_CaveGuard.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0169",
+      "exported": "LODMesh_0169"
+    },
+    {
+      "name": "Solid_CaveGuard.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0170",
+      "exported": "LODMesh_0170"
+    },
+    {
+      "name": "Solid_CaveGuard.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0171",
+      "exported": "LODMesh_0171"
+    },
+    {
+      "name": "Solid_CaveGuard.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0172",
+      "exported": "LODMesh_0172"
+    },
+    {
+      "name": "Solid_CaveGuard.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0173",
+      "exported": "LODMesh_0173"
+    },
+    {
+      "name": "Solid_CaveGuard.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0174",
+      "exported": "LODMesh_0174"
+    },
+    {
+      "name": "Solid_CaveGuard.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0175",
+      "exported": "LODMesh_0175"
+    },
+    {
+      "name": "Solid_CaveGuard.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0176",
+      "exported": "LODMesh_0176"
+    },
+    {
+      "name": "Solid_CaveGuard.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0177",
+      "exported": "LODMesh_0177"
+    },
+    {
+      "name": "Solid_CaveGuard.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0178",
+      "exported": "LODMesh_0178"
+    },
+    {
+      "name": "Solid_CaveGuard.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0179",
+      "exported": "LODMesh_0179"
+    },
+    {
+      "name": "Solid_CaveGuard.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0180",
+      "exported": "LODMesh_0180"
+    },
+    {
+      "name": "Solid_CaveGuard.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0181",
+      "exported": "LODMesh_0181"
+    },
+    {
+      "name": "Solid_CaveGuard.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0182",
+      "exported": "LODMesh_0182"
+    },
+    {
+      "name": "Solid_CaveGuard.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0183",
+      "exported": "LODMesh_0183"
+    },
+    {
+      "name": "Solid_CaveGuard.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0184",
+      "exported": "LODMesh_0184"
+    },
+    {
+      "name": "Solid_CaveGuard.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0185",
+      "exported": "LODMesh_0185"
+    },
+    {
+      "name": "Solid_CaveGuard.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0186",
+      "exported": "LODMesh_0186"
+    },
+    {
+      "name": "Solid_CaveGuard.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0187",
+      "exported": "LODMesh_0187"
+    },
+    {
+      "name": "Solid_CaveGuard.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0188",
+      "exported": "LODMesh_0188"
+    },
+    {
+      "name": "Solid_CaveGuard.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0189",
+      "exported": "LODMesh_0189"
+    },
+    {
+      "name": "Solid_CaveGuard.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0190",
+      "exported": "LODMesh_0190"
+    },
+    {
+      "name": "Solid_CaveGuard.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0191",
+      "exported": "LODMesh_0191"
+    },
+    {
+      "name": "Solid_CaveGuard.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0192",
+      "exported": "LODMesh_0192"
+    },
+    {
+      "name": "Solid_CaveGuard.027",
+      "triangles": 8,
+      "mesh": "LODMesh_0193",
+      "exported": "LODMesh_0193"
+    },
+    {
+      "name": "Solid_CaveGuard.028",
+      "triangles": 8,
+      "mesh": "LODMesh_0194",
+      "exported": "LODMesh_0194"
+    },
+    {
+      "name": "Solid_CaveGuard.029",
+      "triangles": 8,
+      "mesh": "LODMesh_0195",
+      "exported": "LODMesh_0195"
+    },
+    {
+      "name": "Solid_CaveWall",
+      "triangles": 8,
+      "mesh": "LODMesh_0196",
+      "exported": "LODMesh_0196"
+    },
+    {
+      "name": "Solid_CaveWall.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0197",
+      "exported": "LODMesh_0197"
+    },
+    {
+      "name": "Solid_CaveWall.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0198",
+      "exported": "LODMesh_0198"
+    },
+    {
+      "name": "Solid_CaveWall.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0199",
+      "exported": "LODMesh_0199"
+    },
+    {
+      "name": "Solid_CaveWall.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0200",
+      "exported": "LODMesh_0200"
+    },
+    {
+      "name": "Solid_CaveWall.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0201",
+      "exported": "LODMesh_0201"
+    },
+    {
+      "name": "Solid_CaveWall.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0202",
+      "exported": "LODMesh_0202"
+    },
+    {
+      "name": "Solid_CaveWall.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0203",
+      "exported": "LODMesh_0203"
+    },
+    {
+      "name": "Solid_CaveWall.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0204",
+      "exported": "LODMesh_0204"
+    },
+    {
+      "name": "Solid_CaveWall.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0205",
+      "exported": "LODMesh_0205"
+    },
+    {
+      "name": "Solid_CaveWall.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0206",
+      "exported": "LODMesh_0206"
+    },
+    {
+      "name": "Solid_CaveWall.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0207",
+      "exported": "LODMesh_0207"
+    },
+    {
+      "name": "Solid_CaveWall.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0208",
+      "exported": "LODMesh_0208"
+    },
+    {
+      "name": "Solid_CaveWall.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0209",
+      "exported": "LODMesh_0209"
+    },
+    {
+      "name": "Solid_CaveWall.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0210",
+      "exported": "LODMesh_0210"
+    },
+    {
+      "name": "Solid_CaveWall.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0211",
+      "exported": "LODMesh_0211"
+    },
+    {
+      "name": "Solid_CaveWall.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0212",
+      "exported": "LODMesh_0212"
+    },
+    {
+      "name": "Solid_CaveWall.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0213",
+      "exported": "LODMesh_0213"
+    },
+    {
+      "name": "Solid_CaveWall.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0214",
+      "exported": "LODMesh_0214"
+    },
+    {
+      "name": "Solid_CaveWall.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0215",
+      "exported": "LODMesh_0215"
+    },
+    {
+      "name": "Solid_Ceiling",
+      "triangles": 566,
+      "mesh": "LODMesh_0216",
+      "exported": "LODMesh_0216"
+    },
+    {
+      "name": "Solid_CorePlinth",
+      "triangles": 8,
+      "mesh": "LODMesh_0217",
+      "exported": "LODMesh_0217"
+    },
+    {
+      "name": "Solid_GalleryPosts",
+      "triangles": 1410,
+      "mesh": "LODMesh_0218",
+      "exported": "LODMesh_0218"
+    },
+    {
+      "name": "Solid_GalleryRails",
+      "triangles": 574,
+      "mesh": "LODMesh_0219",
+      "exported": "LODMesh_0219"
+    },
+    {
+      "name": "Solid_LavaRail",
+      "triangles": 8,
+      "mesh": "LODMesh_0220",
+      "exported": "LODMesh_0220"
+    },
+    {
+      "name": "Solid_LavaRail.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0221",
+      "exported": "LODMesh_0221"
+    },
+    {
+      "name": "Solid_LavaRail.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0222",
+      "exported": "LODMesh_0222"
+    },
+    {
+      "name": "Solid_LavaRail.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0223",
+      "exported": "LODMesh_0223"
+    },
+    {
+      "name": "Solid_LavaRail.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0224",
+      "exported": "LODMesh_0224"
+    },
+    {
+      "name": "Solid_LavaRail.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0225",
+      "exported": "LODMesh_0225"
+    },
+    {
+      "name": "Solid_LavaRail.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0226",
+      "exported": "LODMesh_0226"
+    },
+    {
+      "name": "Solid_LavaRail.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0227",
+      "exported": "LODMesh_0227"
+    },
+    {
+      "name": "Solid_LavaRail.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0228",
+      "exported": "LODMesh_0228"
+    },
+    {
+      "name": "Solid_LavaRail.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0229",
+      "exported": "LODMesh_0229"
+    },
+    {
+      "name": "Solid_LavaRail.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0230",
+      "exported": "LODMesh_0230"
+    },
+    {
+      "name": "Solid_LavaRail.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0231",
+      "exported": "LODMesh_0231"
+    },
+    {
+      "name": "Solid_LavaRail.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0232",
+      "exported": "LODMesh_0232"
+    },
+    {
+      "name": "Solid_LavaRail.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0233",
+      "exported": "LODMesh_0233"
+    },
+    {
+      "name": "Solid_LavaRail.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0234",
+      "exported": "LODMesh_0234"
+    },
+    {
+      "name": "Solid_LavaRail.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0235",
+      "exported": "LODMesh_0235"
+    },
+    {
+      "name": "Solid_LavaRail.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0236",
+      "exported": "LODMesh_0236"
+    },
+    {
+      "name": "Solid_LavaRail.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0237",
+      "exported": "LODMesh_0237"
+    },
+    {
+      "name": "Solid_LavaRail.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0238",
+      "exported": "LODMesh_0238"
+    },
+    {
+      "name": "Solid_LavaRail.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0239",
+      "exported": "LODMesh_0239"
+    },
+    {
+      "name": "Solid_LavaRail.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0240",
+      "exported": "LODMesh_0240"
+    },
+    {
+      "name": "Solid_LavaRail.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0241",
+      "exported": "LODMesh_0241"
+    },
+    {
+      "name": "Solid_LavaRail.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0242",
+      "exported": "LODMesh_0242"
+    },
+    {
+      "name": "Solid_LavaRail.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0243",
+      "exported": "LODMesh_0243"
+    },
+    {
+      "name": "Solid_LavaRail.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0244",
+      "exported": "LODMesh_0244"
+    },
+    {
+      "name": "Solid_LavaRail.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0245",
+      "exported": "LODMesh_0245"
+    },
+    {
+      "name": "Solid_LavaRail.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0246",
+      "exported": "LODMesh_0246"
+    },
+    {
+      "name": "Solid_Rubble_0_0",
+      "triangles": 6,
+      "mesh": "LODMesh_0247",
+      "exported": "LODMesh_0247"
+    },
+    {
+      "name": "Solid_Rubble_0_1",
+      "triangles": 7,
+      "mesh": "LODMesh_0248",
+      "exported": "LODMesh_0248"
+    },
+    {
+      "name": "Solid_Rubble_0_2",
+      "triangles": 11,
+      "mesh": "LODMesh_0249",
+      "exported": "LODMesh_0249"
+    },
+    {
+      "name": "Solid_Rubble_0_3",
+      "triangles": 11,
+      "mesh": "LODMesh_0250",
+      "exported": "LODMesh_0250"
+    },
+    {
+      "name": "Solid_Rubble_1_0",
+      "triangles": 25,
+      "mesh": "LODMesh_0251",
+      "exported": "LODMesh_0251"
+    },
+    {
+      "name": "Solid_Rubble_1_1",
+      "triangles": 5,
+      "mesh": "LODMesh_0252",
+      "exported": "LODMesh_0252"
+    },
+    {
+      "name": "Solid_Rubble_1_2",
+      "triangles": 18,
+      "mesh": "LODMesh_0253",
+      "exported": "LODMesh_0253"
+    },
+    {
+      "name": "Solid_Rubble_1_3",
+      "triangles": 31,
+      "mesh": "LODMesh_0254",
+      "exported": "LODMesh_0254"
+    },
+    {
+      "name": "Solid_Rubble_1_4",
+      "triangles": 13,
+      "mesh": "LODMesh_0255",
+      "exported": "LODMesh_0255"
+    },
+    {
+      "name": "Solid_Rubble_1_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0256",
+      "exported": "LODMesh_0256"
+    },
+    {
+      "name": "Solid_Rubble_2_0",
+      "triangles": 6,
+      "mesh": "LODMesh_0257",
+      "exported": "LODMesh_0257"
+    },
+    {
+      "name": "Solid_Rubble_2_1",
+      "triangles": 7,
+      "mesh": "LODMesh_0258",
+      "exported": "LODMesh_0258"
+    },
+    {
+      "name": "Solid_Rubble_2_3",
+      "triangles": 7,
+      "mesh": "LODMesh_0259",
+      "exported": "LODMesh_0259"
+    },
+    {
+      "name": "Solid_Rubble_2_4",
+      "triangles": 14,
+      "mesh": "LODMesh_0260",
+      "exported": "LODMesh_0260"
+    },
+    {
+      "name": "Solid_Rubble_2_5",
+      "triangles": 11,
+      "mesh": "LODMesh_0261",
+      "exported": "LODMesh_0261"
+    },
+    {
+      "name": "Solid_Rubble_3_0",
+      "triangles": 6,
+      "mesh": "LODMesh_0262",
+      "exported": "LODMesh_0262"
+    },
+    {
+      "name": "Solid_Rubble_3_1",
+      "triangles": 10,
+      "mesh": "LODMesh_0263",
+      "exported": "LODMesh_0263"
+    },
+    {
+      "name": "Solid_Rubble_3_3",
+      "triangles": 13,
+      "mesh": "LODMesh_0264",
+      "exported": "LODMesh_0264"
+    },
+    {
+      "name": "Solid_Rubble_3_4",
+      "triangles": 23,
+      "mesh": "LODMesh_0265",
+      "exported": "LODMesh_0265"
+    },
+    {
+      "name": "Solid_Rubble_3_5",
+      "triangles": 6,
+      "mesh": "LODMesh_0266",
+      "exported": "LODMesh_0266"
+    },
+    {
+      "name": "Solid_Rubble_4_0",
+      "triangles": 5,
+      "mesh": "LODMesh_0267",
+      "exported": "LODMesh_0267"
+    },
+    {
+      "name": "Solid_Rubble_4_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0268",
+      "exported": "LODMesh_0268"
+    },
+    {
+      "name": "Solid_Rubble_4_2",
+      "triangles": 5,
+      "mesh": "LODMesh_0269",
+      "exported": "LODMesh_0269"
+    },
+    {
+      "name": "Solid_Rubble_4_3",
+      "triangles": 8,
+      "mesh": "LODMesh_0270",
+      "exported": "LODMesh_0270"
+    },
+    {
+      "name": "Solid_Rubble_4_4",
+      "triangles": 22,
+      "mesh": "LODMesh_0271",
+      "exported": "LODMesh_0271"
+    },
+    {
+      "name": "Solid_Rubble_4_5",
+      "triangles": 6,
+      "mesh": "LODMesh_0272",
+      "exported": "LODMesh_0272"
+    },
+    {
+      "name": "Solid_Rubble_5_0",
+      "triangles": 24,
+      "mesh": "LODMesh_0273",
+      "exported": "LODMesh_0273"
+    },
+    {
+      "name": "Solid_Rubble_5_1",
+      "triangles": 19,
+      "mesh": "LODMesh_0274",
+      "exported": "LODMesh_0274"
+    },
+    {
+      "name": "Solid_Rubble_5_2",
+      "triangles": 5,
+      "mesh": "LODMesh_0275",
+      "exported": "LODMesh_0275"
+    },
+    {
+      "name": "Solid_Rubble_5_3",
+      "triangles": 10,
+      "mesh": "LODMesh_0276",
+      "exported": "LODMesh_0276"
+    },
+    {
+      "name": "Solid_Rubble_5_4",
+      "triangles": 8,
+      "mesh": "LODMesh_0277",
+      "exported": "LODMesh_0277"
+    },
+    {
+      "name": "Solid_Rubble_5_5",
+      "triangles": 13,
+      "mesh": "LODMesh_0278",
+      "exported": "LODMesh_0278"
+    },
+    {
+      "name": "Solid_SculptedCavern_0",
+      "triangles": 1364,
+      "mesh": "LODMesh_0279",
+      "exported": "LODMesh_0279"
+    },
+    {
+      "name": "Solid_SculptedCavern_1",
+      "triangles": 1022,
+      "mesh": "LODMesh_0280",
+      "exported": "LODMesh_0280"
+    },
+    {
+      "name": "Solid_SculptedCavern_10",
+      "triangles": 340,
+      "mesh": "LODMesh_0281",
+      "exported": "LODMesh_0281"
+    },
+    {
+      "name": "Solid_SculptedCavern_11",
+      "triangles": 170,
+      "mesh": "LODMesh_0282",
+      "exported": "LODMesh_0282"
+    },
+    {
+      "name": "Solid_SculptedCavern_12",
+      "triangles": 170,
+      "mesh": "LODMesh_0283",
+      "exported": "LODMesh_0283"
+    },
+    {
+      "name": "Solid_SculptedCavern_13",
+      "triangles": 170,
+      "mesh": "LODMesh_0284",
+      "exported": "LODMesh_0284"
+    },
+    {
+      "name": "Solid_SculptedCavern_2",
+      "triangles": 340,
+      "mesh": "LODMesh_0285",
+      "exported": "LODMesh_0285"
+    },
+    {
+      "name": "Solid_SculptedCavern_3",
+      "triangles": 682,
+      "mesh": "LODMesh_0286",
+      "exported": "LODMesh_0286"
+    },
+    {
+      "name": "Solid_SculptedCavern_4",
+      "triangles": 340,
+      "mesh": "LODMesh_0287",
+      "exported": "LODMesh_0287"
+    },
+    {
+      "name": "Solid_SculptedCavern_5",
+      "triangles": 682,
+      "mesh": "LODMesh_0288",
+      "exported": "LODMesh_0288"
+    },
+    {
+      "name": "Solid_SculptedCavern_6",
+      "triangles": 510,
+      "mesh": "LODMesh_0289",
+      "exported": "LODMesh_0289"
+    },
+    {
+      "name": "Solid_SculptedCavern_7",
+      "triangles": 170,
+      "mesh": "LODMesh_0290",
+      "exported": "LODMesh_0290"
+    },
+    {
+      "name": "Solid_SculptedCavern_8",
+      "triangles": 170,
+      "mesh": "LODMesh_0291",
+      "exported": "LODMesh_0291"
+    },
+    {
+      "name": "Solid_SculptedCavern_9",
+      "triangles": 340,
+      "mesh": "LODMesh_0292",
+      "exported": "LODMesh_0292"
+    },
+    {
+      "name": "Surface_lava_0",
+      "triangles": 10,
+      "mesh": "",
+      "exported": "LODMesh_0293"
+    },
+    {
+      "name": "Surface_lava_1",
+      "triangles": 6,
+      "mesh": "",
+      "exported": "LODMesh_0294"
+    },
+    {
+      "name": "Terrain_0_0",
+      "triangles": 62,
+      "mesh": "LODMesh_0295",
+      "exported": "LODMesh_0295"
+    },
+    {
+      "name": "Terrain_0_1",
+      "triangles": 57,
+      "mesh": "LODMesh_0296",
+      "exported": "LODMesh_0296"
+    },
+    {
+      "name": "Terrain_0_2",
+      "triangles": 60,
+      "mesh": "LODMesh_0297",
+      "exported": "LODMesh_0297"
+    },
+    {
+      "name": "Terrain_0_3",
+      "triangles": 64,
+      "mesh": "LODMesh_0298",
+      "exported": "LODMesh_0298"
+    },
+    {
+      "name": "Terrain_0_4",
+      "triangles": 61,
+      "mesh": "LODMesh_0299",
+      "exported": "LODMesh_0299"
+    },
+    {
+      "name": "Terrain_0_5",
+      "triangles": 56,
+      "mesh": "LODMesh_0300",
+      "exported": "LODMesh_0300"
+    },
+    {
+      "name": "Terrain_1_0",
+      "triangles": 84,
+      "mesh": "LODMesh_0301",
+      "exported": "LODMesh_0301"
+    },
+    {
+      "name": "Terrain_1_1",
+      "triangles": 78,
+      "mesh": "LODMesh_0302",
+      "exported": "LODMesh_0302"
+    },
+    {
+      "name": "Terrain_1_2",
+      "triangles": 83,
+      "mesh": "LODMesh_0303",
+      "exported": "LODMesh_0303"
+    },
+    {
+      "name": "Terrain_1_3",
+      "triangles": 84,
+      "mesh": "LODMesh_0304",
+      "exported": "LODMesh_0304"
+    },
+    {
+      "name": "Terrain_1_4",
+      "triangles": 64,
+      "mesh": "LODMesh_0305",
+      "exported": "LODMesh_0305"
+    },
+    {
+      "name": "Terrain_1_5",
+      "triangles": 60,
+      "mesh": "LODMesh_0306",
+      "exported": "LODMesh_0306"
+    },
+    {
+      "name": "Terrain_2_0",
+      "triangles": 106,
+      "mesh": "LODMesh_0307",
+      "exported": "LODMesh_0307"
+    },
+    {
+      "name": "Terrain_2_1",
+      "triangles": 98,
+      "mesh": "LODMesh_0308",
+      "exported": "LODMesh_0308"
+    },
+    {
+      "name": "Terrain_2_2",
+      "triangles": 85,
+      "mesh": "LODMesh_0309",
+      "exported": "LODMesh_0309"
+    },
+    {
+      "name": "Terrain_2_3",
+      "triangles": 91,
+      "mesh": "LODMesh_0310",
+      "exported": "LODMesh_0310"
+    },
+    {
+      "name": "Terrain_2_4",
+      "triangles": 83,
+      "mesh": "LODMesh_0311",
+      "exported": "LODMesh_0311"
+    },
+    {
+      "name": "Terrain_2_5",
+      "triangles": 67,
+      "mesh": "LODMesh_0312",
+      "exported": "LODMesh_0312"
+    },
+    {
+      "name": "Terrain_3_0",
+      "triangles": 95,
+      "mesh": "LODMesh_0313",
+      "exported": "LODMesh_0313"
+    },
+    {
+      "name": "Terrain_3_1",
+      "triangles": 93,
+      "mesh": "LODMesh_0314",
+      "exported": "LODMesh_0314"
+    },
+    {
+      "name": "Terrain_3_2",
+      "triangles": 64,
+      "mesh": "LODMesh_0315",
+      "exported": "LODMesh_0315"
+    },
+    {
+      "name": "Terrain_3_3",
+      "triangles": 69,
+      "mesh": "LODMesh_0316",
+      "exported": "LODMesh_0316"
+    },
+    {
+      "name": "Terrain_3_4",
+      "triangles": 85,
+      "mesh": "LODMesh_0317",
+      "exported": "LODMesh_0317"
+    },
+    {
+      "name": "Terrain_3_5",
+      "triangles": 68,
+      "mesh": "LODMesh_0318",
+      "exported": "LODMesh_0318"
+    },
+    {
+      "name": "Terrain_4_0",
+      "triangles": 64,
+      "mesh": "LODMesh_0319",
+      "exported": "LODMesh_0319"
+    },
+    {
+      "name": "Terrain_4_1",
+      "triangles": 79,
+      "mesh": "LODMesh_0320",
+      "exported": "LODMesh_0320"
+    },
+    {
+      "name": "Terrain_4_2",
+      "triangles": 72,
+      "mesh": "LODMesh_0321",
+      "exported": "LODMesh_0321"
+    },
+    {
+      "name": "Terrain_4_3",
+      "triangles": 78,
+      "mesh": "LODMesh_0322",
+      "exported": "LODMesh_0322"
+    },
+    {
+      "name": "Terrain_4_4",
+      "triangles": 77,
+      "mesh": "LODMesh_0323",
+      "exported": "LODMesh_0323"
+    },
+    {
+      "name": "Terrain_4_5",
+      "triangles": 56,
+      "mesh": "LODMesh_0324",
+      "exported": "LODMesh_0324"
+    },
+    {
+      "name": "Terrain_5_0",
+      "triangles": 56,
+      "mesh": "LODMesh_0325",
+      "exported": "LODMesh_0325"
+    },
+    {
+      "name": "Terrain_5_1",
+      "triangles": 57,
+      "mesh": "LODMesh_0326",
+      "exported": "LODMesh_0326"
+    },
+    {
+      "name": "Terrain_5_2",
+      "triangles": 70,
+      "mesh": "LODMesh_0327",
+      "exported": "LODMesh_0327"
+    },
+    {
+      "name": "Terrain_5_3",
+      "triangles": 71,
+      "mesh": "LODMesh_0328",
+      "exported": "LODMesh_0328"
+    },
+    {
+      "name": "Terrain_5_4",
+      "triangles": 63,
+      "mesh": "LODMesh_0329",
+      "exported": "LODMesh_0329"
+    },
+    {
+      "name": "Terrain_5_5",
+      "triangles": 56,
+      "mesh": "LODMesh_0330",
+      "exported": "LODMesh_0330"
+    }
+  ]
+}

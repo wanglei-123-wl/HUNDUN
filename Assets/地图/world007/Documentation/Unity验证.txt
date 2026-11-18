@@ -1,0 +1,13 @@
+PASS matte ground, rock, bridge and road material settings.
+PASS 112 scattered Jian in 6 families: BrokenJian 18, BronzeLeaf 19, JadeJian 19, LongRidge 19, ShortDuan 18, TempleJian 19.
+Unity 2022.3.62f1 / URP 14 / Direct3D11
+PASS sizes 600x600 m; 144470 render triangles; 575 texture bindings.
+PASS four air walls with 12 edge/corner probes; 0 water, 0 lava, 0 crossings.
+PASS color profile, 3 fog volumes and 394 model renderers.
+PASS camera depth/opaque/post, prefab parity and no cross-map dependencies. 90 mesh colliders / 34510 triangles.
+PASS native Unity LODGroups 394; full-map render triangles 144470 / 99784 / 19424.
+PASS scene and prefab LOD parity, retained original collider meshes, material slots and variant placement.
+PASS actual camera rendered LOD0, LOD1 and LOD2 in order with automatic switching.
+PASS 4 routes; 2066 CharacterController steps; 658 corridor width probes.
+Largest centreline elevation difference: 0.00 m.
+PASS three fixed-tier Unity renders and automatic camera views. Target-device performance unmeasured.

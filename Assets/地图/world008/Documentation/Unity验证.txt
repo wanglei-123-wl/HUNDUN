@@ -1,0 +1,12 @@
+PASS matte ground, rock, bridge and road material settings.
+Unity 2022.3.62f1 / URP 14 / Direct3D11
+PASS sizes 800x800 m; 220322 render triangles; 354 texture bindings.
+PASS four air walls with 12 edge/corner probes; 0 water, 0 lava, 0 crossings.
+PASS color profile, 5 fog volumes and 343 model renderers.
+PASS camera depth/opaque/post, prefab parity and no cross-map dependencies. 125 mesh colliders / 64486 triangles.
+PASS native Unity LODGroups 343; full-map render triangles 220322 / 99995 / 19962.
+PASS scene and prefab LOD parity, retained original collider meshes, material slots and variant placement.
+PASS actual camera rendered LOD0, LOD1 and LOD2 in order with automatic switching.
+PASS 3 routes; 2725 CharacterController steps; 876 corridor width probes.
+Largest centreline elevation difference: 0.00 m.
+PASS three fixed-tier Unity renders and automatic camera views. Target-device performance unmeasured.
