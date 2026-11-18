@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "status": "processed",
+  "asset_name": "HunyuanSmokePropRetry2",
+  "profile": "small_prop",
+  "input_model": "F:\\游戏项目\\UI\\美术产线\\工作区\\输入\\HunyuanSmokeProp-generated-20260730-114016-a770bc6c.glb",
+  "source_triangles": 244252,
+  "triangle_budget_passed": true,
+  "lods": {
+    "LOD0": {
+      "target_triangles": 2500,
+      "actual_triangles": 2500,
+      "topology_repair": {
+        "applied": true,
+        "voxel_resolution": 250,
+        "non_manifold_before": 6205,
+        "non_manifold_after": 0
+      },
+      "glb": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_LOD0.glb"
+    },
+    "LOD1": {
+      "target_triangles": 1250,
+      "actual_triangles": 1250,
+      "glb": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_LOD1.glb"
+    },
+    "LOD2": {
+      "target_triangles": 500,
+      "actual_triangles": 500,
+      "glb": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_LOD2.glb"
+    }
+  },
+  "bake": {
+    "normal": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_Normal.png",
+    "ambient_occlusion": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_AO.png",
+    "texture_size": 1024,
+    "cage_extrusion": 0.02638510675821832,
+    "max_ray_distance": 0.07915532027465495
+  },
+  "combined_fbx": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_LODs.fbx",
+  "blend_file": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_processing.blend",
+  "duration_seconds": 12.865,
+  "notes": [
+    "Multi-view visual validation runs in the next pipeline stage."
+  ]
+}

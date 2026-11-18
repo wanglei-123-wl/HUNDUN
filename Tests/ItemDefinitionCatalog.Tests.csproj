@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Assets/Scripts/Item/Config/ItemCategory.cs" />
+    <Compile Include="../Assets/Scripts/Item/Config/ItemDefinition.cs" />
+    <Compile Include="../Assets/Scripts/Item/Config/ItemDetailTypes.cs" />
+    <Compile Include="../Assets/Scripts/Item/Config/ItemDefinitionAsset.cs" />
+    <Compile Include="../Assets/Scripts/Item/Config/ItemDefinitionTable.cs" />
+    <Compile Include="../Assets/Scripts/Item/Editor/ItemCatalogValidation.cs" />
+    <Compile Include="../Assets/Scripts/Item/Editor/ItemCatalogEditor.cs" />
+    <Compile Include="../Assets/Scripts/Item/Editor/ItemDefinitionAssetInspector.cs" />
+    <Compile Include="../Assets/Scripts/Combat/Skills/SkillReleaseDefinition.cs" />
+    <Compile Include="../Assets/Scripts/Combat/Skills/技能注册表.cs" />
+    <Compile Include="../Assets/Scripts/Inventory/Model/InventoryItemState.cs" />
+    <Compile Include="../Assets/Scripts/Inventory/Presentation/InventoryGridView.cs" />
+    <Compile Include="../Assets/Scripts/Loot/Presentation/LootViewFactory.cs" />
+    <Compile Include="ItemDefinitionCatalog.Tests.cs" />
+    <Compile Include="ItemCatalogEditor.Tests.cs" />
+    <Compile Include="ItemDefinitionAssetInspector.Tests.cs" />
+    <Compile Include="ItemPresentationIntegration.Tests.cs" />
+  </ItemGroup>
+</Project>

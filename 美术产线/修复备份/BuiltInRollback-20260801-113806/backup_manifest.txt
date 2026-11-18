@@ -1,0 +1,4 @@
+Created: 2026-08-01 11:38:06 +08:00
+Project: F:\游戏项目\UI
+Purpose: Restore Built-in render pipeline
+No scene, model, texture, prefab, or gameplay code included.

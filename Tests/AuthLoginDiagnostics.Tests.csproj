@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <IntermediateOutputPath>obj/AuthLoginDiagnostics/$(Configuration)/$(TargetFramework)/</IntermediateOutputPath>
+    <OutputPath>bin/AuthLoginDiagnostics/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Assets/Scripts/LoginScripts/AuthApiClient.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/NetworkEndpointSettings.cs" />
+    <Compile Include="AuthLoginDiagnostics.Tests.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "asset_name": "HunyuanSmokePropRetry2",
+  "profile": "small_prop",
+  "process_report": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\process_report.json",
+  "mechanical_passed": true,
+  "lod_metrics": {
+    "LOD0": [
+      {
+        "triangles": 2500,
+        "vertices": 1252,
+        "non_manifold_edges": 0,
+        "degenerate_faces": 0,
+        "finite_vertex_coordinates": true,
+        "uv_layer": "UVMap",
+        "uv_finite": true,
+        "uv_in_zero_to_one_percent": 100.0,
+        "material_slots": 1
+      }
+    ],
+    "LOD1": [
+      {
+        "triangles": 1250,
+        "vertices": 627,
+        "non_manifold_edges": 0,
+        "degenerate_faces": 0,
+        "finite_vertex_coordinates": true,
+        "uv_layer": "UVMap",
+        "uv_finite": true,
+        "uv_in_zero_to_one_percent": 100.0,
+        "material_slots": 1
+      }
+    ],
+    "LOD2": [
+      {
+        "triangles": 500,
+        "vertices": 252,
+        "non_manifold_edges": 0,
+        "degenerate_faces": 0,
+        "finite_vertex_coordinates": true,
+        "uv_layer": "UVMap",
+        "uv_finite": true,
+        "uv_in_zero_to_one_percent": 100.0,
+        "material_slots": 1
+      }
+    ]
+  },
+  "textures": {
+    "normal": {
+      "path": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_Normal.png",
+      "width": 1024,
+      "height": 1024,
+      "expected_size": 1024,
+      "size_valid": true,
+      "invalid_pixel_percent": 0.0,
+      "variance": 0.05577362,
+      "non_uniform": true
+    },
+    "ambient_occlusion": {
+      "path": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\HunyuanSmokePropRetry2_AO.png",
+      "width": 1024,
+      "height": 1024,
+      "expected_size": 1024,
+      "size_valid": true,
+      "invalid_pixel_percent": 0.0,
+      "variance": 0.16166419,
+      "non_uniform": true
+    }
+  },
+  "silhouette": {
+    "view_count": 10,
+    "mean_error_percent": 0.0573,
+    "max_error_percent": 0.1275,
+    "per_view_error_percent": [
+      0.0558,
+      0.0513,
+      0.0702,
+      0.0667,
+      0.0562,
+      0.0393,
+      0.0159,
+      0.0363,
+      0.0541,
+      0.1275
+    ],
+    "views_directory": "F:\\游戏项目\\UI\\美术产线\\工作区\\中间文件\\HunyuanSmokePropRetry2-20260730-114615-fad34834\\qa_views",
+    "threshold_percent": 1.5,
+    "passed": true,
+    "threshold_calibration_required": true
+  },
+  "unity_publish_allowed": false,
+  "archive_path": "F:\\游戏项目\\UI\\美术产线\\资产库\\待验收\\HunyuanSmokePropRetry2-20260730-114615-fad34834-20260730-115427"
+}

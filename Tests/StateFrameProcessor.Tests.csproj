@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <IntermediateOutputPath>obj/StateFrameProcessor/$(Configuration)/$(TargetFramework)/</IntermediateOutputPath>
+    <OutputPath>bin/StateFrameProcessor/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Protocol/BattleSyncProtocolConstants.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Protocol/StateFrameMessages.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Protocol/StateFrameArrayParser.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Protocol/SnapshotRepairMessages.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Processing/CompactStateDecoder.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Processing/StateFrameProcessor.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Domain/BattleEntityRegistry.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Domain/BattleSyncApplyResult.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/BattleSync/Services/SnapshotRepairService.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/RemotePlayerSync.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/CombatStateStore.cs" />
+    <Compile Include="StateFramePresentation.Stubs.cs" />
+    <Compile Include="StateFrameProcessor.Tests.cs" />
+  </ItemGroup>
+</Project>

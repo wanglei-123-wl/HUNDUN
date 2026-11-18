@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     width="512" height="512" viewBox="0 0 512 512">
+  <title>灵石方案 A - 原创晶面材质稿</title>
+  <defs>
+    <linearGradient id="ice" x1="253" y1="81" x2="338" y2="179" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f7ffff"/>
+      <stop offset=".43" stop-color="#ceeffa"/>
+      <stop offset="1" stop-color="#4b9ac5"/>
+    </linearGradient>
+    <linearGradient id="top-left" x1="245" y1="92" x2="186" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d9fbff"/>
+      <stop offset=".48" stop-color="#65d8eb"/>
+      <stop offset="1" stop-color="#1787b7"/>
+    </linearGradient>
+    <linearGradient id="front" x1="199" y1="192" x2="286" y2="345" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9bf5fc"/>
+      <stop offset=".44" stop-color="#29cae7"/>
+      <stop offset="1" stop-color="#0478b5"/>
+    </linearGradient>
+    <linearGradient id="left" x1="135" y1="225" x2="100" y2="367" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#42d9e9"/>
+      <stop offset=".46" stop-color="#0c96c7"/>
+      <stop offset="1" stop-color="#07527f"/>
+    </linearGradient>
+    <linearGradient id="bottom" x1="125" y1="346" x2="211" y2="429" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34d2e7"/>
+      <stop offset=".48" stop-color="#0784bb"/>
+      <stop offset="1" stop-color="#062f68"/>
+    </linearGradient>
+    <linearGradient id="right-top" x1="349" y1="91" x2="397" y2="246" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#37a9ce"/>
+      <stop offset=".42" stop-color="#11658f"/>
+      <stop offset="1" stop-color="#063358"/>
+    </linearGradient>
+    <linearGradient id="right" x1="354" y1="188" x2="283" y2="374" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#106d9e"/>
+      <stop offset=".52" stop-color="#073d6a"/>
+      <stop offset="1" stop-color="#051d48"/>
+    </linearGradient>
+    <linearGradient id="deep" x1="279" y1="280" x2="193" y2="435" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0a70a4"/>
+      <stop offset=".55" stop-color="#07527d"/>
+      <stop offset="1" stop-color="#041f4d"/>
+    </linearGradient>
+  </defs>
+  <g inkscape:groupmode="layer" inkscape:label="晶体底色" id="base">
+    <path d="M91 350 140 214 263 88 349 78 409 140 390 248 286 371 184 435 112 407Z"
+          fill="#06244a"/>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="晶体大切面" id="facets">
+    <path d="M140 214 263 88 299 162 212 203Z" fill="url(#top-left)"/>
+    <path d="M263 88 349 78 353 178 299 162Z" fill="url(#ice)"/>
+    <path d="M91 350 140 214 212 203 147 344Z" fill="url(#left)"/>
+    <path d="M212 203 299 162 300 290 221 362 147 344Z" fill="url(#front)"/>
+    <path d="M299 162 353 178 300 290Z" fill="#0b6eac"/>
+    <path d="M91 350 147 344 221 362 184 435 112 407Z" fill="url(#bottom)"/>
+    <path d="M300 290 221 362 184 435Z" fill="url(#deep)"/>
+    <path d="M349 78 409 140 390 248 353 178Z" fill="url(#right-top)"/>
+    <path d="M353 178 390 248 286 371 300 290Z" fill="url(#right)"/>
+    <path d="M300 290 286 371 184 435Z" fill="#062b59"/>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="晶体折射" id="refractions">
+    <path d="M212 203 299 162 258 247 147 344Z" fill="#d8fbff" opacity=".20"/>
+    <path d="M299 162 300 290 221 362 258 247Z" fill="#044f8a" opacity=".36"/>
+    <path d="M140 214 212 203 147 344Z" fill="#a2f6fa" opacity=".14"/>
+    <path d="M147 344 221 362 184 435Z" fill="#03b5d7" opacity=".18"/>
+    <path d="M353 178 390 248 300 290Z" fill="#062755" opacity=".27"/>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="晶棱高光" id="highlights">
+    <path d="M263 88 349 78 342 86 270 101Z" fill="#f2ffff" opacity=".94"/>
+    <path d="M140 214 263 88 270 101 146 223Z" fill="#b5f6fa" opacity=".78"/>
+    <path d="M212 203 299 162 288 174 217 215Z" fill="#e9ffff" opacity=".62"/>
+    <path d="M147 344 212 203 217 215 154 347Z" fill="#a3f5ff" opacity=".69"/>
+    <path d="M91 350 147 344 152 350 95 359Z" fill="#52e7ee" opacity=".92"/>
+    <path d="M112 407 184 435 172 428 116 397Z" fill="#35d8e9" opacity=".75"/>
+    <path d="M349 78 409 140 405 154 344 91Z" fill="#64c8e1" opacity=".64"/>
+    <path d="M299 162 353 178 348 188 300 174Z" fill="#67cbdf" opacity=".44"/>
+  </g>
+</svg>
