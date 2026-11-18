@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4fd379e3e1247e296acdeee35dfdb98, type: 3}
+  m_Name: "\u88C5\u5907\u76EE\u5F55V2"
+  m_EditorClassIdentifier:
+  equipmentCatalogVersion: 2
+  definitions:
+  - equipmentId: sword_001
+    itemId: sword_001_item
+    displayName: "\u94C1\u5251"
+    categoryCode: 1
+    subType: sword
+    quality: 1
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: sword_001
+    icon: {fileID: 0}
+    maxHpBonus: 0
+    attackBonus: 10
+    defenseBonus: 0
+  - equipmentId: armor_001
+    itemId: armor_001_item
+    displayName: "\u5E03\u7532"
+    categoryCode: 3
+    subType: cloth
+    quality: 1
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: armor_001
+    icon: {fileID: 21300000, guid: 07f673dfe516e5e428ad34d0ae083613, type: 3}
+    maxHpBonus: 0
+    attackBonus: 0
+    defenseBonus: 5
+  - equipmentId: ring_001
+    itemId: ring_001_item
+    displayName: "\u94DC\u6212"
+    categoryCode: 5
+    subType: metal
+    quality: 1
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: ring_001
+    icon: {fileID: 21300000, guid: 8f77a0dac50ae264495431aaf422079f, type: 3}
+    maxHpBonus: 50
+    attackBonus: 0
+    defenseBonus: 0
+  - equipmentId: weapon_xingyun_001
+    itemId: weapon_xingyun_001_item
+    displayName: "\u661F\u4E91\u5203"
+    categoryCode: 1
+    subType: xingyun
+    quality: 2
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: weapon_xingyun_001
+    icon: {fileID: 21300000, guid: 8c03389122556454aa1b04757c99bd7d, type: 3}
+    maxHpBonus: 0
+    attackBonus: 15
+    defenseBonus: 0
+  - equipmentId: helmet_xingyun_001
+    itemId: helmet_xingyun_001_item
+    displayName: "\u661F\u4E91\u76D4"
+    categoryCode: 2
+    subType: xingyun
+    quality: 2
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: helmet_xingyun_001
+    icon: {fileID: 21300000, guid: ec90d4d8873097f43adab9dfa64a128e, type: 3}
+    maxHpBonus: 0
+    attackBonus: 0
+    defenseBonus: 5
+  - equipmentId: armor_xingyun_001
+    itemId: armor_xingyun_001_item
+    displayName: "\u661F\u4E91\u7532"
+    categoryCode: 3
+    subType: xingyun
+    quality: 2
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: armor_xingyun_001
+    icon: {fileID: 21300000, guid: 07f673dfe516e5e428ad34d0ae083613, type: 3}
+    maxHpBonus: 0
+    attackBonus: 0
+    defenseBonus: 8
+  - equipmentId: necklace_xingyun_001
+    itemId: necklace_xingyun_001_item
+    displayName: "\u661F\u4E91\u94FE"
+    categoryCode: 4
+    subType: xingyun
+    quality: 2
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: necklace_xingyun_001
+    icon: {fileID: 21300000, guid: 731a03f2dab02594f907b411d64fdb5c, type: 3}
+    maxHpBonus: 60
+    attackBonus: 0
+    defenseBonus: 0
+  - equipmentId: ring_xingyun_001
+    itemId: ring_xingyun_001_item
+    displayName: "\u661F\u4E91\u6212"
+    categoryCode: 5
+    subType: xingyun
+    quality: 2
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: ring_xingyun_001
+    icon: {fileID: 21300000, guid: 8f77a0dac50ae264495431aaf422079f, type: 3}
+    maxHpBonus: 60
+    attackBonus: 0
+    defenseBonus: 0
+  - equipmentId: bracelet_xingyun_001
+    itemId: bracelet_xingyun_001_item
+    displayName: "\u661F\u4E91\u956F"
+    categoryCode: 6
+    subType: xingyun
+    quality: 2
+    requiredLevel: 1
+    requiredRoleId:
+    iconKey: bracelet_xingyun_001
+    icon: {fileID: 21300000, guid: c0b801d8f67391a4f814e1568f382361, type: 3}
+    maxHpBonus: 0
+    attackBonus: 3
+    defenseBonus: 0
