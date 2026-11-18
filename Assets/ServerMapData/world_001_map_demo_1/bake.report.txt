@@ -1,0 +1,20 @@
+Server Map Bake Report V1
+Scene ID: world_001
+Map ID: map_demo_1
+Coordinate System: UnityLeftHanded_YUp
+Cell Size: 0.5
+Grid Width: 1280
+Grid Height: 1280
+Height Samples: 1638400
+Walkable Samples: 1638400
+Colliders: 1946
+NavMesh Vertices: 263498
+NavMesh Indices: 362748
+NavMesh Triangles: 120916
+NavMesh Areas: 120916
+Manifest: F:\游戏项目\UI\Assets\ServerMapData\world_001_map_demo_1\manifest.json
+Height File Bytes: 6553600
+Walkable File Bytes: 1638400
+Collider File Bytes: 93428
+NavMesh File Bytes: 5096644
+Warnings: 0

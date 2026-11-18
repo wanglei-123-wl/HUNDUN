@@ -1,0 +1,17 @@
+{
+  "formatVersion": 1,
+  "sceneId": "world_001",
+  "mapId": "map_demo_1",
+  "coordinateSystem": "UnityLeftHanded_YUp",
+  "origin": { "x": -16, "y": 0, "z": -12 },
+  "boundsMin": { "x": -16, "y": 0, "z": -12 },
+  "boundsMax": { "x": 624, "y": 200, "z": 628 },
+  "cellSize": 0.5,
+  "width": 1280,
+  "height": 1280,
+  "heightFile": "heightfield.bin",
+  "walkableFile": "walkable.bin",
+  "colliderFile": "colliders.bin",
+  "navMeshFile": "navmesh.bin",
+  "regionsFile": null
+}
