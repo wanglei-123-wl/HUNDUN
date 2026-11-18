@@ -1,0 +1,58 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# MemoryCaptures can get very large
+[Mm]emoryCaptures/
+
+# Crash reports
+sysinfo.txt
+
+# Visual Studio / Rider / IDE files
+.vs/
+.idea/
+*.csproj
+!Tests/ItemDefinitionCatalog.Tests.csproj
+!Tests/PlayerTradeSession.Tests.csproj
+!Tests/QuickbarProtocol.Tests.csproj
+!Tests/MonsterCatalog.Tests.csproj
+!Tests/StateFrameArrayParser.Tests.csproj
+!Tests/StateFrameProcessor.Tests.csproj
+!Tests/AuthLoginDiagnostics.Tests.csproj
+Tests/bin/
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity generated metadata backups
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Unity package manager archives
+*.tgz
+
+# Addressables build cache
+[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Asset Store Tools
+[Aa]ssets/AssetStoreTools*

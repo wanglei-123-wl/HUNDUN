@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RemoteGameContent
+  m_EditorClassIdentifier: 
+  m_GroupName: RemoteGameContent
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bee749b0010da2e468ba0b38afba77c7
+  m_SerializeEntries:
+  - m_GUID: 0269f45342314524f9db6c7d23ede6b7
+    m_Address: game/items/table
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - required-game-content
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
+    m_Address: game/scene/login
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - required-game-content
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dbb47aa9d87ae7745aef58d322aa95df
+    m_Address: game/scene/demo1-map
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - required-game-content
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6e827adb0a0e4244b02d64365068086
+    m_Address: game/scene/map001
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - required-game-content
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af3898f55a5d9e34391d67f4ba65976f
+    m_Address: game/scene/world
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - required-game-content
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 4ce257e1a1bb00649a558b1b5195a92a, type: 2}
+    - {fileID: 11400000, guid: 4ae01a895a114d244bdcb82d376d7890, type: 2}

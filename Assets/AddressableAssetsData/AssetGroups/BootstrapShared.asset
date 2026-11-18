@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: BootstrapShared
+  m_EditorClassIdentifier: 
+  m_GroupName: BootstrapShared
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 53805c85bc4dd1a4391184f8f818c77c
+  m_SerializeEntries:
+  - m_GUID: e73af7cefd86226449d7c1ddcb0273e6
+    m_Address: bootstrap/font/chinese
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe393ace9b354375a9cb14cdbbc28be4
+    m_Address: bootstrap/shader/text
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 5bcfd7344dfeea84490f9c963d294964, type: 2}
+    - {fileID: 11400000, guid: 35b5e13489cd01d4fba2f8f9d8aea799, type: 2}

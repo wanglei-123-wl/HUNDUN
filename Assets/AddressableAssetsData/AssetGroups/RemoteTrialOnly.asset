@@ -1,0 +1,270 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RemoteTrialOnly
+  m_EditorClassIdentifier: 
+  m_GroupName: RemoteTrialOnly
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 01ad01a20355bb54ebfa643591665b20
+  m_SerializeEntries:
+  - m_GUID: 07f673dfe516e5e428ad34d0ae083613
+    m_Address: item/icon/armor_001_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1409efbf91a36e54f866f6f0e6582962
+    m_Address: item/icon/KZ001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 150b0c51d7ad22144b7505204dabb088
+    m_Address: item/icon/cailiao_004
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f6c6638761ee58458cf8cf381356948
+    m_Address: item/icon/WQ002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 262f81de8e3e0b04cbccbe0b09aa53d5
+    m_Address: item/icon/gongfa_yuluxinfa
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 274507988af85d94e930fd9b187e1a1c
+    m_Address: item/icon/gongfa_001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b082ce9486eb554a93bde949d5eebd5
+    m_Address: item/icon/dan_001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c20aa8d7600b5349a14e6b6520bc719
+    m_Address: item/icon/gold_coin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3363893543da1374099c36a427c5be5b
+    m_Address: trial/icon/huichun
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38b17f3091acfc24596f62edce760891
+    m_Address: item/icon/cai_qinglinghua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 400d672b64200ed49950922c05eba077
+    m_Address: item/icon/cailioa_001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 445199e32d8b69a49b7db88246dfd2fb
+    m_Address: item/icon/danfang_001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b92df5304dec6c40b139284f91e38ce
+    m_Address: item/icon/cai_xuanluguo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 725b3b7c3d55e934a801a1f5dc3215e6
+    m_Address: item/icon/danfang_002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 731a03f2dab02594f907b411d64fdb5c
+    m_Address: item/icon/necklace_xingyun_001_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74a1da45d6b603043872011cc0f008f0
+    m_Address: item/icon/YF002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79d5d5ce74bc8f346aac7f9dc9d7a980
+    m_Address: item/icon/caoyao_001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 800ab69aa922c1942825583e069e2267
+    m_Address: item/icon/caoyao_002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82eb929ddd697434bbdc4c2928d5fad0
+    m_Address: item/icon/WQ001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 858f724c4733b954db732f4995d4a60c
+    m_Address: item/icon/dan1_ningyuandan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c03389122556454aa1b04757c99bd7d
+    m_Address: item/icon/weapon_xingyun_001_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f77a0dac50ae264495431aaf422079f
+    m_Address: item/icon/ring_001_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91ec215fd8d87d24685641cf87170916
+    m_Address: item/icon/fang_ningyuandan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91fad116a6ee52a46af4e9e873eea74e
+    m_Address: item/icon/caoyao_003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9260b9b2fce6d3a4eb03862d4d2a2a50
+    m_Address: item/icon/TK001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a186c8fbc448944bb5465b3c3d5485a
+    m_Address: item/icon/cai_zilingzhi
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e299c456dffd5244accbadf596182fb
+    m_Address: item/icon/WQ003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a34190068801b1d499a0f56c61e0ca2f
+    m_Address: item/icon/cailiao_007
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a937ae445c2dd0a4ca09a374a256b7b5
+    m_Address: item/icon/fang_huichundan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9567e43ff8b7f74ebdea47064da3f29
+    m_Address: item/icon/cailiao_005
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9d9e61baa3682443b980b6f6fef2443
+    m_Address: item/icon/cailiao_002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2138d7638c86f34f8416fb80a62d70a
+    m_Address: item/icon/TK002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2bf218888aeb0c4e86ca1f426a7a173
+    m_Address: item/icon/gongfa_qingyunjue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be00f1a413e0791489a490a209a6baac
+    m_Address: item/icon/ling_shi
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0b801d8f67391a4f814e1568f382361
+    m_Address: item/icon/bracelet_xingyun_001_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c816cfbe6e7de5a449541be673f3176a
+    m_Address: item/icon/cai_ningluguo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd45f1f3242d4e344928b962b9ca8920
+    m_Address: item/icon/cailiao_006
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd8ddc3a593e4744ea9755cf33b4ab64
+    m_Address: item/icon/book_fireball_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf531f5c6a028904682acc0549290917
+    m_Address: item/icon/yf001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4116289a70cc724a8de0c03625d8547
+    m_Address: item/icon/danfang_003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6acb75e38932274fb3f90c681c1183e
+    m_Address: item/icon/dan_002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d735f455d6d10e74e80f7e609dfa913f
+    m_Address: item/icon/cailaio_003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1465e77de3511449a320c6bf493fdb2
+    m_Address: item/icon/cai_chiyushen
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7a015ba0823b7547a0fe181c14a6eb7
+    m_Address: item/icon/book_slash_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec90d4d8873097f43adab9dfa64a128e
+    m_Address: item/icon/helmet_xingyun_001_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f04e83ec184fe264d87d6f83526f0fba
+    m_Address: item/icon/XZ002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1c21438bfa672342b8f522d4480e645
+    m_Address: item/icon/dan_003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f73248080370eb048b3f449d83b52e0d
+    m_Address: item/icon/mp_potion_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fee25953bb5b76f40950a89d5a1147a7
+    m_Address: item/icon/hp_potion_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 57f5767b3d8c0c346bac7b7a2c4f2785, type: 2}
+    - {fileID: 11400000, guid: aa729de8534f60b4bb5b84069af2c634, type: 2}
