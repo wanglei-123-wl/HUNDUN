@@ -1,0 +1,26 @@
+{
+  "id": "world005",
+  "revision": "V04-Boundary05",
+  "dimensions_m": [
+    300,
+    800
+  ],
+  "triangles": 235387,
+  "working_ceiling": null,
+  "mesh_objects": 572,
+  "trees": 122,
+  "plants": 2100,
+  "breakdown": {
+    "Terrain": 21104,
+    "Surface": 181,
+    "Solid": 60876,
+    "Decor": 4110,
+    "Art": 117430,
+    "Effect": 2124,
+    "Plant": 29562
+  },
+  "boundary_mountains": {
+    "Solid_BoundaryMountainSouth": 14000,
+    "Solid_BoundaryMountainNorth": 14000
+  }
+}

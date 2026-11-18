@@ -1,0 +1,15 @@
+PASS Solid_BoundaryMountainNorth: 14000 near triangles; bounds Center: (0.00, 65.06, 357.86), Extents: (150.00, 44.95, 42.14); 3 LOD tiers; original solid mesh collider.
+PASS Solid_BoundaryMountainSouth: 14000 near triangles; bounds Center: (0.00, 31.07, -361.31), Extents: (150.00, 51.70, 38.69); 3 LOD tiers; original solid mesh collider.
+PASS 42 north/south valley-eye enclosure rays; 2241 full-width route capsule probes clear of new mountain geometry.
+PASS native Unity LODGroups 571; full-map render triangles 235387 / 99654 / 19944.
+PASS scene and prefab LOD parity, retained original collider meshes, material slots and variant placement.
+PASS actual camera rendered LOD0, LOD1 and LOD2 in order with automatic switching.
+PASS matte ground, rock, bridge and road material settings.
+Unity 2022.3.62f1 / URP 14 / Direct3D11
+PASS sizes 300x800 m; 235387 render triangles; 589 texture bindings.
+PASS four air walls with 12 edge/corner probes; 1 water, 0 lava, 2 crossings.
+PASS color profile, 5 fog volumes and 572 model renderers.
+PASS camera depth/opaque/post, prefab parity and no cross-map dependencies. 138 mesh colliders / 81980 triangles.
+PASS 3 routes; 1776 CharacterController steps; 558 corridor width probes.
+Largest centreline elevation difference: 0.07 m.
+PASS Unity north/south player-height, overview, rear and original default-camera renders. Human visual review required before release.

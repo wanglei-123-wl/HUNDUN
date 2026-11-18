@@ -1,0 +1,10 @@
+PASS main 沿溪主路: 12 complete standard waypoint legs, 969.5 m. Direct full-map query returns PathPartial.
+PASS side 梯田回路: complete path, 173.3 m.
+PASS side 晒药坪支路: complete path, 70.0 m.
+PASS cross 下游石桥: complete path, 73.0 m.
+PASS cross 上游木桥: complete path, 91.0 m.
+PASS 3 routes, 2 bridge crossings, 559 navigation probes.
+PASS boundaries and 369 blocked-zone/water facets. 8836 NavMesh triangles, 127038.5 m².
+Unity 2022.3.62f1; agent type 0 (Humanoid); radius .36 m, height 1.84 m, climb .35 m, slope 43°, voxel .12 m.
+PASS 1 long route(s) via standard waypoint legs. RouteWaypoints.json stores snapped map-local points.
+PASS prefab data, translation, yaw rotation, disable and re-enable.

@@ -1,0 +1,21 @@
+Package SHA-256 a7a74b956d482faa75f2dc00df90dae27798cbfa650337c9c90640cd879afb58
+NavMesh asset SHA-256 98f7709fb0b569583493fcf90e6d8888186dcf004c5f2f781d42072967e497c3
+PASS main 沿溪主路: 12 complete standard waypoint legs, 969.5 m. Direct full-map query returns PathPartial.
+PASS side 梯田回路: complete path, 173.3 m.
+PASS side 晒药坪支路: complete path, 70.0 m.
+PASS cross 下游石桥: complete path, 73.0 m.
+PASS cross 上游木桥: complete path, 91.0 m.
+PASS 3 routes, 2 bridge crossings, 559 navigation probes.
+PASS boundaries and 187 blocked-zone/water facets. 9425 NavMesh triangles, 150023.5 m².
+Unity 2022.3.62f1; agent type 0 (Humanoid); radius .36 m, height 1.84 m, climb .35 m, slope 43°, voxel .12 m.
+PASS 1 long route(s) via standard waypoint legs. RouteWaypoints.json stores snapped map-local points.
+CHECK 19 reverse legs, 936 shoulders: missing physical floor 0, local NavMesh gaps 0, center capsule obstructions 0.
+CHECK 3716 terrain coverage grid samples at 6 m and 9109 polygon centroids: no floor in probe range 0, no matching query at floor 3, physical obstructions 0, max sampled floor separation 0.200 m, max coarse triangulation height delta 4.622 m.
+DETAIL no direct query match for sampled physical floor (138.920, 51.947, -193.520); nearest (138.895, 51.974, -192.960); closest sampled route point 121.8 m away
+DETAIL no direct query match for sampled physical floor (14.800, 17.753, -124.280); nearest (14.800, 17.759, -123.960); closest sampled route point 28.4 m away
+DETAIL no direct query match for sampled physical floor (101.760, 31.234, 122.400); nearest (101.630, 31.352, 122.880); closest sampled route point 46.5 m away
+CHECK 219 coverage queries at 24 m: direct 219, by connected local legs 0, unresolved 0.
+CHECK 724 submerged river/lake/lava floor samples: matches 0.
+PASS four air walls and 100 edge/corner rays.
+PASS prefab data, translation, yaw rotation, disable and re-enable.
+PASS authored routes, hazard exclusions, air walls and prefab registration

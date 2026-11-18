@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "triangles": 207387,
+  "dimensions_m": [
+    300.0,
+    800.0
+  ],
+  "meshes": 570,
+  "uv": true,
+  "missing_textures": []
+}

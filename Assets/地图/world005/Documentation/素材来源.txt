@@ -1,0 +1,2 @@
+场景布局来自确认稿，三维网格由脚本生成。岩面、石板、刻纹石板、剑身刻纹、火山岩和植被底图由内置 imagegen 生成。岩面与刻纹法线由底色推算。木材、铁锈、骨质和布材质沿用本项目此前的生成材质。树皮沿用 Poly Haven 的 bark_brown_01（CC0）。
+Powered by Poly Haven https://polyhaven.com/a/bark_brown_01

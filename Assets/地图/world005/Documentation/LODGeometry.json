@@ -1,0 +1,6874 @@
+{
+  "version": "LOD3",
+  "near": 235387,
+  "mid": 99654,
+  "far": 19944,
+  "lod1": [
+    {
+      "name": "Art_BridgeCoping",
+      "triangles": 8,
+      "mesh": "LODMesh_0000",
+      "exported": "LODMesh_0000"
+    },
+    {
+      "name": "Art_BridgeCoping.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0001",
+      "exported": "LODMesh_0001"
+    },
+    {
+      "name": "Art_BridgeCoping.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0002",
+      "exported": "LODMesh_0002"
+    },
+    {
+      "name": "Art_BridgeCoping.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0003",
+      "exported": "LODMesh_0003"
+    },
+    {
+      "name": "Art_BridgeCoping.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0004",
+      "exported": "LODMesh_0004"
+    },
+    {
+      "name": "Art_BridgeCoping.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0005",
+      "exported": "LODMesh_0005"
+    },
+    {
+      "name": "Art_BridgeCoping.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0006",
+      "exported": "LODMesh_0006"
+    },
+    {
+      "name": "Art_BridgeCoping.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0007",
+      "exported": "LODMesh_0007"
+    },
+    {
+      "name": "Art_BridgeCoping.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0008",
+      "exported": "LODMesh_0008"
+    },
+    {
+      "name": "Art_BridgeCoping.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0009",
+      "exported": "LODMesh_0009"
+    },
+    {
+      "name": "Art_BridgeCoping.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0010",
+      "exported": "LODMesh_0010"
+    },
+    {
+      "name": "Art_BridgeCoping.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0011",
+      "exported": "LODMesh_0011"
+    },
+    {
+      "name": "Art_BridgeCoping.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0012",
+      "exported": "LODMesh_0012"
+    },
+    {
+      "name": "Art_BridgeCoping.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0013",
+      "exported": "LODMesh_0013"
+    },
+    {
+      "name": "Art_BridgeCoping.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0014",
+      "exported": "LODMesh_0014"
+    },
+    {
+      "name": "Art_BridgeCoping.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0015",
+      "exported": "LODMesh_0015"
+    },
+    {
+      "name": "Art_BridgeCoping.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0016",
+      "exported": "LODMesh_0016"
+    },
+    {
+      "name": "Art_BridgeCoping.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0017",
+      "exported": "LODMesh_0017"
+    },
+    {
+      "name": "Art_BridgeCoping.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0018",
+      "exported": "LODMesh_0018"
+    },
+    {
+      "name": "Art_BridgeCoping.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0019",
+      "exported": "LODMesh_0019"
+    },
+    {
+      "name": "Art_BridgeCoping.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0020",
+      "exported": "LODMesh_0020"
+    },
+    {
+      "name": "Art_BridgeCoping.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0021",
+      "exported": "LODMesh_0021"
+    },
+    {
+      "name": "Art_BridgeCoping.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0022",
+      "exported": "LODMesh_0022"
+    },
+    {
+      "name": "Art_BridgeCoping.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0023",
+      "exported": "LODMesh_0023"
+    },
+    {
+      "name": "Art_BridgeCoping.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0024",
+      "exported": "LODMesh_0024"
+    },
+    {
+      "name": "Art_BridgeCoping.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0025",
+      "exported": "LODMesh_0025"
+    },
+    {
+      "name": "Art_BridgeCoping.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0026",
+      "exported": "LODMesh_0026"
+    },
+    {
+      "name": "Art_BridgeCoping.027",
+      "triangles": 8,
+      "mesh": "LODMesh_0027",
+      "exported": "LODMesh_0027"
+    },
+    {
+      "name": "Art_BridgeCoping.028",
+      "triangles": 8,
+      "mesh": "LODMesh_0028",
+      "exported": "LODMesh_0028"
+    },
+    {
+      "name": "Art_BridgeCoping.029",
+      "triangles": 8,
+      "mesh": "LODMesh_0029",
+      "exported": "LODMesh_0029"
+    },
+    {
+      "name": "Art_BridgeCoping.030",
+      "triangles": 8,
+      "mesh": "LODMesh_0030",
+      "exported": "LODMesh_0030"
+    },
+    {
+      "name": "Art_BridgeCoping.031",
+      "triangles": 8,
+      "mesh": "LODMesh_0031",
+      "exported": "LODMesh_0031"
+    },
+    {
+      "name": "Art_BridgeCoping.032",
+      "triangles": 8,
+      "mesh": "LODMesh_0032",
+      "exported": "LODMesh_0032"
+    },
+    {
+      "name": "Art_BridgeCoping.033",
+      "triangles": 8,
+      "mesh": "LODMesh_0033",
+      "exported": "LODMesh_0033"
+    },
+    {
+      "name": "Art_BridgeCoping.034",
+      "triangles": 8,
+      "mesh": "LODMesh_0034",
+      "exported": "LODMesh_0034"
+    },
+    {
+      "name": "Art_BridgeCoping.035",
+      "triangles": 8,
+      "mesh": "LODMesh_0035",
+      "exported": "LODMesh_0035"
+    },
+    {
+      "name": "Art_BridgeCoping.036",
+      "triangles": 8,
+      "mesh": "LODMesh_0036",
+      "exported": "LODMesh_0036"
+    },
+    {
+      "name": "Art_BridgeCoping.037",
+      "triangles": 8,
+      "mesh": "LODMesh_0037",
+      "exported": "LODMesh_0037"
+    },
+    {
+      "name": "Art_BridgeCoping.038",
+      "triangles": 8,
+      "mesh": "LODMesh_0038",
+      "exported": "LODMesh_0038"
+    },
+    {
+      "name": "Art_BridgeCoping.039",
+      "triangles": 8,
+      "mesh": "LODMesh_0039",
+      "exported": "LODMesh_0039"
+    },
+    {
+      "name": "Art_BridgeSpandrel",
+      "triangles": 8,
+      "mesh": "LODMesh_0040",
+      "exported": "LODMesh_0040"
+    },
+    {
+      "name": "Art_BridgeSpandrel.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0041",
+      "exported": "LODMesh_0041"
+    },
+    {
+      "name": "Art_BridgeSpandrel.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0042",
+      "exported": "LODMesh_0042"
+    },
+    {
+      "name": "Art_BridgeSpandrel.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0043",
+      "exported": "LODMesh_0043"
+    },
+    {
+      "name": "Art_BridgeSpandrel.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0044",
+      "exported": "LODMesh_0044"
+    },
+    {
+      "name": "Art_BridgeSpandrel.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0045",
+      "exported": "LODMesh_0045"
+    },
+    {
+      "name": "Art_BridgeSpandrel.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0046",
+      "exported": "LODMesh_0046"
+    },
+    {
+      "name": "Art_BridgeSpandrel.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0047",
+      "exported": "LODMesh_0047"
+    },
+    {
+      "name": "Art_BridgeSpandrel.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0048",
+      "exported": "LODMesh_0048"
+    },
+    {
+      "name": "Art_BridgeSpandrel.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0049",
+      "exported": "LODMesh_0049"
+    },
+    {
+      "name": "Art_BridgeSpandrel.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0050",
+      "exported": "LODMesh_0050"
+    },
+    {
+      "name": "Art_BridgeSpandrel.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0051",
+      "exported": "LODMesh_0051"
+    },
+    {
+      "name": "Art_BridgeSpandrel.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0052",
+      "exported": "LODMesh_0052"
+    },
+    {
+      "name": "Art_BridgeSpandrel.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0053",
+      "exported": "LODMesh_0053"
+    },
+    {
+      "name": "Art_BridgeSpandrel.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0054",
+      "exported": "LODMesh_0054"
+    },
+    {
+      "name": "Art_BridgeSpandrel.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0055",
+      "exported": "LODMesh_0055"
+    },
+    {
+      "name": "Art_BridgeSpandrel.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0056",
+      "exported": "LODMesh_0056"
+    },
+    {
+      "name": "Art_BridgeSpandrel.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0057",
+      "exported": "LODMesh_0057"
+    },
+    {
+      "name": "Art_BridgeSpandrel.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0058",
+      "exported": "LODMesh_0058"
+    },
+    {
+      "name": "Art_BridgeSpandrel.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0059",
+      "exported": "LODMesh_0059"
+    },
+    {
+      "name": "Art_BridgeSpandrel.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0060",
+      "exported": "LODMesh_0060"
+    },
+    {
+      "name": "Art_BridgeSpandrel.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0061",
+      "exported": "LODMesh_0061"
+    },
+    {
+      "name": "Art_BridgeSpandrel.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0062",
+      "exported": "LODMesh_0062"
+    },
+    {
+      "name": "Art_BridgeSpandrel.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0063",
+      "exported": "LODMesh_0063"
+    },
+    {
+      "name": "Art_BridgeSpandrel.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0064",
+      "exported": "LODMesh_0064"
+    },
+    {
+      "name": "Art_BridgeSpandrel.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0065",
+      "exported": "LODMesh_0065"
+    },
+    {
+      "name": "Art_BridgeSpandrel.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0066",
+      "exported": "LODMesh_0066"
+    },
+    {
+      "name": "Art_BridgeSpandrel.027",
+      "triangles": 8,
+      "mesh": "LODMesh_0067",
+      "exported": "LODMesh_0067"
+    },
+    {
+      "name": "Art_BridgeSpandrel.028",
+      "triangles": 8,
+      "mesh": "LODMesh_0068",
+      "exported": "LODMesh_0068"
+    },
+    {
+      "name": "Art_BridgeSpandrel.029",
+      "triangles": 8,
+      "mesh": "LODMesh_0069",
+      "exported": "LODMesh_0069"
+    },
+    {
+      "name": "Art_BridgeSpandrel.030",
+      "triangles": 8,
+      "mesh": "LODMesh_0070",
+      "exported": "LODMesh_0070"
+    },
+    {
+      "name": "Art_BridgeSpandrel.031",
+      "triangles": 8,
+      "mesh": "LODMesh_0071",
+      "exported": "LODMesh_0071"
+    },
+    {
+      "name": "Art_BridgeSpandrel.032",
+      "triangles": 8,
+      "mesh": "LODMesh_0072",
+      "exported": "LODMesh_0072"
+    },
+    {
+      "name": "Art_BridgeSpandrel.033",
+      "triangles": 8,
+      "mesh": "LODMesh_0073",
+      "exported": "LODMesh_0073"
+    },
+    {
+      "name": "Art_BridgeSpandrel.034",
+      "triangles": 8,
+      "mesh": "LODMesh_0074",
+      "exported": "LODMesh_0074"
+    },
+    {
+      "name": "Art_BridgeSpandrel.035",
+      "triangles": 8,
+      "mesh": "LODMesh_0075",
+      "exported": "LODMesh_0075"
+    },
+    {
+      "name": "Art_BridgeSpandrel.036",
+      "triangles": 8,
+      "mesh": "LODMesh_0076",
+      "exported": "LODMesh_0076"
+    },
+    {
+      "name": "Art_BridgeSpandrel.037",
+      "triangles": 8,
+      "mesh": "LODMesh_0077",
+      "exported": "LODMesh_0077"
+    },
+    {
+      "name": "Art_BridgeSpandrel.038",
+      "triangles": 8,
+      "mesh": "LODMesh_0078",
+      "exported": "LODMesh_0078"
+    },
+    {
+      "name": "Art_BridgeSpandrel.039",
+      "triangles": 8,
+      "mesh": "LODMesh_0079",
+      "exported": "LODMesh_0079"
+    },
+    {
+      "name": "Art_BridgeSpandrel.040",
+      "triangles": 8,
+      "mesh": "LODMesh_0080",
+      "exported": "LODMesh_0080"
+    },
+    {
+      "name": "Art_BridgeSpandrel.041",
+      "triangles": 8,
+      "mesh": "LODMesh_0081",
+      "exported": "LODMesh_0081"
+    },
+    {
+      "name": "Art_BridgeSpandrel.042",
+      "triangles": 8,
+      "mesh": "LODMesh_0082",
+      "exported": "LODMesh_0082"
+    },
+    {
+      "name": "Art_BridgeSpandrel.043",
+      "triangles": 8,
+      "mesh": "LODMesh_0083",
+      "exported": "LODMesh_0083"
+    },
+    {
+      "name": "Art_BridgeSpandrel.044",
+      "triangles": 8,
+      "mesh": "LODMesh_0084",
+      "exported": "LODMesh_0084"
+    },
+    {
+      "name": "Art_BridgeSpandrel.045",
+      "triangles": 8,
+      "mesh": "LODMesh_0085",
+      "exported": "LODMesh_0085"
+    },
+    {
+      "name": "Art_BridgeSpandrel.046",
+      "triangles": 8,
+      "mesh": "LODMesh_0086",
+      "exported": "LODMesh_0086"
+    },
+    {
+      "name": "Art_BridgeSpandrel.047",
+      "triangles": 8,
+      "mesh": "LODMesh_0087",
+      "exported": "LODMesh_0087"
+    },
+    {
+      "name": "Art_CreekCobble",
+      "triangles": 30,
+      "mesh": "LODMesh_0088",
+      "exported": "LODMesh_0088"
+    },
+    {
+      "name": "Art_CreekCobble.001",
+      "triangles": 30,
+      "mesh": "LODMesh_0089",
+      "exported": "LODMesh_0089"
+    },
+    {
+      "name": "Art_CreekCobble.002",
+      "triangles": 34,
+      "mesh": "LODMesh_0090",
+      "exported": "LODMesh_0090"
+    },
+    {
+      "name": "Art_CreekCobble.003",
+      "triangles": 30,
+      "mesh": "LODMesh_0091",
+      "exported": "LODMesh_0091"
+    },
+    {
+      "name": "Art_CreekCobble.004",
+      "triangles": 34,
+      "mesh": "LODMesh_0092",
+      "exported": "LODMesh_0092"
+    },
+    {
+      "name": "Art_CreekCobble.005",
+      "triangles": 34,
+      "mesh": "LODMesh_0093",
+      "exported": "LODMesh_0093"
+    },
+    {
+      "name": "Art_CreekCobble.006",
+      "triangles": 30,
+      "mesh": "LODMesh_0094",
+      "exported": "LODMesh_0094"
+    },
+    {
+      "name": "Art_CreekCobble.007",
+      "triangles": 30,
+      "mesh": "LODMesh_0095",
+      "exported": "LODMesh_0095"
+    },
+    {
+      "name": "Art_CreekCobble.008",
+      "triangles": 30,
+      "mesh": "LODMesh_0096",
+      "exported": "LODMesh_0096"
+    },
+    {
+      "name": "Art_CreekCobble.009",
+      "triangles": 26,
+      "mesh": "LODMesh_0097",
+      "exported": "LODMesh_0097"
+    },
+    {
+      "name": "Art_CreekCobble.010",
+      "triangles": 30,
+      "mesh": "LODMesh_0098",
+      "exported": "LODMesh_0098"
+    },
+    {
+      "name": "Art_CreekCobble.011",
+      "triangles": 34,
+      "mesh": "LODMesh_0099",
+      "exported": "LODMesh_0099"
+    },
+    {
+      "name": "Art_CreekCobble.012",
+      "triangles": 30,
+      "mesh": "LODMesh_0100",
+      "exported": "LODMesh_0100"
+    },
+    {
+      "name": "Art_CreekCobble.013",
+      "triangles": 30,
+      "mesh": "LODMesh_0101",
+      "exported": "LODMesh_0101"
+    },
+    {
+      "name": "Art_CreekCobble.014",
+      "triangles": 30,
+      "mesh": "LODMesh_0102",
+      "exported": "LODMesh_0102"
+    },
+    {
+      "name": "Art_CreekCobble.015",
+      "triangles": 30,
+      "mesh": "LODMesh_0103",
+      "exported": "LODMesh_0103"
+    },
+    {
+      "name": "Art_CreekCobble.016",
+      "triangles": 26,
+      "mesh": "LODMesh_0104",
+      "exported": "LODMesh_0104"
+    },
+    {
+      "name": "Art_CreekCobble.017",
+      "triangles": 34,
+      "mesh": "LODMesh_0105",
+      "exported": "LODMesh_0105"
+    },
+    {
+      "name": "Art_CreekCobble.018",
+      "triangles": 30,
+      "mesh": "LODMesh_0106",
+      "exported": "LODMesh_0106"
+    },
+    {
+      "name": "Art_CreekCobble.019",
+      "triangles": 30,
+      "mesh": "LODMesh_0107",
+      "exported": "LODMesh_0107"
+    },
+    {
+      "name": "Art_CreekCobble.020",
+      "triangles": 26,
+      "mesh": "LODMesh_0108",
+      "exported": "LODMesh_0108"
+    },
+    {
+      "name": "Art_CreekCobble.021",
+      "triangles": 26,
+      "mesh": "LODMesh_0109",
+      "exported": "LODMesh_0109"
+    },
+    {
+      "name": "Art_CreekCobble.022",
+      "triangles": 30,
+      "mesh": "LODMesh_0110",
+      "exported": "LODMesh_0110"
+    },
+    {
+      "name": "Art_CreekCobble.023",
+      "triangles": 34,
+      "mesh": "LODMesh_0111",
+      "exported": "LODMesh_0111"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_0",
+      "triangles": 1220,
+      "mesh": "LODMesh_0112",
+      "exported": "LODMesh_0112"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_1",
+      "triangles": 976,
+      "mesh": "LODMesh_0113",
+      "exported": "LODMesh_0113"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_2",
+      "triangles": 488,
+      "mesh": "LODMesh_0114",
+      "exported": "LODMesh_0114"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_3",
+      "triangles": 244,
+      "mesh": "LODMesh_0115",
+      "exported": "LODMesh_0115"
+    },
+    {
+      "name": "Art_DryStoneTerrace",
+      "triangles": 8,
+      "mesh": "LODMesh_0116",
+      "exported": "LODMesh_0116"
+    },
+    {
+      "name": "Art_DryStoneTerrace.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0117",
+      "exported": "LODMesh_0117"
+    },
+    {
+      "name": "Art_DryStoneTerrace.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0118",
+      "exported": "LODMesh_0118"
+    },
+    {
+      "name": "Art_DryStoneTerrace.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0119",
+      "exported": "LODMesh_0119"
+    },
+    {
+      "name": "Art_DryStoneTerrace.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0120",
+      "exported": "LODMesh_0120"
+    },
+    {
+      "name": "Art_DryingHerbs_0",
+      "triangles": 531,
+      "mesh": "LODMesh_0121",
+      "exported": "LODMesh_0121"
+    },
+    {
+      "name": "Art_GnarledBranches",
+      "triangles": 1022,
+      "mesh": "LODMesh_0122",
+      "exported": "LODMesh_0122"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_0",
+      "triangles": 424,
+      "mesh": "LODMesh_0123",
+      "exported": "LODMesh_0123"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_1",
+      "triangles": 440,
+      "mesh": "LODMesh_0124",
+      "exported": "LODMesh_0124"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_2",
+      "triangles": 392,
+      "mesh": "LODMesh_0125",
+      "exported": "LODMesh_0125"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_3",
+      "triangles": 440,
+      "mesh": "LODMesh_0126",
+      "exported": "LODMesh_0126"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_4",
+      "triangles": 456,
+      "mesh": "LODMesh_0127",
+      "exported": "LODMesh_0127"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_5",
+      "triangles": 502,
+      "mesh": "LODMesh_0128",
+      "exported": "LODMesh_0128"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_6",
+      "triangles": 346,
+      "mesh": "LODMesh_0129",
+      "exported": "LODMesh_0129"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_7",
+      "triangles": 440,
+      "mesh": "LODMesh_0130",
+      "exported": "LODMesh_0130"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_0",
+      "triangles": 282,
+      "mesh": "LODMesh_0131",
+      "exported": "LODMesh_0131"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_1",
+      "triangles": 392,
+      "mesh": "LODMesh_0132",
+      "exported": "LODMesh_0132"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_2",
+      "triangles": 298,
+      "mesh": "LODMesh_0133",
+      "exported": "LODMesh_0133"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_3",
+      "triangles": 440,
+      "mesh": "LODMesh_0134",
+      "exported": "LODMesh_0134"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_4",
+      "triangles": 598,
+      "mesh": "LODMesh_0135",
+      "exported": "LODMesh_0135"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_5",
+      "triangles": 598,
+      "mesh": "LODMesh_0136",
+      "exported": "LODMesh_0136"
+    },
+    {
+      "name": "Art_HerbCeramics_0",
+      "triangles": 306,
+      "mesh": "LODMesh_0137",
+      "exported": "LODMesh_0137"
+    },
+    {
+      "name": "Art_MossCascadeShelf",
+      "triangles": 30,
+      "mesh": "LODMesh_0138",
+      "exported": "LODMesh_0138"
+    },
+    {
+      "name": "Art_MossCascadeShelf.001",
+      "triangles": 30,
+      "mesh": "LODMesh_0139",
+      "exported": "LODMesh_0139"
+    },
+    {
+      "name": "Art_MossCascadeShelf.002",
+      "triangles": 30,
+      "mesh": "LODMesh_0140",
+      "exported": "LODMesh_0140"
+    },
+    {
+      "name": "Art_MossCascadeShelf.003",
+      "triangles": 30,
+      "mesh": "LODMesh_0141",
+      "exported": "LODMesh_0141"
+    },
+    {
+      "name": "Art_MossCascadeShelf.004",
+      "triangles": 30,
+      "mesh": "LODMesh_0142",
+      "exported": "LODMesh_0142"
+    },
+    {
+      "name": "Art_MossCascadeShelf.005",
+      "triangles": 30,
+      "mesh": "LODMesh_0143",
+      "exported": "LODMesh_0143"
+    },
+    {
+      "name": "Art_MossCascadeShelf.006",
+      "triangles": 34,
+      "mesh": "LODMesh_0144",
+      "exported": "LODMesh_0144"
+    },
+    {
+      "name": "Art_NativeGrass_0",
+      "triangles": 336,
+      "mesh": "LODMesh_0145",
+      "exported": "LODMesh_0145"
+    },
+    {
+      "name": "Art_NativeGrass_1",
+      "triangles": 416,
+      "mesh": "LODMesh_0146",
+      "exported": "LODMesh_0146"
+    },
+    {
+      "name": "Art_NativeGrass_2",
+      "triangles": 624,
+      "mesh": "LODMesh_0147",
+      "exported": "LODMesh_0147"
+    },
+    {
+      "name": "Art_TerraceCoping",
+      "triangles": 8,
+      "mesh": "LODMesh_0148",
+      "exported": "LODMesh_0148"
+    },
+    {
+      "name": "Art_TerraceCoping.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0149",
+      "exported": "LODMesh_0149"
+    },
+    {
+      "name": "Art_TerraceCoping.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0150",
+      "exported": "LODMesh_0150"
+    },
+    {
+      "name": "Art_TerraceCoping.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0151",
+      "exported": "LODMesh_0151"
+    },
+    {
+      "name": "Art_TerraceCoping.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0152",
+      "exported": "LODMesh_0152"
+    },
+    {
+      "name": "Art_TerraceCoping.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0153",
+      "exported": "LODMesh_0153"
+    },
+    {
+      "name": "Art_TerraceCoping.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0154",
+      "exported": "LODMesh_0154"
+    },
+    {
+      "name": "Art_TerraceCoping.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0155",
+      "exported": "LODMesh_0155"
+    },
+    {
+      "name": "Art_TerraceCoping.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0156",
+      "exported": "LODMesh_0156"
+    },
+    {
+      "name": "Art_TerraceCoping.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0157",
+      "exported": "LODMesh_0157"
+    },
+    {
+      "name": "Art_TerraceCoping.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0158",
+      "exported": "LODMesh_0158"
+    },
+    {
+      "name": "Art_TerraceCoping.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0159",
+      "exported": "LODMesh_0159"
+    },
+    {
+      "name": "Art_TerraceCoping.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0160",
+      "exported": "LODMesh_0160"
+    },
+    {
+      "name": "Art_TerraceCoping.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0161",
+      "exported": "LODMesh_0161"
+    },
+    {
+      "name": "Art_TerraceCoping.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0162",
+      "exported": "LODMesh_0162"
+    },
+    {
+      "name": "Art_TerraceCoping.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0163",
+      "exported": "LODMesh_0163"
+    },
+    {
+      "name": "Art_TerraceCoping.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0164",
+      "exported": "LODMesh_0164"
+    },
+    {
+      "name": "Art_TerraceCoping.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0165",
+      "exported": "LODMesh_0165"
+    },
+    {
+      "name": "Art_TerraceCoping.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0166",
+      "exported": "LODMesh_0166"
+    },
+    {
+      "name": "Art_TerraceCoping.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0167",
+      "exported": "LODMesh_0167"
+    },
+    {
+      "name": "Art_TerraceCoping.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0168",
+      "exported": "LODMesh_0168"
+    },
+    {
+      "name": "Art_TerraceCoping.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0169",
+      "exported": "LODMesh_0169"
+    },
+    {
+      "name": "Art_TerraceCoping.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0170",
+      "exported": "LODMesh_0170"
+    },
+    {
+      "name": "Art_TerraceCoping.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0171",
+      "exported": "LODMesh_0171"
+    },
+    {
+      "name": "Art_TerraceCoping.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0172",
+      "exported": "LODMesh_0172"
+    },
+    {
+      "name": "Art_ValleyBluff",
+      "triangles": 110,
+      "mesh": "LODMesh_0173",
+      "exported": "LODMesh_0173"
+    },
+    {
+      "name": "Art_ValleyBluff.001",
+      "triangles": 76,
+      "mesh": "LODMesh_0174",
+      "exported": "LODMesh_0174"
+    },
+    {
+      "name": "Art_ValleyBluff.002",
+      "triangles": 110,
+      "mesh": "LODMesh_0175",
+      "exported": "LODMesh_0175"
+    },
+    {
+      "name": "Art_ValleyGardenSteps_0",
+      "triangles": 130,
+      "mesh": "LODMesh_0176",
+      "exported": "LODMesh_0176"
+    },
+    {
+      "name": "Art_ValleyGardenSteps_1",
+      "triangles": 3802,
+      "mesh": "LODMesh_0177",
+      "exported": "LODMesh_0177"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_0",
+      "triangles": 4770,
+      "mesh": "LODMesh_0178",
+      "exported": "LODMesh_0178"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_1",
+      "triangles": 2886,
+      "mesh": "LODMesh_0179",
+      "exported": "LODMesh_0179"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_2",
+      "triangles": 4110,
+      "mesh": "LODMesh_0180",
+      "exported": "LODMesh_0180"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_3",
+      "triangles": 3426,
+      "mesh": "LODMesh_0181",
+      "exported": "LODMesh_0181"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_4",
+      "triangles": 1760,
+      "mesh": "LODMesh_0182",
+      "exported": "LODMesh_0182"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_5",
+      "triangles": 3352,
+      "mesh": "LODMesh_0183",
+      "exported": "LODMesh_0183"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_6",
+      "triangles": 3768,
+      "mesh": "LODMesh_0184",
+      "exported": "LODMesh_0184"
+    },
+    {
+      "name": "Art_VegetatedButtress",
+      "triangles": 34,
+      "mesh": "LODMesh_0185",
+      "exported": "LODMesh_0185"
+    },
+    {
+      "name": "Art_VegetatedButtress.001",
+      "triangles": 30,
+      "mesh": "LODMesh_0186",
+      "exported": "LODMesh_0186"
+    },
+    {
+      "name": "Art_VegetatedButtress.002",
+      "triangles": 26,
+      "mesh": "LODMesh_0187",
+      "exported": "LODMesh_0187"
+    },
+    {
+      "name": "Art_VegetatedButtress.003",
+      "triangles": 30,
+      "mesh": "LODMesh_0188",
+      "exported": "LODMesh_0188"
+    },
+    {
+      "name": "Art_VegetatedButtress.004",
+      "triangles": 30,
+      "mesh": "LODMesh_0189",
+      "exported": "LODMesh_0189"
+    },
+    {
+      "name": "Art_VegetatedButtress.005",
+      "triangles": 30,
+      "mesh": "LODMesh_0190",
+      "exported": "LODMesh_0190"
+    },
+    {
+      "name": "Art_VegetatedButtress.006",
+      "triangles": 30,
+      "mesh": "LODMesh_0191",
+      "exported": "LODMesh_0191"
+    },
+    {
+      "name": "Art_VegetatedButtress.007",
+      "triangles": 26,
+      "mesh": "LODMesh_0192",
+      "exported": "LODMesh_0192"
+    },
+    {
+      "name": "Art_VegetatedButtress.008",
+      "triangles": 30,
+      "mesh": "LODMesh_0193",
+      "exported": "LODMesh_0193"
+    },
+    {
+      "name": "Art_VegetatedButtress.009",
+      "triangles": 34,
+      "mesh": "LODMesh_0194",
+      "exported": "LODMesh_0194"
+    },
+    {
+      "name": "Art_VegetatedButtress.010",
+      "triangles": 30,
+      "mesh": "LODMesh_0195",
+      "exported": "LODMesh_0195"
+    },
+    {
+      "name": "Art_VegetatedButtress.011",
+      "triangles": 30,
+      "mesh": "LODMesh_0196",
+      "exported": "LODMesh_0196"
+    },
+    {
+      "name": "Art_VegetatedButtress.012",
+      "triangles": 34,
+      "mesh": "LODMesh_0197",
+      "exported": "LODMesh_0197"
+    },
+    {
+      "name": "Art_VegetatedButtress.013",
+      "triangles": 34,
+      "mesh": "LODMesh_0198",
+      "exported": "LODMesh_0198"
+    },
+    {
+      "name": "Art_VegetatedButtress.014",
+      "triangles": 26,
+      "mesh": "LODMesh_0199",
+      "exported": "LODMesh_0199"
+    },
+    {
+      "name": "Art_VegetatedButtress.015",
+      "triangles": 30,
+      "mesh": "LODMesh_0200",
+      "exported": "LODMesh_0200"
+    },
+    {
+      "name": "Art_VegetatedButtress.016",
+      "triangles": 30,
+      "mesh": "LODMesh_0201",
+      "exported": "LODMesh_0201"
+    },
+    {
+      "name": "Art_VegetatedButtress.017",
+      "triangles": 26,
+      "mesh": "LODMesh_0202",
+      "exported": "LODMesh_0202"
+    },
+    {
+      "name": "Art_VegetatedButtress.018",
+      "triangles": 30,
+      "mesh": "LODMesh_0203",
+      "exported": "LODMesh_0203"
+    },
+    {
+      "name": "Art_VegetatedButtress.019",
+      "triangles": 26,
+      "mesh": "LODMesh_0204",
+      "exported": "LODMesh_0204"
+    },
+    {
+      "name": "Art_VegetatedButtress.020",
+      "triangles": 26,
+      "mesh": "LODMesh_0205",
+      "exported": "LODMesh_0205"
+    },
+    {
+      "name": "Art_VegetatedButtress.021",
+      "triangles": 34,
+      "mesh": "LODMesh_0206",
+      "exported": "LODMesh_0206"
+    },
+    {
+      "name": "Art_VegetatedButtress.022",
+      "triangles": 30,
+      "mesh": "LODMesh_0207",
+      "exported": "LODMesh_0207"
+    },
+    {
+      "name": "Art_VegetatedButtress.023",
+      "triangles": 34,
+      "mesh": "LODMesh_0208",
+      "exported": "LODMesh_0208"
+    },
+    {
+      "name": "Art_VegetatedButtress.024",
+      "triangles": 30,
+      "mesh": "LODMesh_0209",
+      "exported": "LODMesh_0209"
+    },
+    {
+      "name": "Art_Voussoir",
+      "triangles": 8,
+      "mesh": "LODMesh_0210",
+      "exported": "LODMesh_0210"
+    },
+    {
+      "name": "Art_Voussoir.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0211",
+      "exported": "LODMesh_0211"
+    },
+    {
+      "name": "Art_Voussoir.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0212",
+      "exported": "LODMesh_0212"
+    },
+    {
+      "name": "Art_Voussoir.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0213",
+      "exported": "LODMesh_0213"
+    },
+    {
+      "name": "Art_Voussoir.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0214",
+      "exported": "LODMesh_0214"
+    },
+    {
+      "name": "Art_Voussoir.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0215",
+      "exported": "LODMesh_0215"
+    },
+    {
+      "name": "Art_Voussoir.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0216",
+      "exported": "LODMesh_0216"
+    },
+    {
+      "name": "Art_Voussoir.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0217",
+      "exported": "LODMesh_0217"
+    },
+    {
+      "name": "Art_Voussoir.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0218",
+      "exported": "LODMesh_0218"
+    },
+    {
+      "name": "Art_Voussoir.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0219",
+      "exported": "LODMesh_0219"
+    },
+    {
+      "name": "Art_Voussoir.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0220",
+      "exported": "LODMesh_0220"
+    },
+    {
+      "name": "Art_Voussoir.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0221",
+      "exported": "LODMesh_0221"
+    },
+    {
+      "name": "Art_Voussoir.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0222",
+      "exported": "LODMesh_0222"
+    },
+    {
+      "name": "Art_Voussoir.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0223",
+      "exported": "LODMesh_0223"
+    },
+    {
+      "name": "Art_Voussoir.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0224",
+      "exported": "LODMesh_0224"
+    },
+    {
+      "name": "Art_Voussoir.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0225",
+      "exported": "LODMesh_0225"
+    },
+    {
+      "name": "Art_Voussoir.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0226",
+      "exported": "LODMesh_0226"
+    },
+    {
+      "name": "Art_Voussoir.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0227",
+      "exported": "LODMesh_0227"
+    },
+    {
+      "name": "Art_Voussoir.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0228",
+      "exported": "LODMesh_0228"
+    },
+    {
+      "name": "Art_Voussoir.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0229",
+      "exported": "LODMesh_0229"
+    },
+    {
+      "name": "Art_Voussoir.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0230",
+      "exported": "LODMesh_0230"
+    },
+    {
+      "name": "Art_Voussoir.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0231",
+      "exported": "LODMesh_0231"
+    },
+    {
+      "name": "Art_Voussoir.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0232",
+      "exported": "LODMesh_0232"
+    },
+    {
+      "name": "Art_Voussoir.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0233",
+      "exported": "LODMesh_0233"
+    },
+    {
+      "name": "Art_Voussoir.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0234",
+      "exported": "LODMesh_0234"
+    },
+    {
+      "name": "Art_Voussoir.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0235",
+      "exported": "LODMesh_0235"
+    },
+    {
+      "name": "Art_Voussoir.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0236",
+      "exported": "LODMesh_0236"
+    },
+    {
+      "name": "Art_Voussoir.027",
+      "triangles": 8,
+      "mesh": "LODMesh_0237",
+      "exported": "LODMesh_0237"
+    },
+    {
+      "name": "Art_Voussoir.028",
+      "triangles": 8,
+      "mesh": "LODMesh_0238",
+      "exported": "LODMesh_0238"
+    },
+    {
+      "name": "Art_Voussoir.029",
+      "triangles": 8,
+      "mesh": "LODMesh_0239",
+      "exported": "LODMesh_0239"
+    },
+    {
+      "name": "Art_Voussoir.030",
+      "triangles": 8,
+      "mesh": "LODMesh_0240",
+      "exported": "LODMesh_0240"
+    },
+    {
+      "name": "Art_Voussoir.031",
+      "triangles": 8,
+      "mesh": "LODMesh_0241",
+      "exported": "LODMesh_0241"
+    },
+    {
+      "name": "Art_Voussoir.032",
+      "triangles": 8,
+      "mesh": "LODMesh_0242",
+      "exported": "LODMesh_0242"
+    },
+    {
+      "name": "Art_Voussoir.033",
+      "triangles": 8,
+      "mesh": "LODMesh_0243",
+      "exported": "LODMesh_0243"
+    },
+    {
+      "name": "Art_Voussoir.034",
+      "triangles": 8,
+      "mesh": "LODMesh_0244",
+      "exported": "LODMesh_0244"
+    },
+    {
+      "name": "Art_Voussoir.035",
+      "triangles": 8,
+      "mesh": "LODMesh_0245",
+      "exported": "LODMesh_0245"
+    },
+    {
+      "name": "Art_Voussoir.036",
+      "triangles": 8,
+      "mesh": "LODMesh_0246",
+      "exported": "LODMesh_0246"
+    },
+    {
+      "name": "Art_Voussoir.037",
+      "triangles": 8,
+      "mesh": "LODMesh_0247",
+      "exported": "LODMesh_0247"
+    },
+    {
+      "name": "Art_Voussoir.038",
+      "triangles": 8,
+      "mesh": "LODMesh_0248",
+      "exported": "LODMesh_0248"
+    },
+    {
+      "name": "Art_Voussoir.039",
+      "triangles": 8,
+      "mesh": "LODMesh_0249",
+      "exported": "LODMesh_0249"
+    },
+    {
+      "name": "Art_Voussoir.040",
+      "triangles": 8,
+      "mesh": "LODMesh_0250",
+      "exported": "LODMesh_0250"
+    },
+    {
+      "name": "Art_Voussoir.041",
+      "triangles": 8,
+      "mesh": "LODMesh_0251",
+      "exported": "LODMesh_0251"
+    },
+    {
+      "name": "Art_Voussoir.042",
+      "triangles": 8,
+      "mesh": "LODMesh_0252",
+      "exported": "LODMesh_0252"
+    },
+    {
+      "name": "Art_Voussoir.043",
+      "triangles": 8,
+      "mesh": "LODMesh_0253",
+      "exported": "LODMesh_0253"
+    },
+    {
+      "name": "Art_Voussoir.044",
+      "triangles": 8,
+      "mesh": "LODMesh_0254",
+      "exported": "LODMesh_0254"
+    },
+    {
+      "name": "Art_Voussoir.045",
+      "triangles": 8,
+      "mesh": "LODMesh_0255",
+      "exported": "LODMesh_0255"
+    },
+    {
+      "name": "Art_Voussoir.046",
+      "triangles": 8,
+      "mesh": "LODMesh_0256",
+      "exported": "LODMesh_0256"
+    },
+    {
+      "name": "Art_Voussoir.047",
+      "triangles": 8,
+      "mesh": "LODMesh_0257",
+      "exported": "LODMesh_0257"
+    },
+    {
+      "name": "Art_WeirStones",
+      "triangles": 30,
+      "mesh": "LODMesh_0258",
+      "exported": "LODMesh_0258"
+    },
+    {
+      "name": "Art_WeirStones.001",
+      "triangles": 30,
+      "mesh": "LODMesh_0259",
+      "exported": "LODMesh_0259"
+    },
+    {
+      "name": "Art_WeirStones.002",
+      "triangles": 34,
+      "mesh": "LODMesh_0260",
+      "exported": "LODMesh_0260"
+    },
+    {
+      "name": "Art_WeirStones.003",
+      "triangles": 30,
+      "mesh": "LODMesh_0261",
+      "exported": "LODMesh_0261"
+    },
+    {
+      "name": "Art_WeirStones.004",
+      "triangles": 26,
+      "mesh": "LODMesh_0262",
+      "exported": "LODMesh_0262"
+    },
+    {
+      "name": "Art_WeirStones.005",
+      "triangles": 34,
+      "mesh": "LODMesh_0263",
+      "exported": "LODMesh_0263"
+    },
+    {
+      "name": "Art_WeirStones.006",
+      "triangles": 30,
+      "mesh": "LODMesh_0264",
+      "exported": "LODMesh_0264"
+    },
+    {
+      "name": "Decor_BridgeLamp",
+      "triangles": 38,
+      "mesh": "LODMesh_0265",
+      "exported": "LODMesh_0265"
+    },
+    {
+      "name": "Decor_BridgeLamp.001",
+      "triangles": 38,
+      "mesh": "LODMesh_0266",
+      "exported": "LODMesh_0266"
+    },
+    {
+      "name": "Decor_BridgeLamp.002",
+      "triangles": 38,
+      "mesh": "LODMesh_0267",
+      "exported": "LODMesh_0267"
+    },
+    {
+      "name": "Decor_BridgeLamp.003",
+      "triangles": 38,
+      "mesh": "LODMesh_0268",
+      "exported": "LODMesh_0268"
+    },
+    {
+      "name": "Decor_BridgeLamp.004",
+      "triangles": 38,
+      "mesh": "LODMesh_0269",
+      "exported": "LODMesh_0269"
+    },
+    {
+      "name": "Decor_BridgeLamp.005",
+      "triangles": 38,
+      "mesh": "LODMesh_0270",
+      "exported": "LODMesh_0270"
+    },
+    {
+      "name": "Decor_BridgeLamp.006",
+      "triangles": 38,
+      "mesh": "LODMesh_0271",
+      "exported": "LODMesh_0271"
+    },
+    {
+      "name": "Decor_BridgeLamp.007",
+      "triangles": 38,
+      "mesh": "LODMesh_0272",
+      "exported": "LODMesh_0272"
+    },
+    {
+      "name": "Decor_Rubble_0_0",
+      "triangles": 38,
+      "mesh": "LODMesh_0273",
+      "exported": "LODMesh_0273"
+    },
+    {
+      "name": "Decor_Rubble_0_1",
+      "triangles": 54,
+      "mesh": "LODMesh_0274",
+      "exported": "LODMesh_0274"
+    },
+    {
+      "name": "Decor_Rubble_0_2",
+      "triangles": 36,
+      "mesh": "LODMesh_0275",
+      "exported": "LODMesh_0275"
+    },
+    {
+      "name": "Decor_Rubble_0_4",
+      "triangles": 8,
+      "mesh": "LODMesh_0276",
+      "exported": "LODMesh_0276"
+    },
+    {
+      "name": "Decor_Rubble_0_5",
+      "triangles": 28,
+      "mesh": "LODMesh_0277",
+      "exported": "LODMesh_0277"
+    },
+    {
+      "name": "Decor_Rubble_1_0",
+      "triangles": 20,
+      "mesh": "LODMesh_0278",
+      "exported": "LODMesh_0278"
+    },
+    {
+      "name": "Decor_Rubble_1_1",
+      "triangles": 54,
+      "mesh": "LODMesh_0279",
+      "exported": "LODMesh_0279"
+    },
+    {
+      "name": "Decor_Rubble_1_4",
+      "triangles": 66,
+      "mesh": "LODMesh_0280",
+      "exported": "LODMesh_0280"
+    },
+    {
+      "name": "Decor_Rubble_1_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0281",
+      "exported": "LODMesh_0281"
+    },
+    {
+      "name": "Decor_Rubble_2_0",
+      "triangles": 46,
+      "mesh": "LODMesh_0282",
+      "exported": "LODMesh_0282"
+    },
+    {
+      "name": "Decor_Rubble_2_4",
+      "triangles": 8,
+      "mesh": "LODMesh_0283",
+      "exported": "LODMesh_0283"
+    },
+    {
+      "name": "Decor_Rubble_2_5",
+      "triangles": 18,
+      "mesh": "LODMesh_0284",
+      "exported": "LODMesh_0284"
+    },
+    {
+      "name": "Decor_Rubble_3_0",
+      "triangles": 38,
+      "mesh": "LODMesh_0285",
+      "exported": "LODMesh_0285"
+    },
+    {
+      "name": "Decor_Rubble_3_1",
+      "triangles": 20,
+      "mesh": "LODMesh_0286",
+      "exported": "LODMesh_0286"
+    },
+    {
+      "name": "Decor_Rubble_3_3",
+      "triangles": 100,
+      "mesh": "LODMesh_0287",
+      "exported": "LODMesh_0287"
+    },
+    {
+      "name": "Decor_Rubble_3_4",
+      "triangles": 16,
+      "mesh": "LODMesh_0288",
+      "exported": "LODMesh_0288"
+    },
+    {
+      "name": "Decor_Rubble_3_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0289",
+      "exported": "LODMesh_0289"
+    },
+    {
+      "name": "Decor_Rubble_4_0",
+      "triangles": 58,
+      "mesh": "LODMesh_0290",
+      "exported": "LODMesh_0290"
+    },
+    {
+      "name": "Decor_Rubble_4_1",
+      "triangles": 36,
+      "mesh": "LODMesh_0291",
+      "exported": "LODMesh_0291"
+    },
+    {
+      "name": "Decor_Rubble_4_3",
+      "triangles": 94,
+      "mesh": "LODMesh_0292",
+      "exported": "LODMesh_0292"
+    },
+    {
+      "name": "Decor_Rubble_4_5",
+      "triangles": 28,
+      "mesh": "LODMesh_0293",
+      "exported": "LODMesh_0293"
+    },
+    {
+      "name": "Decor_Rubble_5_0",
+      "triangles": 18,
+      "mesh": "LODMesh_0294",
+      "exported": "LODMesh_0294"
+    },
+    {
+      "name": "Decor_Rubble_5_1",
+      "triangles": 56,
+      "mesh": "LODMesh_0295",
+      "exported": "LODMesh_0295"
+    },
+    {
+      "name": "Decor_Rubble_5_2",
+      "triangles": 10,
+      "mesh": "LODMesh_0296",
+      "exported": "LODMesh_0296"
+    },
+    {
+      "name": "Decor_Rubble_5_3",
+      "triangles": 28,
+      "mesh": "LODMesh_0297",
+      "exported": "LODMesh_0297"
+    },
+    {
+      "name": "Decor_Rubble_5_4",
+      "triangles": 16,
+      "mesh": "LODMesh_0298",
+      "exported": "LODMesh_0298"
+    },
+    {
+      "name": "Decor_Terrace",
+      "triangles": 4,
+      "mesh": "LODMesh_0299",
+      "exported": "LODMesh_0299"
+    },
+    {
+      "name": "Decor_Terrace.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0300",
+      "exported": "LODMesh_0300"
+    },
+    {
+      "name": "Decor_Terrace.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0301",
+      "exported": "LODMesh_0301"
+    },
+    {
+      "name": "Decor_Terrace.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0302",
+      "exported": "LODMesh_0302"
+    },
+    {
+      "name": "Decor_Terrace.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0303",
+      "exported": "LODMesh_0303"
+    },
+    {
+      "name": "Decor_Terrace.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0304",
+      "exported": "LODMesh_0304"
+    },
+    {
+      "name": "Decor_Terrace.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0305",
+      "exported": "LODMesh_0305"
+    },
+    {
+      "name": "Decor_Terrace.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0306",
+      "exported": "LODMesh_0306"
+    },
+    {
+      "name": "Decor_TerraceLoam",
+      "triangles": 4,
+      "mesh": "LODMesh_0307",
+      "exported": "LODMesh_0307"
+    },
+    {
+      "name": "Decor_TerraceLoam.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0308",
+      "exported": "LODMesh_0308"
+    },
+    {
+      "name": "Decor_TerraceLoam.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0309",
+      "exported": "LODMesh_0309"
+    },
+    {
+      "name": "Decor_TerraceLoam.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0310",
+      "exported": "LODMesh_0310"
+    },
+    {
+      "name": "Decor_TerraceLoam.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0311",
+      "exported": "LODMesh_0311"
+    },
+    {
+      "name": "Decor_TerraceLoam.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0312",
+      "exported": "LODMesh_0312"
+    },
+    {
+      "name": "Decor_TerraceLoam.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0313",
+      "exported": "LODMesh_0313"
+    },
+    {
+      "name": "Decor_TerraceLoam.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0314",
+      "exported": "LODMesh_0314"
+    },
+    {
+      "name": "Effect_Footwater",
+      "triangles": 14,
+      "mesh": "LODMesh_0315",
+      "exported": "LODMesh_0315"
+    },
+    {
+      "name": "Effect_Footwater.001",
+      "triangles": 15,
+      "mesh": "LODMesh_0316",
+      "exported": "LODMesh_0316"
+    },
+    {
+      "name": "Effect_Footwater.002",
+      "triangles": 14,
+      "mesh": "LODMesh_0317",
+      "exported": "LODMesh_0317"
+    },
+    {
+      "name": "Effect_RidgeFall",
+      "triangles": 20,
+      "mesh": "LODMesh_0318",
+      "exported": "LODMesh_0318"
+    },
+    {
+      "name": "Effect_RidgeFall.001",
+      "triangles": 20,
+      "mesh": "LODMesh_0319",
+      "exported": "LODMesh_0319"
+    },
+    {
+      "name": "Effect_RidgeFall.002",
+      "triangles": 20,
+      "mesh": "LODMesh_0320",
+      "exported": "LODMesh_0320"
+    },
+    {
+      "name": "Effect_RidgeFall.003",
+      "triangles": 19,
+      "mesh": "LODMesh_0321",
+      "exported": "LODMesh_0321"
+    },
+    {
+      "name": "Effect_RidgeFall.004",
+      "triangles": 20,
+      "mesh": "LODMesh_0322",
+      "exported": "LODMesh_0322"
+    },
+    {
+      "name": "Effect_RidgeFall.005",
+      "triangles": 20,
+      "mesh": "LODMesh_0323",
+      "exported": "LODMesh_0323"
+    },
+    {
+      "name": "Effect_RidgeFall.006",
+      "triangles": 19,
+      "mesh": "LODMesh_0324",
+      "exported": "LODMesh_0324"
+    },
+    {
+      "name": "Effect_RidgeFall.007",
+      "triangles": 20,
+      "mesh": "LODMesh_0325",
+      "exported": "LODMesh_0325"
+    },
+    {
+      "name": "Effect_RidgeFall.008",
+      "triangles": 20,
+      "mesh": "LODMesh_0326",
+      "exported": "LODMesh_0326"
+    },
+    {
+      "name": "Effect_SpringFall",
+      "triangles": 29,
+      "mesh": "LODMesh_0327",
+      "exported": "LODMesh_0327"
+    },
+    {
+      "name": "Effect_StreamFoam_0",
+      "triangles": 45,
+      "mesh": "LODMesh_0328",
+      "exported": "LODMesh_0328"
+    },
+    {
+      "name": "Effect_StreamFoam_1",
+      "triangles": 103,
+      "mesh": "LODMesh_0329",
+      "exported": "LODMesh_0329"
+    },
+    {
+      "name": "Effect_StreamFoam_2",
+      "triangles": 103,
+      "mesh": "LODMesh_0330",
+      "exported": "LODMesh_0330"
+    },
+    {
+      "name": "Effect_StreamFoam_3",
+      "triangles": 57,
+      "mesh": "LODMesh_0331",
+      "exported": "LODMesh_0331"
+    },
+    {
+      "name": "Effect_ValleyFall",
+      "triangles": 34,
+      "mesh": "LODMesh_0332",
+      "exported": "LODMesh_0332"
+    },
+    {
+      "name": "Effect_ValleyFall.001",
+      "triangles": 35,
+      "mesh": "LODMesh_0333",
+      "exported": "LODMesh_0333"
+    },
+    {
+      "name": "Effect_ValleyFall.002",
+      "triangles": 35,
+      "mesh": "LODMesh_0334",
+      "exported": "LODMesh_0334"
+    },
+    {
+      "name": "Plant_0_0_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0335",
+      "exported": "LODMesh_0335"
+    },
+    {
+      "name": "Plant_0_0_Plant1",
+      "triangles": 24,
+      "mesh": "LODMesh_0336",
+      "exported": "LODMesh_0336"
+    },
+    {
+      "name": "Plant_0_1_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0337",
+      "exported": "LODMesh_0337"
+    },
+    {
+      "name": "Plant_0_1_Plant1",
+      "triangles": 22,
+      "mesh": "LODMesh_0338",
+      "exported": "LODMesh_0338"
+    },
+    {
+      "name": "Plant_0_2_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0339",
+      "exported": "LODMesh_0339"
+    },
+    {
+      "name": "Plant_0_2_Plant1",
+      "triangles": 16,
+      "mesh": "LODMesh_0340",
+      "exported": "LODMesh_0340"
+    },
+    {
+      "name": "Plant_0_3_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0341",
+      "exported": "LODMesh_0341"
+    },
+    {
+      "name": "Plant_0_4_Plant1",
+      "triangles": 14,
+      "mesh": "LODMesh_0342",
+      "exported": "LODMesh_0342"
+    },
+    {
+      "name": "Plant_0_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0343",
+      "exported": "LODMesh_0343"
+    },
+    {
+      "name": "Plant_0_5_Plant1",
+      "triangles": 14,
+      "mesh": "LODMesh_0344",
+      "exported": "LODMesh_0344"
+    },
+    {
+      "name": "Plant_1_0_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0345",
+      "exported": "LODMesh_0345"
+    },
+    {
+      "name": "Plant_1_0_Plant1",
+      "triangles": 38,
+      "mesh": "LODMesh_0346",
+      "exported": "LODMesh_0346"
+    },
+    {
+      "name": "Plant_1_1_Plant0",
+      "triangles": 46,
+      "mesh": "LODMesh_0347",
+      "exported": "LODMesh_0347"
+    },
+    {
+      "name": "Plant_1_1_Plant1",
+      "triangles": 40,
+      "mesh": "LODMesh_0348",
+      "exported": "LODMesh_0348"
+    },
+    {
+      "name": "Plant_1_2_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0349",
+      "exported": "LODMesh_0349"
+    },
+    {
+      "name": "Plant_1_2_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0350",
+      "exported": "LODMesh_0350"
+    },
+    {
+      "name": "Plant_1_3_Plant0",
+      "triangles": 10,
+      "mesh": "LODMesh_0351",
+      "exported": "LODMesh_0351"
+    },
+    {
+      "name": "Plant_1_3_Plant1",
+      "triangles": 8,
+      "mesh": "LODMesh_0352",
+      "exported": "LODMesh_0352"
+    },
+    {
+      "name": "Plant_1_4_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0353",
+      "exported": "LODMesh_0353"
+    },
+    {
+      "name": "Plant_1_4_Plant1",
+      "triangles": 64,
+      "mesh": "LODMesh_0354",
+      "exported": "LODMesh_0354"
+    },
+    {
+      "name": "Plant_1_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0355",
+      "exported": "LODMesh_0355"
+    },
+    {
+      "name": "Plant_1_5_Plant1",
+      "triangles": 8,
+      "mesh": "LODMesh_0356",
+      "exported": "LODMesh_0356"
+    },
+    {
+      "name": "Plant_2_0_Plant0",
+      "triangles": 34,
+      "mesh": "LODMesh_0357",
+      "exported": "LODMesh_0357"
+    },
+    {
+      "name": "Plant_2_0_Plant1",
+      "triangles": 28,
+      "mesh": "LODMesh_0358",
+      "exported": "LODMesh_0358"
+    },
+    {
+      "name": "Plant_2_1_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0359",
+      "exported": "LODMesh_0359"
+    },
+    {
+      "name": "Plant_2_1_Plant1",
+      "triangles": 12,
+      "mesh": "LODMesh_0360",
+      "exported": "LODMesh_0360"
+    },
+    {
+      "name": "Plant_2_2_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0361",
+      "exported": "LODMesh_0361"
+    },
+    {
+      "name": "Plant_2_2_Plant1",
+      "triangles": 8,
+      "mesh": "LODMesh_0362",
+      "exported": "LODMesh_0362"
+    },
+    {
+      "name": "Plant_2_3_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0363",
+      "exported": "LODMesh_0363"
+    },
+    {
+      "name": "Plant_2_4_Plant1",
+      "triangles": 8,
+      "mesh": "LODMesh_0364",
+      "exported": "LODMesh_0364"
+    },
+    {
+      "name": "Plant_2_5_Plant1",
+      "triangles": 18,
+      "mesh": "LODMesh_0365",
+      "exported": "LODMesh_0365"
+    },
+    {
+      "name": "Plant_3_0_Plant0",
+      "triangles": 46,
+      "mesh": "LODMesh_0366",
+      "exported": "LODMesh_0366"
+    },
+    {
+      "name": "Plant_3_0_Plant1",
+      "triangles": 22,
+      "mesh": "LODMesh_0367",
+      "exported": "LODMesh_0367"
+    },
+    {
+      "name": "Plant_3_1_Plant0",
+      "triangles": 16,
+      "mesh": "LODMesh_0368",
+      "exported": "LODMesh_0368"
+    },
+    {
+      "name": "Plant_3_1_Plant1",
+      "triangles": 38,
+      "mesh": "LODMesh_0369",
+      "exported": "LODMesh_0369"
+    },
+    {
+      "name": "Plant_3_2_Plant1",
+      "triangles": 6,
+      "mesh": "LODMesh_0370",
+      "exported": "LODMesh_0370"
+    },
+    {
+      "name": "Plant_3_3_Plant0",
+      "triangles": 92,
+      "mesh": "LODMesh_0371",
+      "exported": "LODMesh_0371"
+    },
+    {
+      "name": "Plant_3_3_Plant1",
+      "triangles": 82,
+      "mesh": "LODMesh_0372",
+      "exported": "LODMesh_0372"
+    },
+    {
+      "name": "Plant_3_4_Plant0",
+      "triangles": 16,
+      "mesh": "LODMesh_0373",
+      "exported": "LODMesh_0373"
+    },
+    {
+      "name": "Plant_3_4_Plant1",
+      "triangles": 20,
+      "mesh": "LODMesh_0374",
+      "exported": "LODMesh_0374"
+    },
+    {
+      "name": "Plant_3_5_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0375",
+      "exported": "LODMesh_0375"
+    },
+    {
+      "name": "Plant_3_5_Plant1",
+      "triangles": 12,
+      "mesh": "LODMesh_0376",
+      "exported": "LODMesh_0376"
+    },
+    {
+      "name": "Plant_4_0_Plant0",
+      "triangles": 40,
+      "mesh": "LODMesh_0377",
+      "exported": "LODMesh_0377"
+    },
+    {
+      "name": "Plant_4_0_Plant1",
+      "triangles": 34,
+      "mesh": "LODMesh_0378",
+      "exported": "LODMesh_0378"
+    },
+    {
+      "name": "Plant_4_1_Plant0",
+      "triangles": 28,
+      "mesh": "LODMesh_0379",
+      "exported": "LODMesh_0379"
+    },
+    {
+      "name": "Plant_4_1_Plant1",
+      "triangles": 90,
+      "mesh": "LODMesh_0380",
+      "exported": "LODMesh_0380"
+    },
+    {
+      "name": "Plant_4_2_Plant0",
+      "triangles": 16,
+      "mesh": "LODMesh_0381",
+      "exported": "LODMesh_0381"
+    },
+    {
+      "name": "Plant_4_2_Plant1",
+      "triangles": 60,
+      "mesh": "LODMesh_0382",
+      "exported": "LODMesh_0382"
+    },
+    {
+      "name": "Plant_4_3_Plant0",
+      "triangles": 22,
+      "mesh": "LODMesh_0383",
+      "exported": "LODMesh_0383"
+    },
+    {
+      "name": "Plant_4_3_Plant1",
+      "triangles": 46,
+      "mesh": "LODMesh_0384",
+      "exported": "LODMesh_0384"
+    },
+    {
+      "name": "Plant_4_4_Plant0",
+      "triangles": 16,
+      "mesh": "LODMesh_0385",
+      "exported": "LODMesh_0385"
+    },
+    {
+      "name": "Plant_4_4_Plant1",
+      "triangles": 72,
+      "mesh": "LODMesh_0386",
+      "exported": "LODMesh_0386"
+    },
+    {
+      "name": "Plant_4_5_Plant0",
+      "triangles": 28,
+      "mesh": "LODMesh_0387",
+      "exported": "LODMesh_0387"
+    },
+    {
+      "name": "Plant_4_5_Plant1",
+      "triangles": 14,
+      "mesh": "LODMesh_0388",
+      "exported": "LODMesh_0388"
+    },
+    {
+      "name": "Plant_5_0_Plant0",
+      "triangles": 28,
+      "mesh": "LODMesh_0389",
+      "exported": "LODMesh_0389"
+    },
+    {
+      "name": "Plant_5_0_Plant1",
+      "triangles": 24,
+      "mesh": "LODMesh_0390",
+      "exported": "LODMesh_0390"
+    },
+    {
+      "name": "Plant_5_1_Plant0",
+      "triangles": 28,
+      "mesh": "LODMesh_0391",
+      "exported": "LODMesh_0391"
+    },
+    {
+      "name": "Plant_5_1_Plant1",
+      "triangles": 52,
+      "mesh": "LODMesh_0392",
+      "exported": "LODMesh_0392"
+    },
+    {
+      "name": "Plant_5_2_Plant0",
+      "triangles": 16,
+      "mesh": "LODMesh_0393",
+      "exported": "LODMesh_0393"
+    },
+    {
+      "name": "Plant_5_2_Plant1",
+      "triangles": 78,
+      "mesh": "LODMesh_0394",
+      "exported": "LODMesh_0394"
+    },
+    {
+      "name": "Plant_5_3_Plant0",
+      "triangles": 10,
+      "mesh": "LODMesh_0395",
+      "exported": "LODMesh_0395"
+    },
+    {
+      "name": "Plant_5_3_Plant1",
+      "triangles": 44,
+      "mesh": "LODMesh_0396",
+      "exported": "LODMesh_0396"
+    },
+    {
+      "name": "Plant_5_4_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0397",
+      "exported": "LODMesh_0397"
+    },
+    {
+      "name": "Plant_5_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0398",
+      "exported": "LODMesh_0398"
+    },
+    {
+      "name": "Plant_5_5_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0399",
+      "exported": "LODMesh_0399"
+    },
+    {
+      "name": "Plant_Art_CloseMedicinal",
+      "triangles": 190,
+      "mesh": "LODMesh_0400",
+      "exported": "LODMesh_0400"
+    },
+    {
+      "name": "Plant_Art_Medicine",
+      "triangles": 262,
+      "mesh": "LODMesh_0401",
+      "exported": "LODMesh_0401"
+    },
+    {
+      "name": "Plant_Art_TerracedHerbs",
+      "triangles": 60,
+      "mesh": "LODMesh_0402",
+      "exported": "LODMesh_0402"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_0",
+      "triangles": 156,
+      "mesh": "LODMesh_0403",
+      "exported": "LODMesh_0403"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_0.001",
+      "triangles": 104,
+      "mesh": "LODMesh_0404",
+      "exported": "LODMesh_0404"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_1",
+      "triangles": 162,
+      "mesh": "LODMesh_0405",
+      "exported": "LODMesh_0405"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_1.001",
+      "triangles": 108,
+      "mesh": "LODMesh_0406",
+      "exported": "LODMesh_0406"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_2",
+      "triangles": 144,
+      "mesh": "LODMesh_0407",
+      "exported": "LODMesh_0407"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_2.001",
+      "triangles": 96,
+      "mesh": "LODMesh_0408",
+      "exported": "LODMesh_0408"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_3",
+      "triangles": 162,
+      "mesh": "LODMesh_0409",
+      "exported": "LODMesh_0409"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_3.001",
+      "triangles": 108,
+      "mesh": "LODMesh_0410",
+      "exported": "LODMesh_0410"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_4",
+      "triangles": 166,
+      "mesh": "LODMesh_0411",
+      "exported": "LODMesh_0411"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_4.001",
+      "triangles": 110,
+      "mesh": "LODMesh_0412",
+      "exported": "LODMesh_0412"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_5",
+      "triangles": 184,
+      "mesh": "LODMesh_0413",
+      "exported": "LODMesh_0413"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_5.001",
+      "triangles": 122,
+      "mesh": "LODMesh_0414",
+      "exported": "LODMesh_0414"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_6",
+      "triangles": 126,
+      "mesh": "LODMesh_0415",
+      "exported": "LODMesh_0415"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_6.001",
+      "triangles": 84,
+      "mesh": "LODMesh_0416",
+      "exported": "LODMesh_0416"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_7",
+      "triangles": 162,
+      "mesh": "LODMesh_0417",
+      "exported": "LODMesh_0417"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_7.001",
+      "triangles": 108,
+      "mesh": "LODMesh_0418",
+      "exported": "LODMesh_0418"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_0",
+      "triangles": 104,
+      "mesh": "LODMesh_0419",
+      "exported": "LODMesh_0419"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_0.001",
+      "triangles": 68,
+      "mesh": "LODMesh_0420",
+      "exported": "LODMesh_0420"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_1",
+      "triangles": 144,
+      "mesh": "LODMesh_0421",
+      "exported": "LODMesh_0421"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_1.001",
+      "triangles": 96,
+      "mesh": "LODMesh_0422",
+      "exported": "LODMesh_0422"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_2",
+      "triangles": 110,
+      "mesh": "LODMesh_0423",
+      "exported": "LODMesh_0423"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_2.001",
+      "triangles": 72,
+      "mesh": "LODMesh_0424",
+      "exported": "LODMesh_0424"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_3",
+      "triangles": 162,
+      "mesh": "LODMesh_0425",
+      "exported": "LODMesh_0425"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_3.001",
+      "triangles": 108,
+      "mesh": "LODMesh_0426",
+      "exported": "LODMesh_0426"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_4",
+      "triangles": 220,
+      "mesh": "LODMesh_0427",
+      "exported": "LODMesh_0427"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_4.001",
+      "triangles": 146,
+      "mesh": "LODMesh_0428",
+      "exported": "LODMesh_0428"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_5",
+      "triangles": 220,
+      "mesh": "LODMesh_0429",
+      "exported": "LODMesh_0429"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_5.001",
+      "triangles": 146,
+      "mesh": "LODMesh_0430",
+      "exported": "LODMesh_0430"
+    },
+    {
+      "name": "Plant_HeroPine",
+      "triangles": 36,
+      "mesh": "LODMesh_0431",
+      "exported": "LODMesh_0431"
+    },
+    {
+      "name": "Plant_HeroPine.001",
+      "triangles": 36,
+      "mesh": "LODMesh_0432",
+      "exported": "LODMesh_0432"
+    },
+    {
+      "name": "Solid_BoundaryMountainNorth",
+      "triangles": 11642,
+      "mesh": "LODMesh_0433",
+      "exported": "LODMesh_0433"
+    },
+    {
+      "name": "Solid_BoundaryMountainSouth",
+      "triangles": 11642,
+      "mesh": "LODMesh_0434",
+      "exported": "LODMesh_0434"
+    },
+    {
+      "name": "Solid_CreekHerbShelter",
+      "triangles": 376,
+      "mesh": "LODMesh_0435",
+      "exported": "LODMesh_0435"
+    },
+    {
+      "name": "Solid_CreeksideShelter",
+      "triangles": 376,
+      "mesh": "LODMesh_0436",
+      "exported": "LODMesh_0436"
+    },
+    {
+      "name": "Solid_Deck_0",
+      "triangles": 8,
+      "mesh": "LODMesh_0437",
+      "exported": "LODMesh_0437"
+    },
+    {
+      "name": "Solid_Deck_1",
+      "triangles": 8,
+      "mesh": "LODMesh_0438",
+      "exported": "LODMesh_0438"
+    },
+    {
+      "name": "Solid_DryingShelter",
+      "triangles": 376,
+      "mesh": "LODMesh_0439",
+      "exported": "LODMesh_0439"
+    },
+    {
+      "name": "Solid_EastTerraceHouse",
+      "triangles": 376,
+      "mesh": "LODMesh_0440",
+      "exported": "LODMesh_0440"
+    },
+    {
+      "name": "Solid_GnarledPine",
+      "triangles": 276,
+      "mesh": "LODMesh_0441",
+      "exported": "LODMesh_0441"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_0",
+      "triangles": 306,
+      "mesh": "LODMesh_0442",
+      "exported": "LODMesh_0442"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_1",
+      "triangles": 318,
+      "mesh": "LODMesh_0443",
+      "exported": "LODMesh_0443"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_2",
+      "triangles": 284,
+      "mesh": "LODMesh_0444",
+      "exported": "LODMesh_0444"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_3",
+      "triangles": 318,
+      "mesh": "LODMesh_0445",
+      "exported": "LODMesh_0445"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_4",
+      "triangles": 328,
+      "mesh": "LODMesh_0446",
+      "exported": "LODMesh_0446"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_5",
+      "triangles": 362,
+      "mesh": "LODMesh_0447",
+      "exported": "LODMesh_0447"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_6",
+      "triangles": 250,
+      "mesh": "LODMesh_0448",
+      "exported": "LODMesh_0448"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_7",
+      "triangles": 318,
+      "mesh": "LODMesh_0449",
+      "exported": "LODMesh_0449"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_0",
+      "triangles": 204,
+      "mesh": "LODMesh_0450",
+      "exported": "LODMesh_0450"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_1",
+      "triangles": 284,
+      "mesh": "LODMesh_0451",
+      "exported": "LODMesh_0451"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_2",
+      "triangles": 216,
+      "mesh": "LODMesh_0452",
+      "exported": "LODMesh_0452"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_3",
+      "triangles": 318,
+      "mesh": "LODMesh_0453",
+      "exported": "LODMesh_0453"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_4",
+      "triangles": 432,
+      "mesh": "LODMesh_0454",
+      "exported": "LODMesh_0454"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_5",
+      "triangles": 432,
+      "mesh": "LODMesh_0455",
+      "exported": "LODMesh_0455"
+    },
+    {
+      "name": "Solid_HerbPavilion",
+      "triangles": 376,
+      "mesh": "LODMesh_0456",
+      "exported": "LODMesh_0456"
+    },
+    {
+      "name": "Solid_Pier",
+      "triangles": 8,
+      "mesh": "LODMesh_0457",
+      "exported": "LODMesh_0457"
+    },
+    {
+      "name": "Solid_Pier.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0458",
+      "exported": "LODMesh_0458"
+    },
+    {
+      "name": "Solid_Pier.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0459",
+      "exported": "LODMesh_0459"
+    },
+    {
+      "name": "Solid_Pier.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0460",
+      "exported": "LODMesh_0460"
+    },
+    {
+      "name": "Solid_Pier.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0461",
+      "exported": "LODMesh_0461"
+    },
+    {
+      "name": "Solid_Pier.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0462",
+      "exported": "LODMesh_0462"
+    },
+    {
+      "name": "Solid_Pier.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0463",
+      "exported": "LODMesh_0463"
+    },
+    {
+      "name": "Solid_Pier.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0464",
+      "exported": "LODMesh_0464"
+    },
+    {
+      "name": "Solid_Rail_0_-1",
+      "triangles": 112,
+      "mesh": "LODMesh_0465",
+      "exported": "LODMesh_0465"
+    },
+    {
+      "name": "Solid_Rail_0_1",
+      "triangles": 112,
+      "mesh": "LODMesh_0466",
+      "exported": "LODMesh_0466"
+    },
+    {
+      "name": "Solid_Rail_1_-1",
+      "triangles": 134,
+      "mesh": "LODMesh_0467",
+      "exported": "LODMesh_0467"
+    },
+    {
+      "name": "Solid_Rail_1_1",
+      "triangles": 134,
+      "mesh": "LODMesh_0468",
+      "exported": "LODMesh_0468"
+    },
+    {
+      "name": "Solid_Rubble_0_0",
+      "triangles": 144,
+      "mesh": "LODMesh_0469",
+      "exported": "LODMesh_0469"
+    },
+    {
+      "name": "Solid_Rubble_0_1",
+      "triangles": 94,
+      "mesh": "LODMesh_0470",
+      "exported": "LODMesh_0470"
+    },
+    {
+      "name": "Solid_Rubble_0_2",
+      "triangles": 74,
+      "mesh": "LODMesh_0471",
+      "exported": "LODMesh_0471"
+    },
+    {
+      "name": "Solid_Rubble_0_4",
+      "triangles": 74,
+      "mesh": "LODMesh_0472",
+      "exported": "LODMesh_0472"
+    },
+    {
+      "name": "Solid_Rubble_0_5",
+      "triangles": 114,
+      "mesh": "LODMesh_0473",
+      "exported": "LODMesh_0473"
+    },
+    {
+      "name": "Solid_Rubble_1_0",
+      "triangles": 100,
+      "mesh": "LODMesh_0474",
+      "exported": "LODMesh_0474"
+    },
+    {
+      "name": "Solid_Rubble_1_1",
+      "triangles": 172,
+      "mesh": "LODMesh_0475",
+      "exported": "LODMesh_0475"
+    },
+    {
+      "name": "Solid_Rubble_1_3",
+      "triangles": 66,
+      "mesh": "LODMesh_0476",
+      "exported": "LODMesh_0476"
+    },
+    {
+      "name": "Solid_Rubble_1_4",
+      "triangles": 222,
+      "mesh": "LODMesh_0477",
+      "exported": "LODMesh_0477"
+    },
+    {
+      "name": "Solid_Rubble_1_5",
+      "triangles": 22,
+      "mesh": "LODMesh_0478",
+      "exported": "LODMesh_0478"
+    },
+    {
+      "name": "Solid_Rubble_2_0",
+      "triangles": 164,
+      "mesh": "LODMesh_0479",
+      "exported": "LODMesh_0479"
+    },
+    {
+      "name": "Solid_Rubble_2_1",
+      "triangles": 76,
+      "mesh": "LODMesh_0480",
+      "exported": "LODMesh_0480"
+    },
+    {
+      "name": "Solid_Rubble_2_3",
+      "triangles": 70,
+      "mesh": "LODMesh_0481",
+      "exported": "LODMesh_0481"
+    },
+    {
+      "name": "Solid_Rubble_2_4",
+      "triangles": 124,
+      "mesh": "LODMesh_0482",
+      "exported": "LODMesh_0482"
+    },
+    {
+      "name": "Solid_Rubble_2_5",
+      "triangles": 82,
+      "mesh": "LODMesh_0483",
+      "exported": "LODMesh_0483"
+    },
+    {
+      "name": "Solid_Rubble_3_0",
+      "triangles": 168,
+      "mesh": "LODMesh_0484",
+      "exported": "LODMesh_0484"
+    },
+    {
+      "name": "Solid_Rubble_3_1",
+      "triangles": 188,
+      "mesh": "LODMesh_0485",
+      "exported": "LODMesh_0485"
+    },
+    {
+      "name": "Solid_Rubble_3_3",
+      "triangles": 426,
+      "mesh": "LODMesh_0486",
+      "exported": "LODMesh_0486"
+    },
+    {
+      "name": "Solid_Rubble_3_4",
+      "triangles": 258,
+      "mesh": "LODMesh_0487",
+      "exported": "LODMesh_0487"
+    },
+    {
+      "name": "Solid_Rubble_3_5",
+      "triangles": 66,
+      "mesh": "LODMesh_0488",
+      "exported": "LODMesh_0488"
+    },
+    {
+      "name": "Solid_Rubble_4_0",
+      "triangles": 188,
+      "mesh": "LODMesh_0489",
+      "exported": "LODMesh_0489"
+    },
+    {
+      "name": "Solid_Rubble_4_1",
+      "triangles": 94,
+      "mesh": "LODMesh_0490",
+      "exported": "LODMesh_0490"
+    },
+    {
+      "name": "Solid_Rubble_4_2",
+      "triangles": 20,
+      "mesh": "LODMesh_0491",
+      "exported": "LODMesh_0491"
+    },
+    {
+      "name": "Solid_Rubble_4_3",
+      "triangles": 96,
+      "mesh": "LODMesh_0492",
+      "exported": "LODMesh_0492"
+    },
+    {
+      "name": "Solid_Rubble_4_4",
+      "triangles": 94,
+      "mesh": "LODMesh_0493",
+      "exported": "LODMesh_0493"
+    },
+    {
+      "name": "Solid_Rubble_4_5",
+      "triangles": 20,
+      "mesh": "LODMesh_0494",
+      "exported": "LODMesh_0494"
+    },
+    {
+      "name": "Solid_Rubble_5_0",
+      "triangles": 134,
+      "mesh": "LODMesh_0495",
+      "exported": "LODMesh_0495"
+    },
+    {
+      "name": "Solid_Rubble_5_1",
+      "triangles": 164,
+      "mesh": "LODMesh_0496",
+      "exported": "LODMesh_0496"
+    },
+    {
+      "name": "Solid_Rubble_5_2",
+      "triangles": 110,
+      "mesh": "LODMesh_0497",
+      "exported": "LODMesh_0497"
+    },
+    {
+      "name": "Solid_Rubble_5_3",
+      "triangles": 82,
+      "mesh": "LODMesh_0498",
+      "exported": "LODMesh_0498"
+    },
+    {
+      "name": "Solid_Rubble_5_4",
+      "triangles": 20,
+      "mesh": "LODMesh_0499",
+      "exported": "LODMesh_0499"
+    },
+    {
+      "name": "Solid_Rubble_5_5",
+      "triangles": 20,
+      "mesh": "LODMesh_0500",
+      "exported": "LODMesh_0500"
+    },
+    {
+      "name": "Solid_SpringHall",
+      "triangles": 376,
+      "mesh": "LODMesh_0501",
+      "exported": "LODMesh_0501"
+    },
+    {
+      "name": "Solid_SpringStone",
+      "triangles": 20,
+      "mesh": "LODMesh_0502",
+      "exported": "LODMesh_0502"
+    },
+    {
+      "name": "Solid_TerraceHall",
+      "triangles": 376,
+      "mesh": "LODMesh_0503",
+      "exported": "LODMesh_0503"
+    },
+    {
+      "name": "Solid_Trunks_0_0",
+      "triangles": 76,
+      "mesh": "LODMesh_0504",
+      "exported": "LODMesh_0504"
+    },
+    {
+      "name": "Solid_Trunks_0_1",
+      "triangles": 76,
+      "mesh": "LODMesh_0505",
+      "exported": "LODMesh_0505"
+    },
+    {
+      "name": "Solid_Trunks_0_2",
+      "triangles": 76,
+      "mesh": "LODMesh_0506",
+      "exported": "LODMesh_0506"
+    },
+    {
+      "name": "Solid_Trunks_0_3",
+      "triangles": 18,
+      "mesh": "LODMesh_0507",
+      "exported": "LODMesh_0507"
+    },
+    {
+      "name": "Solid_Trunks_0_5",
+      "triangles": 18,
+      "mesh": "LODMesh_0508",
+      "exported": "LODMesh_0508"
+    },
+    {
+      "name": "Solid_Trunks_1_0",
+      "triangles": 76,
+      "mesh": "LODMesh_0509",
+      "exported": "LODMesh_0509"
+    },
+    {
+      "name": "Solid_Trunks_1_1",
+      "triangles": 152,
+      "mesh": "LODMesh_0510",
+      "exported": "LODMesh_0510"
+    },
+    {
+      "name": "Solid_Trunks_1_2",
+      "triangles": 18,
+      "mesh": "LODMesh_0511",
+      "exported": "LODMesh_0511"
+    },
+    {
+      "name": "Solid_Trunks_1_3",
+      "triangles": 38,
+      "mesh": "LODMesh_0512",
+      "exported": "LODMesh_0512"
+    },
+    {
+      "name": "Solid_Trunks_1_4",
+      "triangles": 76,
+      "mesh": "LODMesh_0513",
+      "exported": "LODMesh_0513"
+    },
+    {
+      "name": "Solid_Trunks_1_5",
+      "triangles": 18,
+      "mesh": "LODMesh_0514",
+      "exported": "LODMesh_0514"
+    },
+    {
+      "name": "Solid_Trunks_2_0",
+      "triangles": 114,
+      "mesh": "LODMesh_0515",
+      "exported": "LODMesh_0515"
+    },
+    {
+      "name": "Solid_Trunks_2_1",
+      "triangles": 76,
+      "mesh": "LODMesh_0516",
+      "exported": "LODMesh_0516"
+    },
+    {
+      "name": "Solid_Trunks_2_2",
+      "triangles": 18,
+      "mesh": "LODMesh_0517",
+      "exported": "LODMesh_0517"
+    },
+    {
+      "name": "Solid_Trunks_3_0",
+      "triangles": 152,
+      "mesh": "LODMesh_0518",
+      "exported": "LODMesh_0518"
+    },
+    {
+      "name": "Solid_Trunks_3_1",
+      "triangles": 56,
+      "mesh": "LODMesh_0519",
+      "exported": "LODMesh_0519"
+    },
+    {
+      "name": "Solid_Trunks_3_3",
+      "triangles": 306,
+      "mesh": "LODMesh_0520",
+      "exported": "LODMesh_0520"
+    },
+    {
+      "name": "Solid_Trunks_3_4",
+      "triangles": 56,
+      "mesh": "LODMesh_0521",
+      "exported": "LODMesh_0521"
+    },
+    {
+      "name": "Solid_Trunks_3_5",
+      "triangles": 76,
+      "mesh": "LODMesh_0522",
+      "exported": "LODMesh_0522"
+    },
+    {
+      "name": "Solid_Trunks_4_0",
+      "triangles": 134,
+      "mesh": "LODMesh_0523",
+      "exported": "LODMesh_0523"
+    },
+    {
+      "name": "Solid_Trunks_4_1",
+      "triangles": 96,
+      "mesh": "LODMesh_0524",
+      "exported": "LODMesh_0524"
+    },
+    {
+      "name": "Solid_Trunks_4_2",
+      "triangles": 56,
+      "mesh": "LODMesh_0525",
+      "exported": "LODMesh_0525"
+    },
+    {
+      "name": "Solid_Trunks_4_3",
+      "triangles": 76,
+      "mesh": "LODMesh_0526",
+      "exported": "LODMesh_0526"
+    },
+    {
+      "name": "Solid_Trunks_4_4",
+      "triangles": 56,
+      "mesh": "LODMesh_0527",
+      "exported": "LODMesh_0527"
+    },
+    {
+      "name": "Solid_Trunks_4_5",
+      "triangles": 96,
+      "mesh": "LODMesh_0528",
+      "exported": "LODMesh_0528"
+    },
+    {
+      "name": "Solid_Trunks_5_0",
+      "triangles": 96,
+      "mesh": "LODMesh_0529",
+      "exported": "LODMesh_0529"
+    },
+    {
+      "name": "Solid_Trunks_5_1",
+      "triangles": 96,
+      "mesh": "LODMesh_0530",
+      "exported": "LODMesh_0530"
+    },
+    {
+      "name": "Solid_Trunks_5_2",
+      "triangles": 56,
+      "mesh": "LODMesh_0531",
+      "exported": "LODMesh_0531"
+    },
+    {
+      "name": "Solid_Trunks_5_3",
+      "triangles": 38,
+      "mesh": "LODMesh_0532",
+      "exported": "LODMesh_0532"
+    },
+    {
+      "name": "Solid_Trunks_5_5",
+      "triangles": 18,
+      "mesh": "LODMesh_0533",
+      "exported": "LODMesh_0533"
+    },
+    {
+      "name": "Solid_ValleyGate",
+      "triangles": 376,
+      "mesh": "LODMesh_0534",
+      "exported": "LODMesh_0534"
+    },
+    {
+      "name": "Surface_water_0",
+      "triangles": 181,
+      "mesh": "",
+      "exported": "LODMesh_0535"
+    },
+    {
+      "name": "Terrain_0_0",
+      "triangles": 209,
+      "mesh": "LODMesh_0536",
+      "exported": "LODMesh_0536"
+    },
+    {
+      "name": "Terrain_0_1",
+      "triangles": 325,
+      "mesh": "LODMesh_0537",
+      "exported": "LODMesh_0537"
+    },
+    {
+      "name": "Terrain_0_2",
+      "triangles": 203,
+      "mesh": "LODMesh_0538",
+      "exported": "LODMesh_0538"
+    },
+    {
+      "name": "Terrain_0_3",
+      "triangles": 204,
+      "mesh": "LODMesh_0539",
+      "exported": "LODMesh_0539"
+    },
+    {
+      "name": "Terrain_0_4",
+      "triangles": 270,
+      "mesh": "LODMesh_0540",
+      "exported": "LODMesh_0540"
+    },
+    {
+      "name": "Terrain_0_5",
+      "triangles": 245,
+      "mesh": "LODMesh_0541",
+      "exported": "LODMesh_0541"
+    },
+    {
+      "name": "Terrain_1_0",
+      "triangles": 380,
+      "mesh": "LODMesh_0542",
+      "exported": "LODMesh_0542"
+    },
+    {
+      "name": "Terrain_1_1",
+      "triangles": 511,
+      "mesh": "LODMesh_0543",
+      "exported": "LODMesh_0543"
+    },
+    {
+      "name": "Terrain_1_2",
+      "triangles": 196,
+      "mesh": "LODMesh_0544",
+      "exported": "LODMesh_0544"
+    },
+    {
+      "name": "Terrain_1_3",
+      "triangles": 201,
+      "mesh": "LODMesh_0545",
+      "exported": "LODMesh_0545"
+    },
+    {
+      "name": "Terrain_1_4",
+      "triangles": 440,
+      "mesh": "LODMesh_0546",
+      "exported": "LODMesh_0546"
+    },
+    {
+      "name": "Terrain_1_5",
+      "triangles": 374,
+      "mesh": "LODMesh_0547",
+      "exported": "LODMesh_0547"
+    },
+    {
+      "name": "Terrain_2_0",
+      "triangles": 242,
+      "mesh": "LODMesh_0548",
+      "exported": "LODMesh_0548"
+    },
+    {
+      "name": "Terrain_2_1",
+      "triangles": 364,
+      "mesh": "LODMesh_0549",
+      "exported": "LODMesh_0549"
+    },
+    {
+      "name": "Terrain_2_2",
+      "triangles": 267,
+      "mesh": "LODMesh_0550",
+      "exported": "LODMesh_0550"
+    },
+    {
+      "name": "Terrain_2_3",
+      "triangles": 262,
+      "mesh": "LODMesh_0551",
+      "exported": "LODMesh_0551"
+    },
+    {
+      "name": "Terrain_2_4",
+      "triangles": 339,
+      "mesh": "LODMesh_0552",
+      "exported": "LODMesh_0552"
+    },
+    {
+      "name": "Terrain_2_5",
+      "triangles": 232,
+      "mesh": "LODMesh_0553",
+      "exported": "LODMesh_0553"
+    },
+    {
+      "name": "Terrain_3_0",
+      "triangles": 245,
+      "mesh": "LODMesh_0554",
+      "exported": "LODMesh_0554"
+    },
+    {
+      "name": "Terrain_3_1",
+      "triangles": 306,
+      "mesh": "LODMesh_0555",
+      "exported": "LODMesh_0555"
+    },
+    {
+      "name": "Terrain_3_2",
+      "triangles": 252,
+      "mesh": "LODMesh_0556",
+      "exported": "LODMesh_0556"
+    },
+    {
+      "name": "Terrain_3_3",
+      "triangles": 231,
+      "mesh": "LODMesh_0557",
+      "exported": "LODMesh_0557"
+    },
+    {
+      "name": "Terrain_3_4",
+      "triangles": 324,
+      "mesh": "LODMesh_0558",
+      "exported": "LODMesh_0558"
+    },
+    {
+      "name": "Terrain_3_5",
+      "triangles": 199,
+      "mesh": "LODMesh_0559",
+      "exported": "LODMesh_0559"
+    },
+    {
+      "name": "Terrain_4_0",
+      "triangles": 199,
+      "mesh": "LODMesh_0560",
+      "exported": "LODMesh_0560"
+    },
+    {
+      "name": "Terrain_4_1",
+      "triangles": 195,
+      "mesh": "LODMesh_0561",
+      "exported": "LODMesh_0561"
+    },
+    {
+      "name": "Terrain_4_2",
+      "triangles": 518,
+      "mesh": "LODMesh_0562",
+      "exported": "LODMesh_0562"
+    },
+    {
+      "name": "Terrain_4_3",
+      "triangles": 569,
+      "mesh": "LODMesh_0563",
+      "exported": "LODMesh_0563"
+    },
+    {
+      "name": "Terrain_4_4",
+      "triangles": 231,
+      "mesh": "LODMesh_0564",
+      "exported": "LODMesh_0564"
+    },
+    {
+      "name": "Terrain_4_5",
+      "triangles": 199,
+      "mesh": "LODMesh_0565",
+      "exported": "LODMesh_0565"
+    },
+    {
+      "name": "Terrain_5_0",
+      "triangles": 203,
+      "mesh": "LODMesh_0566",
+      "exported": "LODMesh_0566"
+    },
+    {
+      "name": "Terrain_5_1",
+      "triangles": 203,
+      "mesh": "LODMesh_0567",
+      "exported": "LODMesh_0567"
+    },
+    {
+      "name": "Terrain_5_2",
+      "triangles": 359,
+      "mesh": "LODMesh_0568",
+      "exported": "LODMesh_0568"
+    },
+    {
+      "name": "Terrain_5_3",
+      "triangles": 288,
+      "mesh": "LODMesh_0569",
+      "exported": "LODMesh_0569"
+    },
+    {
+      "name": "Terrain_5_4",
+      "triangles": 204,
+      "mesh": "LODMesh_0570",
+      "exported": "LODMesh_0570"
+    },
+    {
+      "name": "Terrain_5_5",
+      "triangles": 203,
+      "mesh": "LODMesh_0571",
+      "exported": "LODMesh_0571"
+    }
+  ],
+  "lod2": [
+    {
+      "name": "Art_BridgeCoping",
+      "triangles": 8,
+      "mesh": "LODMesh_0000",
+      "exported": "LODMesh_0000"
+    },
+    {
+      "name": "Art_BridgeCoping.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0001",
+      "exported": "LODMesh_0001"
+    },
+    {
+      "name": "Art_BridgeCoping.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0002",
+      "exported": "LODMesh_0002"
+    },
+    {
+      "name": "Art_BridgeCoping.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0003",
+      "exported": "LODMesh_0003"
+    },
+    {
+      "name": "Art_BridgeCoping.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0004",
+      "exported": "LODMesh_0004"
+    },
+    {
+      "name": "Art_BridgeCoping.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0005",
+      "exported": "LODMesh_0005"
+    },
+    {
+      "name": "Art_BridgeCoping.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0006",
+      "exported": "LODMesh_0006"
+    },
+    {
+      "name": "Art_BridgeCoping.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0007",
+      "exported": "LODMesh_0007"
+    },
+    {
+      "name": "Art_BridgeCoping.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0008",
+      "exported": "LODMesh_0008"
+    },
+    {
+      "name": "Art_BridgeCoping.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0009",
+      "exported": "LODMesh_0009"
+    },
+    {
+      "name": "Art_BridgeCoping.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0010",
+      "exported": "LODMesh_0010"
+    },
+    {
+      "name": "Art_BridgeCoping.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0011",
+      "exported": "LODMesh_0011"
+    },
+    {
+      "name": "Art_BridgeCoping.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0012",
+      "exported": "LODMesh_0012"
+    },
+    {
+      "name": "Art_BridgeCoping.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0013",
+      "exported": "LODMesh_0013"
+    },
+    {
+      "name": "Art_BridgeCoping.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0014",
+      "exported": "LODMesh_0014"
+    },
+    {
+      "name": "Art_BridgeCoping.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0015",
+      "exported": "LODMesh_0015"
+    },
+    {
+      "name": "Art_BridgeCoping.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0016",
+      "exported": "LODMesh_0016"
+    },
+    {
+      "name": "Art_BridgeCoping.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0017",
+      "exported": "LODMesh_0017"
+    },
+    {
+      "name": "Art_BridgeCoping.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0018",
+      "exported": "LODMesh_0018"
+    },
+    {
+      "name": "Art_BridgeCoping.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0019",
+      "exported": "LODMesh_0019"
+    },
+    {
+      "name": "Art_BridgeCoping.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0020",
+      "exported": "LODMesh_0020"
+    },
+    {
+      "name": "Art_BridgeCoping.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0021",
+      "exported": "LODMesh_0021"
+    },
+    {
+      "name": "Art_BridgeCoping.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0022",
+      "exported": "LODMesh_0022"
+    },
+    {
+      "name": "Art_BridgeCoping.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0023",
+      "exported": "LODMesh_0023"
+    },
+    {
+      "name": "Art_BridgeCoping.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0024",
+      "exported": "LODMesh_0024"
+    },
+    {
+      "name": "Art_BridgeCoping.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0025",
+      "exported": "LODMesh_0025"
+    },
+    {
+      "name": "Art_BridgeCoping.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0026",
+      "exported": "LODMesh_0026"
+    },
+    {
+      "name": "Art_BridgeCoping.027",
+      "triangles": 8,
+      "mesh": "LODMesh_0027",
+      "exported": "LODMesh_0027"
+    },
+    {
+      "name": "Art_BridgeCoping.028",
+      "triangles": 8,
+      "mesh": "LODMesh_0028",
+      "exported": "LODMesh_0028"
+    },
+    {
+      "name": "Art_BridgeCoping.029",
+      "triangles": 8,
+      "mesh": "LODMesh_0029",
+      "exported": "LODMesh_0029"
+    },
+    {
+      "name": "Art_BridgeCoping.030",
+      "triangles": 8,
+      "mesh": "LODMesh_0030",
+      "exported": "LODMesh_0030"
+    },
+    {
+      "name": "Art_BridgeCoping.031",
+      "triangles": 8,
+      "mesh": "LODMesh_0031",
+      "exported": "LODMesh_0031"
+    },
+    {
+      "name": "Art_BridgeCoping.032",
+      "triangles": 8,
+      "mesh": "LODMesh_0032",
+      "exported": "LODMesh_0032"
+    },
+    {
+      "name": "Art_BridgeCoping.033",
+      "triangles": 8,
+      "mesh": "LODMesh_0033",
+      "exported": "LODMesh_0033"
+    },
+    {
+      "name": "Art_BridgeCoping.034",
+      "triangles": 8,
+      "mesh": "LODMesh_0034",
+      "exported": "LODMesh_0034"
+    },
+    {
+      "name": "Art_BridgeCoping.035",
+      "triangles": 8,
+      "mesh": "LODMesh_0035",
+      "exported": "LODMesh_0035"
+    },
+    {
+      "name": "Art_BridgeCoping.036",
+      "triangles": 8,
+      "mesh": "LODMesh_0036",
+      "exported": "LODMesh_0036"
+    },
+    {
+      "name": "Art_BridgeCoping.037",
+      "triangles": 8,
+      "mesh": "LODMesh_0037",
+      "exported": "LODMesh_0037"
+    },
+    {
+      "name": "Art_BridgeCoping.038",
+      "triangles": 8,
+      "mesh": "LODMesh_0038",
+      "exported": "LODMesh_0038"
+    },
+    {
+      "name": "Art_BridgeCoping.039",
+      "triangles": 8,
+      "mesh": "LODMesh_0039",
+      "exported": "LODMesh_0039"
+    },
+    {
+      "name": "Art_BridgeSpandrel",
+      "triangles": 8,
+      "mesh": "LODMesh_0040",
+      "exported": "LODMesh_0040"
+    },
+    {
+      "name": "Art_BridgeSpandrel.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0041",
+      "exported": "LODMesh_0041"
+    },
+    {
+      "name": "Art_BridgeSpandrel.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0042",
+      "exported": "LODMesh_0042"
+    },
+    {
+      "name": "Art_BridgeSpandrel.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0043",
+      "exported": "LODMesh_0043"
+    },
+    {
+      "name": "Art_BridgeSpandrel.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0044",
+      "exported": "LODMesh_0044"
+    },
+    {
+      "name": "Art_BridgeSpandrel.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0045",
+      "exported": "LODMesh_0045"
+    },
+    {
+      "name": "Art_BridgeSpandrel.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0046",
+      "exported": "LODMesh_0046"
+    },
+    {
+      "name": "Art_BridgeSpandrel.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0047",
+      "exported": "LODMesh_0047"
+    },
+    {
+      "name": "Art_BridgeSpandrel.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0048",
+      "exported": "LODMesh_0048"
+    },
+    {
+      "name": "Art_BridgeSpandrel.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0049",
+      "exported": "LODMesh_0049"
+    },
+    {
+      "name": "Art_BridgeSpandrel.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0050",
+      "exported": "LODMesh_0050"
+    },
+    {
+      "name": "Art_BridgeSpandrel.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0051",
+      "exported": "LODMesh_0051"
+    },
+    {
+      "name": "Art_BridgeSpandrel.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0052",
+      "exported": "LODMesh_0052"
+    },
+    {
+      "name": "Art_BridgeSpandrel.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0053",
+      "exported": "LODMesh_0053"
+    },
+    {
+      "name": "Art_BridgeSpandrel.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0054",
+      "exported": "LODMesh_0054"
+    },
+    {
+      "name": "Art_BridgeSpandrel.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0055",
+      "exported": "LODMesh_0055"
+    },
+    {
+      "name": "Art_BridgeSpandrel.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0056",
+      "exported": "LODMesh_0056"
+    },
+    {
+      "name": "Art_BridgeSpandrel.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0057",
+      "exported": "LODMesh_0057"
+    },
+    {
+      "name": "Art_BridgeSpandrel.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0058",
+      "exported": "LODMesh_0058"
+    },
+    {
+      "name": "Art_BridgeSpandrel.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0059",
+      "exported": "LODMesh_0059"
+    },
+    {
+      "name": "Art_BridgeSpandrel.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0060",
+      "exported": "LODMesh_0060"
+    },
+    {
+      "name": "Art_BridgeSpandrel.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0061",
+      "exported": "LODMesh_0061"
+    },
+    {
+      "name": "Art_BridgeSpandrel.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0062",
+      "exported": "LODMesh_0062"
+    },
+    {
+      "name": "Art_BridgeSpandrel.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0063",
+      "exported": "LODMesh_0063"
+    },
+    {
+      "name": "Art_BridgeSpandrel.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0064",
+      "exported": "LODMesh_0064"
+    },
+    {
+      "name": "Art_BridgeSpandrel.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0065",
+      "exported": "LODMesh_0065"
+    },
+    {
+      "name": "Art_BridgeSpandrel.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0066",
+      "exported": "LODMesh_0066"
+    },
+    {
+      "name": "Art_BridgeSpandrel.027",
+      "triangles": 8,
+      "mesh": "LODMesh_0067",
+      "exported": "LODMesh_0067"
+    },
+    {
+      "name": "Art_BridgeSpandrel.028",
+      "triangles": 8,
+      "mesh": "LODMesh_0068",
+      "exported": "LODMesh_0068"
+    },
+    {
+      "name": "Art_BridgeSpandrel.029",
+      "triangles": 8,
+      "mesh": "LODMesh_0069",
+      "exported": "LODMesh_0069"
+    },
+    {
+      "name": "Art_BridgeSpandrel.030",
+      "triangles": 8,
+      "mesh": "LODMesh_0070",
+      "exported": "LODMesh_0070"
+    },
+    {
+      "name": "Art_BridgeSpandrel.031",
+      "triangles": 8,
+      "mesh": "LODMesh_0071",
+      "exported": "LODMesh_0071"
+    },
+    {
+      "name": "Art_BridgeSpandrel.032",
+      "triangles": 8,
+      "mesh": "LODMesh_0072",
+      "exported": "LODMesh_0072"
+    },
+    {
+      "name": "Art_BridgeSpandrel.033",
+      "triangles": 8,
+      "mesh": "LODMesh_0073",
+      "exported": "LODMesh_0073"
+    },
+    {
+      "name": "Art_BridgeSpandrel.034",
+      "triangles": 8,
+      "mesh": "LODMesh_0074",
+      "exported": "LODMesh_0074"
+    },
+    {
+      "name": "Art_BridgeSpandrel.035",
+      "triangles": 8,
+      "mesh": "LODMesh_0075",
+      "exported": "LODMesh_0075"
+    },
+    {
+      "name": "Art_BridgeSpandrel.036",
+      "triangles": 8,
+      "mesh": "LODMesh_0076",
+      "exported": "LODMesh_0076"
+    },
+    {
+      "name": "Art_BridgeSpandrel.037",
+      "triangles": 8,
+      "mesh": "LODMesh_0077",
+      "exported": "LODMesh_0077"
+    },
+    {
+      "name": "Art_BridgeSpandrel.038",
+      "triangles": 8,
+      "mesh": "LODMesh_0078",
+      "exported": "LODMesh_0078"
+    },
+    {
+      "name": "Art_BridgeSpandrel.039",
+      "triangles": 8,
+      "mesh": "LODMesh_0079",
+      "exported": "LODMesh_0079"
+    },
+    {
+      "name": "Art_BridgeSpandrel.040",
+      "triangles": 8,
+      "mesh": "LODMesh_0080",
+      "exported": "LODMesh_0080"
+    },
+    {
+      "name": "Art_BridgeSpandrel.041",
+      "triangles": 8,
+      "mesh": "LODMesh_0081",
+      "exported": "LODMesh_0081"
+    },
+    {
+      "name": "Art_BridgeSpandrel.042",
+      "triangles": 8,
+      "mesh": "LODMesh_0082",
+      "exported": "LODMesh_0082"
+    },
+    {
+      "name": "Art_BridgeSpandrel.043",
+      "triangles": 8,
+      "mesh": "LODMesh_0083",
+      "exported": "LODMesh_0083"
+    },
+    {
+      "name": "Art_BridgeSpandrel.044",
+      "triangles": 8,
+      "mesh": "LODMesh_0084",
+      "exported": "LODMesh_0084"
+    },
+    {
+      "name": "Art_BridgeSpandrel.045",
+      "triangles": 8,
+      "mesh": "LODMesh_0085",
+      "exported": "LODMesh_0085"
+    },
+    {
+      "name": "Art_BridgeSpandrel.046",
+      "triangles": 8,
+      "mesh": "LODMesh_0086",
+      "exported": "LODMesh_0086"
+    },
+    {
+      "name": "Art_BridgeSpandrel.047",
+      "triangles": 8,
+      "mesh": "LODMesh_0087",
+      "exported": "LODMesh_0087"
+    },
+    {
+      "name": "Art_CreekCobble",
+      "triangles": 8,
+      "mesh": "LODMesh_0088",
+      "exported": "LODMesh_0088"
+    },
+    {
+      "name": "Art_CreekCobble.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0089",
+      "exported": "LODMesh_0089"
+    },
+    {
+      "name": "Art_CreekCobble.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0090",
+      "exported": "LODMesh_0090"
+    },
+    {
+      "name": "Art_CreekCobble.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0091",
+      "exported": "LODMesh_0091"
+    },
+    {
+      "name": "Art_CreekCobble.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0092",
+      "exported": "LODMesh_0092"
+    },
+    {
+      "name": "Art_CreekCobble.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0093",
+      "exported": "LODMesh_0093"
+    },
+    {
+      "name": "Art_CreekCobble.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0094",
+      "exported": "LODMesh_0094"
+    },
+    {
+      "name": "Art_CreekCobble.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0095",
+      "exported": "LODMesh_0095"
+    },
+    {
+      "name": "Art_CreekCobble.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0096",
+      "exported": "LODMesh_0096"
+    },
+    {
+      "name": "Art_CreekCobble.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0097",
+      "exported": "LODMesh_0097"
+    },
+    {
+      "name": "Art_CreekCobble.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0098",
+      "exported": "LODMesh_0098"
+    },
+    {
+      "name": "Art_CreekCobble.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0099",
+      "exported": "LODMesh_0099"
+    },
+    {
+      "name": "Art_CreekCobble.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0100",
+      "exported": "LODMesh_0100"
+    },
+    {
+      "name": "Art_CreekCobble.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0101",
+      "exported": "LODMesh_0101"
+    },
+    {
+      "name": "Art_CreekCobble.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0102",
+      "exported": "LODMesh_0102"
+    },
+    {
+      "name": "Art_CreekCobble.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0103",
+      "exported": "LODMesh_0103"
+    },
+    {
+      "name": "Art_CreekCobble.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0104",
+      "exported": "LODMesh_0104"
+    },
+    {
+      "name": "Art_CreekCobble.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0105",
+      "exported": "LODMesh_0105"
+    },
+    {
+      "name": "Art_CreekCobble.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0106",
+      "exported": "LODMesh_0106"
+    },
+    {
+      "name": "Art_CreekCobble.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0107",
+      "exported": "LODMesh_0107"
+    },
+    {
+      "name": "Art_CreekCobble.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0108",
+      "exported": "LODMesh_0108"
+    },
+    {
+      "name": "Art_CreekCobble.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0109",
+      "exported": "LODMesh_0109"
+    },
+    {
+      "name": "Art_CreekCobble.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0110",
+      "exported": "LODMesh_0110"
+    },
+    {
+      "name": "Art_CreekCobble.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0111",
+      "exported": "LODMesh_0111"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_0",
+      "triangles": 180,
+      "mesh": "LODMesh_0112",
+      "exported": "LODMesh_0112"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_1",
+      "triangles": 144,
+      "mesh": "LODMesh_0113",
+      "exported": "LODMesh_0113"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_2",
+      "triangles": 72,
+      "mesh": "LODMesh_0114",
+      "exported": "LODMesh_0114"
+    },
+    {
+      "name": "Art_CreekWeatheredRock_3",
+      "triangles": 36,
+      "mesh": "LODMesh_0115",
+      "exported": "LODMesh_0115"
+    },
+    {
+      "name": "Art_DryStoneTerrace",
+      "triangles": 8,
+      "mesh": "LODMesh_0116",
+      "exported": "LODMesh_0116"
+    },
+    {
+      "name": "Art_DryStoneTerrace.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0117",
+      "exported": "LODMesh_0117"
+    },
+    {
+      "name": "Art_DryStoneTerrace.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0118",
+      "exported": "LODMesh_0118"
+    },
+    {
+      "name": "Art_DryStoneTerrace.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0119",
+      "exported": "LODMesh_0119"
+    },
+    {
+      "name": "Art_DryStoneTerrace.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0120",
+      "exported": "LODMesh_0120"
+    },
+    {
+      "name": "Art_DryingHerbs_0",
+      "triangles": 67,
+      "mesh": "LODMesh_0121",
+      "exported": "LODMesh_0121"
+    },
+    {
+      "name": "Art_GnarledBranches",
+      "triangles": 111,
+      "mesh": "LODMesh_0122",
+      "exported": "LODMesh_0122"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_0",
+      "triangles": 31,
+      "mesh": "LODMesh_0123",
+      "exported": "LODMesh_0123"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_1",
+      "triangles": 32,
+      "mesh": "LODMesh_0124",
+      "exported": "LODMesh_0124"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_2",
+      "triangles": 29,
+      "mesh": "LODMesh_0125",
+      "exported": "LODMesh_0125"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_3",
+      "triangles": 32,
+      "mesh": "LODMesh_0126",
+      "exported": "LODMesh_0126"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_4",
+      "triangles": 33,
+      "mesh": "LODMesh_0127",
+      "exported": "LODMesh_0127"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_5",
+      "triangles": 37,
+      "mesh": "LODMesh_0128",
+      "exported": "LODMesh_0128"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_6",
+      "triangles": 25,
+      "mesh": "LODMesh_0129",
+      "exported": "LODMesh_0129"
+    },
+    {
+      "name": "Art_GroveBranches_CreekBanks_7",
+      "triangles": 32,
+      "mesh": "LODMesh_0130",
+      "exported": "LODMesh_0130"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_0",
+      "triangles": 21,
+      "mesh": "LODMesh_0131",
+      "exported": "LODMesh_0131"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_1",
+      "triangles": 29,
+      "mesh": "LODMesh_0132",
+      "exported": "LODMesh_0132"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_2",
+      "triangles": 22,
+      "mesh": "LODMesh_0133",
+      "exported": "LODMesh_0133"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_3",
+      "triangles": 32,
+      "mesh": "LODMesh_0134",
+      "exported": "LODMesh_0134"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_4",
+      "triangles": 44,
+      "mesh": "LODMesh_0135",
+      "exported": "LODMesh_0135"
+    },
+    {
+      "name": "Art_GroveBranches_HighTerraceTreeBands_5",
+      "triangles": 44,
+      "mesh": "LODMesh_0136",
+      "exported": "LODMesh_0136"
+    },
+    {
+      "name": "Art_HerbCeramics_0",
+      "triangles": 44,
+      "mesh": "LODMesh_0137",
+      "exported": "LODMesh_0137"
+    },
+    {
+      "name": "Art_MossCascadeShelf",
+      "triangles": 8,
+      "mesh": "LODMesh_0138",
+      "exported": "LODMesh_0138"
+    },
+    {
+      "name": "Art_MossCascadeShelf.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0139",
+      "exported": "LODMesh_0139"
+    },
+    {
+      "name": "Art_MossCascadeShelf.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0140",
+      "exported": "LODMesh_0140"
+    },
+    {
+      "name": "Art_MossCascadeShelf.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0141",
+      "exported": "LODMesh_0141"
+    },
+    {
+      "name": "Art_MossCascadeShelf.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0142",
+      "exported": "LODMesh_0142"
+    },
+    {
+      "name": "Art_MossCascadeShelf.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0143",
+      "exported": "LODMesh_0143"
+    },
+    {
+      "name": "Art_MossCascadeShelf.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0144",
+      "exported": "LODMesh_0144"
+    },
+    {
+      "name": "Art_NativeGrass_0",
+      "triangles": 16,
+      "mesh": "LODMesh_0145",
+      "exported": "LODMesh_0145"
+    },
+    {
+      "name": "Art_NativeGrass_1",
+      "triangles": 16,
+      "mesh": "LODMesh_0146",
+      "exported": "LODMesh_0146"
+    },
+    {
+      "name": "Art_NativeGrass_2",
+      "triangles": 32,
+      "mesh": "LODMesh_0147",
+      "exported": "LODMesh_0147"
+    },
+    {
+      "name": "Art_TerraceCoping",
+      "triangles": 8,
+      "mesh": "LODMesh_0148",
+      "exported": "LODMesh_0148"
+    },
+    {
+      "name": "Art_TerraceCoping.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0149",
+      "exported": "LODMesh_0149"
+    },
+    {
+      "name": "Art_TerraceCoping.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0150",
+      "exported": "LODMesh_0150"
+    },
+    {
+      "name": "Art_TerraceCoping.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0151",
+      "exported": "LODMesh_0151"
+    },
+    {
+      "name": "Art_TerraceCoping.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0152",
+      "exported": "LODMesh_0152"
+    },
+    {
+      "name": "Art_TerraceCoping.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0153",
+      "exported": "LODMesh_0153"
+    },
+    {
+      "name": "Art_TerraceCoping.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0154",
+      "exported": "LODMesh_0154"
+    },
+    {
+      "name": "Art_TerraceCoping.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0155",
+      "exported": "LODMesh_0155"
+    },
+    {
+      "name": "Art_TerraceCoping.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0156",
+      "exported": "LODMesh_0156"
+    },
+    {
+      "name": "Art_TerraceCoping.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0157",
+      "exported": "LODMesh_0157"
+    },
+    {
+      "name": "Art_TerraceCoping.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0158",
+      "exported": "LODMesh_0158"
+    },
+    {
+      "name": "Art_TerraceCoping.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0159",
+      "exported": "LODMesh_0159"
+    },
+    {
+      "name": "Art_TerraceCoping.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0160",
+      "exported": "LODMesh_0160"
+    },
+    {
+      "name": "Art_TerraceCoping.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0161",
+      "exported": "LODMesh_0161"
+    },
+    {
+      "name": "Art_TerraceCoping.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0162",
+      "exported": "LODMesh_0162"
+    },
+    {
+      "name": "Art_TerraceCoping.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0163",
+      "exported": "LODMesh_0163"
+    },
+    {
+      "name": "Art_TerraceCoping.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0164",
+      "exported": "LODMesh_0164"
+    },
+    {
+      "name": "Art_TerraceCoping.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0165",
+      "exported": "LODMesh_0165"
+    },
+    {
+      "name": "Art_TerraceCoping.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0166",
+      "exported": "LODMesh_0166"
+    },
+    {
+      "name": "Art_TerraceCoping.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0167",
+      "exported": "LODMesh_0167"
+    },
+    {
+      "name": "Art_TerraceCoping.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0168",
+      "exported": "LODMesh_0168"
+    },
+    {
+      "name": "Art_TerraceCoping.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0169",
+      "exported": "LODMesh_0169"
+    },
+    {
+      "name": "Art_TerraceCoping.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0170",
+      "exported": "LODMesh_0170"
+    },
+    {
+      "name": "Art_TerraceCoping.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0171",
+      "exported": "LODMesh_0171"
+    },
+    {
+      "name": "Art_TerraceCoping.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0172",
+      "exported": "LODMesh_0172"
+    },
+    {
+      "name": "Art_ValleyBluff",
+      "triangles": 16,
+      "mesh": "LODMesh_0173",
+      "exported": "LODMesh_0173"
+    },
+    {
+      "name": "Art_ValleyBluff.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0174",
+      "exported": "LODMesh_0174"
+    },
+    {
+      "name": "Art_ValleyBluff.002",
+      "triangles": 16,
+      "mesh": "LODMesh_0175",
+      "exported": "LODMesh_0175"
+    },
+    {
+      "name": "Art_ValleyGardenSteps_0",
+      "triangles": 14,
+      "mesh": "LODMesh_0176",
+      "exported": "LODMesh_0176"
+    },
+    {
+      "name": "Art_ValleyGardenSteps_1",
+      "triangles": 442,
+      "mesh": "LODMesh_0177",
+      "exported": "LODMesh_0177"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_0",
+      "triangles": 708,
+      "mesh": "LODMesh_0178",
+      "exported": "LODMesh_0178"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_1",
+      "triangles": 428,
+      "mesh": "LODMesh_0179",
+      "exported": "LODMesh_0179"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_2",
+      "triangles": 610,
+      "mesh": "LODMesh_0180",
+      "exported": "LODMesh_0180"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_3",
+      "triangles": 508,
+      "mesh": "LODMesh_0181",
+      "exported": "LODMesh_0181"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_4",
+      "triangles": 260,
+      "mesh": "LODMesh_0182",
+      "exported": "LODMesh_0182"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_5",
+      "triangles": 496,
+      "mesh": "LODMesh_0183",
+      "exported": "LODMesh_0183"
+    },
+    {
+      "name": "Art_ValleyLayeredCliffs_6",
+      "triangles": 558,
+      "mesh": "LODMesh_0184",
+      "exported": "LODMesh_0184"
+    },
+    {
+      "name": "Art_VegetatedButtress",
+      "triangles": 8,
+      "mesh": "LODMesh_0185",
+      "exported": "LODMesh_0185"
+    },
+    {
+      "name": "Art_VegetatedButtress.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0186",
+      "exported": "LODMesh_0186"
+    },
+    {
+      "name": "Art_VegetatedButtress.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0187",
+      "exported": "LODMesh_0187"
+    },
+    {
+      "name": "Art_VegetatedButtress.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0188",
+      "exported": "LODMesh_0188"
+    },
+    {
+      "name": "Art_VegetatedButtress.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0189",
+      "exported": "LODMesh_0189"
+    },
+    {
+      "name": "Art_VegetatedButtress.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0190",
+      "exported": "LODMesh_0190"
+    },
+    {
+      "name": "Art_VegetatedButtress.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0191",
+      "exported": "LODMesh_0191"
+    },
+    {
+      "name": "Art_VegetatedButtress.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0192",
+      "exported": "LODMesh_0192"
+    },
+    {
+      "name": "Art_VegetatedButtress.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0193",
+      "exported": "LODMesh_0193"
+    },
+    {
+      "name": "Art_VegetatedButtress.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0194",
+      "exported": "LODMesh_0194"
+    },
+    {
+      "name": "Art_VegetatedButtress.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0195",
+      "exported": "LODMesh_0195"
+    },
+    {
+      "name": "Art_VegetatedButtress.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0196",
+      "exported": "LODMesh_0196"
+    },
+    {
+      "name": "Art_VegetatedButtress.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0197",
+      "exported": "LODMesh_0197"
+    },
+    {
+      "name": "Art_VegetatedButtress.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0198",
+      "exported": "LODMesh_0198"
+    },
+    {
+      "name": "Art_VegetatedButtress.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0199",
+      "exported": "LODMesh_0199"
+    },
+    {
+      "name": "Art_VegetatedButtress.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0200",
+      "exported": "LODMesh_0200"
+    },
+    {
+      "name": "Art_VegetatedButtress.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0201",
+      "exported": "LODMesh_0201"
+    },
+    {
+      "name": "Art_VegetatedButtress.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0202",
+      "exported": "LODMesh_0202"
+    },
+    {
+      "name": "Art_VegetatedButtress.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0203",
+      "exported": "LODMesh_0203"
+    },
+    {
+      "name": "Art_VegetatedButtress.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0204",
+      "exported": "LODMesh_0204"
+    },
+    {
+      "name": "Art_VegetatedButtress.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0205",
+      "exported": "LODMesh_0205"
+    },
+    {
+      "name": "Art_VegetatedButtress.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0206",
+      "exported": "LODMesh_0206"
+    },
+    {
+      "name": "Art_VegetatedButtress.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0207",
+      "exported": "LODMesh_0207"
+    },
+    {
+      "name": "Art_VegetatedButtress.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0208",
+      "exported": "LODMesh_0208"
+    },
+    {
+      "name": "Art_VegetatedButtress.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0209",
+      "exported": "LODMesh_0209"
+    },
+    {
+      "name": "Art_Voussoir",
+      "triangles": 8,
+      "mesh": "LODMesh_0210",
+      "exported": "LODMesh_0210"
+    },
+    {
+      "name": "Art_Voussoir.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0211",
+      "exported": "LODMesh_0211"
+    },
+    {
+      "name": "Art_Voussoir.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0212",
+      "exported": "LODMesh_0212"
+    },
+    {
+      "name": "Art_Voussoir.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0213",
+      "exported": "LODMesh_0213"
+    },
+    {
+      "name": "Art_Voussoir.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0214",
+      "exported": "LODMesh_0214"
+    },
+    {
+      "name": "Art_Voussoir.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0215",
+      "exported": "LODMesh_0215"
+    },
+    {
+      "name": "Art_Voussoir.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0216",
+      "exported": "LODMesh_0216"
+    },
+    {
+      "name": "Art_Voussoir.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0217",
+      "exported": "LODMesh_0217"
+    },
+    {
+      "name": "Art_Voussoir.008",
+      "triangles": 8,
+      "mesh": "LODMesh_0218",
+      "exported": "LODMesh_0218"
+    },
+    {
+      "name": "Art_Voussoir.009",
+      "triangles": 8,
+      "mesh": "LODMesh_0219",
+      "exported": "LODMesh_0219"
+    },
+    {
+      "name": "Art_Voussoir.010",
+      "triangles": 8,
+      "mesh": "LODMesh_0220",
+      "exported": "LODMesh_0220"
+    },
+    {
+      "name": "Art_Voussoir.011",
+      "triangles": 8,
+      "mesh": "LODMesh_0221",
+      "exported": "LODMesh_0221"
+    },
+    {
+      "name": "Art_Voussoir.012",
+      "triangles": 8,
+      "mesh": "LODMesh_0222",
+      "exported": "LODMesh_0222"
+    },
+    {
+      "name": "Art_Voussoir.013",
+      "triangles": 8,
+      "mesh": "LODMesh_0223",
+      "exported": "LODMesh_0223"
+    },
+    {
+      "name": "Art_Voussoir.014",
+      "triangles": 8,
+      "mesh": "LODMesh_0224",
+      "exported": "LODMesh_0224"
+    },
+    {
+      "name": "Art_Voussoir.015",
+      "triangles": 8,
+      "mesh": "LODMesh_0225",
+      "exported": "LODMesh_0225"
+    },
+    {
+      "name": "Art_Voussoir.016",
+      "triangles": 8,
+      "mesh": "LODMesh_0226",
+      "exported": "LODMesh_0226"
+    },
+    {
+      "name": "Art_Voussoir.017",
+      "triangles": 8,
+      "mesh": "LODMesh_0227",
+      "exported": "LODMesh_0227"
+    },
+    {
+      "name": "Art_Voussoir.018",
+      "triangles": 8,
+      "mesh": "LODMesh_0228",
+      "exported": "LODMesh_0228"
+    },
+    {
+      "name": "Art_Voussoir.019",
+      "triangles": 8,
+      "mesh": "LODMesh_0229",
+      "exported": "LODMesh_0229"
+    },
+    {
+      "name": "Art_Voussoir.020",
+      "triangles": 8,
+      "mesh": "LODMesh_0230",
+      "exported": "LODMesh_0230"
+    },
+    {
+      "name": "Art_Voussoir.021",
+      "triangles": 8,
+      "mesh": "LODMesh_0231",
+      "exported": "LODMesh_0231"
+    },
+    {
+      "name": "Art_Voussoir.022",
+      "triangles": 8,
+      "mesh": "LODMesh_0232",
+      "exported": "LODMesh_0232"
+    },
+    {
+      "name": "Art_Voussoir.023",
+      "triangles": 8,
+      "mesh": "LODMesh_0233",
+      "exported": "LODMesh_0233"
+    },
+    {
+      "name": "Art_Voussoir.024",
+      "triangles": 8,
+      "mesh": "LODMesh_0234",
+      "exported": "LODMesh_0234"
+    },
+    {
+      "name": "Art_Voussoir.025",
+      "triangles": 8,
+      "mesh": "LODMesh_0235",
+      "exported": "LODMesh_0235"
+    },
+    {
+      "name": "Art_Voussoir.026",
+      "triangles": 8,
+      "mesh": "LODMesh_0236",
+      "exported": "LODMesh_0236"
+    },
+    {
+      "name": "Art_Voussoir.027",
+      "triangles": 8,
+      "mesh": "LODMesh_0237",
+      "exported": "LODMesh_0237"
+    },
+    {
+      "name": "Art_Voussoir.028",
+      "triangles": 8,
+      "mesh": "LODMesh_0238",
+      "exported": "LODMesh_0238"
+    },
+    {
+      "name": "Art_Voussoir.029",
+      "triangles": 8,
+      "mesh": "LODMesh_0239",
+      "exported": "LODMesh_0239"
+    },
+    {
+      "name": "Art_Voussoir.030",
+      "triangles": 8,
+      "mesh": "LODMesh_0240",
+      "exported": "LODMesh_0240"
+    },
+    {
+      "name": "Art_Voussoir.031",
+      "triangles": 8,
+      "mesh": "LODMesh_0241",
+      "exported": "LODMesh_0241"
+    },
+    {
+      "name": "Art_Voussoir.032",
+      "triangles": 8,
+      "mesh": "LODMesh_0242",
+      "exported": "LODMesh_0242"
+    },
+    {
+      "name": "Art_Voussoir.033",
+      "triangles": 8,
+      "mesh": "LODMesh_0243",
+      "exported": "LODMesh_0243"
+    },
+    {
+      "name": "Art_Voussoir.034",
+      "triangles": 8,
+      "mesh": "LODMesh_0244",
+      "exported": "LODMesh_0244"
+    },
+    {
+      "name": "Art_Voussoir.035",
+      "triangles": 8,
+      "mesh": "LODMesh_0245",
+      "exported": "LODMesh_0245"
+    },
+    {
+      "name": "Art_Voussoir.036",
+      "triangles": 8,
+      "mesh": "LODMesh_0246",
+      "exported": "LODMesh_0246"
+    },
+    {
+      "name": "Art_Voussoir.037",
+      "triangles": 8,
+      "mesh": "LODMesh_0247",
+      "exported": "LODMesh_0247"
+    },
+    {
+      "name": "Art_Voussoir.038",
+      "triangles": 8,
+      "mesh": "LODMesh_0248",
+      "exported": "LODMesh_0248"
+    },
+    {
+      "name": "Art_Voussoir.039",
+      "triangles": 8,
+      "mesh": "LODMesh_0249",
+      "exported": "LODMesh_0249"
+    },
+    {
+      "name": "Art_Voussoir.040",
+      "triangles": 8,
+      "mesh": "LODMesh_0250",
+      "exported": "LODMesh_0250"
+    },
+    {
+      "name": "Art_Voussoir.041",
+      "triangles": 8,
+      "mesh": "LODMesh_0251",
+      "exported": "LODMesh_0251"
+    },
+    {
+      "name": "Art_Voussoir.042",
+      "triangles": 8,
+      "mesh": "LODMesh_0252",
+      "exported": "LODMesh_0252"
+    },
+    {
+      "name": "Art_Voussoir.043",
+      "triangles": 8,
+      "mesh": "LODMesh_0253",
+      "exported": "LODMesh_0253"
+    },
+    {
+      "name": "Art_Voussoir.044",
+      "triangles": 8,
+      "mesh": "LODMesh_0254",
+      "exported": "LODMesh_0254"
+    },
+    {
+      "name": "Art_Voussoir.045",
+      "triangles": 8,
+      "mesh": "LODMesh_0255",
+      "exported": "LODMesh_0255"
+    },
+    {
+      "name": "Art_Voussoir.046",
+      "triangles": 8,
+      "mesh": "LODMesh_0256",
+      "exported": "LODMesh_0256"
+    },
+    {
+      "name": "Art_Voussoir.047",
+      "triangles": 8,
+      "mesh": "LODMesh_0257",
+      "exported": "LODMesh_0257"
+    },
+    {
+      "name": "Art_WeirStones",
+      "triangles": 8,
+      "mesh": "LODMesh_0258",
+      "exported": "LODMesh_0258"
+    },
+    {
+      "name": "Art_WeirStones.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0259",
+      "exported": "LODMesh_0259"
+    },
+    {
+      "name": "Art_WeirStones.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0260",
+      "exported": "LODMesh_0260"
+    },
+    {
+      "name": "Art_WeirStones.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0261",
+      "exported": "LODMesh_0261"
+    },
+    {
+      "name": "Art_WeirStones.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0262",
+      "exported": "LODMesh_0262"
+    },
+    {
+      "name": "Art_WeirStones.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0263",
+      "exported": "LODMesh_0263"
+    },
+    {
+      "name": "Art_WeirStones.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0264",
+      "exported": "LODMesh_0264"
+    },
+    {
+      "name": "Decor_BridgeLamp",
+      "triangles": 4,
+      "mesh": "LODMesh_0265",
+      "exported": "LODMesh_0265"
+    },
+    {
+      "name": "Decor_BridgeLamp.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0266",
+      "exported": "LODMesh_0266"
+    },
+    {
+      "name": "Decor_BridgeLamp.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0267",
+      "exported": "LODMesh_0267"
+    },
+    {
+      "name": "Decor_BridgeLamp.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0268",
+      "exported": "LODMesh_0268"
+    },
+    {
+      "name": "Decor_BridgeLamp.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0269",
+      "exported": "LODMesh_0269"
+    },
+    {
+      "name": "Decor_BridgeLamp.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0270",
+      "exported": "LODMesh_0270"
+    },
+    {
+      "name": "Decor_BridgeLamp.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0271",
+      "exported": "LODMesh_0271"
+    },
+    {
+      "name": "Decor_BridgeLamp.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0272",
+      "exported": "LODMesh_0272"
+    },
+    {
+      "name": "Decor_Rubble_0_0",
+      "triangles": 4,
+      "mesh": "LODMesh_0273",
+      "exported": "LODMesh_0273"
+    },
+    {
+      "name": "Decor_Rubble_0_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0274",
+      "exported": "LODMesh_0274"
+    },
+    {
+      "name": "Decor_Rubble_0_2",
+      "triangles": 4,
+      "mesh": "LODMesh_0275",
+      "exported": "LODMesh_0275"
+    },
+    {
+      "name": "Decor_Rubble_0_4",
+      "triangles": 4,
+      "mesh": "LODMesh_0276",
+      "exported": "LODMesh_0276"
+    },
+    {
+      "name": "Decor_Rubble_0_5",
+      "triangles": 3,
+      "mesh": "LODMesh_0277",
+      "exported": "LODMesh_0277"
+    },
+    {
+      "name": "Decor_Rubble_1_0",
+      "triangles": 2,
+      "mesh": "LODMesh_0278",
+      "exported": "LODMesh_0278"
+    },
+    {
+      "name": "Decor_Rubble_1_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0279",
+      "exported": "LODMesh_0279"
+    },
+    {
+      "name": "Decor_Rubble_1_4",
+      "triangles": 7,
+      "mesh": "LODMesh_0280",
+      "exported": "LODMesh_0280"
+    },
+    {
+      "name": "Decor_Rubble_1_5",
+      "triangles": 4,
+      "mesh": "LODMesh_0281",
+      "exported": "LODMesh_0281"
+    },
+    {
+      "name": "Decor_Rubble_2_0",
+      "triangles": 5,
+      "mesh": "LODMesh_0282",
+      "exported": "LODMesh_0282"
+    },
+    {
+      "name": "Decor_Rubble_2_4",
+      "triangles": 4,
+      "mesh": "LODMesh_0283",
+      "exported": "LODMesh_0283"
+    },
+    {
+      "name": "Decor_Rubble_2_5",
+      "triangles": 2,
+      "mesh": "LODMesh_0284",
+      "exported": "LODMesh_0284"
+    },
+    {
+      "name": "Decor_Rubble_3_0",
+      "triangles": 4,
+      "mesh": "LODMesh_0285",
+      "exported": "LODMesh_0285"
+    },
+    {
+      "name": "Decor_Rubble_3_1",
+      "triangles": 2,
+      "mesh": "LODMesh_0286",
+      "exported": "LODMesh_0286"
+    },
+    {
+      "name": "Decor_Rubble_3_3",
+      "triangles": 5,
+      "mesh": "LODMesh_0287",
+      "exported": "LODMesh_0287"
+    },
+    {
+      "name": "Decor_Rubble_3_4",
+      "triangles": 2,
+      "mesh": "LODMesh_0288",
+      "exported": "LODMesh_0288"
+    },
+    {
+      "name": "Decor_Rubble_3_5",
+      "triangles": 4,
+      "mesh": "LODMesh_0289",
+      "exported": "LODMesh_0289"
+    },
+    {
+      "name": "Decor_Rubble_4_0",
+      "triangles": 6,
+      "mesh": "LODMesh_0290",
+      "exported": "LODMesh_0290"
+    },
+    {
+      "name": "Decor_Rubble_4_1",
+      "triangles": 4,
+      "mesh": "LODMesh_0291",
+      "exported": "LODMesh_0291"
+    },
+    {
+      "name": "Decor_Rubble_4_3",
+      "triangles": 5,
+      "mesh": "LODMesh_0292",
+      "exported": "LODMesh_0292"
+    },
+    {
+      "name": "Decor_Rubble_4_5",
+      "triangles": 3,
+      "mesh": "LODMesh_0293",
+      "exported": "LODMesh_0293"
+    },
+    {
+      "name": "Decor_Rubble_5_0",
+      "triangles": 2,
+      "mesh": "LODMesh_0294",
+      "exported": "LODMesh_0294"
+    },
+    {
+      "name": "Decor_Rubble_5_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0295",
+      "exported": "LODMesh_0295"
+    },
+    {
+      "name": "Decor_Rubble_5_2",
+      "triangles": 4,
+      "mesh": "LODMesh_0296",
+      "exported": "LODMesh_0296"
+    },
+    {
+      "name": "Decor_Rubble_5_3",
+      "triangles": 3,
+      "mesh": "LODMesh_0297",
+      "exported": "LODMesh_0297"
+    },
+    {
+      "name": "Decor_Rubble_5_4",
+      "triangles": 2,
+      "mesh": "LODMesh_0298",
+      "exported": "LODMesh_0298"
+    },
+    {
+      "name": "Decor_Terrace",
+      "triangles": 4,
+      "mesh": "LODMesh_0299",
+      "exported": "LODMesh_0299"
+    },
+    {
+      "name": "Decor_Terrace.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0300",
+      "exported": "LODMesh_0300"
+    },
+    {
+      "name": "Decor_Terrace.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0301",
+      "exported": "LODMesh_0301"
+    },
+    {
+      "name": "Decor_Terrace.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0302",
+      "exported": "LODMesh_0302"
+    },
+    {
+      "name": "Decor_Terrace.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0303",
+      "exported": "LODMesh_0303"
+    },
+    {
+      "name": "Decor_Terrace.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0304",
+      "exported": "LODMesh_0304"
+    },
+    {
+      "name": "Decor_Terrace.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0305",
+      "exported": "LODMesh_0305"
+    },
+    {
+      "name": "Decor_Terrace.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0306",
+      "exported": "LODMesh_0306"
+    },
+    {
+      "name": "Decor_TerraceLoam",
+      "triangles": 4,
+      "mesh": "LODMesh_0307",
+      "exported": "LODMesh_0307"
+    },
+    {
+      "name": "Decor_TerraceLoam.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0308",
+      "exported": "LODMesh_0308"
+    },
+    {
+      "name": "Decor_TerraceLoam.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0309",
+      "exported": "LODMesh_0309"
+    },
+    {
+      "name": "Decor_TerraceLoam.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0310",
+      "exported": "LODMesh_0310"
+    },
+    {
+      "name": "Decor_TerraceLoam.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0311",
+      "exported": "LODMesh_0311"
+    },
+    {
+      "name": "Decor_TerraceLoam.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0312",
+      "exported": "LODMesh_0312"
+    },
+    {
+      "name": "Decor_TerraceLoam.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0313",
+      "exported": "LODMesh_0313"
+    },
+    {
+      "name": "Decor_TerraceLoam.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0314",
+      "exported": "LODMesh_0314"
+    },
+    {
+      "name": "Effect_Footwater",
+      "triangles": 4,
+      "mesh": "LODMesh_0315",
+      "exported": "LODMesh_0315"
+    },
+    {
+      "name": "Effect_Footwater.001",
+      "triangles": 3,
+      "mesh": "LODMesh_0316",
+      "exported": "LODMesh_0316"
+    },
+    {
+      "name": "Effect_Footwater.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0317",
+      "exported": "LODMesh_0317"
+    },
+    {
+      "name": "Effect_RidgeFall",
+      "triangles": 4,
+      "mesh": "LODMesh_0318",
+      "exported": "LODMesh_0318"
+    },
+    {
+      "name": "Effect_RidgeFall.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0319",
+      "exported": "LODMesh_0319"
+    },
+    {
+      "name": "Effect_RidgeFall.002",
+      "triangles": 4,
+      "mesh": "LODMesh_0320",
+      "exported": "LODMesh_0320"
+    },
+    {
+      "name": "Effect_RidgeFall.003",
+      "triangles": 4,
+      "mesh": "LODMesh_0321",
+      "exported": "LODMesh_0321"
+    },
+    {
+      "name": "Effect_RidgeFall.004",
+      "triangles": 4,
+      "mesh": "LODMesh_0322",
+      "exported": "LODMesh_0322"
+    },
+    {
+      "name": "Effect_RidgeFall.005",
+      "triangles": 4,
+      "mesh": "LODMesh_0323",
+      "exported": "LODMesh_0323"
+    },
+    {
+      "name": "Effect_RidgeFall.006",
+      "triangles": 4,
+      "mesh": "LODMesh_0324",
+      "exported": "LODMesh_0324"
+    },
+    {
+      "name": "Effect_RidgeFall.007",
+      "triangles": 4,
+      "mesh": "LODMesh_0325",
+      "exported": "LODMesh_0325"
+    },
+    {
+      "name": "Effect_RidgeFall.008",
+      "triangles": 4,
+      "mesh": "LODMesh_0326",
+      "exported": "LODMesh_0326"
+    },
+    {
+      "name": "Effect_SpringFall",
+      "triangles": 4,
+      "mesh": "LODMesh_0327",
+      "exported": "LODMesh_0327"
+    },
+    {
+      "name": "Effect_StreamFoam_0",
+      "triangles": 4,
+      "mesh": "LODMesh_0328",
+      "exported": "LODMesh_0328"
+    },
+    {
+      "name": "Effect_StreamFoam_1",
+      "triangles": 10,
+      "mesh": "LODMesh_0329",
+      "exported": "LODMesh_0329"
+    },
+    {
+      "name": "Effect_StreamFoam_2",
+      "triangles": 10,
+      "mesh": "LODMesh_0330",
+      "exported": "LODMesh_0330"
+    },
+    {
+      "name": "Effect_StreamFoam_3",
+      "triangles": 6,
+      "mesh": "LODMesh_0331",
+      "exported": "LODMesh_0331"
+    },
+    {
+      "name": "Effect_ValleyFall",
+      "triangles": 4,
+      "mesh": "LODMesh_0332",
+      "exported": "LODMesh_0332"
+    },
+    {
+      "name": "Effect_ValleyFall.001",
+      "triangles": 4,
+      "mesh": "LODMesh_0333",
+      "exported": "LODMesh_0333"
+    },
+    {
+      "name": "Effect_ValleyFall.002",
+      "triangles": 3,
+      "mesh": "LODMesh_0334",
+      "exported": "LODMesh_0334"
+    },
+    {
+      "name": "Plant_0_0_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0335",
+      "exported": "LODMesh_0335"
+    },
+    {
+      "name": "Plant_0_0_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0336",
+      "exported": "LODMesh_0336"
+    },
+    {
+      "name": "Plant_0_1_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0337",
+      "exported": "LODMesh_0337"
+    },
+    {
+      "name": "Plant_0_1_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0338",
+      "exported": "LODMesh_0338"
+    },
+    {
+      "name": "Plant_0_2_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0339",
+      "exported": "LODMesh_0339"
+    },
+    {
+      "name": "Plant_0_2_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0340",
+      "exported": "LODMesh_0340"
+    },
+    {
+      "name": "Plant_0_3_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0341",
+      "exported": "LODMesh_0341"
+    },
+    {
+      "name": "Plant_0_4_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0342",
+      "exported": "LODMesh_0342"
+    },
+    {
+      "name": "Plant_0_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0343",
+      "exported": "LODMesh_0343"
+    },
+    {
+      "name": "Plant_0_5_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0344",
+      "exported": "LODMesh_0344"
+    },
+    {
+      "name": "Plant_1_0_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0345",
+      "exported": "LODMesh_0345"
+    },
+    {
+      "name": "Plant_1_0_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0346",
+      "exported": "LODMesh_0346"
+    },
+    {
+      "name": "Plant_1_1_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0347",
+      "exported": "LODMesh_0347"
+    },
+    {
+      "name": "Plant_1_1_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0348",
+      "exported": "LODMesh_0348"
+    },
+    {
+      "name": "Plant_1_2_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0349",
+      "exported": "LODMesh_0349"
+    },
+    {
+      "name": "Plant_1_2_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0350",
+      "exported": "LODMesh_0350"
+    },
+    {
+      "name": "Plant_1_3_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0351",
+      "exported": "LODMesh_0351"
+    },
+    {
+      "name": "Plant_1_3_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0352",
+      "exported": "LODMesh_0352"
+    },
+    {
+      "name": "Plant_1_4_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0353",
+      "exported": "LODMesh_0353"
+    },
+    {
+      "name": "Plant_1_4_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0354",
+      "exported": "LODMesh_0354"
+    },
+    {
+      "name": "Plant_1_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0355",
+      "exported": "LODMesh_0355"
+    },
+    {
+      "name": "Plant_1_5_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0356",
+      "exported": "LODMesh_0356"
+    },
+    {
+      "name": "Plant_2_0_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0357",
+      "exported": "LODMesh_0357"
+    },
+    {
+      "name": "Plant_2_0_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0358",
+      "exported": "LODMesh_0358"
+    },
+    {
+      "name": "Plant_2_1_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0359",
+      "exported": "LODMesh_0359"
+    },
+    {
+      "name": "Plant_2_1_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0360",
+      "exported": "LODMesh_0360"
+    },
+    {
+      "name": "Plant_2_2_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0361",
+      "exported": "LODMesh_0361"
+    },
+    {
+      "name": "Plant_2_2_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0362",
+      "exported": "LODMesh_0362"
+    },
+    {
+      "name": "Plant_2_3_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0363",
+      "exported": "LODMesh_0363"
+    },
+    {
+      "name": "Plant_2_4_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0364",
+      "exported": "LODMesh_0364"
+    },
+    {
+      "name": "Plant_2_5_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0365",
+      "exported": "LODMesh_0365"
+    },
+    {
+      "name": "Plant_3_0_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0366",
+      "exported": "LODMesh_0366"
+    },
+    {
+      "name": "Plant_3_0_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0367",
+      "exported": "LODMesh_0367"
+    },
+    {
+      "name": "Plant_3_1_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0368",
+      "exported": "LODMesh_0368"
+    },
+    {
+      "name": "Plant_3_1_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0369",
+      "exported": "LODMesh_0369"
+    },
+    {
+      "name": "Plant_3_2_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0370",
+      "exported": "LODMesh_0370"
+    },
+    {
+      "name": "Plant_3_3_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0371",
+      "exported": "LODMesh_0371"
+    },
+    {
+      "name": "Plant_3_3_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0372",
+      "exported": "LODMesh_0372"
+    },
+    {
+      "name": "Plant_3_4_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0373",
+      "exported": "LODMesh_0373"
+    },
+    {
+      "name": "Plant_3_4_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0374",
+      "exported": "LODMesh_0374"
+    },
+    {
+      "name": "Plant_3_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0375",
+      "exported": "LODMesh_0375"
+    },
+    {
+      "name": "Plant_3_5_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0376",
+      "exported": "LODMesh_0376"
+    },
+    {
+      "name": "Plant_4_0_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0377",
+      "exported": "LODMesh_0377"
+    },
+    {
+      "name": "Plant_4_0_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0378",
+      "exported": "LODMesh_0378"
+    },
+    {
+      "name": "Plant_4_1_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0379",
+      "exported": "LODMesh_0379"
+    },
+    {
+      "name": "Plant_4_1_Plant1",
+      "triangles": 6,
+      "mesh": "LODMesh_0380",
+      "exported": "LODMesh_0380"
+    },
+    {
+      "name": "Plant_4_2_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0381",
+      "exported": "LODMesh_0381"
+    },
+    {
+      "name": "Plant_4_2_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0382",
+      "exported": "LODMesh_0382"
+    },
+    {
+      "name": "Plant_4_3_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0383",
+      "exported": "LODMesh_0383"
+    },
+    {
+      "name": "Plant_4_3_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0384",
+      "exported": "LODMesh_0384"
+    },
+    {
+      "name": "Plant_4_4_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0385",
+      "exported": "LODMesh_0385"
+    },
+    {
+      "name": "Plant_4_4_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0386",
+      "exported": "LODMesh_0386"
+    },
+    {
+      "name": "Plant_4_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0387",
+      "exported": "LODMesh_0387"
+    },
+    {
+      "name": "Plant_4_5_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0388",
+      "exported": "LODMesh_0388"
+    },
+    {
+      "name": "Plant_5_0_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0389",
+      "exported": "LODMesh_0389"
+    },
+    {
+      "name": "Plant_5_0_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0390",
+      "exported": "LODMesh_0390"
+    },
+    {
+      "name": "Plant_5_1_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0391",
+      "exported": "LODMesh_0391"
+    },
+    {
+      "name": "Plant_5_1_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0392",
+      "exported": "LODMesh_0392"
+    },
+    {
+      "name": "Plant_5_2_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0393",
+      "exported": "LODMesh_0393"
+    },
+    {
+      "name": "Plant_5_2_Plant1",
+      "triangles": 4,
+      "mesh": "LODMesh_0394",
+      "exported": "LODMesh_0394"
+    },
+    {
+      "name": "Plant_5_3_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0395",
+      "exported": "LODMesh_0395"
+    },
+    {
+      "name": "Plant_5_3_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0396",
+      "exported": "LODMesh_0396"
+    },
+    {
+      "name": "Plant_5_4_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0397",
+      "exported": "LODMesh_0397"
+    },
+    {
+      "name": "Plant_5_5_Plant0",
+      "triangles": 8,
+      "mesh": "LODMesh_0398",
+      "exported": "LODMesh_0398"
+    },
+    {
+      "name": "Plant_5_5_Plant1",
+      "triangles": 2,
+      "mesh": "LODMesh_0399",
+      "exported": "LODMesh_0399"
+    },
+    {
+      "name": "Plant_Art_CloseMedicinal",
+      "triangles": 12,
+      "mesh": "LODMesh_0400",
+      "exported": "LODMesh_0400"
+    },
+    {
+      "name": "Plant_Art_Medicine",
+      "triangles": 18,
+      "mesh": "LODMesh_0401",
+      "exported": "LODMesh_0401"
+    },
+    {
+      "name": "Plant_Art_TerracedHerbs",
+      "triangles": 4,
+      "mesh": "LODMesh_0402",
+      "exported": "LODMesh_0402"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_0",
+      "triangles": 14,
+      "mesh": "LODMesh_0403",
+      "exported": "LODMesh_0403"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_0.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0404",
+      "exported": "LODMesh_0404"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_1",
+      "triangles": 16,
+      "mesh": "LODMesh_0405",
+      "exported": "LODMesh_0405"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_1.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0406",
+      "exported": "LODMesh_0406"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_2",
+      "triangles": 14,
+      "mesh": "LODMesh_0407",
+      "exported": "LODMesh_0407"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_2.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0408",
+      "exported": "LODMesh_0408"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_3",
+      "triangles": 16,
+      "mesh": "LODMesh_0409",
+      "exported": "LODMesh_0409"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_3.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0410",
+      "exported": "LODMesh_0410"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_4",
+      "triangles": 16,
+      "mesh": "LODMesh_0411",
+      "exported": "LODMesh_0411"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_4.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0412",
+      "exported": "LODMesh_0412"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_5",
+      "triangles": 18,
+      "mesh": "LODMesh_0413",
+      "exported": "LODMesh_0413"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_5.001",
+      "triangles": 12,
+      "mesh": "LODMesh_0414",
+      "exported": "LODMesh_0414"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_6",
+      "triangles": 12,
+      "mesh": "LODMesh_0415",
+      "exported": "LODMesh_0415"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_6.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0416",
+      "exported": "LODMesh_0416"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_7",
+      "triangles": 16,
+      "mesh": "LODMesh_0417",
+      "exported": "LODMesh_0417"
+    },
+    {
+      "name": "Plant_Grove_CreekBanks_7.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0418",
+      "exported": "LODMesh_0418"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_0",
+      "triangles": 10,
+      "mesh": "LODMesh_0419",
+      "exported": "LODMesh_0419"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_0.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0420",
+      "exported": "LODMesh_0420"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_1",
+      "triangles": 14,
+      "mesh": "LODMesh_0421",
+      "exported": "LODMesh_0421"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_1.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0422",
+      "exported": "LODMesh_0422"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_2",
+      "triangles": 10,
+      "mesh": "LODMesh_0423",
+      "exported": "LODMesh_0423"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_2.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0424",
+      "exported": "LODMesh_0424"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_3",
+      "triangles": 16,
+      "mesh": "LODMesh_0425",
+      "exported": "LODMesh_0425"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_3.001",
+      "triangles": 10,
+      "mesh": "LODMesh_0426",
+      "exported": "LODMesh_0426"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_4",
+      "triangles": 20,
+      "mesh": "LODMesh_0427",
+      "exported": "LODMesh_0427"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_4.001",
+      "triangles": 14,
+      "mesh": "LODMesh_0428",
+      "exported": "LODMesh_0428"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_5",
+      "triangles": 20,
+      "mesh": "LODMesh_0429",
+      "exported": "LODMesh_0429"
+    },
+    {
+      "name": "Plant_Grove_HighTerraceTreeBands_5.001",
+      "triangles": 14,
+      "mesh": "LODMesh_0430",
+      "exported": "LODMesh_0430"
+    },
+    {
+      "name": "Plant_HeroPine",
+      "triangles": 8,
+      "mesh": "LODMesh_0431",
+      "exported": "LODMesh_0431"
+    },
+    {
+      "name": "Plant_HeroPine.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0432",
+      "exported": "LODMesh_0432"
+    },
+    {
+      "name": "Solid_BoundaryMountainNorth",
+      "triangles": 2792,
+      "mesh": "LODMesh_0433",
+      "exported": "LODMesh_0433"
+    },
+    {
+      "name": "Solid_BoundaryMountainSouth",
+      "triangles": 2792,
+      "mesh": "LODMesh_0434",
+      "exported": "LODMesh_0434"
+    },
+    {
+      "name": "Solid_CreekHerbShelter",
+      "triangles": 28,
+      "mesh": "LODMesh_0435",
+      "exported": "LODMesh_0435"
+    },
+    {
+      "name": "Solid_CreeksideShelter",
+      "triangles": 28,
+      "mesh": "LODMesh_0436",
+      "exported": "LODMesh_0436"
+    },
+    {
+      "name": "Solid_Deck_0",
+      "triangles": 6,
+      "mesh": "LODMesh_0437",
+      "exported": "LODMesh_0437"
+    },
+    {
+      "name": "Solid_Deck_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0438",
+      "exported": "LODMesh_0438"
+    },
+    {
+      "name": "Solid_DryingShelter",
+      "triangles": 28,
+      "mesh": "LODMesh_0439",
+      "exported": "LODMesh_0439"
+    },
+    {
+      "name": "Solid_EastTerraceHouse",
+      "triangles": 28,
+      "mesh": "LODMesh_0440",
+      "exported": "LODMesh_0440"
+    },
+    {
+      "name": "Solid_GnarledPine",
+      "triangles": 36,
+      "mesh": "LODMesh_0441",
+      "exported": "LODMesh_0441"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_0",
+      "triangles": 22,
+      "mesh": "LODMesh_0442",
+      "exported": "LODMesh_0442"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_1",
+      "triangles": 23,
+      "mesh": "LODMesh_0443",
+      "exported": "LODMesh_0443"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_2",
+      "triangles": 25,
+      "mesh": "LODMesh_0444",
+      "exported": "LODMesh_0444"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_3",
+      "triangles": 23,
+      "mesh": "LODMesh_0445",
+      "exported": "LODMesh_0445"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_4",
+      "triangles": 24,
+      "mesh": "LODMesh_0446",
+      "exported": "LODMesh_0446"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_5",
+      "triangles": 27,
+      "mesh": "LODMesh_0447",
+      "exported": "LODMesh_0447"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_6",
+      "triangles": 22,
+      "mesh": "LODMesh_0448",
+      "exported": "LODMesh_0448"
+    },
+    {
+      "name": "Solid_Grove_CreekBanks_7",
+      "triangles": 23,
+      "mesh": "LODMesh_0449",
+      "exported": "LODMesh_0449"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_0",
+      "triangles": 18,
+      "mesh": "LODMesh_0450",
+      "exported": "LODMesh_0450"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_1",
+      "triangles": 25,
+      "mesh": "LODMesh_0451",
+      "exported": "LODMesh_0451"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_2",
+      "triangles": 19,
+      "mesh": "LODMesh_0452",
+      "exported": "LODMesh_0452"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_3",
+      "triangles": 23,
+      "mesh": "LODMesh_0453",
+      "exported": "LODMesh_0453"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_4",
+      "triangles": 32,
+      "mesh": "LODMesh_0454",
+      "exported": "LODMesh_0454"
+    },
+    {
+      "name": "Solid_Grove_HighTerraceTreeBands_5",
+      "triangles": 32,
+      "mesh": "LODMesh_0455",
+      "exported": "LODMesh_0455"
+    },
+    {
+      "name": "Solid_HerbPavilion",
+      "triangles": 28,
+      "mesh": "LODMesh_0456",
+      "exported": "LODMesh_0456"
+    },
+    {
+      "name": "Solid_Pier",
+      "triangles": 8,
+      "mesh": "LODMesh_0457",
+      "exported": "LODMesh_0457"
+    },
+    {
+      "name": "Solid_Pier.001",
+      "triangles": 8,
+      "mesh": "LODMesh_0458",
+      "exported": "LODMesh_0458"
+    },
+    {
+      "name": "Solid_Pier.002",
+      "triangles": 8,
+      "mesh": "LODMesh_0459",
+      "exported": "LODMesh_0459"
+    },
+    {
+      "name": "Solid_Pier.003",
+      "triangles": 8,
+      "mesh": "LODMesh_0460",
+      "exported": "LODMesh_0460"
+    },
+    {
+      "name": "Solid_Pier.004",
+      "triangles": 8,
+      "mesh": "LODMesh_0461",
+      "exported": "LODMesh_0461"
+    },
+    {
+      "name": "Solid_Pier.005",
+      "triangles": 8,
+      "mesh": "LODMesh_0462",
+      "exported": "LODMesh_0462"
+    },
+    {
+      "name": "Solid_Pier.006",
+      "triangles": 8,
+      "mesh": "LODMesh_0463",
+      "exported": "LODMesh_0463"
+    },
+    {
+      "name": "Solid_Pier.007",
+      "triangles": 8,
+      "mesh": "LODMesh_0464",
+      "exported": "LODMesh_0464"
+    },
+    {
+      "name": "Solid_Rail_0_-1",
+      "triangles": 8,
+      "mesh": "LODMesh_0465",
+      "exported": "LODMesh_0465"
+    },
+    {
+      "name": "Solid_Rail_0_1",
+      "triangles": 8,
+      "mesh": "LODMesh_0466",
+      "exported": "LODMesh_0466"
+    },
+    {
+      "name": "Solid_Rail_1_-1",
+      "triangles": 10,
+      "mesh": "LODMesh_0467",
+      "exported": "LODMesh_0467"
+    },
+    {
+      "name": "Solid_Rail_1_1",
+      "triangles": 10,
+      "mesh": "LODMesh_0468",
+      "exported": "LODMesh_0468"
+    },
+    {
+      "name": "Solid_Rubble_0_0",
+      "triangles": 17,
+      "mesh": "LODMesh_0469",
+      "exported": "LODMesh_0469"
+    },
+    {
+      "name": "Solid_Rubble_0_1",
+      "triangles": 12,
+      "mesh": "LODMesh_0470",
+      "exported": "LODMesh_0470"
+    },
+    {
+      "name": "Solid_Rubble_0_2",
+      "triangles": 9,
+      "mesh": "LODMesh_0471",
+      "exported": "LODMesh_0471"
+    },
+    {
+      "name": "Solid_Rubble_0_4",
+      "triangles": 9,
+      "mesh": "LODMesh_0472",
+      "exported": "LODMesh_0472"
+    },
+    {
+      "name": "Solid_Rubble_0_5",
+      "triangles": 14,
+      "mesh": "LODMesh_0473",
+      "exported": "LODMesh_0473"
+    },
+    {
+      "name": "Solid_Rubble_1_0",
+      "triangles": 12,
+      "mesh": "LODMesh_0474",
+      "exported": "LODMesh_0474"
+    },
+    {
+      "name": "Solid_Rubble_1_1",
+      "triangles": 21,
+      "mesh": "LODMesh_0475",
+      "exported": "LODMesh_0475"
+    },
+    {
+      "name": "Solid_Rubble_1_3",
+      "triangles": 6,
+      "mesh": "LODMesh_0476",
+      "exported": "LODMesh_0476"
+    },
+    {
+      "name": "Solid_Rubble_1_4",
+      "triangles": 28,
+      "mesh": "LODMesh_0477",
+      "exported": "LODMesh_0477"
+    },
+    {
+      "name": "Solid_Rubble_1_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0478",
+      "exported": "LODMesh_0478"
+    },
+    {
+      "name": "Solid_Rubble_2_0",
+      "triangles": 21,
+      "mesh": "LODMesh_0479",
+      "exported": "LODMesh_0479"
+    },
+    {
+      "name": "Solid_Rubble_2_1",
+      "triangles": 8,
+      "mesh": "LODMesh_0480",
+      "exported": "LODMesh_0480"
+    },
+    {
+      "name": "Solid_Rubble_2_3",
+      "triangles": 9,
+      "mesh": "LODMesh_0481",
+      "exported": "LODMesh_0481"
+    },
+    {
+      "name": "Solid_Rubble_2_4",
+      "triangles": 17,
+      "mesh": "LODMesh_0482",
+      "exported": "LODMesh_0482"
+    },
+    {
+      "name": "Solid_Rubble_2_5",
+      "triangles": 9,
+      "mesh": "LODMesh_0483",
+      "exported": "LODMesh_0483"
+    },
+    {
+      "name": "Solid_Rubble_3_0",
+      "triangles": 21,
+      "mesh": "LODMesh_0484",
+      "exported": "LODMesh_0484"
+    },
+    {
+      "name": "Solid_Rubble_3_1",
+      "triangles": 23,
+      "mesh": "LODMesh_0485",
+      "exported": "LODMesh_0485"
+    },
+    {
+      "name": "Solid_Rubble_3_3",
+      "triangles": 51,
+      "mesh": "LODMesh_0486",
+      "exported": "LODMesh_0486"
+    },
+    {
+      "name": "Solid_Rubble_3_4",
+      "triangles": 31,
+      "mesh": "LODMesh_0487",
+      "exported": "LODMesh_0487"
+    },
+    {
+      "name": "Solid_Rubble_3_5",
+      "triangles": 6,
+      "mesh": "LODMesh_0488",
+      "exported": "LODMesh_0488"
+    },
+    {
+      "name": "Solid_Rubble_4_0",
+      "triangles": 24,
+      "mesh": "LODMesh_0489",
+      "exported": "LODMesh_0489"
+    },
+    {
+      "name": "Solid_Rubble_4_1",
+      "triangles": 12,
+      "mesh": "LODMesh_0490",
+      "exported": "LODMesh_0490"
+    },
+    {
+      "name": "Solid_Rubble_4_2",
+      "triangles": 8,
+      "mesh": "LODMesh_0491",
+      "exported": "LODMesh_0491"
+    },
+    {
+      "name": "Solid_Rubble_4_3",
+      "triangles": 11,
+      "mesh": "LODMesh_0492",
+      "exported": "LODMesh_0492"
+    },
+    {
+      "name": "Solid_Rubble_4_4",
+      "triangles": 12,
+      "mesh": "LODMesh_0493",
+      "exported": "LODMesh_0493"
+    },
+    {
+      "name": "Solid_Rubble_4_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0494",
+      "exported": "LODMesh_0494"
+    },
+    {
+      "name": "Solid_Rubble_5_0",
+      "triangles": 15,
+      "mesh": "LODMesh_0495",
+      "exported": "LODMesh_0495"
+    },
+    {
+      "name": "Solid_Rubble_5_1",
+      "triangles": 20,
+      "mesh": "LODMesh_0496",
+      "exported": "LODMesh_0496"
+    },
+    {
+      "name": "Solid_Rubble_5_2",
+      "triangles": 13,
+      "mesh": "LODMesh_0497",
+      "exported": "LODMesh_0497"
+    },
+    {
+      "name": "Solid_Rubble_5_3",
+      "triangles": 9,
+      "mesh": "LODMesh_0498",
+      "exported": "LODMesh_0498"
+    },
+    {
+      "name": "Solid_Rubble_5_4",
+      "triangles": 8,
+      "mesh": "LODMesh_0499",
+      "exported": "LODMesh_0499"
+    },
+    {
+      "name": "Solid_Rubble_5_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0500",
+      "exported": "LODMesh_0500"
+    },
+    {
+      "name": "Solid_SpringHall",
+      "triangles": 28,
+      "mesh": "LODMesh_0501",
+      "exported": "LODMesh_0501"
+    },
+    {
+      "name": "Solid_SpringStone",
+      "triangles": 8,
+      "mesh": "LODMesh_0502",
+      "exported": "LODMesh_0502"
+    },
+    {
+      "name": "Solid_TerraceHall",
+      "triangles": 28,
+      "mesh": "LODMesh_0503",
+      "exported": "LODMesh_0503"
+    },
+    {
+      "name": "Solid_Trunks_0_0",
+      "triangles": 7,
+      "mesh": "LODMesh_0504",
+      "exported": "LODMesh_0504"
+    },
+    {
+      "name": "Solid_Trunks_0_1",
+      "triangles": 7,
+      "mesh": "LODMesh_0505",
+      "exported": "LODMesh_0505"
+    },
+    {
+      "name": "Solid_Trunks_0_2",
+      "triangles": 7,
+      "mesh": "LODMesh_0506",
+      "exported": "LODMesh_0506"
+    },
+    {
+      "name": "Solid_Trunks_0_3",
+      "triangles": 8,
+      "mesh": "LODMesh_0507",
+      "exported": "LODMesh_0507"
+    },
+    {
+      "name": "Solid_Trunks_0_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0508",
+      "exported": "LODMesh_0508"
+    },
+    {
+      "name": "Solid_Trunks_1_0",
+      "triangles": 7,
+      "mesh": "LODMesh_0509",
+      "exported": "LODMesh_0509"
+    },
+    {
+      "name": "Solid_Trunks_1_1",
+      "triangles": 17,
+      "mesh": "LODMesh_0510",
+      "exported": "LODMesh_0510"
+    },
+    {
+      "name": "Solid_Trunks_1_2",
+      "triangles": 8,
+      "mesh": "LODMesh_0511",
+      "exported": "LODMesh_0511"
+    },
+    {
+      "name": "Solid_Trunks_1_3",
+      "triangles": 8,
+      "mesh": "LODMesh_0512",
+      "exported": "LODMesh_0512"
+    },
+    {
+      "name": "Solid_Trunks_1_4",
+      "triangles": 7,
+      "mesh": "LODMesh_0513",
+      "exported": "LODMesh_0513"
+    },
+    {
+      "name": "Solid_Trunks_1_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0514",
+      "exported": "LODMesh_0514"
+    },
+    {
+      "name": "Solid_Trunks_2_0",
+      "triangles": 12,
+      "mesh": "LODMesh_0515",
+      "exported": "LODMesh_0515"
+    },
+    {
+      "name": "Solid_Trunks_2_1",
+      "triangles": 7,
+      "mesh": "LODMesh_0516",
+      "exported": "LODMesh_0516"
+    },
+    {
+      "name": "Solid_Trunks_2_2",
+      "triangles": 8,
+      "mesh": "LODMesh_0517",
+      "exported": "LODMesh_0517"
+    },
+    {
+      "name": "Solid_Trunks_3_0",
+      "triangles": 17,
+      "mesh": "LODMesh_0518",
+      "exported": "LODMesh_0518"
+    },
+    {
+      "name": "Solid_Trunks_3_1",
+      "triangles": 6,
+      "mesh": "LODMesh_0519",
+      "exported": "LODMesh_0519"
+    },
+    {
+      "name": "Solid_Trunks_3_3",
+      "triangles": 34,
+      "mesh": "LODMesh_0520",
+      "exported": "LODMesh_0520"
+    },
+    {
+      "name": "Solid_Trunks_3_4",
+      "triangles": 6,
+      "mesh": "LODMesh_0521",
+      "exported": "LODMesh_0521"
+    },
+    {
+      "name": "Solid_Trunks_3_5",
+      "triangles": 7,
+      "mesh": "LODMesh_0522",
+      "exported": "LODMesh_0522"
+    },
+    {
+      "name": "Solid_Trunks_4_0",
+      "triangles": 13,
+      "mesh": "LODMesh_0523",
+      "exported": "LODMesh_0523"
+    },
+    {
+      "name": "Solid_Trunks_4_1",
+      "triangles": 11,
+      "mesh": "LODMesh_0524",
+      "exported": "LODMesh_0524"
+    },
+    {
+      "name": "Solid_Trunks_4_2",
+      "triangles": 6,
+      "mesh": "LODMesh_0525",
+      "exported": "LODMesh_0525"
+    },
+    {
+      "name": "Solid_Trunks_4_3",
+      "triangles": 7,
+      "mesh": "LODMesh_0526",
+      "exported": "LODMesh_0526"
+    },
+    {
+      "name": "Solid_Trunks_4_4",
+      "triangles": 6,
+      "mesh": "LODMesh_0527",
+      "exported": "LODMesh_0527"
+    },
+    {
+      "name": "Solid_Trunks_4_5",
+      "triangles": 11,
+      "mesh": "LODMesh_0528",
+      "exported": "LODMesh_0528"
+    },
+    {
+      "name": "Solid_Trunks_5_0",
+      "triangles": 11,
+      "mesh": "LODMesh_0529",
+      "exported": "LODMesh_0529"
+    },
+    {
+      "name": "Solid_Trunks_5_1",
+      "triangles": 11,
+      "mesh": "LODMesh_0530",
+      "exported": "LODMesh_0530"
+    },
+    {
+      "name": "Solid_Trunks_5_2",
+      "triangles": 6,
+      "mesh": "LODMesh_0531",
+      "exported": "LODMesh_0531"
+    },
+    {
+      "name": "Solid_Trunks_5_3",
+      "triangles": 8,
+      "mesh": "LODMesh_0532",
+      "exported": "LODMesh_0532"
+    },
+    {
+      "name": "Solid_Trunks_5_5",
+      "triangles": 8,
+      "mesh": "LODMesh_0533",
+      "exported": "LODMesh_0533"
+    },
+    {
+      "name": "Solid_ValleyGate",
+      "triangles": 28,
+      "mesh": "LODMesh_0534",
+      "exported": "LODMesh_0534"
+    },
+    {
+      "name": "Surface_water_0",
+      "triangles": 181,
+      "mesh": "",
+      "exported": "LODMesh_0535"
+    },
+    {
+      "name": "Terrain_0_0",
+      "triangles": 115,
+      "mesh": "LODMesh_0536",
+      "exported": "LODMesh_0536"
+    },
+    {
+      "name": "Terrain_0_1",
+      "triangles": 107,
+      "mesh": "LODMesh_0537",
+      "exported": "LODMesh_0537"
+    },
+    {
+      "name": "Terrain_0_2",
+      "triangles": 101,
+      "mesh": "LODMesh_0538",
+      "exported": "LODMesh_0538"
+    },
+    {
+      "name": "Terrain_0_3",
+      "triangles": 102,
+      "mesh": "LODMesh_0539",
+      "exported": "LODMesh_0539"
+    },
+    {
+      "name": "Terrain_0_4",
+      "triangles": 132,
+      "mesh": "LODMesh_0540",
+      "exported": "LODMesh_0540"
+    },
+    {
+      "name": "Terrain_0_5",
+      "triangles": 147,
+      "mesh": "LODMesh_0541",
+      "exported": "LODMesh_0541"
+    },
+    {
+      "name": "Terrain_1_0",
+      "triangles": 132,
+      "mesh": "LODMesh_0542",
+      "exported": "LODMesh_0542"
+    },
+    {
+      "name": "Terrain_1_1",
+      "triangles": 131,
+      "mesh": "LODMesh_0543",
+      "exported": "LODMesh_0543"
+    },
+    {
+      "name": "Terrain_1_2",
+      "triangles": 110,
+      "mesh": "LODMesh_0544",
+      "exported": "LODMesh_0544"
+    },
+    {
+      "name": "Terrain_1_3",
+      "triangles": 111,
+      "mesh": "LODMesh_0545",
+      "exported": "LODMesh_0545"
+    },
+    {
+      "name": "Terrain_1_4",
+      "triangles": 152,
+      "mesh": "LODMesh_0546",
+      "exported": "LODMesh_0546"
+    },
+    {
+      "name": "Terrain_1_5",
+      "triangles": 172,
+      "mesh": "LODMesh_0547",
+      "exported": "LODMesh_0547"
+    },
+    {
+      "name": "Terrain_2_0",
+      "triangles": 148,
+      "mesh": "LODMesh_0548",
+      "exported": "LODMesh_0548"
+    },
+    {
+      "name": "Terrain_2_1",
+      "triangles": 146,
+      "mesh": "LODMesh_0549",
+      "exported": "LODMesh_0549"
+    },
+    {
+      "name": "Terrain_2_2",
+      "triangles": 139,
+      "mesh": "LODMesh_0550",
+      "exported": "LODMesh_0550"
+    },
+    {
+      "name": "Terrain_2_3",
+      "triangles": 132,
+      "mesh": "LODMesh_0551",
+      "exported": "LODMesh_0551"
+    },
+    {
+      "name": "Terrain_2_4",
+      "triangles": 137,
+      "mesh": "LODMesh_0552",
+      "exported": "LODMesh_0552"
+    },
+    {
+      "name": "Terrain_2_5",
+      "triangles": 130,
+      "mesh": "LODMesh_0553",
+      "exported": "LODMesh_0553"
+    },
+    {
+      "name": "Terrain_3_0",
+      "triangles": 139,
+      "mesh": "LODMesh_0554",
+      "exported": "LODMesh_0554"
+    },
+    {
+      "name": "Terrain_3_1",
+      "triangles": 134,
+      "mesh": "LODMesh_0555",
+      "exported": "LODMesh_0555"
+    },
+    {
+      "name": "Terrain_3_2",
+      "triangles": 164,
+      "mesh": "LODMesh_0556",
+      "exported": "LODMesh_0556"
+    },
+    {
+      "name": "Terrain_3_3",
+      "triangles": 157,
+      "mesh": "LODMesh_0557",
+      "exported": "LODMesh_0557"
+    },
+    {
+      "name": "Terrain_3_4",
+      "triangles": 154,
+      "mesh": "LODMesh_0558",
+      "exported": "LODMesh_0558"
+    },
+    {
+      "name": "Terrain_3_5",
+      "triangles": 125,
+      "mesh": "LODMesh_0559",
+      "exported": "LODMesh_0559"
+    },
+    {
+      "name": "Terrain_4_0",
+      "triangles": 111,
+      "mesh": "LODMesh_0560",
+      "exported": "LODMesh_0560"
+    },
+    {
+      "name": "Terrain_4_1",
+      "triangles": 111,
+      "mesh": "LODMesh_0561",
+      "exported": "LODMesh_0561"
+    },
+    {
+      "name": "Terrain_4_2",
+      "triangles": 142,
+      "mesh": "LODMesh_0562",
+      "exported": "LODMesh_0562"
+    },
+    {
+      "name": "Terrain_4_3",
+      "triangles": 153,
+      "mesh": "LODMesh_0563",
+      "exported": "LODMesh_0563"
+    },
+    {
+      "name": "Terrain_4_4",
+      "triangles": 133,
+      "mesh": "LODMesh_0564",
+      "exported": "LODMesh_0564"
+    },
+    {
+      "name": "Terrain_4_5",
+      "triangles": 111,
+      "mesh": "LODMesh_0565",
+      "exported": "LODMesh_0565"
+    },
+    {
+      "name": "Terrain_5_0",
+      "triangles": 99,
+      "mesh": "LODMesh_0566",
+      "exported": "LODMesh_0566"
+    },
+    {
+      "name": "Terrain_5_1",
+      "triangles": 99,
+      "mesh": "LODMesh_0567",
+      "exported": "LODMesh_0567"
+    },
+    {
+      "name": "Terrain_5_2",
+      "triangles": 111,
+      "mesh": "LODMesh_0568",
+      "exported": "LODMesh_0568"
+    },
+    {
+      "name": "Terrain_5_3",
+      "triangles": 118,
+      "mesh": "LODMesh_0569",
+      "exported": "LODMesh_0569"
+    },
+    {
+      "name": "Terrain_5_4",
+      "triangles": 106,
+      "mesh": "LODMesh_0570",
+      "exported": "LODMesh_0570"
+    },
+    {
+      "name": "Terrain_5_5",
+      "triangles": 107,
+      "mesh": "LODMesh_0571",
+      "exported": "LODMesh_0571"
+    }
+  ]
+}
