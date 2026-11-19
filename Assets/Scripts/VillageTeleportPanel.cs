@@ -142,6 +142,7 @@ public sealed class VillageTeleportPanel : MonoBehaviour
             Unsubscribe();
             dispatcher = currentDispatcher;
             dispatcher.Register("map_transfer_options_result", HandleOptionsResult);
+            dispatcher.Register("map_transfer_result", HandleOptionsRejection);
             dispatcher.Register("error", HandleOptionsError);
         }
 
@@ -200,6 +201,16 @@ public sealed class VillageTeleportPanel : MonoBehaviour
             GameNoticeService.Show("目的地路线配置不明确");
         else if (!anyRoute)
             GameNoticeService.Show("当前位置没有可用的传送路线");
+    }
+
+    private void HandleOptionsRejection(string json)
+    {
+        if (!queryPending || !IsQueryCurrent()) return;
+        var result = JsonUtility.FromJson<MapTransferResult>(json);
+        if (result == null || result.success || !string.IsNullOrEmpty(result.requestId)
+            || result.sceneSessionId != querySessionId) return;
+        queryPending = false;
+        GameNoticeService.Show("传送路线暂不可用，请稍后重试");
     }
 
     private void HandleOptionsError(string json)
@@ -317,6 +328,7 @@ public sealed class VillageTeleportPanel : MonoBehaviour
         if (dispatcher == null)
             return;
         dispatcher.Unregister("map_transfer_options_result", HandleOptionsResult);
+        dispatcher.Unregister("map_transfer_result", HandleOptionsRejection);
         dispatcher.Unregister("error", HandleOptionsError);
         dispatcher = null;
     }

@@ -220,8 +220,12 @@ public sealed class LootPickupService
             return;
         }
 
-        // TCP errors do not confirm that the pickup sequence was consumed.
-        session.PickupSuspended = true;
+        bool movementRejected = MovementReferenceError.DidNotExecute(message.errorCode);
+        if (movementRejected && message.requestSequence != requestState.RequestSequence)
+            return;
+
+        // A generic error leaves sequence consumption uncertain.
+        if (!movementRejected) session.PickupSuspended = true;
         CompleteRequest(requestState);
         PickupFailed?.Invoke(new LootPickupResultMessageDto
         {

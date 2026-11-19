@@ -6,8 +6,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float runSpeed = 8f;
-    [SerializeField] private float acceleration = 20f;
-    [SerializeField] private float deceleration = 30f;
     [SerializeField] private float gravity = -18f;
     [SerializeField] private float jumpSpeed = 7f;
     [SerializeField] private float turnSpeed = 180f;
@@ -28,7 +26,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
 
     private CharacterController controller;
     private Vector3 velocity;
-    private float verticalVelocity;
     private bool grounded;
     private bool hasMoveBoolParameter;
     private bool hasAttackTriggerParameter;
@@ -52,15 +49,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
         || Time.unscaledTime < attackMovementUnlockTime;
     private bool CanStartPredictedAttack => animator != null && hasAttackTriggerParameter
         && !authoritativeAttackLocked && !attackAnimationLocked;
-
-    public struct PredictionState
-    {
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public Vector3 Velocity;
-        public float VerticalVelocity;
-        public bool Grounded;
-    }
 
     private void Awake()
     {
@@ -94,107 +82,48 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
             || ((actions & PlayerInputActions.PrimaryAction) != 0 && CanStartPredictedAttack);
     }
 
-    public void Simulate(PlayerInputFrame input, float fixedDeltaTime, bool isReplay)
+    public void ApplyMovementSettings(MovementEventControl control)
     {
-        if (input == null || controller == null || fixedDeltaTime <= 0f)
-        {
-            return;
-        }
-
-        Vector2 movementInput = ReadMovementInput(input);
-        bool movementLocked = BlocksMovementForAttack(input.Actions);
-        bool hasMovementInput = !movementLocked && movementInput.sqrMagnitude > 0.0001f;
-        float maxTurnDelta = turnSpeed * fixedDeltaTime;
-        Vector3 desiredDirection = Vector3.zero;
-
-        if (hasMovementInput)
-        {
-            desiredDirection = GetCameraRelativeDirection(movementInput, input.CameraYaw);
-            float targetYaw = Mathf.Atan2(desiredDirection.x, desiredDirection.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
-        }
-        else if (!movementLocked && input.FaceCamera)
-        {
-            RotateTowards(input.CameraYaw, maxTurnDelta);
-        }
-
-        Vector3 targetHorizontalVelocity = Vector3.zero;
-        if (hasMovementInput)
-        {
-            float targetSpeed = input.IsRunning ? runSpeed : moveSpeed;
-            targetHorizontalVelocity = desiredDirection * targetSpeed;
-        }
-
-        Vector3 horizontalVelocity = new Vector3(velocity.x, 0f, velocity.z);
-        float velocityChangeRate = hasMovementInput ? acceleration : deceleration;
-        horizontalVelocity = Vector3.MoveTowards(
-            horizontalVelocity,
-            targetHorizontalVelocity,
-            velocityChangeRate * fixedDeltaTime
-        );
-        if (grounded && verticalVelocity < 0f)
-        {
-            verticalVelocity = 0f;
-        }
-
-        bool jumpRequestedOnGround = grounded && input.JumpPressed;
-        if (jumpRequestedOnGround)
-        {
-            verticalVelocity = jumpSpeed;
-        }
-
-        verticalVelocity += gravity * fixedDeltaTime;
-        CollisionFlags collisions = controller.Move(
-            (horizontalVelocity + Vector3.up * verticalVelocity) * fixedDeltaTime
-        );
-        grounded = (collisions & CollisionFlags.Below) != 0;
-
-        if (grounded && verticalVelocity < 0f)
-        {
-            verticalVelocity = 0f;
-        }
-        else if ((collisions & CollisionFlags.Above) != 0 && verticalVelocity > 0f)
-        {
-            verticalVelocity = 0f;
-        }
-
-        velocity = new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z);
-
-        if (!isReplay)
-        {
-            PresentPredictedInput(input, jumpRequestedOnGround && !grounded && velocity.y > 0f);
-        }
+        moveSpeed = control.walkSpeed;
+        runSpeed = control.runSpeed;
+        jumpSpeed = control.jumpSpeed;
+        gravity = control.gravity;
+        turnSpeed = control.turnSpeed;
+        controller.radius = control.radius;
+        controller.height = control.height;
+        controller.center = new Vector3(0f, control.height * 0.5f, 0f);
+        controller.minMoveDistance = 0f;
     }
 
-    public PredictionState CapturePredictionState()
+    public void ApplyMovementControl(MovementEventControl control)
     {
-        return new PredictionState
-        {
-            Position = transform.position,
-            Rotation = transform.rotation,
-            Velocity = velocity,
-            VerticalVelocity = verticalVelocity,
-            Grounded = grounded
-        };
+        ApplyMovementSettings(control);
+        SetTransform(control.Position, control.Rotation);
+        grounded = control.grounded;
+        velocity = Vector3.up * control.velocityY;
+        running = false;
+        ResetAttackMovementLock();
+        RefreshMovementAnimation();
     }
 
-    public void RestorePredictionState(PredictionState state)
+    public Vector3 MovementDirection(PlayerInputFrame input) =>
+        GetCameraRelativeDirection(ReadMovementInput(input), input.CameraYaw);
+
+    public float TurnStep(float targetYaw, float deltaSeconds) =>
+        Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetYaw, turnSpeed * deltaSeconds);
+
+    public float Speed(bool run) => run ? runSpeed : moveSpeed;
+    public float JumpSpeed => jumpSpeed;
+
+    public void SetHeading(float yaw) => transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+
+    public void SetLocalMotion(Vector3 horizontal, float vertical, bool onGround)
     {
-        SetTransform(state.Position, state.Rotation);
-        velocity = state.Velocity;
-        verticalVelocity = state.VerticalVelocity;
-        grounded = state.Grounded;
+        velocity = horizontal + Vector3.up * vertical;
+        grounded = onGround;
     }
 
-    public void PreservePredictedVertical(PredictionState state)
-    {
-        Vector3 position = transform.position;
-        position.y = state.Position.y;
-        SetTransform(position, transform.rotation);
-        velocity.y = state.Velocity.y;
-        verticalVelocity = state.VerticalVelocity;
-        grounded = state.Grounded;
-    }
+    public CollisionFlags MoveLocally(Vector3 displacement) => controller.Move(displacement);
 
     public void PresentPredictedInput(PlayerInputFrame input, bool jumpStarted = false)
     {
@@ -314,12 +243,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
             : Vector3.zero;
     }
 
-    private void RotateTowards(float targetYaw, float maxTurnDelta)
-    {
-        float yaw = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetYaw, maxTurnDelta);
-        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
-    }
-
     public void SetAuthoritativeState(PlayerAuthoritativeState state)
     {
         if (state == null)
@@ -329,7 +252,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
 
         SetTransform(state.GetPosition(), state.GetRotation());
         velocity = state.GetVelocity();
-        verticalVelocity = velocity.y;
         grounded = state.grounded;
         authoritativeAttackLocked = state.actionState != 0;
     }
@@ -338,7 +260,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
     {
         SetTransform(position, rotation);
         velocity = Vector3.zero;
-        verticalVelocity = 0f;
         grounded = controller != null && controller.enabled
             && (controller.Move(Vector3.down * 0.001f) & CollisionFlags.Below) != 0;
         running = false;
@@ -350,7 +271,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
     public void StopForDeath()
     {
         velocity = Vector3.zero;
-        verticalVelocity = 0f;
         grounded = false;
         running = false;
         ResetAttackMovementLock();

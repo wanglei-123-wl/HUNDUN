@@ -26,7 +26,6 @@ namespace Game.Client.BattleSync
             public const string BattleOutboxAck = "battle_outbox_ack";
             public const string StateFrame = "state_frame";
             public const string PlayerAuthoritativeState = "player_authoritative_state";
-            public const string PlayerInput = "player_input";
             public const string CombatAction = "combat_action";
             public const string Respawn = "respawn";
             public const string DeathTimeoutKick = "death_timeout_kick";

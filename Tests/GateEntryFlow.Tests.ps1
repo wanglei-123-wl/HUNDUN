@@ -209,8 +209,13 @@ public sealed class PlayerNetworkState
     public string characterId;
     public string sceneId;
 }
+public static class MovementEventPolicy
+{
+    public static bool Accepts(EnterWorldResult result) => result.movementProtocolVersion == 2;
+}
 public sealed class EnterWorldResult
 {
+    public int movementProtocolVersion;
     public bool success;
     public string message;
     public string reason;
@@ -311,7 +316,7 @@ Assert-True ([UnityEngine.Debug]::Messages.Exists([Predicate[string]]{
     param($message) $message.Contains('[GateEntry][RX]') -and
         $message.Contains('msgId=world_snapshot')
 })) 'Incoming message IDs must be visible while waiting for Gate.'
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_002","mapId":"map_001","sceneSessionId":"session-a","snapshotRevision":4,"serverTime":1234,"equipmentOperationSessionId":"equipment-session-a","self":{"characterDbId":1,"characterId":"character_001","sceneId":"world_002"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_002","mapId":"map_001","sceneSessionId":"session-a","snapshotRevision":4,"serverTime":1234,"equipmentOperationSessionId":"equipment-session-a","self":{"characterDbId":1,"characterId":"character_001","sceneId":"world_002"}}')
 $network.Receive('{"msgId":"world_chat_history","type":"world_chat_history","syncId":"sync-1","snapshotTime":1234,"batchIndex":1,"totalCount":0,"messages":[],"isLast":true,"success":true}')
 Assert-True ($script:accepted -eq 1 -and $script:failed -eq '' -and
     [GateEntryHandoff]::HasPending) 'Success must prepare a handoff before scene activation.'
@@ -544,7 +549,7 @@ $coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_
     10, [Action]{ throw 'Wrong character cannot activate a scene.' },
     [Action[string]]{ param($message) $script:failed = $message })
 $coordinator.Begin()
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":2,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-wrong-character","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":2,"characterId":"character_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":2,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-wrong-character","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":2,"characterId":"character_001"}}')
 Assert-True ($script:failed.Contains('不匹配') -and
     -not [GateEntryHandoff]::HasPending) 'Another character cannot pass the Gate handoff.'
 
@@ -555,7 +560,7 @@ $coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_
     10, [Action]{ throw 'Wrong map cannot activate a scene.' },
     [Action[string]]{ param($message) $script:failed = $message })
 $coordinator.Begin()
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_002","mapId":"map_demo_1","sceneSessionId":"session-wrong-map","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_002","mapId":"map_demo_1","sceneSessionId":"session-wrong-map","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
 Assert-True ($script:failed.Contains('地图') -and
     -not [GateEntryHandoff]::HasPending -and -not $network.IsConnected) `
     'An unknown world/map combination must stop entry and close the Gate connection.'
@@ -567,7 +572,7 @@ $coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_
     10, [Action]{ throw 'Missing map cannot activate a scene.' },
     [Action[string]]{ param($message) $script:failed = $message })
 $coordinator.Begin()
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_001","sceneSessionId":"session-missing-map","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_001","sceneSessionId":"session-missing-map","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
 Assert-True ($script:failed.Contains('地图') -and
     -not [GateEntryHandoff]::HasPending -and -not $network.IsConnected) `
     'A success packet without mapId must stop entry rather than assume Demo 1.'
@@ -579,7 +584,7 @@ $coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_
     10, [Action]{ throw 'Conflicting self scene cannot activate a scene.' },
     [Action[string]]{ param($message) $script:failed = $message })
 $coordinator.Begin()
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_002","mapId":"map_001","sceneSessionId":"session-wrong-self","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001","sceneId":"world_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_002","mapId":"map_001","sceneSessionId":"session-wrong-self","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001","sceneId":"world_001"}}')
 Assert-True ($script:failed.Contains('不匹配') -and
     -not [GateEntryHandoff]::HasPending -and -not $network.IsConnected) `
     'A self scene conflicting with the top-level world cannot pass the handoff.'
@@ -591,7 +596,7 @@ $coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_
     10, [Action]{ throw 'Missing scene session cannot activate a scene.' },
     [Action[string]]{ param($message) $script:failed = $message })
 $coordinator.Begin()
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
 Assert-True ($script:failed.Contains('不匹配') -and
     -not [GateEntryHandoff]::HasPending -and -not $network.IsConnected) `
     'A success packet without sceneSessionId must not activate the world.'
@@ -601,7 +606,7 @@ $network = [NetworkManager]::Instance
 $coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_001',
     10, [Action]{}, [Action[string]]{ param($message) })
 $coordinator.Begin()
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-b","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-b","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
 $network.Disconnect()
 $inbox = [Game.Chat.Transport.WorldChatTransportInbox]::Instance
 $network.Receive('{"msgId":"chat_message","channel":"world","messageId":"stale-1"}')
@@ -620,7 +625,7 @@ $network = [NetworkManager]::Instance
 $coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_001',
     10, [Action]{}, [Action[string]]{ param($message) })
 $coordinator.Begin()
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-c","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-c","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
 for ($i = 0; $i -le 512; $i++) { $network.Receive('{"msgId":"world_snapshot"}') }
 Assert-True (-not [GateEntryHandoff]::HasPending -and
     [GateEntryHandoff]::RequiresHandoff -and -not $network.IsConnected) `
@@ -694,7 +699,7 @@ Assert-True ($earlyRuntime.PrivateConversations.CharacterDbId -eq 0 -and
     'Messages preceding enter_world_result must not be saved or acknowledged.'
 $throwingObserver = [Action]{ throw 'Private UI not available' }
 $earlyRuntime.PrivateConversations.add_Changed($throwingObserver)
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-d","snapshotRevision":4,"serverTime":20,"self":{"characterDbId":1,"characterId":"character_001"}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-d","snapshotRevision":4,"serverTime":20,"self":{"characterDbId":1,"characterId":"character_001"}}')
 $dispatcher.ReplayDeferredWorldMessages()
 Assert-True ($earlyRuntime.PrivateConversations.GetMessages(1002).Count -eq 1 -and
     $network.PrivateAckSendCount -eq 0) `
@@ -707,7 +712,7 @@ Assert-True ($network.PrivateAckSendCount -eq 1 -and
     $network.LastPrivateChatAck.messageIds[0] -eq $earlyId) `
     'A saved early delivery must ACK after enter_world_result despite a broken UI observer.'
 $earlyRuntime.PrivateConversations.remove_Changed($throwingObserver)
-$network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":2,"self":{"characterDbId":2}}')
+$network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":2,"self":{"characterDbId":2}}')
 $network.Receive($earlyJson)
 $network.Receive($earlyJson.Replace('"targetCharacterDbId":1',
     '"targetCharacterDbId":2'))
@@ -738,7 +743,7 @@ foreach ($destination in @(
         'character_001', 10, [Action]{ $script:accepted++ },
         [Action[string]]{ param($message) throw $message })
     $initial.Begin()
-    $network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-e","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
+    $network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"world_001","mapId":"map_demo_1","sceneSessionId":"session-e","snapshotRevision":4,"serverTime":1234,"self":{"characterDbId":1,"characterId":"character_001"}}')
     $initial.Dispose()
     $initialJson = ''
     Assert-True ([GateEntryHandoff]::TryTake($network.ConnectionEpoch, 1,
@@ -755,7 +760,7 @@ foreach ($destination in @(
     $recovery.Begin()
     $network.Receive('{"msgId":"world_snapshot","sceneId":"' +
         $destination.Scene + '"}')
-    $network.Receive('{"msgId":"enter_world_result","success":true,"characterDbId":1,"sceneId":"' +
+    $network.Receive('{"msgId":"enter_world_result","movementProtocolVersion":2,"success":true,"characterDbId":1,"sceneId":"' +
         $destination.Scene + '","mapId":"' + $destination.Map +
         '","sceneSessionId":"session-recovered","snapshotRevision":5,"serverTime":5678,"self":{"characterDbId":1,"characterId":"character_001","sceneId":"' +
         $destination.Scene + '"}}')
@@ -785,7 +790,7 @@ $recoveryHandler = [regex]::Match($game,
     '(?s)private void HandleRecoveryAccepted\(\)(.*?)private IEnumerator LoadRecoveredWorldShell').Groups[1].Value
 Assert-True ($game.Contains('BeginRecoveryGate();') -and
     $game.Contains('if (returningToLogin || worldRecoveryPending) return;') -and
-    $game.Contains('localPlayerReconciler?.ClearPendingInputs();') -and
+    $game.Contains('localPlayerInputController?.BeginMovement(result.movementControl, result.movementPolicy);') -and
     $game.Contains('if (!worldHandoffInProgress) SendLeaveWorld();') -and
     $game.Contains('if (worldHandoffInProgress)') -and
     $game.Contains('HandleRecoveryFailed("Gate disconnected while loading the world.') -and

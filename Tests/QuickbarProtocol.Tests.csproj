@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../Assets/Scripts/NetWork/NetMessages.cs" />
+    <Compile Include="../Assets/Scripts/NetWork/MovementEventMessages.cs" />
     <Compile Include="../Assets/Scripts/Inventory/Protocol/V2/QuickbarMessages.cs" />
     <Compile Include="../Assets/Scripts/Inventory/Model/V2/InventoryOwnershipSnapshot.cs" />
     <Compile Include="../Assets/Scripts/Inventory/Integration/V2/QuickbarSession.cs" />

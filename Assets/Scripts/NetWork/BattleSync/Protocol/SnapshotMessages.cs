@@ -54,6 +54,7 @@ namespace Game.Client.BattleSync.Protocol
     [Serializable]
     public sealed class PlayerStateDto
     {
+        public RemoteMovementSnapshot movement;
         public string userId;
         public string username;
         public long characterDbId;

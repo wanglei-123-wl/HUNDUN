@@ -25,9 +25,7 @@ public enum PlayerInputActions
 [Serializable]
 public sealed class PlayerInputFrame
 {
-    public long Sequence;
     public long ClientTick;
-    public long ClientTimeMs;
     public PlayerInputKeys Keys;
     public PlayerInputActions Actions;
     public float LookYaw;
@@ -46,20 +44,4 @@ public sealed class PlayerInputFrame
         return (Actions & action) != 0;
     }
 
-    public PlayerInputRequest ToRequest()
-    {
-        return new PlayerInputRequest
-        {
-            sequence = Sequence,
-            clientTick = ClientTick,
-            clientTimeMs = ClientTimeMs,
-            keys = (int)Keys,
-            actions = (int)Actions,
-            lookYaw = LookYaw,
-            cameraYaw = CameraYaw,
-            faceCamera = FaceCamera,
-            jumpPressed = JumpPressed,
-            isRunning = IsRunning
-        };
-    }
 }

@@ -112,6 +112,8 @@ namespace UnityEngine
         public Transform transform;
         public bool enabled = true;
         public bool isGrounded;
+        public float radius, height, minMoveDistance;
+        public Vector3 center;
         public CollisionFlags Move(Vector3 delta)
         {
             Vector3 next = transform.position + delta;
@@ -164,12 +166,13 @@ namespace UnityEngine
         { if (name == "Attack") AttackTriggered = true; }
     }
 }
-public class PlayerInputRequest
+public class MovementEventControl
 {
-    public long sequence, clientTick, clientTimeMs;
-    public int keys, actions;
-    public float lookYaw, cameraYaw;
-    public bool faceCamera, jumpPressed, isRunning;
+    public float walkSpeed = 5, runSpeed = 8, jumpSpeed = 7, gravity = -18, radius = .5f, height = 2, turnSpeed = 180;
+    public float velocityY;
+    public bool grounded = true;
+    public UnityEngine.Vector3 Position;
+    public UnityEngine.Quaternion Rotation;
 }
 public class PlayerAuthoritativeState
 {
@@ -198,77 +201,18 @@ public static class JumpTests
         var motor = new PredictedCharacterMotor();
         motor.testComponent = new CharacterController { transform = motor.transform };
         typeof(PredictedCharacterMotor).GetMethod("Awake",
-            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-            .Invoke(motor, null);
-        motor.ResetAtSpawn(Vector3.zero, Quaternion.identity);
-        Check(motor.IsGrounded, "Spawn on ground should allow an immediate jump.");
-
-        var jump = new PlayerInputFrame { JumpPressed = true };
-        var idle = new PlayerInputFrame();
-        motor.Simulate(jump, 0.05f, true);
-        float firstHeight = motor.transform.position.y;
-        Check(firstHeight > 0f && motor.Velocity.y > 0f,
-            "Grounded jump must rise in its first simulation step.");
-
-        var oldState = new PlayerAuthoritativeState {
-            position = Vector3.zero, velocity = Vector3.zero, grounded = true };
-        motor.SetAuthoritativeState(oldState);
-        motor.Simulate(jump, 0.05f, true);
-        Check(Math.Abs(motor.transform.position.y - firstHeight) < 0.001f,
-            "Replaying an unacknowledged jump after a grounded state must reproduce the launch.");
-
-        var airborne = new PlayerAuthoritativeState {
-            position = motor.transform.position, velocity = motor.Velocity, grounded = false };
-        motor.SetAuthoritativeState(airborne);
-        float lastHeight = motor.transform.position.y;
-        bool landed = false;
-        for (int i = 0; i < 40; i++)
-        {
-            motor.Simulate(idle, 0.05f, true);
-            float height = motor.transform.position.y;
-            Check(height >= 0f, "Landing must not sink below the floor.");
-            if (motor.IsGrounded) { landed = true; break; }
-            lastHeight = height;
-        }
-        Check(landed && motor.Velocity.y == 0f, "Fall must finish grounded with no downward velocity.");
-        motor.Simulate(jump, 0.05f, true);
-        Check(motor.transform.position.y > 0f, "A second jump must work immediately after landing.");
-
-        motor.SetAuthoritativeState(oldState);
-        Check(motor.IsGrounded && motor.transform.position.y == 0f,
-            "A grounded server correction must restore grounded state after a jump.");
-        motor.Simulate(idle, 0.05f, true);
-        Check(motor.IsGrounded && motor.transform.position.y == 0f,
-            "Replayed idle input must not bounce above the floor.");
-        motor.Simulate(jump, 0.05f, true);
-        Check(motor.Velocity.y > 0f, "Another jump after the grounded correction must launch.");
-
-        var saved = motor.CapturePredictionState();
-        motor.Simulate(idle, 0.05f, true);
-        motor.RestorePredictionState(saved);
-        Check(Math.Abs(motor.transform.position.y - saved.Position.y) < 0.001f
-            && Math.Abs(motor.Velocity.y - saved.Velocity.y) < 0.001f
-            && motor.IsGrounded == saved.Grounded,
-            "Failed send must restore the exact pre-send motion state.");
-
-        motor.ResetAtSpawn(Vector3.zero, Quaternion.identity);
-        var backward = new PlayerInputFrame { Keys = PlayerInputKeys.S, CameraYaw = 0f };
-        motor.Simulate(backward, 0.05f, true);
-        Check(Math.Abs(Math.Abs(motor.transform.eulerAngles.y) - 180f) < 0.001f,
-            "Backward input must face backward in its first prediction step.");
-        Check(motor.transform.position.z < 0f && motor.Velocity.z < 0f,
-            "Backward input must move immediately instead of waiting for a turn.");
-
-        motor.SetAuthoritativeState(oldState);
-        motor.Simulate(backward, 0.05f, true);
-        Check(Math.Abs(Math.Abs(motor.transform.eulerAngles.y) - 180f) < 0.001f
-            && motor.transform.position.z < 0f,
-            "Replaying backward input must reproduce the same immediate turn and movement.");
-
-        motor.ResetAtSpawn(Vector3.zero, Quaternion.identity);
-        motor.Simulate(new PlayerInputFrame { FaceCamera = true, CameraYaw = 90f }, 0.05f, true);
-        Check(Math.Abs(motor.transform.eulerAngles.y - 9f) < 0.001f,
-            "Facing the camera without movement must keep its existing gradual turn.");
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(motor, null);
+        motor.ApplyMovementControl(new MovementEventControl { jumpSpeed = 8f, radius = .45f });
+        Check(motor.IsGrounded && motor.JumpSpeed == 8f && motor.Gravity == -18f,
+            "Server physics must apply before local movement.");
+        Check(((CharacterController)motor.testComponent).radius == .45f,
+            "The local collision body must use the server radius.");
+        motor.SetLocalMotion(Vector3.zero, motor.JumpSpeed, false);
+        motor.MoveLocally(Vector3.up * .2f);
+        Check(motor.transform.position.y > 0 && !motor.IsGrounded, "Local takeoff uses CharacterController.");
+        Check((motor.MoveLocally(Vector3.down) & CollisionFlags.Below) != 0, "Local landing detects ground.");
+        var backward = motor.MovementDirection(new PlayerInputFrame { Keys = PlayerInputKeys.S });
+        Check(backward.z < 0 && motor.TurnStep(90, .05f) == 9f, "Camera-relative direction and turn speed remain valid.");
     }
 }
 '@
@@ -277,11 +221,8 @@ $sources = "using System;`nusing UnityEngine;`n" `
     + ($sources -replace '(?m)^using (System|UnityEngine);[ \t]*\r?\n', '')
 Add-Type -TypeDefinition $sources -IgnoreWarnings
 [JumpTests]::Run()
-$controller = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Player/AuthorityMovement/LocalPlayerInputController.cs') -Raw
-$predictionIndex = $controller.IndexOf('predictedMotor.Simulate(input, fixedDeltaTime, true);')
-$sendIndex = $controller.IndexOf('networkManager.SendPlayerInput(input.ToRequest())')
-if ($predictionIndex -lt 0 -or $sendIndex -le $predictionIndex `
-    -or $controller -notmatch 'inputAccumulator = Mathf.Max\(inputAccumulator, FixedInputDeltaTime\)') {
-    throw 'Jump input must be simulated before the send and must not wait for the next input tick.'
+$controller = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Player/AuthorityMovement/LocalPlayerInputController.MovementEvents.cs') -Raw
+if ($controller -notmatch 'Report\("jump", now\)' -or $controller -notmatch 'edge = "land"') {
+    throw 'Jump and landing must publish movement events at their transitions.'
 }
-Write-Output 'Local player jump prediction tests passed.'
+Write-Output 'PASS: movement control, local jump and landing events.'

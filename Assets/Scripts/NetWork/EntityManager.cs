@@ -29,6 +29,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
     private long localCharacterDbId;
     private string activeSceneId;
     private long activeConnectionEpoch;
+    private readonly Dictionary<long, PlayerMovementEventMessage> pendingMovement = new Dictionary<long, PlayerMovementEventMessage>();
     private BattleSyncSnapshotRoutingMode snapshotRoutingMode=BattleSyncSnapshotRoutingMode.LegacySelfRegistered;
 
     private void OnEnable()
@@ -105,6 +106,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             currentDispatcher.Register("player_enter_broadcast", HandlePlayerEnterBroadcast);
             currentDispatcher.Register("player_leave_broadcast", HandlePlayerLeave);
         }
+        currentDispatcher.Register("player_movement_event", HandleMovementEvent);
         currentDispatcher.Register("skill_cast_event", HandleSkillCastEvent);
         registeredDispatcher = currentDispatcher;
     }
@@ -119,6 +121,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         registeredDispatcher.Unregister("player_state_broadcast", HandlePlayerStateBroadcast);
         registeredDispatcher.Unregister("player_enter_broadcast", HandlePlayerEnterBroadcast);
         registeredDispatcher.Unregister("player_leave_broadcast", HandlePlayerLeave);
+        registeredDispatcher.Unregister("player_movement_event", HandleMovementEvent);
         registeredDispatcher.Unregister("skill_cast_event", HandleSkillCastEvent);
         registeredDispatcher = null;
     }
@@ -397,6 +400,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         if(!string.Equals(activeSceneId,message.sceneId,System.StringComparison.Ordinal))return BattleSyncApplyResult.IgnoredWrongScene;
         if(message.player.characterDbId==localCharacterDbId)return BattleSyncApplyResult.AlreadyApplied;
         PlayerNetworkState state=ConvertPlayer(message.player);
+        if (message.visibilityRevision > 0) state.visibilityRevision = message.visibilityRevision;
         if(FindRemotePlayerPrefab(state.characterId)==null)
         {
             Debug.LogError(
@@ -416,6 +420,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         if(message==null||message.characterDbId<=0)return BattleSyncApplyResult.InvalidMessage;
         if(!string.Equals(activeSceneId,message.sceneId,System.StringComparison.Ordinal))return BattleSyncApplyResult.IgnoredWrongScene;
         if(message.characterDbId==localCharacterDbId)return BattleSyncApplyResult.AlreadyApplied;
+        pendingMovement.Remove(message.characterDbId);
         if(!remotePlayers.ContainsKey(message.characterDbId))return BattleSyncApplyResult.AlreadyApplied;
         RemoveRemotePlayer(message.characterDbId,message.reason);
         return remotePlayers.ContainsKey(message.characterDbId)?BattleSyncApplyResult.RetryableFailure:BattleSyncApplyResult.Applied;
@@ -443,7 +448,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             movementState = item.movementState, serverTick = item.serverTick,
             lastProcessedInputSequence = item.lastProcessedInputSequence, hp = item.hp,
             maxHp = item.maxHp, lifeState = item.lifeState, combatRevision = item.combatRevision,
-            visibilityRevision = item.visibilityRevision, netId = item.netId
+            visibilityRevision = item.visibilityRevision, netId = item.netId, movement = item.movement
         };
     }
 
@@ -505,7 +510,43 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             remotePlayer.Init(state.characterDbId, state.characterId, state.nickname);
             remotePlayer.ClearPendingSnapshots();
             remotePlayer.ApplyServerState(state);
+            if (pendingMovement.TryGetValue(state.characterDbId, out var pending)
+                && pending.visibilityRevision <= state.visibilityRevision)
+            {
+                pendingMovement.Remove(state.characterDbId);
+                if (pending.visibilityRevision == state.visibilityRevision)
+                    remotePlayer.ApplyMovementEvent(pending.movement);
+            }
         }
+    }
+
+    private void HandleMovementEvent(string json)
+    {
+        var message = JsonUtility.FromJson<PlayerMovementEventMessage>(json);
+        if (message?.movement?.IsValid != true || message.characterDbId <= 0
+            || message.characterDbId == localCharacterDbId || !IsActiveScene(message.sceneId)
+            || string.IsNullOrEmpty(message.sceneSessionId)
+            || message.sceneSessionId != NetworkManager.Instance?.SceneSessionId)
+            return;
+
+        if (remotePlayers.TryGetValue(message.characterDbId, out var player) && player != null)
+        {
+            if (message.visibilityRevision == player.VisibilityRevision)
+            {
+                player.ApplyMovementEvent(message.movement);
+                return;
+            }
+            if (message.visibilityRevision < player.VisibilityRevision) return;
+        }
+
+        if (pendingMovement.TryGetValue(message.characterDbId, out var previous))
+        {
+            if (message.visibilityRevision < previous.visibilityRevision
+                || (message.visibilityRevision == previous.visibilityRevision
+                    && message.movement.revision <= previous.movement.revision)) return;
+        }
+        else if (pendingMovement.Count >= 512) return;
+        pendingMovement[message.characterDbId] = message;
     }
 
     private void ApplyRemotePlayerState(PlayerNetworkState state)
@@ -579,6 +620,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
 
     public void ClearAllRemotePlayers()
     {
+        pendingMovement.Clear();
         remoteSkillEffects.Clear();
         foreach (RemotePlayerSync remotePlayer in remotePlayers.Values)
         {

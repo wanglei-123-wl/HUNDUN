@@ -52,9 +52,8 @@ public sealed class LootRemoveMessageDto : NetMessageBase
 }
 
 [Serializable]
-public sealed class LootPickupMessageDto : NetMessageBase
+public sealed class LootPickupMessageDto : MovementReferencedRequest
 {
-    public string sceneSessionId;
     public long requestSequence;
     public long clientTick;
     public string lootId;
@@ -147,6 +146,7 @@ public sealed class InventorySnapshotResultMessageDto : NetMessageBase
 [Serializable]
 public sealed class NetErrorMessageDto : NetMessageBase
 {
+    public long requestSequence;
     public string requestMsgId;
     public string errorCode;
     public string message;

@@ -22,6 +22,16 @@ $sources = ($usings -join "`n") + "`n" +
 
 $stubs = @'
 public class NetMessageBase { public string msgId; public string type; }
+public class MovementReferencedRequest : NetMessageBase
+{
+    public string sceneSessionId;
+    public long movementEpoch, movementSequence;
+}
+public static class MovementReferenceError
+{
+    public static bool DidNotExecute(string error) => error == "stale_movement_epoch"
+        || error == "movement_reference_mismatch" || error == "movement_control_required" || error == "movement_locked";
+}
 namespace UnityEngine
 {
     public struct Vector3

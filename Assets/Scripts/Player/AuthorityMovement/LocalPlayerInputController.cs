@@ -2,12 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public sealed class LocalPlayerInputController : MonoBehaviour
+public sealed partial class LocalPlayerInputController : MonoBehaviour
 {
-    [Header("Input Tick")]
-    [SerializeField, Min(1f)] private float inputTickRate = 20f;
-    [SerializeField, Min(1)] private int maxTicksPerFrame = 4;
-
     private PredictedCharacterMotor predictedMotor;
     private Animator meditationAnimator;
     private PlayerInputKeys previousDirectionTap;
@@ -20,8 +16,6 @@ public sealed class LocalPlayerInputController : MonoBehaviour
     private LocalPlayerVisualSmoother visualSmoother;
     private LocalPlayerCombatController combatController;
     private ThirdPersonCameraFollow cameraFollow;
-    private float inputAccumulator;
-    private long nextSequence;
     private long clientTick;
     private bool inputEnabled;
     private bool pendingMouseLeftDown;
@@ -45,13 +39,12 @@ public sealed class LocalPlayerInputController : MonoBehaviour
     private const float MouseClickDragThreshold = 4f;
     private const float MovingHorizontalSpeedSquared = 0.0025f;
 
-    public float FixedInputDeltaTime => 1f / Mathf.Max(1f, inputTickRate);
     public long CurrentClientTick => Math.Max(1L, clientTick);
     public bool IsInputEnabled => inputEnabled;
 
     private void Update()
     {
-        if (!inputEnabled)
+        if (!inputEnabled || NetworkManager.Instance?.MovementReady != true)
         {
             return;
         }
@@ -113,8 +106,9 @@ public sealed class LocalPlayerInputController : MonoBehaviour
             && predictedMotor != null && !predictedMotor.BlocksMovementForAttack())
         {
             pendingJumpPressed = true;
-            inputAccumulator = Mathf.Max(inputAccumulator, FixedInputDeltaTime);
         }
+
+        if (!UpdateMovement(CreateInputFrame(), MovementNow)) return;
 
         if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -158,21 +152,6 @@ public sealed class LocalPlayerInputController : MonoBehaviour
             combatController?.TrySendSkillSlotCast(7, CurrentClientTick);
         }
 
-        inputAccumulator += Time.unscaledDeltaTime;
-        float fixedDeltaTime = FixedInputDeltaTime;
-        int processedTicks = 0;
-
-        while (inputAccumulator >= fixedDeltaTime && processedTicks < maxTicksPerFrame)
-        {
-            inputAccumulator -= fixedDeltaTime;
-            processedTicks++;
-            GenerateAndSendInput(fixedDeltaTime);
-        }
-
-        if (processedTicks >= maxTicksPerFrame && inputAccumulator >= fixedDeltaTime)
-        {
-            inputAccumulator = 0f;
-        }
     }
 
     public void Bind(
@@ -199,12 +178,17 @@ public sealed class LocalPlayerInputController : MonoBehaviour
         reconciler = playerReconciler;
         visualSmoother = smoother;
         ResolveCombatController();
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.FlushLocalMovement = FlushMovement;
+            if (movementControl?.IsValidFor(NetworkManager.Instance.SceneSessionId) == true)
+                predictedMotor.ApplyMovementSettings(movementControl);
+        }
     }
 
     public void SetInputEnabled(bool enabled, bool resetSequence = false)
     {
         inputEnabled = enabled;
-        inputAccumulator = 0f;
         pendingMouseLeftDown = false;
         pendingJumpPressed = false;
         trackingMouseLeftClick = false;
@@ -220,120 +204,13 @@ public sealed class LocalPlayerInputController : MonoBehaviour
         {
             EndMeditation();
             ResetRollInput();
-            reconciler?.ClearPendingInputs();
             return;
         }
 
         if (resetSequence)
         {
-            ResetInputSequence();
+            clientTick = 0;
         }
-    }
-
-    public void ResetInputSequence()
-    {
-        nextSequence = 0;
-        clientTick = 0;
-        reconciler?.ClearPendingInputs();
-    }
-
-    public void AdvanceInputSequence(long acknowledgedSequence)
-    {
-        if (acknowledgedSequence <= nextSequence)
-        {
-            return;
-        }
-
-        nextSequence = acknowledgedSequence;
-    }
-
-    public void SetNextInputSequence(long sequence)
-    {
-        if (sequence <= 0)
-            return;
-        nextSequence = sequence - 1;
-        reconciler?.ClearPendingInputs();
-    }
-
-    private void GenerateAndSendInput(float fixedDeltaTime)
-    {
-        if (predictedMotor == null || reconciler == null)
-        {
-            return;
-        }
-
-        NetworkManager networkManager = NetworkManager.Instance;
-        if (networkManager == null || !networkManager.IsConnected)
-        {
-            return;
-        }
-
-        PlayerInputFrame input = CreateInputFrame();
-        PredictedCharacterMotor.PredictionState beforePrediction =
-            predictedMotor.CapturePredictionState();
-        Vector3 beforeVisualPosition = visualSmoother == null
-            ? transform.position
-            : visualSmoother.VisualWorldPosition;
-        Quaternion beforeVisualRotation = visualSmoother == null
-            ? transform.rotation
-            : visualSmoother.VisualWorldRotation;
-
-        visualSmoother?.BeginLogicStep();
-        predictedMotor.Simulate(input, fixedDeltaTime, true);
-        visualSmoother?.EndLogicStep();
-        if (input.JumpPressed && predictedMotor.Velocity.y <= 0f)
-        {
-            Debug.LogWarning("[LocalJump] No upward velocity after jump input; sequence="
-                + input.Sequence + " groundedBefore=" + beforePrediction.Grounded
-                + " rootY=" + transform.position.y);
-        }
-
-        long sendStarted = input.JumpPressed
-            ? System.Diagnostics.Stopwatch.GetTimestamp()
-            : 0L;
-        bool sent = networkManager.SendPlayerInput(input.ToRequest());
-        if (sendStarted != 0L)
-        {
-            double sendMilliseconds = (System.Diagnostics.Stopwatch.GetTimestamp() - sendStarted)
-                * 1000d / System.Diagnostics.Stopwatch.Frequency;
-            if (sendMilliseconds > 20d)
-            {
-                Debug.LogWarning("[LocalJump] Input send blocked the main thread for "
-                    + sendMilliseconds.ToString("F1") + "ms; sequence=" + input.Sequence);
-            }
-        }
-
-        if (!sent)
-        {
-            predictedMotor.RestorePredictionState(beforePrediction);
-            visualSmoother?.ApplyCorrection(beforeVisualPosition, beforeVisualRotation, 0f);
-            RestorePendingInput(input);
-            return;
-        }
-
-        nextSequence = input.Sequence;
-        clientTick = input.ClientTick;
-        if (HasDirectionalInput(input.Keys) || HasBothMouseButtons(input.Actions) || input.FaceCamera)
-            visualSmoother?.ClearCombatFacing();
-
-        bool jumpStarted = input.JumpPressed && beforePrediction.Grounded
-            && predictedMotor.Velocity.y > 0f && !predictedMotor.IsGrounded;
-        reconciler.RecordPredictedInput(input, jumpStarted);
-        if (reconciler.IsJumpActive)
-        {
-            visualSmoother?.UpdateJumpPresentation(
-                predictedMotor.Velocity.y,
-                predictedMotor.Gravity,
-                fixedDeltaTime,
-                predictedMotor.IsGrounded
-            );
-        }
-        if (input.HasAction(PlayerInputActions.PrimaryAction))
-        {
-            ResolveCombatController();
-            combatController?.TrySendBasicAttack(input.ClientTick, input.CameraYaw);
-        }
-        predictedMotor.PresentPredictedInput(input, jumpStarted);
     }
 
     private void ResolveCombatController()
@@ -526,9 +403,7 @@ public sealed class LocalPlayerInputController : MonoBehaviour
 
         return new PlayerInputFrame
         {
-            Sequence = nextSequence + 1,
             ClientTick = clientTick + 1,
-            ClientTimeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             Keys = keys,
             Actions = actions,
             LookYaw = cameraYaw,
@@ -541,24 +416,6 @@ public sealed class LocalPlayerInputController : MonoBehaviour
             JumpPressed = jumpPressed,
             IsRunning = (keys & PlayerInputKeys.Shift) != 0
         };
-    }
-
-    private void RestorePendingInput(PlayerInputFrame input)
-    {
-        if (input == null)
-        {
-            return;
-        }
-
-        if ((input.Actions & PlayerInputActions.PrimaryAction) != 0)
-        {
-            pendingMouseLeftDown = true;
-        }
-
-        if (input.JumpPressed)
-        {
-            pendingJumpPressed = true;
-        }
     }
 
     private float ReadCameraYaw() => cameraFollow == null

@@ -326,6 +326,10 @@ public class NetMessageDispatcher
             case "combat_event":
             case "combat_event_batch":
             case "player_authoritative_state":
+            case "movement_control":
+            case "movement_control_result":
+            case "movement_correction":
+            case "player_movement_event":
             case "player_state_broadcast":
             case "player_state_frame":
             case "monster_state":

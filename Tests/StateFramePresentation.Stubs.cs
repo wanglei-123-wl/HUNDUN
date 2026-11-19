@@ -18,16 +18,26 @@ namespace UnityEngine
 
     public class MonoBehaviour
     {
+        public bool enabled;
+        public bool TryGetComponent<T>(out T value) where T : class { value = null; return false; }
+        protected static void Destroy(object value) { }
         public readonly Transform transform = new Transform();
         public readonly GameObject gameObject = new GameObject();
         protected T GetComponentInChildren<T>() where T : class { return null; }
     }
 
-    public sealed class GameObject { public string name; }
+    public sealed class GameObject
+    {
+        public string name;
+        public bool TryGetComponent<T>(out T value) where T : class { value = null; return false; }
+        public T GetComponentInChildren<T>(bool includeInactive) where T : class => null;
+        public T[] GetComponentsInChildren<T>(bool includeInactive) => Array.Empty<T>();
+    }
     public sealed class Transform
     {
         public Vector3 position;
         public Quaternion rotation;
+        public void SetPositionAndRotation(Vector3 p, Quaternion r) { position = p; rotation = r; }
     }
     public struct Vector2
     {
@@ -39,6 +49,8 @@ namespace UnityEngine
     {
         public float x, y, z;
         public Vector3(float x, float y, float z) { this.x = x; this.y = y; this.z = z; }
+        public static Vector3 operator +(Vector3 a, Vector3 b) => new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+        public static Vector3 operator *(Vector3 a, float b) => new Vector3(a.x * b, a.y * b, a.z * b);
         public static float Distance(Vector3 a, Vector3 b)
         {
             float x = a.x - b.x, y = a.y - b.y, z = a.z - b.z;
@@ -63,7 +75,7 @@ namespace UnityEngine
             return Euler(0f, a.Yaw + delta * Math.Clamp(t, 0f, 1f), 0f);
         }
     }
-    public static class Time { public static float deltaTime = 1f / 12f; }
+    public static class Time { public static float deltaTime = 1f / 12f; public static double realtimeSinceStartupAsDouble; }
     public enum AnimatorControllerParameterType { Bool, Trigger }
     public sealed class AnimatorControllerParameter
     {
@@ -87,6 +99,8 @@ namespace UnityEngine
     }
     public static class Mathf
     {
+        public static float Max(float x, float y) => Math.Max(x, y);
+        public static float Clamp(float value, float min, float max) => Math.Clamp(value, min, max);
         public static int Max(int x, int y) => Math.Max(x, y);
         public static int Clamp(int value, int min, int max) => Math.Clamp(value, min, max);
     }
@@ -94,7 +108,8 @@ namespace UnityEngine
 
 public sealed class PlayerNetworkState
 {
-    public long characterDbId, serverTick, sequence;
+    public long characterDbId, serverTick, sequence, visibilityRevision;
+    public RemoteMovementSnapshot movement;
     public string characterId, nickname, animation;
     public float x, y, z, rotY, velocityX, velocityY, velocityZ;
     public int movementState;
@@ -113,4 +128,24 @@ public sealed class CombatStateMessage
     public int hp, maxHp;
     public string lifeState;
     public long combatRevision, spawnGeneration;
+}
+
+public class NetMessageBase { public string msgId, type; }
+public class EnterWorldResult
+{
+    public string sceneSessionId;
+    public int movementProtocolVersion;
+    public MovementEventPolicy movementPolicy;
+    public MovementEventControl movementControl;
+}
+public class PlayerEffectPresenter { public void SetVisual(UnityEngine.GameObject visual) {} }
+public static class PlayerDeathAnimation
+{
+    public static void SetDead(UnityEngine.Animator animator, bool dead, bool alreadyDeadAtSpawn = false) {}
+}
+public class NetworkManager
+{
+    public static NetworkManager Instance;
+    public int MovementHeartbeatIntervalMs;
+    public float MovementGravity;
 }

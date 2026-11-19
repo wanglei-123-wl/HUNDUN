@@ -129,12 +129,15 @@ public sealed class GameSession
     public int Resumed;
     public int Prepared;
     public PlayerAuthoritativeState LastPosition;
-    public event Action<PlayerAuthoritativeState> LocalAuthoritativeStateReceived;
+    public event Action LocalRespawnControlReceived;
+    private PlayerAuthoritativeState pendingControl;
     public event Action<long, long> LocalWorldEntered;
     public void EnterLocalDeadState() {}
     public void PrepareLocalRespawn() { Prepared++; }
-    public bool ApplyLocalRespawnPosition(PlayerAuthoritativeState state)
+    public bool TryApplyLocalRespawnControl()
     {
+        var state = pendingControl;
+        if (state == null || state.serverTick < 7) return false;
         AppliedPositions++;
         LastPosition = state;
         return AcceptPosition;
@@ -142,8 +145,11 @@ public sealed class GameSession
     public void ResumeLocalPlayerControl() { Resumed++; }
     public void RecoverWorldSession(string reason) {}
     public void ReturnToLogin(string reason) {}
-    public void Emit(PlayerAuthoritativeState state) =>
-        LocalAuthoritativeStateReceived?.Invoke(state);
+    public void Emit(PlayerAuthoritativeState state)
+    {
+        pendingControl = state;
+        LocalRespawnControlReceived?.Invoke();
+    }
 }
 public sealed class NetworkManager
 {
@@ -327,12 +333,10 @@ Assert-True ($session.AppliedPositions -eq 2 -and
 
 $gameSource = Get-Content -LiteralPath (
     Join-Path $root 'Assets/Scripts/GameSession.cs') -Raw
-$authority = [regex]::Match($gameSource,
-    '(?s)public bool ApplyLocalRespawnPosition\(PlayerAuthoritativeState state\)(.*?)public void ResumeLocalPlayerControl').Groups[1].Value
-Assert-True ($authority.Contains('state.GetPosition()') -and
-    $authority.Contains('state.GetRotation()') -and
-    $authority.Contains('localPlayerReconciler.ResetAtSpawn(position, rotation)') -and
-    $authority.Contains('localPlayerVisualSmoother?.ResetVisual()')) `
-    'The game session must reset prediction and visuals at the server-selected position.'
+$authority = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Player/AuthorityMovement/LocalPlayerInputController.MovementEvents.cs') -Raw
+Assert-True ($gameSource.Contains('localPlayerInputController?.RestoreRespawnControl()') -and
+    $authority.Contains('movementControl.epoch <= deathMovementEpoch') -and
+    $authority.Contains('reconciler.ApplyControl(movementControl, false)')) `
+    'The game session must apply a newer server respawn control point before resuming.'
 Invoke-Private $life 'OnDisable'
 Write-Output 'PASS: respawn location error, retry throttle, event ordering and authoritative reset.'

@@ -16,6 +16,7 @@ public class EnterWorldRequest : NetMessageBase
     public string token;
     public long time;
     public int sessionLifecycleVersion = 1;
+    public int movementProtocolVersion = MovementEventPolicy.Version;
 
     public EnterWorldRequest()
     {
@@ -27,6 +28,9 @@ public class EnterWorldRequest : NetMessageBase
 [Serializable]
 public class EnterWorldResult : NetMessageBase
 {
+    public int movementProtocolVersion;
+    public MovementEventControl movementControl;
+    public MovementEventPolicy movementPolicy;
     public bool success;
     public string message;
     public string sceneSessionId;
@@ -156,6 +160,7 @@ public sealed class ProgressionSnapshotResult : NetMessageBase
 [Serializable]
 public class PlayerNetworkState
 {
+    public RemoteMovementSnapshot movement;
     public string userId;
     public string username;
     public long characterDbId;
@@ -203,33 +208,10 @@ public class PlayerNetworkState
 }
 
 [Serializable]
-public class PlayerInputRequest : NetMessageBase
-{
-    public string sceneSessionId;
-    public long sequence;
-    public long clientTick;
-    public long clientTimeMs;
-    public int keys;
-    public int actions;
-    public float lookYaw;
-    public float cameraYaw;
-    public bool faceCamera;
-    public bool jumpPressed;
-    public bool isRunning;
-
-    public PlayerInputRequest()
-    {
-        msgId = "player_input";
-        type = "player_input";
-    }
-}
-
-[Serializable]
-public class AttackModeSetRequest : NetMessageBase
+public class AttackModeSetRequest : MovementReferencedRequest
 {
     public const string FreeMode = "free";
 
-    public string sceneSessionId;
     public long requestSequence;
     public string mode;
 
@@ -251,9 +233,8 @@ public class AttackModeResult : NetMessageBase
 }
 
 [Serializable]
-public class CombatActionRequest : NetMessageBase
+public class CombatActionRequest : MovementReferencedRequest
 {
-    public string sceneSessionId;
     public long actionSequence;
     public long clientTick;
     public string actionId;
@@ -269,9 +250,8 @@ public class CombatActionRequest : NetMessageBase
 }
 
 [Serializable]
-public class SkillCastRequest : NetMessageBase
+public class SkillCastRequest : MovementReferencedRequest
 {
-    public string sceneSessionId;
     public long requestSequence;
     public long clientTick;
     public string skillId;
@@ -349,6 +329,8 @@ public class SkillCastResult : NetMessageBase
 [Serializable]
 public class PlayerAuthoritativeState : NetMessageBase
 {
+    public long movementEpoch;
+    public string movementMode;
     public long serverTick;
     public long serverTimeMs;
     public long lastProcessedInputSequence;
@@ -544,9 +526,8 @@ public class RespawnRequest : NetMessageBase
 }
 
 [Serializable]
-public sealed class MapTransferOptionsRequest : NetMessageBase
+public sealed class MapTransferOptionsRequest : MovementReferencedRequest
 {
-    public string sceneSessionId;
 
     public MapTransferOptionsRequest()
     {
@@ -570,11 +551,10 @@ public sealed class MapTransferOptionsResult : NetMessageBase
 }
 
 [Serializable]
-public sealed class MapTransferRequest : NetMessageBase
+public sealed class MapTransferRequest : MovementReferencedRequest
 {
     public string requestId;
     public string routeId;
-    public string sceneSessionId;
 
     public MapTransferRequest()
     {
@@ -619,7 +599,7 @@ public sealed class MapTransferResult : NetMessageBase
     public float y;
     public float z;
     public float rotY;
-    public long nextInputSequence;
+    public MovementEventControl movementControl;
     public long snapshotRevision;
     public PlayerNetworkState self;
     public MapTransferSafeZone safeZone;
@@ -642,4 +622,5 @@ public class ServerErrorMessage : NetMessageBase
     public string errorCode;
     public string message;
     public long expectedRequestSequence;
+    public long requestSequence;
 }

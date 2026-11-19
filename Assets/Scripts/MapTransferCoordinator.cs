@@ -204,7 +204,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         BindPanel();
         if (!network.Send(request))
         {
-            session.ResumeAfterMapTransferFailure(0);
+            session.ResumeAfterMapTransferFailure(null);
             ClearPending();
             BindPanel();
             GameNoticeService.Show("传送请求发送失败");
@@ -326,9 +326,8 @@ public sealed class MapTransferCoordinator : MonoBehaviour
                 return;
             }
 
-            long nextSequence = result.nextInputSequence;
             ClearPending();
-            session?.ResumeAfterMapTransferFailure(nextSequence);
+            session?.ResumeAfterMapTransferFailure(result.movementControl);
             BindPanel();
             GameNoticeService.Show(DescribeFailure(result.errorCode));
             return;
@@ -339,7 +338,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
             || result.mapId != destinationMapId
             || string.IsNullOrWhiteSpace(result.sceneSessionId)
             || result.sceneSessionId == request.sceneSessionId
-            || result.self == null || result.nextInputSequence <= 0
+            || result.self == null || result.movementControl?.IsValidFor(result.sceneSessionId) != true
             || result.snapshotRevision <= 0 || commitHandler == null)
         {
             RecoverUncertain("Map transfer committed with incomplete destination data.");

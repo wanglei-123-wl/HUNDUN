@@ -13,6 +13,8 @@ public class LocalPlayerVisualSmoother
         float correctionDistance) {}
     public void StopJumpPresentation() {}
     public void ResetVisual() {}
+    public void BeginLogicStep() {}
+    public void EndLogicStep() {}
 }
 '@
 $tests = @'
@@ -50,55 +52,18 @@ public static class LocalPlayerMovementAnimationTests
         motor.BindAnimator(animator);
         motor.ResetAtSpawn(Vector3.zero, Quaternion.identity);
         var reconciler = new LocalPlayerReconciler { transform = motor.transform };
-        reconciler.Bind(motor, null, 0.05f);
-
-        var forward = new PlayerInputFrame { Sequence = 1, Keys = PlayerInputKeys.W };
-        motor.Simulate(forward, 0.05f, true);
-        motor.PresentPredictedInput(forward);
-        reconciler.RecordPredictedInput(forward);
-        Check(animator.IsMoving, "Forward prediction must start the walk animation.");
-
-        var released = new PlayerInputFrame { Sequence = 2 };
-        motor.Simulate(released, 0.05f, true);
-        motor.PresentPredictedInput(released);
-        reconciler.RecordPredictedInput(released);
-        Check(motor.Velocity.z == 0f && !animator.IsMoving,
-            "Release must stop walking once the horizontal velocity reaches zero.");
-
-        reconciler.ApplyAuthoritativeState(State(1, 1f));
-        Check(!animator.IsMoving && motor.Velocity.z == 0f,
-            "A late walking reply must replay the pending release before updating animation.");
-        reconciler.ApplyAuthoritativeState(State(2, 0f));
-        Check(!animator.IsMoving, "The acknowledged idle state must remain idle.");
-        var staleMovementFlag = State(2, 0f);
-        staleMovementFlag.movementState = 1;
-        reconciler.ApplyAuthoritativeState(staleMovementFlag);
-        Check(!animator.IsMoving,
-            "A stale movement flag with no horizontal velocity must not restart walking.");
-        reconciler.ApplyAuthoritativeState(State(1, 1f));
-        Check(!animator.IsMoving, "An out-of-order walking reply must not restart walking.");
-
-        var resumed = new PlayerInputFrame { Sequence = 3, Keys = PlayerInputKeys.W };
-        motor.Simulate(resumed, 0.05f, true);
-        motor.PresentPredictedInput(resumed);
-        reconciler.RecordPredictedInput(resumed);
-        Check(animator.IsMoving, "Pressing forward again must resume walking immediately.");
-        reconciler.ApplyAuthoritativeState(State(2, 0f));
-        Check(animator.IsMoving, "An older idle reply must preserve the pending forward input.");
-        reconciler.ApplyAuthoritativeState(State(3, 1f, 1));
-        Check(!animator.IsMoving, "An authoritative attack lock must suppress walking.");
-
-        var duringAttack = new PlayerInputFrame { Sequence = 4, Keys = PlayerInputKeys.W };
-        motor.Simulate(duringAttack, 0.05f, true);
-        motor.PresentPredictedInput(duringAttack);
-        reconciler.RecordPredictedInput(duringAttack);
-        Check(!animator.IsMoving, "Movement input during attack lock must not play walking.");
-        reconciler.ApplyAuthoritativeState(State(4, 0f, 1));
-        Check(!animator.IsMoving, "Attack-locked reconciliation must keep walking off.");
-        reconciler.ApplyAuthoritativeState(State(4, 1f));
-        Check(animator.IsMoving, "Walking may resume after the attack lock ends.");
-
-        var attackInput = new PlayerInputFrame { Sequence = 5, Actions = PlayerInputActions.PrimaryAction };
+        reconciler.Bind(motor, null);
+        motor.SetLocalMotion(new Vector3(0, 0, 1), 0, true);
+        motor.PresentPredictedInput(new PlayerInputFrame { Keys = PlayerInputKeys.W });
+        Check(animator.IsMoving, "Local walk should animate immediately.");
+        motor.SetLocalMotion(Vector3.zero, 0, true);
+        motor.PresentPredictedInput(new PlayerInputFrame());
+        Check(!animator.IsMoving, "Releasing movement must stop the animation.");
+        reconciler.ApplyAuthoritativeState(State(1, 1f, 1));
+        Check(!animator.IsMoving, "A server-owned attack lock suppresses walking.");
+        reconciler.ApplyAuthoritativeState(State(2, 1f));
+        Check(animator.IsMoving, "Server-owned movement can animate after the lock.");
+        var attackInput = new PlayerInputFrame { Actions = PlayerInputActions.PrimaryAction };
         motor.PresentPredictedInput(attackInput);
         Check(animator.AttackTriggered && !animator.IsMoving,
             "Locally predicted attack must trigger attack and suppress walking.");

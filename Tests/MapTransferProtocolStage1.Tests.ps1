@@ -9,17 +9,17 @@ function Extract([string]$text, [string]$pattern) {
     return $match.Value
 }
 
-$inputDtos = Extract $messages '(?s)\[Serializable\]\s*public class PlayerInputRequest.*?(?=\[Serializable\]\s*public class SkillCastStarted)'
+$inputDtos = Extract $messages '(?s)\[Serializable\]\s*public class AttackModeSetRequest.*?(?=\[Serializable\]\s*public class SkillCastStarted)'
 $respawnDto = Extract $messages '(?s)\[Serializable\]\s*public class RespawnRequest.*?(?=\[Serializable\]\s*public sealed class MapTransferOptionsRequest)'
 $transferDtos = Extract $messages '(?s)\[Serializable\]\s*public sealed class MapTransferOptionsRequest.*?(?=\[Serializable\]\s*public class ServerErrorMessage)'
 $send = Extract $network '(?s)    public bool Send<T>\(T message\)\s*\{.*?\r?\n    \}(?=\r?\n\r?\n    public bool SetSceneSessionId)'
 $set = Extract $network '(?s)    public bool SetSceneSessionId\(long epoch, string value\)\s*\{.*?\r?\n    \}(?=\r?\n\r?\n    public bool SetSceneOperationsPaused)'
-$pause = Extract $network '(?s)    public bool SetSceneOperationsPaused\(long epoch, bool paused\)\s*\{.*?\r?\n    \}(?=\r?\n\r?\n    public bool SendPlayerInput)'
+$pause = Extract $network '(?s)    public bool SetSceneOperationsPaused\(long epoch, bool paused\)\s*\{.*?\r?\n    \}(?=\r?\n\r?\n    internal bool TryFlushMovement)'
 $getter = Extract $network '(?s)    public string SceneSessionId => IsConnected.*?sceneSessionId : null;'
 
 if ($messages -notmatch '(?s)class EnterWorldResult : NetMessageBase\s*\{.*?public string sceneSessionId;' -or
     (Get-Content (Join-Path $root 'Assets/Scripts/Loot/Protocol/LootMessageDtos.cs') -Raw) -notmatch
-        '(?s)class LootPickupMessageDto : NetMessageBase\s*\{\s*public string sceneSessionId;' -or
+        'class LootPickupMessageDto : MovementReferencedRequest' -or
     (Get-Content (Join-Path $root 'Assets/Scripts/Inventory/Protocol/V2/InventoryV2Messages.cs') -Raw) -notmatch
         '(?s)class InventoryV2ItemUseRequestDto : NetMessageBase\s*\{\s*public string sceneSessionId;' -or
     (Get-Content (Join-Path $root 'Assets/Scripts/NetWork/BattleSync/Protocol/SnapshotRepairMessages.cs') -Raw) -notmatch
@@ -33,6 +33,11 @@ using System.Text.Json;
 using UnityEngine;
 public class NetMessageBase { public string msgId; public string type; }
 public class PlayerNetworkState { public string characterId; }
+public class MovementEventControl {}
+public class MovementReferencedRequest : NetMessageBase {
+    public string sceneSessionId;
+    public long movementEpoch, movementSequence;
+}
 public sealed class LootPickupMessageDto : NetMessageBase { public string sceneSessionId; public long requestSequence; }
 namespace Game.Inventory.Protocol.V2 {
     public sealed class InventoryV2ItemUseRequestDto : NetMessageBase {
@@ -41,7 +46,7 @@ namespace Game.Inventory.Protocol.V2 {
     public sealed class InventoryV2WorldDropRequestDto : NetMessageBase {
         public string sceneSessionId; public string worldDropOperationSessionId; public long requestSequence;
     }
-    public sealed class InventoryV2StackWorldDropRequestDto : NetMessageBase {
+    public sealed class InventoryV2StackWorldDropRequestDto : MovementReferencedRequest {
         public string worldDropOperationSessionId; public long requestSequence;
     }
 }
@@ -59,6 +64,10 @@ public sealed class NetworkManager {
     private bool sceneOperationsPaused;
     private bool localPlayerActionsBlocked;
     public string LastJson;
+    private long movementEpoch, movementSequence;
+    public bool TryFlushMovement() => movementEpoch > 0 && SceneSessionId != null;
+    private void ResetMovementSession() { movementEpoch = movementSequence = 0; }
+    public void AckMovement(long epoch, long sequence) { movementEpoch = epoch; movementSequence = sequence; }
     public bool SendJson(string json) { LastJson = json; return IsConnected; }
 __GETTER__
 __SEND__
@@ -76,14 +85,16 @@ function Assert-True($condition, [string]$message) {
 }
 
 $manager = [NetworkManager]::new()
-$move = [PlayerInputRequest]::new()
-$move.sequence = 19
+$move = [CombatActionRequest]::new()
+$move.actionSequence = 19
 Assert-True (-not $manager.Send($move)) 'World input must not send without a server scene session.'
 Assert-True (-not $manager.SetSceneSessionId(6, 'old')) 'An older connection cannot set the scene session.'
 Assert-True ($manager.SetSceneSessionId(7, 'server-session-a')) 'The current Gate session must be stored.'
-Assert-True ($manager.Send($move)) 'World input should send after enter_world_result.'
+Assert-True (-not $manager.Send($move)) 'Position operations require movement control confirmation.'
+$manager.AckMovement(4, 12)
+Assert-True ($manager.Send($move)) 'World operation should send after movement control confirmation.'
 $json = $manager.LastJson | ConvertFrom-Json -AsHashtable
-Assert-True ($json.sceneSessionId -eq 'server-session-a' -and $json.sequence -eq 19) `
+Assert-True ($json.sceneSessionId -eq 'server-session-a' -and $json.actionSequence -eq 19 -and $json.movementEpoch -eq 4 -and $json.movementSequence -eq 12) `
     'Input must carry the current scene session without changing its sequence.'
 
 $item = [Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto]::new()
@@ -101,8 +112,8 @@ $stackDrop.requestSequence = 24
 Assert-True ($manager.Send($stackDrop)) 'Stack world drop requires the active scene.'
 $json = $manager.LastJson | ConvertFrom-Json -AsHashtable
 Assert-True ($json.worldDropOperationSessionId -eq 'world-drop-session' -and
-    $json.requestSequence -eq 24 -and -not $json.ContainsKey('sceneSessionId')) `
-    'Stack world drop must match the server payload without adding a sceneSessionId.'
+    $json.requestSequence -eq 24 -and $json.sceneSessionId -eq 'server-session-a' -and $json.movementSequence -eq 12) `
+    'Stack world drop must reference the current movement state.'
 
 Assert-True ($manager.SetSceneOperationsPaused(7, $true) -and
     -not $manager.Send($move) -and -not $manager.Send($item) -and
@@ -122,24 +133,24 @@ Assert-True ($json.msgId -eq 'map_transfer_options' -and
 $request = [MapTransferRequest]::new()
 $request.requestId = [Guid]::NewGuid().ToString('D')
 $request.routeId = 'village_to_demo1'
-Assert-True (-not $manager.Send($request)) 'Transfer requests need their explicit source session.'
-$request.sceneSessionId = 'original-source-session'
-Assert-True ($manager.Send($request)) 'Transfer requests should retain their explicit source session.'
+Assert-True ($manager.Send($request)) 'The first transfer request uses the current movement state.'
+$manager.AckMovement(8, 22)
+Assert-True ($manager.Send($request)) 'An existing transfer retry preserves the original movement reference.'
 $json = $manager.LastJson | ConvertFrom-Json -AsHashtable
-Assert-True ($json.sceneSessionId -eq 'original-source-session' -and
-    $json.routeId -eq 'village_to_demo1' -and
+Assert-True ($json.sceneSessionId -eq 'server-session-a' -and
+    $json.routeId -eq 'village_to_demo1' -and $json.movementEpoch -eq 4 -and $json.movementSequence -eq 12 -and
     -not $json.ContainsKey('sourcePointId')) `
     'A retry must retain its original source session and legacy payload.'
 
 $ready = [MapTransferReadyRequest]::new()
 $ready.transferId = [Guid]::NewGuid().ToString('D')
 Assert-True (-not $manager.Send($ready)) 'Ready requests need their explicit source session.'
-$ready.sceneSessionId = 'original-source-session'
+$ready.sceneSessionId = 'server-session-a'
 $ready.loaded = $true
 Assert-True ($manager.Send($ready)) 'Ready requests should send with the source session.'
 $json = $manager.LastJson | ConvertFrom-Json -AsHashtable
 Assert-True ($json.msgId -eq 'map_transfer_ready' -and
-    $json.sceneSessionId -eq 'original-source-session' -and $json.loaded) `
+    $json.sceneSessionId -eq 'server-session-a' -and $json.loaded) `
     'Ready payload must keep its source generation and load result.'
 
 $manager.ConnectionEpoch = 8

@@ -161,7 +161,7 @@ public partial class GameSession : MonoBehaviour
         ? 1L
         : localPlayerInputController.CurrentClientTick;
 
-    public event System.Action<PlayerAuthoritativeState> LocalAuthoritativeStateReceived;
+    public event System.Action LocalRespawnControlReceived;
     public event System.Action<long, long> LocalWorldEntered;
     public event System.Action<AttributeSnapshotResult> LocalAttributeSnapshotChanged;
     public event System.Action<ProgressionSnapshotResult> LocalProgressionSnapshotChanged;
@@ -325,7 +325,6 @@ public partial class GameSession : MonoBehaviour
         ResetSkillSnapshot();
         ClearLocalPlayerProvider();
         StopLocalPlayerInput();
-        localPlayerReconciler?.ClearPendingInputs();
         StopEnterWorldWhenReady();
         StopMissingServerSpawnTimeout();
         messageDispatcher?.ClearDeferredWorldMessages();
@@ -800,6 +799,9 @@ public partial class GameSession : MonoBehaviour
         legacyWorldSnapshotRegistered = battleSyncRuntime == null || !battleSyncRuntime.OwnsSnapshotRouting;
         if (legacyWorldSnapshotRegistered) messageDispatcher.Register("world_snapshot", HandleWorldSnapshot);
         messageDispatcher.Register("player_authoritative_state", HandlePlayerAuthoritativeState);
+        messageDispatcher.Register("movement_correction", HandleMovementCorrection);
+        messageDispatcher.Register("movement_control_result", HandleMovementControlResult);
+        messageDispatcher.Register("movement_control", HandleMovementControl);
         messageDispatcher.Register("heartbeat_result", HandleHeartbeatReply);
     }
 
@@ -824,6 +826,9 @@ public partial class GameSession : MonoBehaviour
             legacyWorldSnapshotRegistered = false;
         }
         messageDispatcher.Unregister("player_authoritative_state", HandlePlayerAuthoritativeState);
+        messageDispatcher.Unregister("movement_correction", HandleMovementCorrection);
+        messageDispatcher.Unregister("movement_control_result", HandleMovementControlResult);
+        messageDispatcher.Unregister("movement_control", HandleMovementControl);
         messageDispatcher.Unregister("heartbeat_result", HandleHeartbeatReply);
     }
 
@@ -1059,6 +1064,13 @@ public partial class GameSession : MonoBehaviour
             return;
         }
 
+        if (!MovementEventPolicy.Accepts(result))
+        {
+            GateEntryHandoff.SetFailure("游戏服务器未提供移动协议 V2，请更新服务端。");
+            ReturnToLogin("movement_protocol_version_invalid");
+            return;
+        }
+
         if (!auth.AcceptGameEntry(networkManager, epoch, result)
             || !networkManager.SetSceneSessionId(epoch, result.sceneSessionId))
         {
@@ -1084,8 +1096,8 @@ public partial class GameSession : MonoBehaviour
         string characterId = selfState != null && !string.IsNullOrWhiteSpace(selfState.characterId)
             ? selfState.characterId
             : GetEnterWorldCharacterId(result);
-        Vector3 spawnPosition = selfState == null ? result.GetPosition() : selfState.GetPosition();
-        Quaternion spawnRotation = selfState == null ? result.GetRotation() : selfState.GetRotation();
+        Vector3 spawnPosition = result.movementControl.Position;
+        Quaternion spawnRotation = result.movementControl.Rotation;
         long resultCharacterDbId = result.characterDbId > 0
             ? result.characterDbId
             : (selfState == null ? 0 : selfState.characterDbId);
@@ -1181,7 +1193,7 @@ public partial class GameSession : MonoBehaviour
         }
 
         ApplyLocalCharacterVisual(characterId, spawnPosition, spawnRotation);
-        localPlayerReconciler?.ResetAtSpawn(spawnPosition, spawnRotation);
+        localPlayerInputController?.BeginMovement(result.movementControl, result.movementPolicy);
         ResolveReferences();
 
         if (entityManagerObject != null)
@@ -1550,7 +1562,6 @@ public partial class GameSession : MonoBehaviour
                 RecoverWorldSession("map_transfer_input_resume_failed");
                 return;
             }
-            transferInput.SetNextInputSequence(transfer.nextInputSequence);
             if (!localPlayerDead && inputWasEnabledForTransfer)
                 transferInput.SetInputEnabled(true);
             if (mapTransferSourceScene.IsValid() && mapTransferSourceScene.isLoaded
@@ -1625,6 +1636,7 @@ public partial class GameSession : MonoBehaviour
             || battleSyncRuntime == null || !battleSyncRuntime.OwnsSnapshotRouting
             || messageDispatcher == null || networkManager == null
             || !networkManager.IsConnected || localPlayerRootObject == null
+            || result.movementControl?.IsValidFor(result.sceneSessionId) != true
             || result.self == null || result.self.characterDbId != localCharacterDbId
             || result.self.sceneId != result.sceneId || result.serverTime <= 0
             || !WorldMapSceneCatalog.TryGetAddress(result.sceneId, result.mapId,
@@ -1703,12 +1715,11 @@ public partial class GameSession : MonoBehaviour
 
         sceneId = result.sceneId;
         activeMapId = result.mapId;
-        Vector3 position = new Vector3(result.x, result.y, result.z);
-        Quaternion rotation = Quaternion.Euler(0f, result.rotY, 0f);
-        localPlayerReconciler?.ResetAtSpawn(position, rotation);
-        if (localPlayerReconciler == null)
-            localPlayerRootObject.transform.SetPositionAndRotation(position, rotation);
-        localPlayerVisualSmoother?.ResetVisual();
+        if (!TryGetLocalPlayerInputController(out var movementInput) || !movementInput.ApplyMovementControl(result.movementControl))
+        {
+            RecoverWorldSession("map_transfer_movement_control_failed");
+            yield break;
+        }
         LocalEnterWorldHp = result.self.maxHp > 0
             ? Mathf.Clamp(result.self.hp, 0, result.self.maxHp) : -1;
         if (IsLocalPlayerDeadAtSpawn(result.self)) EnterLocalDeadState();
@@ -1755,20 +1766,30 @@ public partial class GameSession : MonoBehaviour
 
     public void HandlePlayerAuthoritativeState(string json)
     {
-        PlayerAuthoritativeState state = JsonUtility.FromJson<PlayerAuthoritativeState>(json);
-        if (state == null)
-        {
-            Debug.LogWarning("Player authoritative state parse failed.");
+        var state = JsonUtility.FromJson<PlayerAuthoritativeState>(json);
+        if (state != null && !localPlayerDead && !mapTransferPaused)
+            localPlayerInputController?.ApplyOwnedMovement(state);
+    }
+
+    private void HandleMovementControl(string json) =>
+        ApplyMovementControl(JsonUtility.FromJson<MovementControlNotification>(json)?.control);
+
+    private void HandleMovementControlResult(string json) =>
+        localPlayerInputController?.ReceiveMovementControlResult(JsonUtility.FromJson<MovementControlReply>(json)?.result);
+
+    private void HandleMovementCorrection(string json)
+    {
+        var result = JsonUtility.FromJson<MovementControlReply>(json)?.result;
+        if (result?.needsControlAck == true)
+            ApplyMovementControl(result.control);
+    }
+
+    private void ApplyMovementControl(MovementEventControl control)
+    {
+        if (control == null || (mapTransferPaused && pendingMapTransfer == null && control.mode == "normal"))
             return;
-        }
-
-        if (TryGetLocalPlayerInputController(out LocalPlayerInputController inputController))
-        {
-            inputController.AdvanceInputSequence(state.lastProcessedInputSequence);
-        }
-
-        if (!localPlayerDead) localPlayerReconciler?.ApplyAuthoritativeState(state);
-        LocalAuthoritativeStateReceived?.Invoke(state);
+        if (localPlayerInputController?.ApplyMovementControl(control) == true && control.reason == "respawn")
+            LocalRespawnControlReceived?.Invoke();
     }
 
     public void HandleHeartbeatReply(string json)
@@ -1825,6 +1846,8 @@ public partial class GameSession : MonoBehaviour
             || battleSyncRuntime == null || !battleSyncRuntime.OwnsSnapshotRouting
             || battleSyncRuntime.SessionState == null
             || !battleSyncRuntime.SessionState.IsReady
+            || !networkManager.MovementReady
+            || localPlayerInputController?.StopMovementForTransfer() != true
             || !networkManager.SetSceneOperationsPaused(networkManager.ConnectionEpoch, true))
             return false;
 
@@ -1835,7 +1858,7 @@ public partial class GameSession : MonoBehaviour
         return true;
     }
 
-    public void ResumeAfterMapTransferFailure(long nextInputSequence)
+    public void ResumeAfterMapTransferFailure(MovementEventControl control)
     {
         if (!mapTransferPaused)
             return;
@@ -1847,7 +1870,7 @@ public partial class GameSession : MonoBehaviour
 
         if (TryGetLocalPlayerInputController(out LocalPlayerInputController input))
         {
-            input.SetNextInputSequence(nextInputSequence);
+            if (control != null) input.ApplyMovementControl(control);
             if (IsWorldReady && !localPlayerDead && inputWasEnabledForTransfer)
                 input.SetInputEnabled(true);
         }
@@ -1862,9 +1885,9 @@ public partial class GameSession : MonoBehaviour
 
     public void EnterLocalDeadState()
     {
+        if (!localPlayerDead) localPlayerInputController?.RecordDeathMovementEpoch();
         SetLocalPlayerDead(true);
         StopLocalPlayerInput();
-        localPlayerReconciler?.ClearPendingInputs();
         predictedCharacterMotor?.StopForDeath();
     }
 
@@ -1873,30 +1896,10 @@ public partial class GameSession : MonoBehaviour
         EnterLocalDeadState();
     }
 
-    public bool ApplyLocalRespawnPosition(PlayerAuthoritativeState state)
+    public bool TryApplyLocalRespawnControl()
     {
-        if (state == null || !IsWorldReady || networkManager == null
-            || !networkManager.IsConnected || localPlayerRootObject == null)
+        if (!IsWorldReady || localPlayerInputController?.RestoreRespawnControl() != true)
             return false;
-
-        Vector3 position = state.GetPosition();
-        Quaternion rotation = state.GetRotation();
-        if (localPlayerReconciler != null)
-        {
-            localPlayerReconciler.ResetAtSpawn(position, rotation);
-            localPlayerReconciler.ApplyAuthoritativeState(state);
-        }
-        else if (predictedCharacterMotor != null)
-        {
-            predictedCharacterMotor.ResetAtSpawn(position, rotation);
-            predictedCharacterMotor.SetAuthoritativeState(state);
-        }
-        else
-        {
-            localPlayerRootObject.transform.SetPositionAndRotation(position, rotation);
-        }
-
-        localPlayerVisualSmoother?.ResetVisual();
         SetLocalPlayerDead(false);
         return true;
     }
@@ -1915,7 +1918,6 @@ public partial class GameSession : MonoBehaviour
             return;
         }
 
-        localPlayerReconciler?.ClearPendingInputs();
         if (networkManager != null) BeginDefaultAttackMode();
         if (TryGetLocalPlayerInputController(out LocalPlayerInputController inputController))
         {
@@ -2147,11 +2149,7 @@ public partial class GameSession : MonoBehaviour
             localPlayerInputController = localPlayerRoot.AddComponent<LocalPlayerInputController>();
         }
 
-        localPlayerReconciler.Bind(
-            predictedCharacterMotor,
-            localPlayerVisualSmoother,
-            localPlayerInputController.FixedInputDeltaTime
-        );
+        localPlayerReconciler.Bind(predictedCharacterMotor, localPlayerVisualSmoother);
         localPlayerInputController.Bind(
             predictedCharacterMotor,
             localPlayerReconciler,

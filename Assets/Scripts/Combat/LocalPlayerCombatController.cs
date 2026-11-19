@@ -216,27 +216,21 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             return false;
         }
 
-        CombatTargetSelection target = default;
-        bool hasTarget = targetingController != null
-            && targetingController.TryResolveCombatTarget(out target)
-            && target.IsValid
-            && string.Equals(target.EntityType, "monster", System.StringComparison.Ordinal);
-
-        if (!hasTarget)
-        {
-            Debug.Log("[SkillCast] " + normalizedSkillId
-                + " pressed but no monster target was selected.");
-            return false;
-        }
-
         NetworkManager networkManager = NetworkManager.Instance;
         GameSession session = FindObjectOfType<GameSession>();
         if (networkManager == null || !networkManager.IsConnected
             || networkManager.ConnectionEpoch <= 0
             || session == null || session.LocalCharacterDbId <= 0)
-        {
             return false;
-        }
+
+        var learned = System.Array.Find(session.LocalSkillSnapshot?.skills ?? System.Array.Empty<SkillSnapshotEntry>(),
+            entry => entry != null && entry.skillId == normalizedSkillId);
+        bool selfTarget = learned?.progress?.attributes?.targetType == "self";
+        CombatTargetSelection target = default;
+        if (!selfTarget && !(targetingController != null
+            && targetingController.TryResolveCombatTarget(out target) && target.IsValid
+            && target.EntityType == "monster"))
+            return false;
 
         long requestSequence = nextSkillRequestSequence + 1L;
         SkillCastRequest request = new SkillCastRequest
@@ -244,8 +238,8 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             requestSequence = requestSequence,
             clientTick = clientTick,
             skillId = normalizedSkillId,
-            targetType = "monster",
-            targetId = target.EntityId
+            targetType = selfTarget ? "player" : "monster",
+            targetId = selfTarget ? session.LocalCharacterDbId.ToString(CultureInfo.InvariantCulture) : target.EntityId
         };
 
         if (!networkManager.SendSkillCast(request))
@@ -255,7 +249,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
         nextSkillRequestSequence = requestSequence;
         TrackAttackForLock(networkManager, request.skillId, requestSequence);
-        FaceAttackTarget(target);
+        if (!selfTarget) FaceAttackTarget(target);
         latestSkillCooldownSequences[normalizedSkillId] = requestSequence;
         skillCooldownDeadlines[normalizedSkillId] =
             Time.unscaledTime + Mathf.Max(0.01f, 技能统一冷却秒数);
@@ -494,6 +488,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             return;
         }
 
+        currentDispatcher.Register("error", HandleMovementReferenceError);
         currentDispatcher.Register("skill_cast_started", HandleSkillCastStarted);
         currentDispatcher.Register("skill_cast_result", HandleSkillCastResult);
         registeredDispatcher = currentDispatcher;
@@ -506,6 +501,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             return;
         }
 
+        registeredDispatcher.Unregister("error", HandleMovementReferenceError);
         registeredDispatcher.Unregister("skill_cast_started", HandleSkillCastStarted);
         registeredDispatcher.Unregister("skill_cast_result", HandleSkillCastResult);
         registeredDispatcher = null;
@@ -570,8 +566,11 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             return;
         }
 
-        pending.EffectInstance = 播放技能特效(
-            pending.SkillId, pending.TargetType, pending.TargetId, targetPosition);
+        if (pending.TargetType == "monster")
+            pending.EffectInstance = 播放技能特效(pending.SkillId, pending.TargetType, pending.TargetId, targetPosition);
+        else if (技能释放节点 != null && 技能配置表 != null
+            && 技能配置表.TryGet(pending.SkillId, out var selfConfig) && selfConfig.特效预制体 != null)
+            pending.EffectInstance = 播放预制体特效(selfConfig.特效预制体, 技能释放节点.position, transform.rotation);
         if (pending.EffectInstance != null)
         {
             activeSkillEffectInstances.Add(pending.EffectInstance);
@@ -579,6 +578,27 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
                 + " requestSequence=" + started.requestSequence
                 + " targetPosition=" + targetPosition);
         }
+    }
+
+    private void HandleMovementReferenceError(string json)
+    {
+        var error = JsonUtility.FromJson<ServerErrorMessage>(json);
+        if (error == null || error.requestSequence <= 0 || !MovementReferenceError.DidNotExecute(error.errorCode))
+            return;
+
+        if (error.requestMsgId == "cast_skill"
+            && pendingSkillRequests.TryGetValue(error.requestSequence, out var pending)
+            && pending.StartedMessage == null && MatchesCurrentSkillSession(pending))
+        {
+            pendingSkillRequests.Remove(error.requestSequence);
+            ReleaseAcceptanceLock(pending.SkillId, error.requestSequence);
+            if (IsLatestSkillCooldownRequest(pending.SkillId, error.requestSequence))
+                skillCooldownDeadlines.Remove(pending.SkillId);
+            nextSkillRequestSequence = System.Math.Min(nextSkillRequestSequence, error.requestSequence - 1);
+            GameNoticeService.Show("移动状态已变化，请重新释放技能");
+        }
+        else if (error.requestMsgId == "combat_action" && combatEnabled)
+            nextActionSequence = System.Math.Min(nextActionSequence, error.requestSequence - 1);
     }
 
     private void HandleSkillCastResult(string json)

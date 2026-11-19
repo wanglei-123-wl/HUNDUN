@@ -20,6 +20,16 @@ $sources = ($usings -join "`n") + "`n" +
 
 $stubs = @'
 public class NetMessageBase { public string msgId; public string type; }
+public class MovementReferencedRequest : NetMessageBase
+{
+    public string sceneSessionId;
+    public long movementEpoch, movementSequence;
+}
+public static class MovementReferenceError
+{
+    public static bool DidNotExecute(string error) => error == "stale_movement_epoch"
+        || error == "movement_reference_mismatch" || error == "movement_control_required" || error == "movement_locked";
+}
 namespace UnityEngine
 {
     public static class Time { public static float realtimeSinceStartup; }
@@ -332,6 +342,19 @@ foreach ($errorCode in @('loot_pickup_sequence_gap', 'loot_pickup_duplicate_or_s
     Assert-True (-not $errorFixture.Service.PickupSuspended -and
         $errorFixture.Service.NextRequestSequence -eq 1) 'New entry clears suspended pickup state.'
 }
+$movingFixture = [PickupFixture]::new()
+$movingFixture.Store.Items.Add($lootId, [LootState]::new())
+$movingFixture.Store.Items[$lootId].SceneId = 'world_001'
+$null = $movingFixture.Service.RequestPickup($lootId)
+$movementError = [NetErrorMessageDto]::new()
+$movementError.requestMsgId = 'loot_pickup'
+$movementError.requestSequence = 1
+$movementError.errorCode = 'movement_reference_mismatch'
+$movingFixture.Service.HandleProtocolError($movementError)
+Assert-True (-not $movingFixture.Service.PickupSuspended -and
+    $movingFixture.Service.PendingCount -eq 0 -and $movingFixture.Service.NextRequestSequence -eq 1) `
+    'A rejected movement reference must leave the pickup sequence available for retry.'
+
 $tcpFixture = [PickupFixture]::new()
 $tcpFixture.Store.Items.Add($lootId, [LootState]::new())
 $tcpFixture.Store.Items[$lootId].SceneId = 'world_001'

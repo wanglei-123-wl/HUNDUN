@@ -7,7 +7,7 @@ $update = [regex]::Match($input, '(?s)    private void Update\(\).*?(?=    publi
 if (-not $sample.Success -or -not $update.Success -or
     $camera.IndexOf('SampleInput();', $sample.Index + $sample.Length) -lt 0 -or
     $update.Value.IndexOf('cameraFollow?.SampleInput();') -lt 0 -or
-    $update.Value.IndexOf('cameraFollow?.SampleInput();') -gt $update.Value.IndexOf('GenerateAndSendInput(fixedDeltaTime);') -or
+    $update.Value.IndexOf('cameraFollow?.SampleInput();') -gt $update.Value.IndexOf('UpdateMovement(CreateInputFrame(), MovementNow)') -or
     $input -notmatch 'CameraYaw = cameraYaw' -or
     $input -notmatch 'cameraFollow\.CameraYaw') {
     throw 'Camera input must be sampled before movement and reused for the render frame.'

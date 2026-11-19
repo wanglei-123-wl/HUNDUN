@@ -63,6 +63,12 @@ public class NetworkManager
     private long receiveSequence;
     private long sceneSessionEpoch;
     private string sceneSessionId;
+    private long movementEpoch, movementSequence;
+    private bool movementReady;
+    internal Func<bool> FlushLocalMovement { get; set; }
+    internal int MovementHeartbeatIntervalMs { get; set; }
+    internal float MovementGravity { get; set; }
+    internal bool MovementReady => movementReady && !string.IsNullOrEmpty(SceneSessionId);
     private bool sceneOperationsPaused;
     private bool localPlayerActionsBlocked;
     private HeartbeatLatencyTracker heartbeatLatency;
@@ -309,6 +315,7 @@ public class NetworkManager
         SuspendAutoReconnect();
         shouldRun = false;
         sceneSessionId = null;
+        ResetMovementSession();
         sceneSessionEpoch = 0;
         sceneOperationsPaused = false;
         localPlayerActionsBlocked = false;
@@ -336,44 +343,36 @@ public class NetworkManager
 
     public bool Send<T>(T message)
     {
-        bool playerOperation = message is PlayerInputRequest
-            || message is CombatActionRequest || message is SkillCastRequest || message is AttackModeSetRequest
-            || message is LootPickupMessageDto
-            || message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto
-            || message is Game.Inventory.Protocol.V2.InventoryV2StackWorldDropRequestDto
-            || message is Game.Inventory.Protocol.V2.InventoryV2WorldDropRequestDto
-            || message is MapTransferOptionsRequest;
-        if (localPlayerActionsBlocked && (playerOperation || message is MapTransferRequest))
+        bool transferRequest = message is MapTransferRequest;
+        bool playerOperation = message is MovementReferencedRequest
+            || message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto;
+        if (localPlayerActionsBlocked && playerOperation)
             return false;
-
-        bool sceneRequest = playerOperation || message is RespawnRequest;
-        if (sceneRequest && sceneOperationsPaused)
+        if (playerOperation && sceneOperationsPaused && !transferRequest)
             return false;
 
         string currentSceneSessionId = SceneSessionId;
-        if (message is PlayerInputRequest playerInput)
-            playerInput.sceneSessionId = currentSceneSessionId;
-        else if (message is CombatActionRequest combatAction)
-            combatAction.sceneSessionId = currentSceneSessionId;
-        else if (message is AttackModeSetRequest attackMode)
-            attackMode.sceneSessionId = currentSceneSessionId;
-        else if (message is SkillCastRequest skillCast)
-            skillCast.sceneSessionId = currentSceneSessionId;
-        else if (message is LootPickupMessageDto lootPickup)
-            lootPickup.sceneSessionId = currentSceneSessionId;
+        if (message is MovementReferencedRequest operation)
+        {
+            // Committed/prepared transfer retries retain the original request and reference.
+            if (transferRequest && operation.movementEpoch > 0)
+            {
+                if (operation.sceneSessionId != currentSceneSessionId) return false;
+            }
+            else
+            {
+                if (!TryFlushMovement()) return false;
+                operation.sceneSessionId = currentSceneSessionId;
+                operation.movementEpoch = movementEpoch;
+                operation.movementSequence = movementSequence;
+            }
+        }
         else if (message is RespawnRequest respawn)
             respawn.sceneSessionId = currentSceneSessionId;
         else if (message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto itemUse)
             itemUse.sceneSessionId = currentSceneSessionId;
-        else if (message is Game.Inventory.Protocol.V2.InventoryV2WorldDropRequestDto worldDrop)
-            worldDrop.sceneSessionId = currentSceneSessionId;
-        else if (message is MapTransferOptionsRequest options)
-            options.sceneSessionId = currentSceneSessionId;
 
-        if (sceneRequest && string.IsNullOrWhiteSpace(currentSceneSessionId))
-            return false;
-        if (message is MapTransferRequest transfer
-            && string.IsNullOrWhiteSpace(transfer.sceneSessionId))
+        if ((playerOperation || message is RespawnRequest) && string.IsNullOrEmpty(currentSceneSessionId))
             return false;
         if (message is MapTransferReadyRequest ready
             && string.IsNullOrWhiteSpace(ready.sceneSessionId))
@@ -389,6 +388,7 @@ public class NetworkManager
             || string.IsNullOrWhiteSpace(value))
             return false;
 
+        if (sceneSessionEpoch != epoch || sceneSessionId != value) ResetMovementSession();
         sceneSessionEpoch = epoch;
         sceneSessionId = value;
         return true;
@@ -408,14 +408,44 @@ public class NetworkManager
         localPlayerActionsBlocked = blocked;
     }
 
-    public bool SendPlayerInput(PlayerInputRequest message)
-    {
-        if (!IsConnected || message == null || message.sequence <= 0)
-        {
-            return false;
-        }
+    internal bool TryFlushMovement() =>
+        MovementReady && (sceneOperationsPaused || FlushLocalMovement?.Invoke() == true);
 
-        return Send(message);
+    internal void ResetMovementSession()
+    {
+        movementEpoch = movementSequence = 0;
+        movementReady = false;
+        MovementHeartbeatIntervalMs = 0;
+        MovementGravity = 0f;
+    }
+
+    internal void BeginMovementControl(MovementEventControl control)
+    {
+        movementEpoch = control.epoch;
+        movementSequence = control.nextSequence - 1;
+        movementReady = false;
+    }
+
+    internal bool AcceptMovementControl(MovementControlEvaluation result)
+    {
+        if (result?.success != true || result.needsControlAck || result.control?.mode != "normal"
+            || result.control.sceneSessionId != SceneSessionId || result.control.epoch != movementEpoch
+            || result.acceptedSequence != movementSequence)
+            return false;
+        movementReady = true;
+        return true;
+    }
+
+    internal bool SendMovementEvent(MovementEventRequest message)
+    {
+        if (!MovementReady || sceneOperationsPaused || localPlayerActionsBlocked)
+            return false;
+        message.sceneSessionId = SceneSessionId;
+        message.movementEpoch = movementEpoch;
+        message.sequence = movementSequence + 1;
+        if (!Send(message)) return false;
+        movementSequence = message.sequence;
+        return true;
     }
 
     public bool SendCombatAction(CombatActionRequest message)
@@ -453,7 +483,7 @@ public class NetworkManager
             || message.requestSequence <= 0
             || message.clientTick <= 0
             || string.IsNullOrWhiteSpace(message.skillId)
-            || !string.Equals(message.targetType, "monster", StringComparison.Ordinal)
+            || (message.targetType != "monster" && message.targetType != "player")
             || string.IsNullOrWhiteSpace(message.targetId))
         {
             return false;
@@ -695,6 +725,7 @@ public class NetworkManager
         disconnectHandled = true;
         shouldRun = false;
         sceneSessionId = null;
+        ResetMovementSession();
         sceneSessionEpoch = 0;
         sceneOperationsPaused = false;
         localPlayerActionsBlocked = false;

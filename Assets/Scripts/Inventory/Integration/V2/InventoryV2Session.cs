@@ -1533,6 +1533,7 @@ namespace Game.Inventory.Integration.V2
                 ++nextWorldDropOperationSequence, equipment.ItemInstanceId);
             if (!network.Send(request))
             {
+                nextWorldDropOperationSequence--;
                 Debug.LogWarning("Equipment world drop request could not be sent.");
                 ShowNotice("装备地面掉落请求发送失败，请稍后重试");
                 return;
@@ -1572,6 +1573,7 @@ namespace Game.Inventory.Integration.V2
                     snapshot.InventoryRevision, stack.StackId, count);
                 if (!network.Send(request))
                 {
+                    nextWorldDropOperationSequence--;
                     discardConfirmation?.ShowFailure();
                     ShowNotice("地面掉落请求发送失败，请稍后重试");
                     return;
@@ -1905,6 +1907,18 @@ namespace Game.Inventory.Integration.V2
             ServerErrorMessage error;
             try { error = JsonUtility.FromJson<ServerErrorMessage>(json); }
             catch (Exception) { return; }
+            if (error != null && MovementReferenceError.DidNotExecute(error.errorCode)
+                && pendingWorldDrop != null && error.requestSequence == pendingWorldDrop.Sequence
+                && error.requestMsgId == (pendingWorldDrop.IsStack
+                    ? InventoryV2Protocol.InventoryWorldDrop : InventoryV2Protocol.EquipmentWorldDrop))
+            {
+                nextWorldDropOperationSequence = pendingWorldDrop.Sequence - 1;
+                pendingWorldDrop = null;
+                discardConfirmation?.ShowFailure();
+                equipmentPanel?.SetPending(false);
+                ShowNotice("移动状态已变化，请重新丢弃物品");
+                return;
+            }
             if (error == null
                 || !string.Equals(error.requestMsgId, InventoryV2Protocol.ItemUse,
                     StringComparison.Ordinal)

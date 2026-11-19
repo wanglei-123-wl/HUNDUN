@@ -159,6 +159,7 @@ public sealed class LocalPlayerLifeController : MonoBehaviour
             {
                 currentState = LocalLifeState.WaitingAuthoritativePosition;
                 StartAuthoritativeStateTimeout();
+                HandleRespawnControl();
             }
             else
             {
@@ -175,6 +176,7 @@ public sealed class LocalPlayerLifeController : MonoBehaviour
             SetDeathDialogVisible(false);
             gameSession?.PrepareLocalRespawn();
             StartAuthoritativeStateTimeout();
+            HandleRespawnControl();
             return;
         }
 
@@ -222,19 +224,16 @@ public sealed class LocalPlayerLifeController : MonoBehaviour
         SetDeathDialogVisible(false);
         gameSession?.PrepareLocalRespawn();
         StartAuthoritativeStateTimeout();
+        HandleRespawnControl();
     }
 
-    private void HandleAuthoritativeState(PlayerAuthoritativeState state)
+    private void HandleRespawnControl()
     {
-        if (currentState != LocalLifeState.WaitingAuthoritativePosition || state == null)
+        if (currentState != LocalLifeState.WaitingAuthoritativePosition)
         {
             return;
         }
-        if (respawnServerTick > 0 && state.serverTick < respawnServerTick)
-        {
-            return;
-        }
-        if (gameSession == null || !gameSession.ApplyLocalRespawnPosition(state))
+        if (gameSession == null || !gameSession.TryApplyLocalRespawnControl())
         {
             return;
         }
@@ -700,7 +699,7 @@ public sealed class LocalPlayerLifeController : MonoBehaviour
         }
         if (stateStore != null) stateStore.StateChanged += HandleCombatStateChanged;
         if (combatReceiver != null) combatReceiver.CombatEventApplied += HandleCombatEventApplied;
-        if (gameSession != null) gameSession.LocalAuthoritativeStateReceived += HandleAuthoritativeState;
+        if (gameSession != null) gameSession.LocalRespawnControlReceived += HandleRespawnControl;
         if (gameSession != null) gameSession.LocalWorldEntered += HandleLocalWorldEntered;
         if (networkManager != null) networkManager.OnDisconnected += HandleNetworkDisconnected;
         if (messageDispatcher != null)
@@ -720,7 +719,7 @@ public sealed class LocalPlayerLifeController : MonoBehaviour
         }
         if (stateStore != null) stateStore.StateChanged -= HandleCombatStateChanged;
         if (combatReceiver != null) combatReceiver.CombatEventApplied -= HandleCombatEventApplied;
-        if (gameSession != null) gameSession.LocalAuthoritativeStateReceived -= HandleAuthoritativeState;
+        if (gameSession != null) gameSession.LocalRespawnControlReceived -= HandleRespawnControl;
         if (gameSession != null) gameSession.LocalWorldEntered -= HandleLocalWorldEntered;
         if (networkManager != null) networkManager.OnDisconnected -= HandleNetworkDisconnected;
         if (messageDispatcher != null)

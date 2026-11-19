@@ -68,14 +68,11 @@ public static class BasicAttackMovementGateTests
         Check(!input.Moving(PlayerInputKeys.Shift, PlayerInputActions.MouseRightHeld),
             "Shift or right mouse button alone must not count as movement.");
 
-        var walk = new PlayerInputFrame { Keys = PlayerInputKeys.W };
-        for (int i = 0; i < 3; i++) motor.Simulate(walk, 0.05f, true);
-        var idle = new PlayerInputFrame();
-        motor.Simulate(idle, 0.05f, true);
+        motor.SetLocalMotion(new Vector3(0, 0, 1), 0, true);
         Check(input.Moving(PlayerInputKeys.None, PlayerInputActions.None),
-            "Releasing the key must not allow attacking while the motor is decelerating.");
+            "A moving motor must still gate attacks when no direction is currently pressed.");
         gate.Observe(true, 20f);
-        motor.Simulate(idle, 0.05f, true);
+        motor.SetLocalMotion(Vector3.zero, 0, true);
         Check(!input.Moving(PlayerInputKeys.None, PlayerInputActions.None),
             "The movement gate should start its timer only after horizontal velocity stops.");
         gate.Observe(false, 20.05f);

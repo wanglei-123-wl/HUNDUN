@@ -195,6 +195,12 @@ public sealed class GateEntryCoordinator : IDisposable
             return;
         }
 
+        if (!MovementEventPolicy.Accepts(result))
+        {
+            Fail("游戏服务器未提供移动协议 V2，请更新服务端。");
+            return;
+        }
+
         long resultDbId = result.characterDbId > 0
             ? result.characterDbId : (result.self == null ? 0 : result.self.characterDbId);
         string userId = auth.UserId;

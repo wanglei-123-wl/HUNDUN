@@ -37,6 +37,10 @@ public class RemotePlayerSync : MonoBehaviour
     private bool hasAttackTriggerParameter;
     private bool attackEventsDriveAnimation;
     private long lastServerTick;
+    private RemoteMovementSnapshot movement;
+    private double movementReceivedAt;
+    private bool movementGroundedParameter, movementJumpParameter;
+    public long VisibilityRevision { get; private set; }
     private long lastAttackActionSequence;
     private long lastAttackEventId;
     private long lifeCombatRevision = -1;
@@ -68,17 +72,32 @@ public class RemotePlayerSync : MonoBehaviour
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, targetPosition);
+        Vector3 destination = targetPosition;
+        if (!IsDead && movement?.mode == "normal")
+        {
+            var network = NetworkManager.Instance;
+            float horizon = (network?.MovementHeartbeatIntervalMs ?? 0) * .001f;
+            float age = Mathf.Clamp((float)(Time.realtimeSinceStartupAsDouble - movementReceivedAt), 0f, horizon);
+            var velocity = movement.info.Velocity;
+            destination += new Vector3(velocity.x, 0f, velocity.z) * age;
+            if ((movement.info.flags & MovementEventFlags.Falling) != 0)
+            {
+                // Predict the ascent between samples. Downward movement follows received positions.
+                float gravity = network?.MovementGravity ?? 0f;
+                destination.y += Mathf.Max(0f, velocity.y * age + .5f * gravity * age * age);
+            }
+        }
+        float distance = Vector3.Distance(transform.position, destination);
 
         if (distance > snapDistance)
         {
-            transform.position = targetPosition;
+            transform.position = destination;
         }
         else
         {
             transform.position = Vector3.Lerp(
                 transform.position,
-                targetPosition,
+                destination,
                 positionLerpSpeed * Time.deltaTime
             );
         }
@@ -115,6 +134,7 @@ public class RemotePlayerSync : MonoBehaviour
         {
             animator = visual.GetComponentInChildren<Animator>(true);
         }
+        CacheAnimatorParameters();
 
         foreach (RemotePlayerSync modelSync in visual.GetComponentsInChildren<RemotePlayerSync>(true))
         {
@@ -174,6 +194,13 @@ public class RemotePlayerSync : MonoBehaviour
         }
 
         lastServerTick = orderingTick > 0 ? orderingTick : lastServerTick;
+        if (!hasReceivedState) VisibilityRevision = state.visibilityRevision;
+        if (state.movement?.IsValid == true)
+        {
+            ApplyMovementEvent(state.movement);
+            return true;
+        }
+        if (movement?.mode == "normal") return true;
         targetPosition = state.GetPosition();
         targetRotation = state.GetRotation();
 
@@ -197,11 +224,37 @@ public class RemotePlayerSync : MonoBehaviour
         return true;
     }
 
+    public bool ApplyMovementEvent(RemoteMovementSnapshot incoming)
+    {
+        if (!initialized || incoming?.IsValid != true
+            || (movement != null && incoming.revision <= movement.revision))
+            return false;
+
+        bool wasAirborne = movement != null && (movement.info.flags & MovementEventFlags.Falling) != 0;
+        movement = incoming;
+        movementReceivedAt = Time.realtimeSinceStartupAsDouble;
+        targetPosition = movement.info.Position;
+        targetRotation = Quaternion.Euler(0f, movement.info.yaw, 0f);
+        if (!hasReceivedState)
+            transform.SetPositionAndRotation(targetPosition, targetRotation);
+        hasReceivedState = true;
+        var v = movement.info.Velocity;
+        var flags = movement.info.flags;
+        bool walking = (flags & MovementEventFlags.Walking) != 0;
+        bool airborne = (flags & MovementEventFlags.Falling) != 0;
+        if (movementGroundedParameter) animator.SetBool("IsGrounded", !airborne);
+        if (movementJumpParameter && airborne && !wasAirborne && movement.info.jumpSpeed > 0f && !IsDead)
+            animator.SetTrigger("Jump");
+        ApplyAnimation(v.x * v.x + v.z * v.z > .0025f ? (walking ? "Moving" : runStateName) : idleStateName);
+        return true;
+    }
+
     public bool ApplyDynamicState(DecodedPlayerState state,long serverTick)
     {
         if(!initialized||serverTick<=lastServerTick)return false;
         lastServerTick=serverTick;
-        if(state.HasPosition)
+        bool serverOwned = movement?.mode != "normal";
+        if(serverOwned && state.HasPosition)
         {
             targetPosition=new Vector3(state.X,state.Y,state.Z);
             targetRotation=Quaternion.Euler(0f,state.YawDegrees,0f);
@@ -209,7 +262,7 @@ public class RemotePlayerSync : MonoBehaviour
         }
         bool moving=state.HasMovementState&&state.MovementState!=0;
         if(state.HasVelocity) moving|=new Vector2(state.VelocityX,state.VelocityZ).sqrMagnitude>0.0025f;
-        if(state.HasMovementState||state.HasVelocity)ApplyAnimation(moving?runStateName:idleStateName);
+        if(serverOwned && (state.HasMovementState||state.HasVelocity))ApplyAnimation(moving?runStateName:idleStateName);
         if(state.HasActionState&&state.ActionState!=0&&!attackEventsDriveAnimation)
             ApplyAnimation(attackStateName);
         return true;
@@ -260,6 +313,8 @@ public class RemotePlayerSync : MonoBehaviour
     public void ClearPendingSnapshots()
     {
         lastServerTick = 0;
+        movement = null;
+        VisibilityRevision = 0;
         currentAnim = "";
 
         if (animator == null)
@@ -358,6 +413,7 @@ public class RemotePlayerSync : MonoBehaviour
         hasMoveBoolParameter = false;
         hasRunningParameter = false;
         hasAttackTriggerParameter = false;
+        movementGroundedParameter = movementJumpParameter = false;
 
         if (animator == null)
         {
@@ -369,6 +425,8 @@ public class RemotePlayerSync : MonoBehaviour
         for (int i = 0; i < parameters.Length; i++)
         {
             AnimatorControllerParameter parameter = parameters[i];
+            movementGroundedParameter |= parameter.type == AnimatorControllerParameterType.Bool && parameter.name == "IsGrounded";
+            movementJumpParameter |= parameter.type == AnimatorControllerParameterType.Trigger && parameter.name == "Jump";
 
             if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == moveBoolName)
             {

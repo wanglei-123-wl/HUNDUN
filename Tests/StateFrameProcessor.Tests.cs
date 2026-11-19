@@ -164,6 +164,7 @@ internal static class StateFrameProcessorTests
         PreserveTickWhenModuleFails();
         RespectSceneEpochAndRevision();
         ApplyArraysToPlayerPresentation();
+        PreserveNewerMovementEventOverPositionFrame();
         KeepNewerMonsterHealthWhenOldArrayArrives();
         Console.WriteLine("State frame processor tests passed.");
     }
@@ -344,6 +345,32 @@ internal static class StateFrameProcessorTests
             .Invoke(view, null);
         Check(Quaternion.LastSlerpDistance < 1f && !float.IsNaN(view.transform.rotation.Yaw),
             "Yaw near 360/0 took the long turn in the presentation harness.");
+    }
+
+    private static void PreserveNewerMovementEventOverPositionFrame()
+    {
+        var harness = new StateFrameHarness();
+        var view = new RemotePlayerSync();
+        view.Init(1001, "player-1001", "Remote");
+        harness.Players.View = view;
+        Check(view.ApplyServerState(new PlayerNetworkState
+        {
+            characterDbId = 1001, visibilityRevision = 8,
+            movement = Movement(1, 10f, 2f)
+        }) && view.VisibilityRevision == 8, "Movement must seed from the visible player snapshot.");
+        Check(view.ApplyMovementEvent(Movement(2, 20f, 0f)), "New stop must apply.");
+        Check(!view.ApplyMovementEvent(Movement(1, 7f, 2f)), "Old movement event changed the pose.");
+        Check(harness.Processor.Process(1, Frame(101, 1, Player, "")) == BattleSyncApplyResult.Applied,
+            "Generic state frame should still be processed for battle data.");
+        typeof(RemotePlayerSync).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic)
+            .Invoke(view, null);
+        Check(view.transform.position.x == 20f, "Older position frame overrode an accepted stop.");
+
+        static RemoteMovementSnapshot Movement(long revision, float x, float speed) => new RemoteMovementSnapshot
+        {
+            epoch = 1, revision = revision, mode = "normal",
+            info = new MovementEventInfo { x = x, velocityX = speed, flags = MovementEventFlags.Walking }
+        };
     }
 
     private static void KeepNewerMonsterHealthWhenOldArrayArrives()

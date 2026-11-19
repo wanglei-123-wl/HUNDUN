@@ -315,7 +315,7 @@ namespace Game.Inventory.Protocol.V2
     }
 
     [Serializable]
-    public sealed class InventoryV2StackWorldDropRequestDto : NetMessageBase
+    public sealed class InventoryV2StackWorldDropRequestDto : MovementReferencedRequest
     {
         public string worldDropOperationSessionId;
         public long requestSequence;
@@ -338,9 +338,8 @@ namespace Game.Inventory.Protocol.V2
     }
 
     [Serializable]
-    public sealed class InventoryV2WorldDropRequestDto : NetMessageBase
+    public sealed class InventoryV2WorldDropRequestDto : MovementReferencedRequest
     {
-        public string sceneSessionId;
         public string worldDropOperationSessionId;
         public long requestSequence;
         public string itemInstanceId;

@@ -21,6 +21,12 @@ using Game.UI.Notice;
 
 public class NetMessageBase { public string msgId; public string type; }
 public class PlayerNetworkState { public string characterId; }
+public class MovementReferencedRequest : NetMessageBase { public string sceneSessionId; }
+public class MovementEventControl {
+    public long epoch;
+    public string sceneSessionId;
+    public bool IsValidFor(string scene) => epoch > 0 && sceneSessionId == scene;
+}
 public class ServerErrorMessage { public string requestMsgId; public string errorCode; }
 public sealed class GameSession {
     public bool IsWorldReady = true;
@@ -38,8 +44,8 @@ public sealed class GameSession {
         PauseCount++;
         return true;
     }
-    public void ResumeAfterMapTransferFailure(long next) {
-        ResumedAt = next;
+    public void ResumeAfterMapTransferFailure(MovementEventControl movement) {
+        ResumedAt = movement?.epoch ?? 0;
         NetworkManager.Instance.SceneOperationsPaused = false;
         PauseCount--;
     }
@@ -157,7 +163,7 @@ function Emit-Result($dispatcher, $request, [bool]$success, [string]$transferId,
         sceneId = $(if ($success) { $scene } else { '' })
         mapId = $(if ($success) { $map } else { '' })
         self = $(if ($success) { @{ characterId = 'player' } } else { $null })
-        nextInputSequence = $nextSequence
+        movementControl = @{ epoch = $nextSequence; sceneSessionId = $(if ($success) { $destinationSession } else { $request.sceneSessionId }) }
         snapshotRevision = $(if ($success) { 2 } else { 0 })
         errorCode = $(if ($success) { '' } else { 'too_far' })
     } | ConvertTo-Json -Compress -Depth 5
