@@ -60,14 +60,14 @@
       "formatVersion": 1,
       "address": "game/map-traversal/map_001",
       "asset": "Assets/MapTraversalData/map_001.bytes",
-      "packageFingerprint": "827382692d9cbde3775d036722dff07163b195c0d76faac86c1a5f8d6643c89d",
-      "archiveSha256": "8442de108e4d9f3cddaf8d761227529b4d90ee08b20e848e8641339570099425",
-      "archiveBytes": 6299825,
+      "packageFingerprint": "624c917fddf91dece6c4ba06181f0193447f22a2887963c6f04e37e7abd03e59",
+      "archiveSha256": "b9afa59715d9b87b662e702d07b1c5e2b99ab91d463ca020c6bf172efb06086f",
+      "archiveBytes": 6547427,
       "files": [
         {
           "name": "colliders.bin",
-          "bytes": 1809284,
-          "sha256": "017c36afc34210b730d20b829765bfa9dd4352995fd923f01d96fc838129bcf3"
+          "bytes": 4264628,
+          "sha256": "800fcec82f64695e4f8ce7ed618ab51ba443ef768d3192203270bd800b102261"
         },
         {
           "name": "heightfield.bin",
@@ -81,13 +81,13 @@
         },
         {
           "name": "navmesh.bin",
-          "bytes": 380428,
-          "sha256": "08b98618b35ee6fc72bbc5a2d03cefe6db379bc409326b4b165196fd5d0efce0"
+          "bytes": 398060,
+          "sha256": "2f12d0c350cbc006157a0fc16912bbc80242f5c9d48ac62c94fbc5e4557b9284"
         },
         {
           "name": "walkable.bin",
           "bytes": 1965056,
-          "sha256": "d2a0b3a9b9b1330f67fe19862082987942bfe4a1543f2e14dfbb16289bda97a7"
+          "sha256": "967a6cf4673f5e22cfc919df5ae88bcefc4a42cee93289aa9502851fa8885beb"
         }
       ]
     },

@@ -112,6 +112,7 @@ public partial class GameSession : MonoBehaviour
     private GateEntryCoordinator recoveryGate;
     private long lastWorldEnteredEpoch;
     private bool gameSessionAccepted;
+    private int monsterSyncVersion;
     private bool returningToLogin;
     private string activeMapId;
     private long nextAttributeSnapshotSequence;
@@ -1137,6 +1138,7 @@ public partial class GameSession : MonoBehaviour
         }
 
         gameSessionAccepted = true;
+        monsterSyncVersion = result.monsterSyncVersion;
         PlayerNetworkState selfState = result.self;
         if (selfState == null && !HasServerSpawnTransform(json))
         {
@@ -1242,7 +1244,7 @@ public partial class GameSession : MonoBehaviour
                         resultCharacterDbId,
                         result.snapshotRevision,
                         result.serverTime,
-                        result.reason);
+                        result.reason, result.sceneSessionId, monsterSyncVersion);
 
                 battleSyncRuntime.NotifyEnterWorldAccepted(
                     context, WorldEntryLoadingView.ActiveWorldEntry != null);
@@ -1774,7 +1776,7 @@ public partial class GameSession : MonoBehaviour
             || !networkManager.SetSceneSessionId(epoch, result.sceneSessionId)
             || !battleSyncRuntime.BeginMapTransfer(new BattleSyncEnterWorldContext(
                 epoch, result.sceneId, localCharacterDbId, result.snapshotRevision,
-                result.serverTime, "map_transfer")))
+                result.serverTime, "map_transfer", result.sceneSessionId, monsterSyncVersion)))
         {
             RecoverWorldSession("map_transfer_destination_initialization_failed");
             yield break;

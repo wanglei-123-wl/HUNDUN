@@ -177,10 +177,12 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         for (int i = 0; i < items.Length; i++)
         {
             MonsterSnapshotItem item = ConvertMonster(items[i]); snapshotMonsterIds.Add(item.monsterInstanceId);
-            if (ApplyMonsterState(item, items[i].spawnGeneration) == null) return BattleSyncApplyResult.RetryableFailure;
+            MonsterClientEntry entry = ApplyMonsterState(item, items[i].spawnGeneration);
+            if (entry == null) return BattleSyncApplyResult.RetryableFailure;
             CacheMonsterDefinition(item); monsterVersions[item.monsterInstanceId] = new MonsterVersion(item.aoiRevision, message.serverTime);
             monsterSpawnGenerations[item.monsterInstanceId] = items[i].spawnGeneration;
             MergeMonsterSpawnCombatState(items[i], message.serverTick);
+            entry.networkView.SetMovementPath(CanPlayPath(entry, item.state) ? items[i].path : null, message.serverTime);
         }
         RemoveMissingMonsters();
         return BattleSyncApplyResult.Applied;
@@ -196,9 +198,11 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         if(monsterSpawnGenerations.TryGetValue(id,out long currentGeneration)&&generation<currentGeneration)
             return BattleSyncApplyResult.IgnoredStale;
         MonsterSnapshotItem item=ConvertMonster(message.monster);item.aoiRevision=message.aoiRevision;
-        if(ApplyMonsterState(item,generation)==null)return BattleSyncApplyResult.RetryableFailure;
+        MonsterClientEntry entry=ApplyMonsterState(item,generation);
+        if(entry==null)return BattleSyncApplyResult.RetryableFailure;
         CacheMonsterDefinition(item);monsterSpawnGenerations[id]=generation;
         MergeMonsterSpawnCombatState(message.monster, message.serverTick);
+        entry.networkView.SetMovementPath(CanPlayPath(entry,item.state) ? message.monster.path : null,message.serverTime);
         monsterVersions[id]=new MonsterVersion(message.aoiRevision,message.serverTime);
         return BattleSyncApplyResult.Applied;
     }
@@ -312,7 +316,8 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         Vector3 position=state.HasPosition?new Vector3(state.X,state.Y,state.Z):entry.gameObject.transform.position;
         Quaternion rotation=state.HasPosition?Quaternion.Euler(0f,state.YawDegrees,0f):entry.gameObject.transform.rotation;
         bool unknownAi = state.HasAiState && state.AiState == 0;
-        string aiState=state.HasAiState && !unknownAi ? ResolveAiState(state.AiState) : entry.lastAiState;
+        string aiState=entry.networkView.CurrentHp <= 0 ? "Dead"
+            : state.HasAiState && !unknownAi ? ResolveAiState(state.AiState) : entry.lastAiState;
         if (unknownAi)
         {
             if (entry.unknownAiFrames < 3) entry.unknownAiFrames++;
@@ -330,6 +335,7 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         localStateSequence++;
         MonsterViewState viewState=new MonsterViewState{entityId=state.EntityId,stateSequence=localStateSequence,
             position=position,rotation=rotation,velocity=Vector3.zero,
+            preserveTransform=!state.HasPosition,
             locomotionMode=ResolveLocomotionMode(aiState),
             hp=entry.networkView.CurrentHp,maxHp=entry.networkView.MaxHp};
         if(!entry.networkView.ApplyState(viewState))return BattleSyncApplyResult.IgnoredStale;
@@ -347,8 +353,16 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
                 && revisionGap)
                 CombatRevisionGapDetected?.Invoke(state.EntityId);
         }
+        if (state.HasPathUpdate || !CanPlayPath(entry,aiState))
+            entry.networkView.SetMovementPath(CanPlayPath(entry,aiState) ? state.Path : null,serverTime);
+        else if (state.HasPosition)
+            entry.networkView.CorrectMovementPath(position,serverTime);
         return BattleSyncApplyResult.Applied;
     }
+
+    private static bool CanPlayPath(MonsterClientEntry entry,string state) =>
+        entry.networkView.CurrentHp > 0 && (string.Equals(state,"Chase",StringComparison.OrdinalIgnoreCase)
+            || string.Equals(state,"Return",StringComparison.OrdinalIgnoreCase));
 
     private static string ResolveAiState(byte value)
     {

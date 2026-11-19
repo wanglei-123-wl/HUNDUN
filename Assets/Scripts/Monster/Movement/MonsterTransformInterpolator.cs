@@ -1,3 +1,5 @@
+using System;
+using Game.Client.BattleSync.Protocol;
 using UnityEngine;
 
 public class MonsterTransformInterpolator : MonoBehaviour
@@ -11,6 +13,9 @@ public class MonsterTransformInterpolator : MonoBehaviour
     private Quaternion targetRotation;
     private Vector3 previousPosition;
     private bool hasTarget;
+    private MonsterPathDto movementPath;
+    private double pathReceivedAt;
+    private double pathAgeAtReceipt;
 
     public Vector3 CurrentVelocity { get; private set; }
     public bool HasTarget => hasTarget;
@@ -30,18 +35,20 @@ public class MonsterTransformInterpolator : MonoBehaviour
         }
 
         previousPosition = targetTransform.position;
-        float distance = Vector3.Distance(previousPosition, targetPosition);
+        Vector3 desiredPosition = movementPath == null ? targetPosition
+            : SamplePath(movementPath, pathAgeAtReceipt + Time.realtimeSinceStartupAsDouble - pathReceivedAt);
+        float distance = Vector3.Distance(previousPosition, desiredPosition);
 
         if (distance >= snapDistance)
         {
-            targetTransform.SetPositionAndRotation(targetPosition, targetRotation);
+            targetTransform.SetPositionAndRotation(desiredPosition, targetRotation);
         }
         else
         {
             float positionWeight = 1f - Mathf.Exp(-positionLerpSpeed * Time.deltaTime);
             float rotationWeight = 1f - Mathf.Exp(-rotationLerpSpeed * Time.deltaTime);
 
-            targetTransform.position = Vector3.Lerp(previousPosition, targetPosition, positionWeight);
+            targetTransform.position = Vector3.Lerp(previousPosition, desiredPosition, positionWeight);
             targetTransform.rotation = Quaternion.Slerp(targetTransform.rotation, targetRotation, rotationWeight);
         }
 
@@ -61,8 +68,35 @@ public class MonsterTransformInterpolator : MonoBehaviour
         SetTarget(state.position, state.rotation);
     }
 
+    public void SetMovementPath(MonsterPathDto path, long serverTime)
+    {
+        movementPath = path != null && path.IsValid && serverTime > 0 ? path : null;
+        if (movementPath == null) return;
+        pathReceivedAt = Time.realtimeSinceStartupAsDouble;
+        pathAgeAtReceipt = AgeAt(path, serverTime);
+        targetRotation = Quaternion.LookRotation(new Vector3(path.endX - path.x, 0f, path.endZ - path.z));
+    }
+
+    public void CorrectMovementPath(Vector3 position, long serverTime)
+    {
+        if (movementPath != null &&
+            Vector3.Distance(position, SamplePath(movementPath, AgeAt(movementPath, serverTime))) > .25f)
+            movementPath = null;
+    }
+
+    private static double AgeAt(MonsterPathDto path, long serverTime) =>
+        Math.Max(0d, ((double)serverTime - path.startTime) / 1000d);
+
+    private static Vector3 SamplePath(MonsterPathDto path, double age)
+    {
+        Vector3 origin = new Vector3(path.x,path.y,path.z);
+        Vector3 end = new Vector3(path.endX,path.y,path.endZ);
+        return Vector3.MoveTowards(origin,end,(float)(path.speed * Math.Max(0d,age)));
+    }
+
     public void Snap(Vector3 position, Quaternion rotation)
     {
+        movementPath = null;
         ResolveTargetTransform();
 
         if (targetTransform == null)
@@ -80,6 +114,7 @@ public class MonsterTransformInterpolator : MonoBehaviour
 
     public void ResetView()
     {
+        movementPath = null;
         ResolveTargetTransform();
 
         if (targetTransform == null)

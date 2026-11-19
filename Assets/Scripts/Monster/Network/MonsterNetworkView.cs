@@ -1,4 +1,5 @@
 using System;
+using Game.Client.BattleSync.Protocol;
 using UnityEngine;
 
 public class MonsterNetworkView : MonoBehaviour
@@ -56,11 +57,20 @@ public class MonsterNetworkView : MonoBehaviour
     public void BootstrapState(string state)
     {
         if (string.Equals(state, "Dead", StringComparison.OrdinalIgnoreCase))
+        {
             receivedDeathState = true;
+            SetMovementPath(null, 0);
+        }
 
         ResolveViewRoot();
         viewRoot?.BootstrapState(state);
     }
+
+    internal void SetMovementPath(MonsterPathDto path,long serverTime) =>
+        viewRoot?.TransformInterpolator?.SetMovementPath(receivedDeathState ? null : path,serverTime);
+
+    internal void CorrectMovementPath(Vector3 position,long serverTime) =>
+        viewRoot?.TransformInterpolator?.CorrectMovementPath(position,serverTime);
 
     public bool ApplyState(MonsterViewState state)
     {

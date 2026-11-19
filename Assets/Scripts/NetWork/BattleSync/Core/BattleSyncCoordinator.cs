@@ -280,7 +280,8 @@ namespace Game.Client.BattleSync
                     context.ConnectionEpoch,
                     context.SceneId);
                 snapshotRepairService.BeginSession(context.ConnectionEpoch,context.SceneId,context.SnapshotRevision);
-                stateFrameProcessor.BeginSession(context.ConnectionEpoch,context.SceneId);
+                stateFrameProcessor.BeginSession(context.ConnectionEpoch,context.SceneId,
+                    context.SceneSessionId,context.MonsterSyncVersion);
             }
             catch (Exception exception)
             {
@@ -574,7 +575,7 @@ namespace Game.Client.BattleSync
                 reliableMessageProcessor.BeginSession(epoch, context.SceneId);
                 snapshotRepairService.BeginSession(epoch, context.SceneId,
                     context.SnapshotRevision);
-                stateFrameProcessor.BeginSession(epoch, context.SceneId);
+                stateFrameProcessor.BeginSession(epoch, context.SceneId, context.SceneSessionId, context.MonsterSyncVersion);
                 BattleSyncModuleSessionContext moduleContext =
                     new BattleSyncModuleSessionContext(epoch, context.SceneId,
                         context.CharacterDbId, context.SnapshotRevision,
@@ -742,8 +743,12 @@ namespace Game.Client.BattleSync
                 BattleEntityRegistryResult registered=entityRegistry.RegisterOrUpdate(new BattleEntityRegistration(
                     sessionState.ConnectionEpoch,message.sceneId,BattleEntityKind.Monster,id,message.netId,
                     message.visibilityRevision,message.serverTick,message.monster.spawnGeneration),clock.NowMilliseconds);
+                if (registered.Status == BattleEntityRegistryStatus.AlreadyRegistered && stateFrameProcessor.HasMonsterBaseline(id))
+                    return BattleSyncApplyResult.AlreadyApplied;
                 BattleSyncApplyResult applied=ApplyRegistryResult(registered,BattleEntityKind.Monster,id,
                     ()=>moduleBindings.Monster.ApplyMonsterEnter(message));
+                if (registered.IsSuccess && registered.Status != BattleEntityRegistryStatus.AlreadyRegistered)
+                    stateFrameProcessor.ForgetMonster(id);
                 if(registered!=null && registered.IsSuccess && applied==BattleSyncApplyResult.RetryableFailure)
                     snapshotRepairService.RequestRepair(SnapshotRepairReason.MissingEntity,BattleEntityKind.Monster,
                         "monsterInstanceId:"+id,CurrentSnapshotRevision());
@@ -801,6 +806,7 @@ namespace Game.Client.BattleSync
                 BattleEntityRegistryResult removed=entityRegistry.Remove(new BattleEntityRemoval(sessionState.ConnectionEpoch,
                     message.sceneId,BattleEntityKind.Monster,id,message.netId,message.visibilityRevision,message.serverTick,
                     message.spawnGeneration,message.reason),clock.NowMilliseconds);
+                if (removed.IsSuccess) stateFrameProcessor.ForgetMonster(id);
                 return ApplyRegistryResult(removed,BattleEntityKind.Monster,id,
                     ()=>moduleBindings.Monster.ApplyMonsterRemove(message));
             });
@@ -1234,6 +1240,7 @@ namespace Game.Client.BattleSync
                         "Registry status=" + committed.Status);
                     return;
                 }
+                if (kind == InitialSnapshotKind.Monster) stateFrameProcessor.ClearMonsterBaselines();
             }
 
             if (!isRequiredSnapshot)

@@ -52,7 +52,7 @@ public class MonsterViewRoot : MonoBehaviour
             EntityId = state.entityId;
         }
 
-        if (transformInterpolator != null)
+        if (transformInterpolator != null && !state.preserveTransform)
         {
             transformInterpolator.SetTarget(state);
         }

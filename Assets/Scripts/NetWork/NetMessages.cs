@@ -18,6 +18,7 @@ public class EnterWorldRequest : NetMessageBase
     public int sessionLifecycleVersion = 1;
     public int movementProtocolVersion = MovementEventPolicy.Version;
     public int movementBroadcastVersion = MovementEventPolicy.BroadcastVersion;
+    public int monsterSyncVersion = MovementEventPolicy.MonsterSyncVersion;
 
     public EnterWorldRequest()
     {
@@ -31,6 +32,7 @@ public class EnterWorldResult : NetMessageBase
 {
     public int movementProtocolVersion;
     public int movementBroadcastVersion;
+    public int monsterSyncVersion;
     public MovementEventControl movementControl;
     public MovementEventPolicy movementPolicy;
     public bool success;

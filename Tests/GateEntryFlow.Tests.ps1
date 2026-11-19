@@ -214,7 +214,8 @@ public static class MovementEventPolicy
     public const string IncompatibleServerMessage = "Movement version mismatch.";
     public static bool Accepts(EnterWorldResult result) => result.movementProtocolVersion == 2;
     public static bool IsAdmissionError(ServerErrorMessage error) =>
-        error?.requestMsgId == "enter_world" && error.errorCode == "movement_client_update_required";
+        error?.requestMsgId == "enter_world" && (error.errorCode == "movement_client_update_required"
+            || error.errorCode == "monster_sync_client_update_required");
 }
 public sealed class EnterWorldResult
 {
