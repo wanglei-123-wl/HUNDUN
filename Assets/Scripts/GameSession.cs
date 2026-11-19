@@ -113,6 +113,7 @@ public partial class GameSession : MonoBehaviour
     private GateEntryCoordinator recoveryGate;
     private long lastWorldEnteredEpoch;
     private bool gameSessionAccepted;
+    private int monsterSyncVersion;
     private bool returningToLogin;
     private string activeMapId;
     private long nextAttributeSnapshotSequence;
@@ -827,6 +828,7 @@ public partial class GameSession : MonoBehaviour
         }
 
         messageDispatcher.Register("enter_world_result", HandleEnterWorldResult);
+        messageDispatcher.Register("error", HandleEnterWorldProtocolError);
         messageDispatcher.Register("attribute_snapshot_result", HandleAttributeSnapshotResult);
         messageDispatcher.Register("progression_snapshot_result", HandleProgressionSnapshotResult);
         messageDispatcher.Register("skill_snapshot_result", HandleSkillSnapshotResult);
@@ -851,6 +853,7 @@ public partial class GameSession : MonoBehaviour
         }
 
         messageDispatcher.Unregister("enter_world_result", HandleEnterWorldResult);
+        messageDispatcher.Unregister("error", HandleEnterWorldProtocolError);
         messageDispatcher.Unregister("attribute_snapshot_result", HandleAttributeSnapshotResult);
         messageDispatcher.Unregister("progression_snapshot_result", HandleProgressionSnapshotResult);
         messageDispatcher.Unregister("skill_snapshot_result", HandleSkillSnapshotResult);
@@ -1050,6 +1053,24 @@ public partial class GameSession : MonoBehaviour
         }
     }
 
+    private void HandleEnterWorldProtocolError(string json)
+    {
+        if (returningToLogin || worldRecoveryPending || enterWorldConfirmed || gameSessionAccepted)
+            return;
+
+        AuthSession auth = AuthSession.Instance;
+        if (networkManager == null || auth == null
+            || !auth.IsCurrentGameEntry(networkManager, networkManager.ConnectionEpoch))
+            return;
+
+        var error = JsonUtility.FromJson<ServerErrorMessage>(json);
+        if (!MovementEventPolicy.IsAdmissionError(error)) return;
+
+        GateEntryHandoff.SetFailure(
+            string.IsNullOrWhiteSpace(error.message) ? MovementEventPolicy.IncompatibleServerMessage : error.message);
+        ReturnToLogin("movement_protocol_version_invalid");
+    }
+
     public void HandleEnterWorldResult(string json)
     {
         if (returningToLogin || worldRecoveryPending) return;
@@ -1104,7 +1125,7 @@ public partial class GameSession : MonoBehaviour
 
         if (!MovementEventPolicy.Accepts(result))
         {
-            GateEntryHandoff.SetFailure("游戏服务器未提供移动协议 V2，请更新服务端。");
+            GateEntryHandoff.SetFailure(MovementEventPolicy.IncompatibleServerMessage);
             ReturnToLogin("movement_protocol_version_invalid");
             return;
         }
@@ -1118,6 +1139,7 @@ public partial class GameSession : MonoBehaviour
         }
 
         gameSessionAccepted = true;
+        monsterSyncVersion = result.monsterSyncVersion;
         PlayerNetworkState selfState = result.self;
         if (selfState == null && !HasServerSpawnTransform(json))
         {
@@ -1223,7 +1245,7 @@ public partial class GameSession : MonoBehaviour
                         resultCharacterDbId,
                         result.snapshotRevision,
                         result.serverTime,
-                        result.reason);
+                        result.reason, result.sceneSessionId, monsterSyncVersion);
 
                 battleSyncRuntime.NotifyEnterWorldAccepted(
                     context, WorldEntryLoadingView.ActiveWorldEntry != null);
@@ -1755,7 +1777,7 @@ public partial class GameSession : MonoBehaviour
             || !networkManager.SetSceneSessionId(epoch, result.sceneSessionId)
             || !battleSyncRuntime.BeginMapTransfer(new BattleSyncEnterWorldContext(
                 epoch, result.sceneId, localCharacterDbId, result.snapshotRevision,
-                result.serverTime, "map_transfer")))
+                result.serverTime, "map_transfer", result.sceneSessionId, monsterSyncVersion)))
         {
             RecoverWorldSession("map_transfer_destination_initialization_failed");
             yield break;

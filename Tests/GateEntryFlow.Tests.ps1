@@ -211,7 +211,11 @@ public sealed class PlayerNetworkState
 }
 public static class MovementEventPolicy
 {
+    public const string IncompatibleServerMessage = "Movement version mismatch.";
     public static bool Accepts(EnterWorldResult result) => result.movementProtocolVersion == 2;
+    public static bool IsAdmissionError(ServerErrorMessage error) =>
+        error?.requestMsgId == "enter_world" && (error.errorCode == "movement_client_update_required"
+            || error.errorCode == "monster_sync_client_update_required");
 }
 public sealed class EnterWorldResult
 {
@@ -855,6 +859,21 @@ $coordinator.CheckTimeout()
 Assert-True ($network.IsConnected -and $network.ConnectionEpoch -gt $epoch -and $network.SendCount -eq 2) 'A hung response must be retried on a fresh TCP connection.'
 $coordinator.Dispose()
 Write-Output 'PASS: busy/service-unavailable backoff, terminal invalidation, and a hung attempt on a new connection.'
+
+$dispatcher = New-Context
+$network = [NetworkManager]::Instance
+$script:accepted = 0
+$script:failed = ''
+$coordinator = [GateEntryCoordinator]::new($network, $dispatcher, 1, 'character_001', 10,
+    [Action]{ $script:accepted++ }, [Action[string]]{ param($message) $script:failed = $message })
+$coordinator.Begin()
+$network.Receive('{"msgId":"error","requestMsgId":"cast_skill","errorCode":"movement_client_update_required","message":"Unrelated error"}')
+Assert-True (-not $coordinator.IsCompleted) 'An unrelated error must not fail world entry.'
+$network.Receive('{"msgId":"error","requestMsgId":"enter_world","errorCode":"movement_client_update_required","message":"Upgrade client"}')
+Assert-True ($coordinator.IsCompleted -and $script:accepted -eq 0 -and
+    $script:failed -eq 'Upgrade client' -and -not $network.IsConnected) `
+    'The Gate version rejection must bypass deferred world messages and fail entry immediately.'
+Write-Output 'PASS: the movement broadcast version error fails entry immediately.'
 
 $dispatcher = New-Context
 $network = [NetworkManager]::Instance

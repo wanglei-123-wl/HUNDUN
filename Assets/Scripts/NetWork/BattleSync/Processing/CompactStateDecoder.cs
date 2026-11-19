@@ -57,18 +57,30 @@ namespace Game.Client.BattleSync
         public int Hp { get; }
         public bool HasCombatRevision { get; }
         public long CombatRevision { get; }
+        public bool HasPathUpdate { get; }
+        public MonsterPathDto Path { get; }
 
         public DecodedMonsterState(int netId,long visibilityRevision,ushort flags,bool hasPosition,
             float x,float y,float z,float yawDegrees,bool hasAiState,byte aiState,bool hasHp,int hp,
-            bool hasCombatRevision,long combatRevision,string entityId="")
+            bool hasCombatRevision,long combatRevision,string entityId="",bool hasPathUpdate=false,MonsterPathDto path=null)
         {
             NetId=netId;EntityId=entityId??string.Empty;VisibilityRevision=visibilityRevision;Flags=flags;HasPosition=hasPosition;
             X=x;Y=y;Z=z;YawDegrees=yawDegrees;HasAiState=hasAiState;AiState=aiState;
             HasHp=hasHp;Hp=hp;HasCombatRevision=hasCombatRevision;CombatRevision=combatRevision;
+            HasPathUpdate=hasPathUpdate;Path=path;
         }
 
         public DecodedMonsterState WithEntityId(string entityId)=>new DecodedMonsterState(NetId,VisibilityRevision,
-            Flags,HasPosition,X,Y,Z,YawDegrees,HasAiState,AiState,HasHp,Hp,HasCombatRevision,CombatRevision,entityId);
+            Flags,HasPosition,X,Y,Z,YawDegrees,HasAiState,AiState,HasHp,Hp,HasCombatRevision,CombatRevision,entityId,HasPathUpdate,Path);
+
+        public DecodedMonsterState WithPath(MonsterPathDto path)=>new DecodedMonsterState(NetId,VisibilityRevision,
+            Flags,HasPosition,X,Y,Z,YawDegrees,HasAiState,AiState,HasHp,Hp,HasCombatRevision,CombatRevision,EntityId,true,path);
+
+        public DecodedMonsterState WithChangedGroups(int mask)=>new DecodedMonsterState(NetId,VisibilityRevision,
+            Flags,HasPosition&&(mask&MonsterStateDelta.Position)!=0,X,Y,Z,YawDegrees,
+            HasAiState&&(mask&MonsterStateDelta.Behavior)!=0,AiState,
+            HasHp&&(mask&MonsterStateDelta.Combat)!=0,Hp,
+            HasCombatRevision&&(mask&MonsterStateDelta.Combat)!=0,CombatRevision,EntityId,HasPathUpdate,Path);
     }
 
     public sealed class CompactStateDecoder

@@ -20,6 +20,8 @@
     <Compile Include="../Assets/Scripts/NetWork/RemotePlayerSync.cs" />
     <Compile Include="../Assets/Scripts/NetWork/MovementEventMessages.cs" />
     <Compile Include="../Assets/Scripts/NetWork/CombatStateStore.cs" />
+    <Compile Include="../Assets/Scripts/Monster/Core/MonsterViewTypes.cs" />
+    <Compile Include="../Assets/Scripts/Monster/Movement/MonsterTransformInterpolator.cs" />
     <Compile Include="StateFramePresentation.Stubs.cs" />
     <Compile Include="StateFrameProcessor.Tests.cs" />
   </ItemGroup>

@@ -20,14 +20,25 @@ public class MovementReferencedRequest : NetMessageBase
 public sealed class MovementEventPolicy
 {
     public const int Version = 2;
+    public const int BroadcastVersion = 1;
+    public const int MonsterSyncVersion = 2;
+    public const string IncompatibleServerMessage =
+        "游戏服务器的移动或怪物同步协议版本不匹配，请确认客户端与服务端版本配套。";
     public int version, heartbeatIntervalMs, maxEventsPerSecond, movingTimeoutMs, controlTimeoutMs;
 
     public bool IsValid => version == Version && heartbeatIntervalMs > 0
         && maxEventsPerSecond > 0 && movingTimeoutMs > heartbeatIntervalMs && controlTimeoutMs > 0;
 
     public static bool Accepts(EnterWorldResult entry) => entry != null
-        && entry.movementProtocolVersion == Version && entry.movementPolicy?.IsValid == true
+        && entry.movementProtocolVersion == Version
+        && entry.movementBroadcastVersion == BroadcastVersion
+        && (entry.monsterSyncVersion == 0 || entry.monsterSyncVersion == MonsterSyncVersion)
+        && entry.movementPolicy?.IsValid == true
         && entry.movementControl?.IsValidFor(entry.sceneSessionId) == true;
+
+    public static bool IsAdmissionError(ServerErrorMessage error) =>
+        error?.requestMsgId == "enter_world" && (error.errorCode == "movement_client_update_required"
+            || error.errorCode == "monster_sync_client_update_required");
 }
 
 [Serializable]

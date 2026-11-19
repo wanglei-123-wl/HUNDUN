@@ -168,6 +168,8 @@ internal static class StateFrameProcessorTests
         DisableDeadRemotePlayerCollidersAndRestoreOnRespawn();
         KeepDeadRemotePlayerCollidersDisabledOnRebind();
         KeepNewerMonsterHealthWhenOldArrayArrives();
+        ApplyMonsterDeltasAndPaths();
+        PlayBoundedMonsterPathAndCorrections();
         Console.WriteLine("State frame processor tests passed.");
     }
 
@@ -489,6 +491,81 @@ internal static class StateFrameProcessorTests
             && !harness.Monsters.Last.HasHp && !harness.Monsters.Last.HasCombatRevision
             && store.TryGetState("monster", "monster-501", out state) && state.Hp == 80,
             "Unflagged HP was applied to the combat state.");
+    }
+
+    private static void ApplyMonsterDeltasAndPaths()
+    {
+        var harness = new StateFrameHarness();
+        harness.Processor.BeginSession(1, "world_001", "current", 2);
+        var store = new CombatStateStore();
+        store.BeginScene("world_001");
+        Check(store.MergeMonsterSpawnState("world_001","monster-501",100,100,"Alive",1,1,100),
+            "monster combat baseline");
+        harness.Monsters.Store = store;
+
+        string Scoped(long tick,long sequence,string monster = "",string extras = "",string scene = "current") =>
+            Frame(tick,sequence,"",monster).TrimEnd('}') + ",\"sceneSessionId\":\"" + scene + "\"" + extras + "}";
+        const string start = ",\"monsterPaths\":[[501,3,100,1784713000000,300,21050,2967,7600,21200,7600]]";
+        Check(harness.Processor.Process(1,Scoped(101,9,Monster,start,"previous")) == BattleSyncApplyResult.IgnoredWrongScene
+            && harness.Monsters.Calls == 0,"a future sequence from a previous scene session must be ignored");
+        Check(harness.Processor.Process(1,Scoped(101,1,Monster,start)) == BattleSyncApplyResult.Applied
+            && harness.Monsters.Last.HasPathUpdate && harness.Monsters.Last.Path.speed == 3f,
+            "full monster establishes the baseline and starts the bounded path");
+        Check(store.MergeDynamicMonsterHealth("world_001","monster-501",66,10,101,1),"apply newer combat activity");
+        Check(harness.Processor.Process(1,Scoped(101,2,extras:",\"monsterDeltas\":[[501,3,1,4,72,4]]"))
+            == BattleSyncApplyResult.Applied && !harness.Monsters.Last.HasPosition && harness.Monsters.Last.HasHp
+            && !harness.Monsters.Last.HasPathUpdate && store.TryGetState("monster","monster-501",out var health)
+            && health.Hp == 66 && health.CombatRevision == 10,
+            "HP-only delta on the same tick preserves transform and newer reliable HP");
+        Check(harness.Processor.Process(1,Scoped(102,4,extras:
+            ",\"monsterDeltas\":[[501,3,2,1,21100,2967,7600,32768]],\"monsterPaths\":[[501,3]]"))
+            == BattleSyncApplyResult.Applied && harness.Monsters.Last.HasPathUpdate && harness.Monsters.Last.Path == null
+            && Math.Abs(harness.Monsters.Last.X - 211f) < .001f && !harness.Monsters.Last.HasHp,
+            "position-only delta can skip sequences and stop at the matching authoritative position");
+        Check(harness.Processor.Process(1,Scoped(103,5,extras:",\"monsterDeltas\":[[501,3,2,4,50,11]]"))
+            == BattleSyncApplyResult.IgnoredStale && harness.Monsters.Calls == 3 && harness.Tick(501) == 102,
+            "delta with a missing baseline must not mutate state");
+        harness.Repair.Update();
+        Check(harness.Transport.Sent.Count > 0,"missing baseline requests repair");
+        Check(harness.Processor.Process(1,Scoped(104,6,Monster, ",\"monsterPaths\":[[999,3]]"))
+            == BattleSyncApplyResult.InvalidMessage && harness.Monsters.Calls == 3,
+            "path without a matching state row invalidates the frame");
+        harness.Processor.ClearMonsterBaselines();
+        Check(harness.Processor.Process(1,Scoped(104,6,extras:",\"monsterDeltas\":[[501,3,4,4,50,11]]"))
+            == BattleSyncApplyResult.IgnoredStale,"snapshot replacement invalidates the old delta chain");
+        Check(harness.Processor.Process(1,Scoped(105,7,Monster)) == BattleSyncApplyResult.Applied,
+            "first full state after a repair starts a fresh baseline");
+    }
+
+    private static void PlayBoundedMonsterPathAndCorrections()
+    {
+        var interpolator = new MonsterTransformInterpolator();
+        var update = typeof(MonsterTransformInterpolator).GetMethod("Update",BindingFlags.Instance|BindingFlags.NonPublic);
+        float originalDelta = Time.deltaTime;
+        double originalClock = Time.realtimeSinceStartupAsDouble;
+        try
+        {
+            Time.deltaTime = 1f;
+            Time.realtimeSinceStartupAsDouble = 10d;
+            interpolator.Snap(Vector3.zero,Quaternion.Euler(0f,0f,0f));
+            var path = new MonsterPathDto { startTick=100,startTime=10000,speed=4,endX=2 };
+            interpolator.SetMovementPath(path,10250);
+            update.Invoke(interpolator,null);
+            Check(Math.Abs(interpolator.transform.position.x - 1f) < .001f,"late path starts at its current progress");
+            Time.realtimeSinceStartupAsDouble = 13d;
+            update.Invoke(interpolator,null);
+            Check(Math.Abs(interpolator.transform.position.x - 2f) < .001f,"path stops at its endpoint");
+            interpolator.SetTarget(new Vector3(.5f,0f,0f),Quaternion.Euler(0f,0f,0f));
+            interpolator.CorrectMovementPath(new Vector3(.5f,0f,0f),10500);
+            update.Invoke(interpolator,null);
+            Check(Math.Abs(interpolator.transform.position.x - .5f) < .001f,"large server correction supersedes the path");
+            interpolator.SetMovementPath(path,10250);
+            interpolator.SetTarget(new Vector3(.75f,0f,0f),Quaternion.Euler(0f,0f,0f));
+            interpolator.SetMovementPath(null,10500);
+            update.Invoke(interpolator,null);
+            Check(Math.Abs(interpolator.transform.position.x - .75f) < .001f,"explicit stop returns to the server target");
+        }
+        finally { Time.deltaTime = originalDelta; Time.realtimeSinceStartupAsDouble = originalClock; }
     }
 
     private static string Frame(long tick, long sequence, string players = Player,

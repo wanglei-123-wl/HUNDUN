@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
@@ -191,12 +192,149 @@ namespace Game.Client.BattleSync.Protocol
                 };
             }
 
+            if (!TryMonsterExtensions(root, monsterStates, serverTick, frameSequence, out string sceneSessionId,
+                out MonsterStateDelta[] deltas, out MonsterPathUpdate[] paths, out string invalidField))
+            {
+                error = new StateFrameParseError(invalidField, "Invalid monster synchronization data.", sceneId, frameSequence);
+                return false;
+            }
+
             message = new StateFrameMessageDto
             {
                 msgId = msgId, type = type, sceneId = sceneId,
                 serverTick = serverTick, serverTime = serverTime, frameSequence = frameSequence,
-                players = playerStates, monsters = monsterStates
+                players = playerStates, monsters = monsterStates, sceneSessionId = sceneSessionId,
+                monsterDeltas = deltas, monsterPaths = paths
             };
+            return true;
+        }
+
+        private static readonly IntegerWidth[] PathFields =
+        {
+            IntegerWidth.Int, IntegerWidth.Long, IntegerWidth.Long, IntegerWidth.Long, IntegerWidth.Int,
+            IntegerWidth.Int, IntegerWidth.Int, IntegerWidth.Int, IntegerWidth.Int, IntegerWidth.Int
+        };
+
+        private static bool TryMonsterExtensions(JObject root, CompactMonsterStateDto[] monsters,
+            long tick, long sequence, out string sceneSessionId, out MonsterStateDelta[] deltas,
+            out MonsterPathUpdate[] paths, out string invalidField)
+        {
+            sceneSessionId = null;
+            deltas = Array.Empty<MonsterStateDelta>();
+            paths = Array.Empty<MonsterPathUpdate>();
+            invalidField = "sceneSessionId";
+            if (Get(root, invalidField) != null &&
+                (!TryString(root, invalidField, out sceneSessionId) || string.IsNullOrWhiteSpace(sceneSessionId)))
+                return false;
+
+            JToken deltaList = Get(root, "monsterDeltas"), pathList = Get(root, "monsterPaths");
+            if (deltaList == null && pathList == null) return true;
+            if (sceneSessionId == null) return false;
+
+            var identities = new Dictionary<int, long>();
+            foreach (CompactMonsterStateDto state in monsters)
+            {
+                invalidField = "monsters";
+                if (identities.ContainsKey(state.netId)) return false;
+                identities.Add(state.netId, state.visibilityRevision);
+            }
+            if (deltaList != null)
+            {
+                invalidField = "monsterDeltas";
+                if (!(deltaList is JArray rows)) return false;
+                deltas = new MonsterStateDelta[rows.Count];
+                for (int i = 0; i < deltas.Length; i++)
+                {
+                    invalidField = "monsterDeltas[" + i + "]";
+                    if (!(rows[i] is JArray row) || !TryDelta(row, sequence, out MonsterStateDelta delta)
+                        || identities.ContainsKey(delta.fields.netId)) return false;
+                    identities.Add(delta.fields.netId, delta.fields.visibilityRevision);
+                    deltas[i] = delta;
+                }
+            }
+            if (pathList != null)
+            {
+                invalidField = "monsterPaths";
+                if (!(pathList is JArray rows)) return false;
+                paths = new MonsterPathUpdate[rows.Count];
+                for (int i = 0; i < paths.Length; i++)
+                {
+                    invalidField = "monsterPaths[" + i + "]";
+                    if (!(rows[i] is JArray row) || !TryPath(row, tick, out MonsterPathUpdate path)
+                        || !identities.TryGetValue(path.netId, out long visible) || visible != path.visibilityRevision)
+                        return false;
+                    // A path row must accompany one state row, and each monster can have at most one path update.
+                    identities.Remove(path.netId);
+                    paths[i] = path;
+                }
+            }
+            return true;
+        }
+
+        private static bool TryDelta(JArray row, long sequence, out MonsterStateDelta delta)
+        {
+            delta = null;
+            if (row.Count < 4 || !TryInteger(row[0], IntegerWidth.Int, out long id) || id <= 0
+                || !TryInteger(row[1], IntegerWidth.Long, out long visibility) || visibility < 0
+                || !TryInteger(row[2], IntegerWidth.Long, out long baseline) || baseline <= 0 || baseline >= sequence
+                || !TryInteger(row[3], IntegerWidth.Byte, out long mask) || mask < 1 || mask > 7)
+                return false;
+            bool position = (mask & MonsterStateDelta.Position) != 0;
+            bool behavior = (mask & MonsterStateDelta.Behavior) != 0;
+            bool combat = (mask & MonsterStateDelta.Combat) != 0;
+            if (row.Count != 4 + (position ? 4 : 0) + (behavior ? 2 : 0) + (combat ? 2 : 0)) return false;
+
+            var fields = new CompactMonsterStateDto { netId = (int)id, visibilityRevision = visibility };
+            int index = 4;
+            if (position)
+            {
+                if (!TryInteger(row[index++], IntegerWidth.Int, out long x)
+                    || !TryInteger(row[index++], IntegerWidth.Int, out long y)
+                    || !TryInteger(row[index++], IntegerWidth.Int, out long z)
+                    || !TryInteger(row[index++], IntegerWidth.UShort, out long yaw)) return false;
+                fields.x = (int)x; fields.y = (int)y; fields.z = (int)z; fields.yaw = (int)yaw;
+            }
+            if (behavior)
+            {
+                if (!TryInteger(row[index++], IntegerWidth.Byte, out long ai)
+                    || !TryInteger(row[index++], IntegerWidth.UShort, out long flags)
+                    || (flags & BattleSyncProtocolConstants.StateFlags.MovementState) != 0 && ai > 7) return false;
+                fields.aiState = (int)ai; fields.flags = (int)flags;
+            }
+            if (combat)
+            {
+                if (!TryInteger(row[index++], IntegerWidth.Int, out long hp) || hp < 0
+                    || !TryInteger(row[index], IntegerWidth.Long, out long revision) || revision < 0) return false;
+                fields.hp = (int)hp; fields.combatRevision = revision;
+            }
+            delta = new MonsterStateDelta { fields = fields, baseFrameSequence = baseline, mask = (int)mask };
+            return true;
+        }
+
+        private static bool TryPath(JArray row, long tick, out MonsterPathUpdate path)
+        {
+            path = null;
+            if ((row.Count != 2 && row.Count != PathFields.Length)
+                || !TryInteger(row[0], IntegerWidth.Int, out long id) || id <= 0
+                || !TryInteger(row[1], IntegerWidth.Long, out long visibility) || visibility < 0)
+                return false;
+            MonsterPathDto segment = null;
+            if (row.Count != 2)
+            {
+                if (!TryRow(row, "monsterPaths", 0, PathFields, out long[] values, out _)) return false;
+                segment = new MonsterPathDto
+                {
+                    startTick = values[2], startTime = values[3], speed = values[4] * .01f,
+                    x = values[5] * .01f, y = values[6] * .01f, z = values[7] * .01f,
+                    endX = values[8] * .01f, endZ = values[9] * .01f
+                };
+                if (segment.startTick < 0 || segment.startTick > tick || segment.startTime <= 0 || segment.speed < 0)
+                    return false;
+                if (values[5] == values[8] && values[7] == values[9])
+                    segment = null; // Both endpoints rounded to the same centimeter.
+                else if (!segment.IsValid) return false;
+            }
+            path = new MonsterPathUpdate { netId = (int)id, visibilityRevision = visibility, path = segment };
             return true;
         }
 

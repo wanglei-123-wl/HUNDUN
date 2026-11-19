@@ -69,6 +69,8 @@ namespace Game.Client.BattleSync
         public long ServerTime { get; }
 
         public string Reason { get; }
+        public string SceneSessionId { get; }
+        public int MonsterSyncVersion { get; }
 
         public BattleSyncEnterWorldContext(
             long connectionEpoch,
@@ -76,7 +78,7 @@ namespace Game.Client.BattleSync
             long characterDbId,
             long snapshotRevision,
             long serverTime,
-            string reason)
+            string reason, string sceneSessionId = "", int monsterSyncVersion = 0)
         {
             ConnectionEpoch = connectionEpoch;
             SceneId = sceneId ?? string.Empty;
@@ -84,6 +86,8 @@ namespace Game.Client.BattleSync
             SnapshotRevision = snapshotRevision;
             ServerTime = serverTime;
             Reason = reason ?? string.Empty;
+            SceneSessionId = sceneSessionId ?? string.Empty;
+            MonsterSyncVersion = monsterSyncVersion;
         }
 
         public bool IsValid =>

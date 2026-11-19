@@ -423,8 +423,11 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         if(message==null||message.characterDbId<=0)return BattleSyncApplyResult.InvalidMessage;
         if(!string.Equals(activeSceneId,message.sceneId,System.StringComparison.Ordinal))return BattleSyncApplyResult.IgnoredWrongScene;
         if(message.characterDbId==localCharacterDbId)return BattleSyncApplyResult.AlreadyApplied;
-        pendingMovement.Remove(message.characterDbId);
-        if(!remotePlayers.ContainsKey(message.characterDbId))return BattleSyncApplyResult.AlreadyApplied;
+        if (!remotePlayers.ContainsKey(message.characterDbId))
+        {
+            pendingMovement.Remove(message.characterDbId);
+            return BattleSyncApplyResult.AlreadyApplied;
+        }
         RemoveRemotePlayer(message.characterDbId,message.reason);
         return remotePlayers.ContainsKey(message.characterDbId)?BattleSyncApplyResult.RetryableFailure:BattleSyncApplyResult.Applied;
     }
@@ -504,14 +507,21 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             return;
         }
 
+        if (remotePlayers.TryGetValue(state.characterDbId, out var existingPlayer)
+            && existingPlayer != null && state.visibilityRevision < existingPlayer.VisibilityRevision)
+            return;
+
         playerLeaveTimes.Remove(state.characterDbId);
         MergeRemotePlayerCombatState(state);
         RemotePlayerSync remotePlayer = GetOrCreateRemotePlayer(state);
 
         if (remotePlayer != null)
         {
-            remotePlayer.Init(state.characterDbId, state.characterId, state.nickname);
-            remotePlayer.ClearPendingSnapshots();
+            if (state.visibilityRevision > remotePlayer.VisibilityRevision)
+            {
+                remotePlayer.Init(state.characterDbId, state.characterId, state.nickname);
+                remotePlayer.ClearPendingSnapshots();
+            }
             remotePlayer.ApplyServerState(state);
             if (pendingMovement.TryGetValue(state.characterDbId, out var pending)
                 && pending.visibilityRevision <= state.visibilityRevision)
@@ -525,10 +535,8 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
 
     private void HandleMovementEvent(string json)
     {
-        var message = JsonUtility.FromJson<PlayerMovementEventMessage>(json);
-        if (message?.movement?.IsValid != true || message.characterDbId <= 0
+        if (!PlayerMovementEventParser.TryParse(json, out var message)
             || message.characterDbId == localCharacterDbId || !IsActiveScene(message.sceneId)
-            || string.IsNullOrEmpty(message.sceneSessionId)
             || message.sceneSessionId != NetworkManager.Instance?.SceneSessionId)
             return;
 
@@ -596,6 +604,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             return;
         }
 
+        pendingMovement.Remove(characterDbId);
         remoteSkillEffects.RemoveCaster(characterDbId);
         if (!remotePlayers.TryGetValue(characterDbId, out RemotePlayerSync remotePlayer))
         {

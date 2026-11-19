@@ -11,6 +11,8 @@ namespace UnityEngine
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class SerializeField : Attribute { }
     [AttributeUsage(AttributeTargets.Field)]
+    public sealed class RangeAttribute : Attribute { public RangeAttribute(float minimum,float maximum) { } }
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class HeaderAttribute : Attribute
     {
         public HeaderAttribute(string value) { }
@@ -65,7 +67,10 @@ namespace UnityEngine
     {
         public float x, y, z;
         public Vector3(float x, float y, float z) { this.x = x; this.y = y; this.z = z; }
+        public static Vector3 zero => new Vector3(0f,0f,0f);
         public static Vector3 operator +(Vector3 a, Vector3 b) => new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+        public static Vector3 operator -(Vector3 a, Vector3 b) => new Vector3(a.x-b.x,a.y-b.y,a.z-b.z);
+        public static Vector3 operator /(Vector3 a,float b) => new Vector3(a.x/b,a.y/b,a.z/b);
         public static Vector3 operator *(Vector3 a, float b) => new Vector3(a.x * b, a.y * b, a.z * b);
         public static float Distance(Vector3 a, Vector3 b)
         {
@@ -78,12 +83,16 @@ namespace UnityEngine
             return new Vector3(a.x + (b.x - a.x) * t,
                 a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
         }
+        public static Vector3 MoveTowards(Vector3 a,Vector3 b,float distance) =>
+            Distance(a,b) <= distance ? b : Lerp(a,b,distance/Distance(a,b));
     }
     public struct Quaternion
     {
         public float Yaw;
         public static float LastSlerpDistance;
         public static Quaternion Euler(float x, float y, float z) => new Quaternion { Yaw = y };
+        public static Quaternion LookRotation(Vector3 direction) =>
+            Euler(0f,(float)(Math.Atan2(direction.x,direction.z)*180d/Math.PI),0f);
         public static Quaternion Slerp(Quaternion a, Quaternion b, float t)
         {
             float delta = (b.Yaw - a.Yaw + 540f) % 360f - 180f;
@@ -115,6 +124,7 @@ namespace UnityEngine
     }
     public static class Mathf
     {
+        public static float Exp(float exponent) => (float)Math.Exp(exponent);
         public static float Max(float x, float y) => Math.Max(x, y);
         public static float Clamp(float value, float min, float max) => Math.Clamp(value, min, max);
         public static int Max(int x, int y) => Math.Max(x, y);
@@ -151,9 +161,11 @@ public class EnterWorldResult
 {
     public string sceneSessionId;
     public int movementProtocolVersion;
+    public int movementBroadcastVersion, monsterSyncVersion;
     public MovementEventPolicy movementPolicy;
     public MovementEventControl movementControl;
 }
+public class ServerErrorMessage { public string requestMsgId, errorCode; }
 public class PlayerEffectPresenter { public void SetVisual(UnityEngine.GameObject visual) {} }
 public static class PlayerDeathAnimation
 {

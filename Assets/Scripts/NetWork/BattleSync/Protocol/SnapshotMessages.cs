@@ -115,6 +115,7 @@ namespace Game.Client.BattleSync.Protocol
         public string lifeState;
         public long visibilityRevision;
         public int netId;
+        public MonsterPathDto path;
     }
 
     [Serializable]
