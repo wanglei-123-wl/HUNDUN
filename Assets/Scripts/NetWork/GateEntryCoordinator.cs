@@ -69,6 +69,7 @@ public sealed class GateEntryCoordinator : IDisposable
         dispatcher.BeginDeferredWorldMessages();
         dispatcher.DeferredDispatchOverflow += HandleOverflow;
         dispatcher.Register("enter_world_result", HandleResult);
+        dispatcher.Register("error", HandleEntryError);
         auth.GameSessionEnded += HandleGameSessionEnded;
         network.OnConnected += HandleConnected;
         network.OnDisconnected += HandleDisconnected;
@@ -165,6 +166,16 @@ public sealed class GateEntryCoordinator : IDisposable
             + ", dispatcherSubscribed=" + dispatcher.HasNetworkSubscription);
     }
 
+    private void HandleEntryError(string json)
+    {
+        if (completed || disposed || !awaitingResult || auth == null
+            || !auth.IsCurrentGameEntry(network, sentEpoch)) return;
+
+        var error = JsonUtility.FromJson<ServerErrorMessage>(json);
+        if (MovementEventPolicy.IsAdmissionError(error))
+            Fail(string.IsNullOrWhiteSpace(error.message) ? MovementEventPolicy.IncompatibleServerMessage : error.message);
+    }
+
     private void HandleResult(string json)
     {
         if (completed || disposed || !awaitingResult || auth == null
@@ -197,7 +208,7 @@ public sealed class GateEntryCoordinator : IDisposable
 
         if (!MovementEventPolicy.Accepts(result))
         {
-            Fail("游戏服务器未提供移动协议 V2，请更新服务端。");
+            Fail(MovementEventPolicy.IncompatibleServerMessage);
             return;
         }
 
@@ -307,6 +318,7 @@ public sealed class GateEntryCoordinator : IDisposable
         if (dispatcher != null)
         {
             dispatcher.Unregister("enter_world_result", HandleResult);
+            dispatcher.Unregister("error", HandleEntryError);
             dispatcher.DeferredDispatchOverflow -= HandleOverflow;
             if (!GateEntryHandoff.HasPending) dispatcher.ClearDeferredWorldMessages();
         }

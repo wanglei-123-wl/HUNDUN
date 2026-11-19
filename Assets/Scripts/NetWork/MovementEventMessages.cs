@@ -20,14 +20,22 @@ public class MovementReferencedRequest : NetMessageBase
 public sealed class MovementEventPolicy
 {
     public const int Version = 2;
+    public const int BroadcastVersion = 1;
+    public const string IncompatibleServerMessage =
+        "游戏服务器未提供有效的移动协议 V2 和广播格式 V1，请确认客户端与服务端版本配套。";
     public int version, heartbeatIntervalMs, maxEventsPerSecond, movingTimeoutMs, controlTimeoutMs;
 
     public bool IsValid => version == Version && heartbeatIntervalMs > 0
         && maxEventsPerSecond > 0 && movingTimeoutMs > heartbeatIntervalMs && controlTimeoutMs > 0;
 
     public static bool Accepts(EnterWorldResult entry) => entry != null
-        && entry.movementProtocolVersion == Version && entry.movementPolicy?.IsValid == true
+        && entry.movementProtocolVersion == Version
+        && entry.movementBroadcastVersion == BroadcastVersion
+        && entry.movementPolicy?.IsValid == true
         && entry.movementControl?.IsValidFor(entry.sceneSessionId) == true;
+
+    public static bool IsAdmissionError(ServerErrorMessage error) =>
+        error?.requestMsgId == "enter_world" && error.errorCode == "movement_client_update_required";
 }
 
 [Serializable]

@@ -211,7 +211,8 @@ public class NetMessageDispatcher
             || header.msgId == "chat_send_result";
         bool isSessionControl = header.msgId == "enter_world_result"
             || header.msgId == "heartbeat_result" || header.msgId == "account_kicked"
-            || (header.msgId == "error" && header.requestMsgId == "heartbeat");
+            || (header.msgId == "error"
+                && (header.requestMsgId == "heartbeat" || header.requestMsgId == "enter_world"));
         if (deferringWorldMessages
             && !isSessionControl
             && !isWorldChat
