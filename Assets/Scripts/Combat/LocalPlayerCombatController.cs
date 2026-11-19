@@ -8,6 +8,19 @@ using UnityEngine.Serialization;
 public sealed class LocalPlayerCombatController : MonoBehaviour
 {
     private const int RecentAttackCapacity = 128;
+    private const float ApproachStallSeconds = 1.5f;
+
+    private sealed class PendingCombatApproach
+    {
+        public CombatTargetSelection Target;
+        public string SkillId;
+        public float Range;
+        public GameSession Session;
+        public long ConnectionEpoch;
+        public string SceneSessionId;
+        public Vector3 LastProgressPosition;
+        public float LastProgressAt;
+    }
 
     private sealed class PendingSkillRequest
     {
@@ -32,6 +45,12 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
     [SerializeField] private 技能注册表 技能配置表;
     [SerializeField] private 技能栏控制器 技能栏;
     [SerializeField] private string basicAttackActionId = "basic_attack";
+    [Header("自动接近攻击目标")]
+    [SerializeField, Min(0.1f), Tooltip("与服务端 basic_attack 的 Range 保持一致；当前服务端默认值为 3。")]
+    private float basicAttackRange = 3f;
+    [SerializeField, Min(0f)] private float approachRangeMargin = 0.1f;
+    [SerializeField, Min(0f), Tooltip("与服务端普攻和技能的最大目标高度差保持一致。")]
+    private float attackMaxVerticalDifference = 3f;
     [Header("技能配置")]
     [SerializeField, FormerlySerializedAs("skillId")] private string 火球术技能ID = "fireball_01";
     [SerializeField] private string 斩灵术技能ID = "slash_01";
@@ -69,6 +88,9 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
     private long lastSkillManaServerTick = -1;
     private long lastSkillManaServerTime = -1;
     private long lastSkillManaRequestSequence = -1;
+    private PendingCombatApproach pendingCombatApproach;
+
+    internal bool HasCombatApproach => pendingCombatApproach != null;
 
     public long LastSentActionSequence => nextActionSequence;
     internal CombatTargetSelection LockedTarget => this != null && isActiveAndEnabled
@@ -124,6 +146,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
     internal void ClearCombatTarget()
     {
+        CancelCombatApproach();
         recentAttacks.Clear();
         if (targetingController != null)
             targetingController.ClearTarget();
@@ -142,6 +165,8 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
     {
         if (!combatEnabled || !isActiveAndEnabled || targetingController == null || !target.IsValid)
             return;
+
+        CancelCombatApproach();
 
         CombatTargetSelection lockedTarget = LockedTarget;
         if (lockedTarget.TargetTransform == target.TargetTransform && lockedTarget.EntityId == target.EntityId
@@ -163,6 +188,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
     public bool TrySendSkillSlotCast(int slotNumber, long clientTick)
     {
+        CancelCombatApproach();
         ResolveReferences();
         if (技能栏 == null)
         {
@@ -185,6 +211,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
     public bool TrySendSkillCast(long clientTick, string requestedSkillId)
     {
+        CancelCombatApproach();
         string normalizedSkillId = NormalizeSkillId(requestedSkillId);
         if (!combatEnabled
             || clientTick <= 0
@@ -231,6 +258,17 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             && target.EntityType == "monster"))
             return false;
 
+        // Range comes from the learned skill's current server attributes.
+        // Queue only the intent: sequences, mana and cooldown start on send.
+        double skillRange = learned?.progress?.attributes?.range ?? double.NaN;
+        if (!selfTarget && !double.IsNaN(skillRange) && !double.IsInfinity(skillRange)
+            && skillRange >= 0 && skillRange <= float.MaxValue
+            && !IsInsideApproachRange(target, (float)skillRange))
+        {
+            BeginCombatApproach(target, normalizedSkillId, (float)skillRange, session);
+            return false;
+        }
+
         long requestSequence = nextSkillRequestSequence + 1L;
         SkillCastRequest request = new SkillCastRequest
         {
@@ -272,6 +310,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
     public bool TrySendBasicAttack(long clientTick, float aimYaw)
     {
+        CancelCombatApproach();
         if (!combatEnabled || clientTick <= 0 || nextActionSequence == long.MaxValue)
         {
             return false;
@@ -282,6 +321,13 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         bool hasTarget = targetingController != null
             && targetingController.TryResolveCombatTarget(out target)
             && target.IsValid;
+
+        if (hasTarget && target.EntityType == "monster" && SameTarget(target, LockedTarget)
+            && !IsInsideApproachRange(target, basicAttackRange))
+        {
+            BeginCombatApproach(target, null, basicAttackRange, FindObjectOfType<GameSession>());
+            return false;
+        }
 
         if (hasTarget && target.TryGetHorizontalYaw(transform.position, out float targetYaw))
         {
@@ -325,6 +371,106 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             FaceAttackTarget(target);
         }
         return true;
+    }
+
+    internal void CancelCombatApproach(string reason = null)
+    {
+        if (pendingCombatApproach == null) return;
+        pendingCombatApproach = null;
+        if (!string.IsNullOrEmpty(reason)) GameNoticeService.Show(reason);
+    }
+
+    private static bool SameTarget(CombatTargetSelection first, CombatTargetSelection second) =>
+        first.IsValid && second.IsValid && first.TargetTransform == second.TargetTransform
+        && first.EntityType == second.EntityType && first.EntityId == second.EntityId;
+
+    private float ApproachStoppingRange(float range) =>
+        Mathf.Max(0f, range - Mathf.Min(Mathf.Max(0f, approachRangeMargin), range * 0.1f));
+
+    private bool IsInsideApproachRange(CombatTargetSelection target, float range)
+    {
+        if (!target.IsValid) return false;
+        Vector3 delta = target.TargetTransform.position - transform.position;
+        float stoppingRange = ApproachStoppingRange(range);
+        return delta.x * delta.x + delta.z * delta.z <= stoppingRange * stoppingRange
+            && Mathf.Abs(delta.y) <= attackMaxVerticalDifference;
+    }
+
+    private void BeginCombatApproach(CombatTargetSelection target, string skillId, float range, GameSession session)
+    {
+        NetworkManager network = NetworkManager.Instance;
+        if (session == null || !session.IsWorldReady || session.IsLocalPlayerDead
+            || network == null || !network.MovementReady || network.SceneOperationsPaused
+            || !TryGetComponent(out LocalPlayerInputController input) || !input.isActiveAndEnabled || !input.IsInputEnabled
+            || !target.TargetTransform.TryGetComponent(out MonsterNetworkView monster) || !monster.IsTargetable)
+            return;
+        targetingController.ConfirmCombatTarget(target);
+        if (!SameTarget(target, LockedTarget)) return;
+        pendingCombatApproach = new PendingCombatApproach
+        {
+            Target = target, SkillId = skillId, Range = range, Session = session,
+            ConnectionEpoch = network.ConnectionEpoch, SceneSessionId = network.SceneSessionId,
+            LastProgressPosition = transform.position, LastProgressAt = Time.unscaledTime
+        };
+    }
+
+    internal bool TryReadCombatApproach(out Vector3 direction, out bool basicAttack)
+    {
+        direction = Vector3.zero;
+        basicAttack = false;
+        PendingCombatApproach pending = pendingCombatApproach;
+        if (pending == null) return false;
+        NetworkManager network = NetworkManager.Instance;
+        if (!combatEnabled || !isActiveAndEnabled || pending.Session == null || !pending.Session.IsWorldReady
+            || pending.Session.IsLocalPlayerDead || network == null || !network.MovementReady
+            || network.SceneOperationsPaused || network.ConnectionEpoch != pending.ConnectionEpoch
+            || network.SceneSessionId != pending.SceneSessionId || !SameTarget(pending.Target, LockedTarget)
+            || !pending.Target.TargetTransform.TryGetComponent(out MonsterNetworkView monster) || !monster.IsTargetable)
+        {
+            CancelCombatApproach();
+            return false;
+        }
+        basicAttack = pending.SkillId == null;
+        if (!basicAttack)
+        {
+            SkillSnapshotEntry skill = System.Array.Find(pending.Session.LocalSkillSnapshot?.skills
+                ?? System.Array.Empty<SkillSnapshotEntry>(), entry => entry != null && entry.skillId == pending.SkillId);
+            double range = skill?.progress?.attributes?.range ?? double.NaN;
+            if (double.IsNaN(range) || double.IsInfinity(range) || range < 0 || range > float.MaxValue)
+            {
+                CancelCombatApproach();
+                return false;
+            }
+            pending.Range = (float)range;
+        }
+        if (IsInsideApproachRange(pending.Target, pending.Range)) return true;
+        Vector3 delta = pending.Target.TargetTransform.position - transform.position;
+        delta.y = 0f;
+        if (delta.sqrMagnitude <= ApproachStoppingRange(pending.Range) * ApproachStoppingRange(pending.Range)
+            || delta.sqrMagnitude < 0.0001f)
+        {
+            CancelCombatApproach("目标高度差过大，自动追击已停止");
+            return false;
+        }
+        if ((transform.position - pending.LastProgressPosition).sqrMagnitude > 0.0025f)
+        {
+            pending.LastProgressPosition = transform.position;
+            pending.LastProgressAt = Time.unscaledTime;
+        }
+        else if (Time.unscaledTime - pending.LastProgressAt >= ApproachStallSeconds)
+        {
+            CancelCombatApproach("前方道路受阻，自动追击已停止");
+            return false;
+        }
+        direction = delta.normalized;
+        return true;
+    }
+
+    internal void CompleteApproachSkill(long clientTick)
+    {
+        if (!TryReadCombatApproach(out Vector3 direction, out bool basicAttack)
+            || basicAttack || direction != Vector3.zero) return;
+        TrySendSkillCast(clientTick, pendingCombatApproach.SkillId);
     }
 
     private void FaceAttackTarget(CombatTargetSelection target)

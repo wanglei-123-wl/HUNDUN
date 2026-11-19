@@ -46,6 +46,7 @@ public sealed partial class LocalPlayerInputController
 
         if (movementControl?.epoch != control.epoch || movementControl.sceneSessionId != control.sceneSessionId)
         {
+            combatController?.CancelCombatApproach();
             movementControl = control;
             network.BeginMovementControl(control);
             network.MovementHeartbeatIntervalMs = movementPolicy.heartbeatIntervalMs;
@@ -114,6 +115,9 @@ public sealed partial class LocalPlayerInputController
     private bool UpdateMovement(PlayerInputFrame input, long now)
     {
         if (predictedMotor == null || movementControl == null || !AdvanceMovement(now)) return false;
+        // Refresh after advancing the previous segment, then use the same
+        // movement events, map checks and heartbeat schedule as manual input.
+        ApplyCombatApproachInput(input);
         clientTick = input.ClientTick;
         bool run = input.IsRunning;
         Vector3 direction = predictedMotor.MovementDirection(input);
@@ -138,6 +142,8 @@ public sealed partial class LocalPlayerInputController
                 direction = Vector3.zero;
         }
         MovementEventFlags directional = ReadDirectionFlags(input, direction);
+        if (direction == Vector3.zero && HasDirectionalInput(input.Keys) && combatController?.HasCombatApproach == true)
+            combatController.CancelCombatApproach("前方道路受阻，自动追击已停止");
         MovementEventFlags turning = ResolveTurnFlags(input, direction, now);
 
         bool wasWalking = (movementFlags & MovementEventFlags.Walking) != 0;
@@ -185,8 +191,9 @@ public sealed partial class LocalPlayerInputController
 
         if (HasDirectionalInput(input.Keys) || HasBothMouseButtons(input.Actions) || input.FaceCamera)
             visualSmoother?.ClearCombatFacing();
-        if (input.HasAction(PlayerInputActions.PrimaryAction))
-            combatController?.TrySendBasicAttack(input.ClientTick, input.CameraYaw);
+        if (input.HasAction(PlayerInputActions.PrimaryAction)
+            && combatController?.TrySendBasicAttack(input.ClientTick, input.CameraYaw) != true)
+            input.Actions &= ~PlayerInputActions.PrimaryAction;
         predictedMotor.PresentPredictedInput(input, jump);
         return true;
     }
@@ -315,6 +322,8 @@ public sealed partial class LocalPlayerInputController
         predictedMotor.SetLocalMotion(horizontalVelocity, onGround ? 0f : vertical, onGround);
         bool edgeReported = edge == null || Report(edge, end);
         if (!horizontalBlocked || (movementFlags & DirectionFlags) == 0) return edgeReported;
+
+        combatController?.CancelCombatApproach("前方道路受阻，自动追击已停止");
 
         blockedTraversalDirection = travelDirection;
         blockedTraversalPosition = transform.position;
