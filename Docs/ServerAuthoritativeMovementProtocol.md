@@ -8,6 +8,10 @@ HUNDUN 进场发送 `movementProtocolVersion=2`。客户端应收齐 Gate 返回
 - 已学习且服务端标记自身目标的技能由技能栏以本角色为目标发送，位移类技能的实际位移由 Gate 推进。双击方向键沿用现有普通翻滚操作。
 - `player_input` 和输入回放已移除。进场不接受旧移动协议。应用层会话心跳仍独立维护 Token 和连接。
 
+站立原地右键转向只更新朝向，不执行 `CharacterController.Move`、下压落地探测或地图位置回退。连续鼠标采样合并为持续转向，鼠标目标短暂停顿不会逐帧发送起停；转向状态切换按服务端 `maxEventsPerSecond` 限制频率，该发送时钟在位置纠正换代后继续保留。松开右键、UI 阻断或进入行走时立即结束原地转向。空中的原地转向仍执行重力及碰撞处理。
+
+本地模型通过 `LocalPlayerVisualGrounding` 的独立展示节点对齐脚底。原有光圈贴地和碰撞体落地不等于模型鞋底对齐；新节点在站立的 Locomotion 姿势按实际蒙皮鞋/脚网格校准基准，缺少可测网格时使用 Avatar 脚底高度回退。保留模型预制体原缩放。落地时检测当前地图地表并平滑补偿展示高度，腾空时使用模型的中性脚底基准；网络坐标、碰撞体与相机跟随节点保持独立，施法挂点及玩家特效跟随展示节点。这是模型整体的脚底基准校正，台阶上双脚分别贴合仍属于独立脚部 IK。
+
 ## 客户端地图通行约束
 
 `WorldMapLayerLoader` 在进场时准备当前地图的通行数据，`GameSession` 在切图时更换查询。当前地图未就绪时不开放本地输入。数据来源和校验值记录在 `MapTraversalStage2Import.json`，资源包地址为 `game/map-traversal/{mapId}`，构建版需要重建并分发对应 Addressables 资源。
@@ -31,6 +35,24 @@ Unity 编辑器菜单：`Tools > Resource Update > Build Map Traversal Content`�
 本地资源构建不发布文件，也不构建客户端程序。构建版使用新逻辑还需要重新构建客户端；远程资源分发需包含生成的目录、hash 和目录引用的 Bundle。后端运行版本是否与导入数据一致仍需另行确认。
 
 `RemoteWorldMaps` 按资源分别打包，地址中的斜杠会产生 Bundle 子目录。分发资源时需要保留这些子目录，不能只复制输出目录顶层的文件。
+
+## 本地打坐条件特效
+
+`Assets/Settings/玩家公共表现配置.asset` 保存共用显示规则，每条记录的特效名称同时作为稳定的唯一 ID。保留原有的“出场播放”和“按名称调用”，新增“条件控制”触发方式。显示条件目前支持“存活”和“打坐中”，勾选的条件必须同时满足；不勾选条件保留原有无条件行为。
+
+`PlayerEffectStateSource` 挂在各自玩家根节点，保存该玩家的已知状态、存活和打坐状态，状态发生变化才通知 `PlayerEffectPresenter`。共用的配置资源不保存角色运行状态。条件控制自动启动和关闭特效；出场、手动调用也必须通过同一条件检查，条件失效会停止已播放的效果。循环特效不会重复创建；条件控制的一次性特效在每次条件由不满足变为满足时播放一次。
+
+当前 `MeshFX_Galaxy` 设置为“条件控制 + 循环播放 + 存活 + 打坐中”。本地输入组件在动画更新后读取打坐意图及 Meditation 动画标签；进入打坐动画后显示，取消打坐时立即隐藏，不等待起身动画结束。禁用输入、死亡、切图和会话退出也会结束本地打坐显示，停止时同时清理粒子和模型表面的覆盖光效。
+
+按当前需求，仅由本地打坐状态控制光晕，不新增前后端协议或服务端状态同步。远端没有打坐状态发布者，带条件的效果在状态未知时默认隐藏。逻辑接入后已完成脚本编译，并在 LocalTrial 配置下完成 Windows Addressables 资源构建及世界场景目录依赖核对，配置与产物校验信息见 `PlayerMeditationContentBuild.json`。随后已构建 Windows 客户端并核对内置资源，结果见 `WindowsLocalTrialPlayerBuild.json`。未运行自动化测试或游戏场景测试，未启动客户端或发布资源。
+
+## 构建 Windows 本地客户端
+
+编辑器菜单 `Tools > Resource Update > Build Windows Local Trial Player` 或批处理入口 `WindowsLocalTrialPlayerBuild.BuildBatch` 使用当前 LocalTrial 配置构建 Windows 客户端。要求打坐资源构建记录成功且配置、源码、目录及世界场景依赖校验值仍然匹配。启动场景是唯一直接打入程序的场景，沿用已构建的 Addressables 内容，不切换资源环境或服务器地址。
+
+每次输出到新的 `Build/WindowsLocalTrial/MeditationEffect-{requestId}/HUNDUN.exe`，避免覆盖旧程序。构建后核对程序内置的 Addressables 设置、本地目录和世界场景本地依赖，结果写入 `WindowsLocalTrialPlayerBuild.json`。此入口不启动客户端或运行测试；LocalTrial 的远程资源仍通过当前本地资源服务加载。
+
+编辑器已打开时，可向 `Temp/WindowsLocalTrialPlayerBuild.request.json` 提交显式、一次性的请求，包含 `requestId`（无连字符 GUID）、`projectRoot` 和 `expiresAtUtc`。入口在编辑器停止播放且导入、编译完成后领取请求，过期或项目路径不符的请求会拒绝执行。
 
 ## 验证
 

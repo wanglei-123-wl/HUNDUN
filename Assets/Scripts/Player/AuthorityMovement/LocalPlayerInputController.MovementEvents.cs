@@ -9,6 +9,7 @@ public sealed partial class LocalPlayerInputController
         | MovementEventFlags.StrafeLeft | MovementEventFlags.StrafeRight;
     private const MovementEventFlags TurnFlags = MovementEventFlags.TurnLeft | MovementEventFlags.TurnRight;
     private const int MovementStepMilliseconds = 16;
+    private const long TurnIdleStopDelayMilliseconds = 100;
     private static readonly Stopwatch MovementClock = Stopwatch.StartNew();
     private MovementEventControl movementControl;
     private MovementEventPolicy movementPolicy;
@@ -22,6 +23,8 @@ public sealed partial class LocalPlayerInputController
     private bool traversalStopPending;
     private Vector3 blockedTraversalDirection, blockedTraversalPosition;
     private bool blockedTraversalGrounded;
+    private long lookTargetChangedAt, lastTurnEventAt;
+    private bool lookTargetTracked, hasTurnEvent;
     private static long MovementNow => MovementClock.ElapsedMilliseconds;
 
     internal void BeginMovement(MovementEventControl control, MovementEventPolicy policy)
@@ -29,6 +32,7 @@ public sealed partial class LocalPlayerInputController
         movementPolicy = policy;
         movementControl = null;
         deathMovementEpoch = 0;
+        hasTurnEvent = false;
         ApplyMovementControl(control);
     }
 
@@ -50,6 +54,7 @@ public sealed partial class LocalPlayerInputController
             travelDirection = Vector3.zero;
             traversalStopPending = false;
             blockedTraversalDirection = Vector3.zero;
+            lookTargetTracked = false;
             lastSent = null;
             controlAckAt = stepAt = airStartedAt = lastAnalogFacingAt = MovementNow;
             ownedServerTick = 0;
@@ -133,14 +138,7 @@ public sealed partial class LocalPlayerInputController
                 direction = Vector3.zero;
         }
         MovementEventFlags directional = ReadDirectionFlags(input, direction);
-        MovementEventFlags turning = MovementEventFlags.None;
-        if (input.FaceCamera && direction == Vector3.zero)
-        {
-            targetTurnYaw = input.CameraYaw;
-            float angle = Mathf.DeltaAngle(transform.eulerAngles.y, targetTurnYaw);
-            if (Mathf.Abs(angle) > .25f)
-                turning = angle < 0 ? MovementEventFlags.TurnLeft : MovementEventFlags.TurnRight;
-        }
+        MovementEventFlags turning = ResolveTurnFlags(input, direction, now);
 
         bool wasWalking = (movementFlags & MovementEventFlags.Walking) != 0;
         if (wasWalking == run)
@@ -196,6 +194,36 @@ public sealed partial class LocalPlayerInputController
     private float MovementSpeed => Mathf.Max(0f,
         predictedMotor.Speed((movementFlags & MovementEventFlags.Walking) == 0) * .995f);
 
+    private MovementEventFlags ResolveTurnFlags(PlayerInputFrame input, Vector3 direction, long now)
+    {
+        // Release/UI/movement stops turning immediately. Mouse samples arriving
+        // between rendered frames must not create start/stop pairs every frame.
+        if (!input.FaceCamera || direction != Vector3.zero)
+        {
+            lookTargetTracked = false;
+            return MovementEventFlags.None;
+        }
+
+        if (!lookTargetTracked || Mathf.Abs(Mathf.DeltaAngle(targetTurnYaw, input.CameraYaw)) > .01f)
+            lookTargetChangedAt = now;
+        targetTurnYaw = input.CameraYaw;
+        lookTargetTracked = true;
+
+        MovementEventFlags oldTurning = movementFlags & TurnFlags;
+        float angle = Mathf.DeltaAngle(transform.eulerAngles.y, targetTurnYaw);
+        MovementEventFlags wanted = Mathf.Abs(angle) > .25f
+            ? (angle < 0 ? MovementEventFlags.TurnLeft : MovementEventFlags.TurnRight)
+            : (now - lookTargetChangedAt < TurnIdleStopDelayMilliseconds ? oldTurning : MovementEventFlags.None);
+        // Reserve half the advertised event budget for movement edges and
+        // heartbeats. Keep this clock across correction epochs so a correction
+        // cannot restart the same event burst.
+        int eventBudget = Math.Max(1, movementPolicy.maxEventsPerSecond);
+        long minimumInterval = Math.Max(50L, (2000L + eventBudget - 1) / eventBudget);
+        if (wanted != oldTurning && hasTurnEvent && now - lastTurnEventAt < minimumInterval)
+            return oldTurning;
+        return wanted;
+    }
+
     private void SetTravelDirection(Vector3 direction)
     {
         travelDirection = direction;
@@ -239,12 +267,21 @@ public sealed partial class LocalPlayerInputController
     {
         float dt = (end - stepAt) * .001f;
         bool onGround = (movementFlags & MovementEventFlags.Falling) == 0;
+        if ((movementFlags & TurnFlags) != 0)
+            predictedMotor.SetHeading(predictedMotor.TurnStep(targetTurnYaw, dt));
+        // An idle grounded actor does not call CharacterController.Move either.
+        // A turn must keep that exact position/support state, rather than run a
+        // downward probe through overlap recovery and map-height correction.
+        if (onGround && (movementFlags & DirectionFlags) == 0)
+        {
+            stepAt = end;
+            predictedMotor.SetLocalMotion(Vector3.zero, 0f, true);
+            return true;
+        }
         float age = (end - airStartedAt) * .001f;
         float vertical = onGround ? -.02f : airSpeed + predictedMotor.Gravity * age;
         float deltaY = onGround ? -.015f : (vertical - .5f * predictedMotor.Gravity * dt) * dt;
         Vector3 before = transform.position;
-        if ((movementFlags & TurnFlags) != 0)
-            predictedMotor.SetHeading(predictedMotor.TurnStep(targetTurnYaw, dt));
         Vector3 requestedDisplacement = travelDirection * (MovementSpeed * dt) + Vector3.up * deltaY;
         CollisionFlags collisions = predictedMotor.MoveLocally(requestedDisplacement,
             movementSession == null ? null : movementSession.CurrentMapTraversal,
@@ -347,6 +384,11 @@ public sealed partial class LocalPlayerInputController
         if (!NetworkManager.Instance.SendMovementEvent(new MovementEventRequest { @event = kind, info = info }))
             return false;
         lastSent = info;
+        if (kind == "turn_start" || kind == "turn_stop")
+        {
+            lastTurnEventAt = now;
+            hasTurnEvent = true;
+        }
         return true;
     }
 
@@ -363,6 +405,7 @@ public sealed partial class LocalPlayerInputController
 
     private void OnDestroy()
     {
+        if (effectStateSource != null) effectStateSource.Clear();
         var network = NetworkManager.Instance;
         if (network != null && network.FlushLocalMovement == FlushMovement)
             network.FlushLocalMovement = null;

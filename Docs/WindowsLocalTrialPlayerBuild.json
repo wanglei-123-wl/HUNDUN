@@ -1,0 +1,62 @@
+{
+  "scope": "windows-local-trial-player",
+  "requestId": "c60b7427a6754e5dbe04c2c3d9acca16",
+  "status": "succeeded",
+  "startedAtUtc": "2026-11-19T12:09:18.5685703Z",
+  "testsRun": false,
+  "playerLaunched": false,
+  "published": false,
+  "outputDirectory": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16",
+  "executablePath": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16\\HUNDUN.exe",
+  "profile": "LocalTrial",
+  "buildTarget": "StandaloneWindows64",
+  "scriptingBackend": "Mono2x",
+  "scenes": [
+    "Assets/Scenes/启动场景.unity"
+  ],
+  "contentReport": {
+    "path": "F:\\游戏项目\\HUNDUN\\Docs\\PlayerMeditationContentBuild.json",
+    "bytes": 4394,
+    "sha256": "31c2aeb867ae6b6c60ceb831c54b7a2582050ebfee1ac60d54ea56e2929d58bf"
+  },
+  "remoteContentDirectory": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64",
+  "remoteCatalogLoadPath": "http://127.0.0.1:18761/StandaloneWindows64",
+  "nativeResult": "Succeeded",
+  "totalErrors": 0,
+  "totalWarnings": 0,
+  "totalSize": 92552449,
+  "durationSeconds": 13.1150174,
+  "executable": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16\\HUNDUN.exe",
+    "bytes": 666624,
+    "sha256": "0b62e9914456f6315d2d5799314c3cdcd398bd59f15ea24662c41a356a4e8669"
+  },
+  "playerRuntimeSettings": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16\\HUNDUN_Data\\StreamingAssets/aa\\settings.json",
+    "bytes": 3935,
+    "sha256": "cc053dd167f5db3c602617212b90527580e2bc275762890ec7d94e2cd9cb430c"
+  },
+  "playerCatalog": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16\\HUNDUN_Data\\StreamingAssets/aa\\catalog.json",
+    "bytes": 52870,
+    "sha256": "c7399e14bd892198d5514cc2378d14146aa99037cf3c01125b35961e3956a609"
+  },
+  "localWorldDependencies": [
+    {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16\\HUNDUN_Data\\StreamingAssets/aa\\StandaloneWindows64\\64aaea1d9abfd84b538513a81e94375a_unitybuiltinshaders_d6ab62ac7095c26cdbaa99b824cb1342.bundle",
+      "bytes": 688588,
+      "sha256": "ff5fe1aa648b7a205b71fc3f076bb3f5acc1436d9a753d1216d5cc51c8071ab0"
+    },
+    {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16\\HUNDUN_Data\\StreamingAssets/aa\\StandaloneWindows64\\bootstrapshared_assets_all_377f1d3467dfed743be38354a01b3e57.bundle",
+      "bytes": 9915349,
+      "sha256": "3271738c29449d7cd0c53d4aefa9236c431554525924fc2646ae3768518919c8"
+    }
+  ],
+  "gameAssembly": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\WindowsLocalTrial\\MeditationEffect-c60b7427a6754e5dbe04c2c3d9acca16\\HUNDUN_Data\\Managed/Assembly-CSharp.dll",
+    "bytes": 1484800,
+    "sha256": "e229e19acd2cae20c3700e73a4c17314a03c39ada6bbe39dae098a0b7c6b5448"
+  },
+  "finishedAtUtc": "2026-11-19T12:09:40.6909662Z"
+}

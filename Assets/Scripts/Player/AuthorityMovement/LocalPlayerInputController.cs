@@ -7,6 +7,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private PredictedCharacterMotor predictedMotor;
     private GameSession movementSession;
     private Animator meditationAnimator;
+    private PlayerEffectStateSource effectStateSource;
     private PlayerInputKeys previousDirectionTap;
     private double previousDirectionTapTime;
     private PlayerInputKeys rollDirection;
@@ -155,6 +156,31 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
     }
 
+    private void LateUpdate() => RefreshEffectState();
+
+    private void OnDisable() => EndMeditation();
+
+    private void RefreshEffectState()
+    {
+        if (effectStateSource == null) return;
+        if (!isActiveAndEnabled || movementSession == null || !movementSession.IsWorldReady)
+        {
+            effectStateSource.Clear();
+            return;
+        }
+
+        bool alive = !movementSession.IsLocalPlayerDead;
+        // The intent closes the effect immediately on cancellation, while the
+        // animation tag prevents showing it before the sitting transition starts.
+        bool meditating = alive && inputEnabled && NetworkManager.Instance?.MovementReady == true
+            && meditationAnimator != null && meditationAnimator.isActiveAndEnabled
+            && meditationAnimator.GetBool(MeditatingParameter)
+            && (meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
+                || (meditationAnimator.IsInTransition(0)
+                    && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag)));
+        effectStateSource.Publish(new PlayerEffectState(alive, meditating));
+    }
+
     public void Bind(
         PredictedCharacterMotor motor,
         LocalPlayerReconciler playerReconciler,
@@ -164,6 +190,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         ResetRollInput();
         predictedMotor = motor;
         movementSession = session;
+        if (effectStateSource == null && !TryGetComponent(out effectStateSource))
+            effectStateSource = gameObject.AddComponent<PlayerEffectStateSource>();
         meditationAnimator = null;
         Animator animator = motor?.VisualAnimator;
         if (animator != null)
@@ -187,6 +215,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
             if (movementControl?.IsValidFor(NetworkManager.Instance.SceneSessionId) == true)
                 predictedMotor.ApplyMovementSettings(movementControl);
         }
+        RefreshEffectState();
     }
 
     public void SetInputEnabled(bool enabled, bool resetSequence = false)
@@ -214,6 +243,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         {
             clientTick = 0;
         }
+        RefreshEffectState();
     }
 
     private void ResolveCombatController()
@@ -356,6 +386,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (meditationAnimator != null && meditationAnimator.isActiveAndEnabled
             && meditationAnimator.GetBool(MeditatingParameter))
             meditationAnimator.SetBool(MeditatingParameter, false);
+        RefreshEffectState();
     }
 
     private bool IsMeditationBlockingInput()

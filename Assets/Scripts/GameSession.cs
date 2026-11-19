@@ -92,6 +92,7 @@ public partial class GameSession : MonoBehaviour
     private PredictedCharacterMotor predictedCharacterMotor;
     private LocalPlayerReconciler localPlayerReconciler;
     private LocalPlayerVisualSmoother localPlayerVisualSmoother;
+    private LocalPlayerVisualGrounding localPlayerVisualGrounding;
     private PlayerGroundRingEffect localGroundRing;
     private bool localPlayerDead;
     private long localCharacterDbId;
@@ -2039,7 +2040,7 @@ public partial class GameSession : MonoBehaviour
         {
             UseDefaultLocalCharacterVisual(localPlayerRoot, characterId);
             PlayerEffectPresenter.Bind(localPlayerRoot, playerPresentationSettings,
-                localCharacterVisualRoot, localSkillReleasePoint, defaultLocalCharacterVisual);
+                LocalPresentationRoot, localSkillReleasePoint, defaultLocalCharacterVisual);
             return;
         }
 
@@ -2064,7 +2065,7 @@ public partial class GameSession : MonoBehaviour
         DisableGameplayComponentsOnVisual(spawnedLocalCharacterVisual);
         BindLocalPlayerComponents(localPlayerRoot, spawnedLocalCharacterVisual.GetComponentInChildren<Animator>(true));
         PlayerEffectPresenter.Bind(localPlayerRoot, playerPresentationSettings,
-            localCharacterVisualRoot, localSkillReleasePoint, spawnedLocalCharacterVisual);
+            LocalPresentationRoot, localSkillReleasePoint, spawnedLocalCharacterVisual);
     }
 
     private GameObject EnsureLocalPlayerRoot(Vector3 spawnPosition, Quaternion spawnRotation)
@@ -2215,8 +2216,9 @@ public partial class GameSession : MonoBehaviour
             predictedCharacterMotor = localPlayerRoot.AddComponent<PredictedCharacterMotor>();
         }
 
-        Animator boundAnimator = animator != null
-            ? animator
+        GameObject currentVisual = spawnedLocalCharacterVisual != null ? spawnedLocalCharacterVisual : defaultLocalCharacterVisual;
+        Animator boundAnimator = animator != null ? animator
+            : currentVisual != null ? currentVisual.GetComponentInChildren<Animator>(true)
             : localPlayerRoot.GetComponentInChildren<Animator>(true);
         predictedCharacterMotor.BindAnimator(boundAnimator);
         PlayerDeathAnimation.SetDead(boundAnimator, localPlayerDead, alreadyDeadAtSpawn: true);
@@ -2228,6 +2230,11 @@ public partial class GameSession : MonoBehaviour
         }
 
         localPlayerVisualSmoother.Bind(localPlayerRoot.transform, localCharacterVisualRoot);
+
+        localPlayerVisualGrounding = localPlayerRoot.GetComponent<LocalPlayerVisualGrounding>();
+        if (localPlayerVisualGrounding == null)
+            localPlayerVisualGrounding = localPlayerRoot.AddComponent<LocalPlayerVisualGrounding>();
+        localPlayerVisualGrounding.Bind(this, predictedCharacterMotor, localCharacterVisualRoot, currentVisual, boundAnimator);
 
         localPlayerReconciler = localPlayerRoot.GetComponent<LocalPlayerReconciler>();
         if (localPlayerReconciler == null)
@@ -2264,13 +2271,18 @@ public partial class GameSession : MonoBehaviour
         BindLocalGroundRing(cameraFollowTarget, localPlayerRoot.transform);
     }
 
+    private Transform LocalPresentationRoot => localPlayerVisualGrounding != null
+        && localPlayerVisualGrounding.PresentationRoot != null
+        ? localPlayerVisualGrounding.PresentationRoot : localCharacterVisualRoot;
+
     private void BindLocalSkillRelease(GameObject localPlayerRoot)
     {
         if (localSkillReleasePoint == null)
         {
             localSkillReleasePoint = new GameObject("施法挂点").transform;
-            localSkillReleasePoint.SetParent(localCharacterVisualRoot, false);
         }
+        if (localSkillReleasePoint.parent != LocalPresentationRoot)
+            localSkillReleasePoint.SetParent(LocalPresentationRoot, false);
 
         localSkillReleasePoint.localPosition = playerPresentationSettings != null
             ? playerPresentationSettings.SkillReleaseOffset
@@ -2326,6 +2338,7 @@ public partial class GameSession : MonoBehaviour
         SetBehavioursEnabled<PredictedCharacterMotor>(visualObject, false);
         SetBehavioursEnabled<LocalPlayerReconciler>(visualObject, false);
         SetBehavioursEnabled<LocalPlayerVisualSmoother>(visualObject, false);
+        SetBehavioursEnabled<LocalPlayerVisualGrounding>(visualObject, false);
 
         CharacterController[] controllers = visualObject.GetComponentsInChildren<CharacterController>(true);
         for (int index = 0; index < controllers.Length; index++)

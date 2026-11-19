@@ -20,7 +20,7 @@ public sealed class PlayerPresentationSettings : ScriptableObject
 [Serializable]
 public sealed class PlayerEffectDefinition
 {
-    [SerializeField, Tooltip("同一份配置中的名称需要唯一。")]
+    [SerializeField, Tooltip("同时作为特效唯一 ID。同一份配置中不能重复，注册后应保持稳定。")]
     private string 特效名称;
 
     [SerializeField]
@@ -38,12 +38,17 @@ public sealed class PlayerEffectDefinition
     [SerializeField]
     private PlayerEffectPlayback 播放方式;
 
+    [SerializeField, Tooltip("所选条件需要同时满足。条件控制会自动开关；其他播放入口也受这些条件约束。")]
+    private PlayerEffectConditions 显示条件;
+
     public string EffectName => 特效名称;
+    public string EffectId => 特效名称;
     public GameObject Prefab => 粒子预制体;
     public PlayerEffectAnchor Anchor => 挂载位置;
     public Vector3 LocalOffset => 位置偏移;
     public PlayerEffectTrigger Trigger => 触发方式;
     public PlayerEffectPlayback Playback => 播放方式;
+    public PlayerEffectConditions Conditions => 显示条件;
 }
 
 public enum PlayerEffectAnchor
@@ -54,8 +59,17 @@ public enum PlayerEffectAnchor
 
 public enum PlayerEffectTrigger
 {
-    [InspectorName("出场播放")] OnSpawn,
-    [InspectorName("按名称调用")] OnDemand
+    [InspectorName("出场播放")] OnSpawn = 0,
+    [InspectorName("按名称调用")] OnDemand = 1,
+    [InspectorName("条件控制")] WhileCondition = 2
+}
+
+[Flags]
+public enum PlayerEffectConditions
+{
+    [InspectorName("无条件")] None = 0,
+    [InspectorName("存活")] Alive = 1,
+    [InspectorName("打坐中")] Meditating = 2
 }
 
 public enum PlayerEffectPlayback
