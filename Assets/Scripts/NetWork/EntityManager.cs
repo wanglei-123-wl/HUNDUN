@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using Game.Client.BattleSync;
 using Game.Client.BattleSync.Protocol;
+using Game.Client.Vfx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSyncSnapshotRoutingControl
 {
@@ -11,6 +13,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
     [SerializeField] private GameObject fallbackRemotePlayerPrefab;
     [SerializeField] private Transform remotePlayerRoot;
     [SerializeField, InspectorName("玩家公共表现配置")] private PlayerPresentationSettings playerPresentationSettings;
+    [SerializeField] private PlayerGroundRingEffect remotePlayerSelectionRingPrefab;
 
     [Header("Remote Player Health Bar")]
     [SerializeField] private GameObject remotePlayerHealthBarPrefab;
@@ -672,6 +675,14 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         remotePlayer = playerObject.AddComponent<RemotePlayerSync>();
         remotePlayer.BindPresentation(visual, skillReleasePoint);
         remotePlayer.Init(state.characterDbId, state.characterId, state.nickname);
+        if (remotePlayerSelectionRingPrefab != null)
+        {
+            var selectionRing = Instantiate(remotePlayerSelectionRingPrefab, playerRoot, false);
+            selectionRing.gameObject.SetActive(false);
+            selectionRing.SetFollowTarget(playerRoot, playerRoot, GroundRingSurfaceFilter.Allows);
+            selectionRing.SetGroundScene(SceneManager.GetActiveScene());
+            remotePlayer.SelectionRing = selectionRing.gameObject;
+        }
         remotePlayer.SetAttackEventRoutingEnabled(
             snapshotRoutingMode == BattleSyncSnapshotRoutingMode.CoordinatorOwned);
         PlayerEffectPresenter.Bind(playerObject, playerPresentationSettings, playerRoot, skillReleasePoint, visual);

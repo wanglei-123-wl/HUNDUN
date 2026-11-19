@@ -1966,7 +1966,6 @@ public partial class GameSession : MonoBehaviour
         spawnedLocalCharacterVisual.name = "LocalCharacter_" + characterId;
         spawnedLocalCharacterVisual.transform.localPosition = Vector3.zero;
         spawnedLocalCharacterVisual.transform.localRotation = Quaternion.identity;
-        spawnedLocalCharacterVisual.transform.localScale = Vector3.one;
 
         DisableGameplayComponentsOnVisual(spawnedLocalCharacterVisual);
         BindLocalPlayerComponents(localPlayerRoot, spawnedLocalCharacterVisual.GetComponentInChildren<Animator>(true));
@@ -2085,7 +2084,6 @@ public partial class GameSession : MonoBehaviour
 
         defaultLocalCharacterVisual.transform.localPosition = Vector3.zero;
         defaultLocalCharacterVisual.transform.localRotation = Quaternion.identity;
-        defaultLocalCharacterVisual.transform.localScale = Vector3.one;
         defaultLocalCharacterVisual.SetActive(true);
         BindLocalPlayerComponents(localPlayerRoot, defaultLocalCharacterVisual.GetComponentInChildren<Animator>(true));
     }

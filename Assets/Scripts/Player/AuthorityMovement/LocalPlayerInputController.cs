@@ -22,7 +22,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private bool pendingJumpPressed;
     private bool trackingMouseLeftClick;
     private bool suppressLeftClickAttack;
-    private CombatTargetSelection rightClickMonster;
+    private CombatTargetSelection rightClickTarget;
     private float mouseLeftDragDistance;
     private readonly BasicAttackMovementGate basicAttackMovementGate =
         new BasicAttackMovementGate();
@@ -78,7 +78,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         basicAttackMovementGate.Observe(
             IsMovingForBasicAttack(heldKeys, heldActions), Time.unscaledTime);
 
-        HandleMonsterRightClick(gameplayBlocked);
+        HandleTargetRightClick(gameplayBlocked);
 
         if (!gameplayBlocked && Input.GetMouseButtonDown(0))
         {
@@ -193,7 +193,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         pendingJumpPressed = false;
         trackingMouseLeftClick = false;
         suppressLeftClickAttack = false;
-        rightClickMonster = default;
+        rightClickTarget = default;
         mouseLeftDragDistance = 0f;
         basicAttackMovementGate.Reset();
         cameraFollow = null;
@@ -226,18 +226,18 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         }
     }
 
-    private void HandleMonsterRightClick(bool uiBlocked)
+    private void HandleTargetRightClick(bool uiBlocked)
     {
         if (uiBlocked || Input.GetMouseButton(0)
             || (cameraFollow != null && cameraFollow.IsRightMouseDragging))
         {
-            rightClickMonster = default;
+            rightClickTarget = default;
             return;
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            rightClickMonster = default;
+            rightClickTarget = default;
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return;
 
@@ -249,15 +249,15 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
                 return;
 
             ResolveCombatController();
-            combatController?.TryPickMonsterUnderPointer(out rightClickMonster);
+            combatController?.TryPickTargetUnderPointer(out rightClickTarget);
         }
 
         if (!Input.GetMouseButtonUp(1))
             return;
 
-        if (rightClickMonster.IsValid)
-            combatController?.ToggleClickedMonsterLock(rightClickMonster);
-        rightClickMonster = default;
+        if (rightClickTarget.IsValid)
+            combatController?.ToggleClickedTargetLock(rightClickTarget);
+        rightClickTarget = default;
     }
 
     private void UpdateRollInput(PlayerInputKeys tappedDirections, double now, bool inputAvailable)

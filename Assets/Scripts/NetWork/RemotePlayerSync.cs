@@ -51,6 +51,13 @@ public class RemotePlayerSync : MonoBehaviour
     public long LastServerTick => lastServerTick;
     public Animator VisualAnimator => animator;
     public Transform SkillReleasePoint { get; private set; }
+    internal GameObject SelectionRing { get; set; }
+
+    internal void SetSelectionRingVisible(bool visible)
+    {
+        if (SelectionRing != null)
+            SelectionRing.SetActive(visible);
+    }
 
     private void Awake()
     {

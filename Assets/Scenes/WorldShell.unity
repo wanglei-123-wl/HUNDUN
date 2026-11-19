@@ -24522,6 +24522,7 @@ MonoBehaviour:
   fallbackRemotePlayerPrefab: {fileID: 0}
   remotePlayerRoot: {fileID: 1798329031}
   playerPresentationSettings: {fileID: 11400000, guid: 2560c62c692545fd99700ba27a45ab87, type: 2}
+  remotePlayerSelectionRingPrefab: {fileID: 11400000, guid: 68327db641ed4607a7d1245731f4a1ba, type: 3}
   remotePlayerHealthBarPrefab: {fileID: 4401805970693814780, guid: bb61d9b210f968b48a81399a86c11de5, type: 3}
   remotePlayerHealthBarOffset: {x: 0, y: 0.2, z: 0}
   combatStateStore: {fileID: 1973135054}

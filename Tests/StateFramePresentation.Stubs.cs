@@ -29,6 +29,7 @@ namespace UnityEngine
     public sealed class GameObject
     {
         public string name;
+        public void SetActive(bool active) { }
         public bool TryGetComponent<T>(out T value) where T : class { value = null; return false; }
         public T GetComponentInChildren<T>(bool includeInactive) where T : class => null;
         public T[] GetComponentsInChildren<T>(bool includeInactive) => Array.Empty<T>();

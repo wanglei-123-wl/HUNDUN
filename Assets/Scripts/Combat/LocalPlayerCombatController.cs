@@ -71,9 +71,9 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
     private long lastSkillManaRequestSequence = -1;
 
     public long LastSentActionSequence => nextActionSequence;
-    internal CombatTargetSelection LockedMonsterTarget => this != null && isActiveAndEnabled
+    internal CombatTargetSelection LockedTarget => this != null && isActiveAndEnabled
         && combatEnabled && targetingController != null
-        ? targetingController.LockedMonsterTarget
+        ? targetingController.LockedTarget
         : default;
 
     private void Awake()
@@ -131,28 +131,27 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             visualSmoother.ClearCombatFacing();
     }
 
-    internal bool TryPickMonsterUnderPointer(out CombatTargetSelection target)
+    internal bool TryPickTargetUnderPointer(out CombatTargetSelection target)
     {
         target = default;
         return combatEnabled && isActiveAndEnabled && targetingController != null
-            && targetingController.TryPickMonsterUnderPointer(out target);
+            && targetingController.TryPickTargetUnderPointer(out target);
     }
 
-    internal void ToggleClickedMonsterLock(CombatTargetSelection target)
+    internal void ToggleClickedTargetLock(CombatTargetSelection target)
     {
-        if (!combatEnabled || !isActiveAndEnabled || targetingController == null || !target.IsValid
-            || !target.TargetTransform.TryGetComponent(out MonsterNetworkView monster)
-            || monster.EntityId != target.EntityId)
+        if (!combatEnabled || !isActiveAndEnabled || targetingController == null || !target.IsValid)
             return;
 
-        CombatTargetSelection lockedTarget = LockedMonsterTarget;
-        if (lockedTarget.TargetTransform == target.TargetTransform && lockedTarget.EntityId == target.EntityId)
+        CombatTargetSelection lockedTarget = LockedTarget;
+        if (lockedTarget.TargetTransform == target.TargetTransform && lockedTarget.EntityId == target.EntityId
+            && lockedTarget.EntityType == target.EntityType)
         {
             ClearCombatTarget();
             return;
         }
 
-        if (targetingController.TryLockMonster(monster))
+        if (targetingController.TryLockTarget(target))
             recentAttacks.Clear();
     }
 
@@ -284,8 +283,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             && targetingController.TryResolveCombatTarget(out target)
             && target.IsValid;
 
-        if (hasTarget && target.EntityType == "monster"
-            && target.TryGetHorizontalYaw(transform.position, out float targetYaw))
+        if (hasTarget && target.TryGetHorizontalYaw(transform.position, out float targetYaw))
         {
             aimYaw = targetYaw;
         }
@@ -331,7 +329,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
     private void FaceAttackTarget(CombatTargetSelection target)
     {
-        if (visualSmoother != null && target.EntityType == "monster"
+        if (visualSmoother != null
             && target.TryGetHorizontalYaw(visualSmoother.VisualWorldPosition, out float yaw))
         {
             visualSmoother.FaceCombatTargetImmediately(yaw);
@@ -369,7 +367,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         string monsterInstanceId, Transform expectedTarget = null)
     {
         if (!combatEnabled || !isActiveAndEnabled || targetingController == null
-            || LockedMonsterTarget.IsValid || !recentAttacks.Contains((actionId, sequence)))
+            || LockedTarget.IsValid || !recentAttacks.Contains((actionId, sequence)))
             return;
 
         NetworkManager network = NetworkManager.Instance;

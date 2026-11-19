@@ -13,16 +13,13 @@ public sealed class MonsterTargetingController : MonoBehaviour
 
     private CombatTargetSelection currentTarget;
     private MonsterNetworkView targetMonster;
+    private RemotePlayerSync targetPlayer;
 
     public CombatTargetSelection CurrentTarget => IsValidTarget(currentTarget)
-        && (currentTarget.EntityType != "monster" || (targetMonster != null
-            && targetMonster.IsTargetable && targetMonster.EntityId == currentTarget.EntityId))
         ? currentTarget
         : default;
 
-    public CombatTargetSelection LockedMonsterTarget => targetMonster != null && targetMonster.SelectionRing != null
-        ? CurrentTarget
-        : default;
+    public CombatTargetSelection LockedTarget => CurrentTarget;
 
     private void LateUpdate()
     {
@@ -40,7 +37,7 @@ public sealed class MonsterTargetingController : MonoBehaviour
         target = default;
         if (!isActiveAndEnabled) return false;
 
-        CombatTargetSelection lockedTarget = LockedMonsterTarget;
+        CombatTargetSelection lockedTarget = LockedTarget;
         if (lockedTarget.IsValid)
         {
             target = lockedTarget;
@@ -78,12 +75,15 @@ public sealed class MonsterTargetingController : MonoBehaviour
     {
         if (targetMonster != null)
             targetMonster.SetSelectionRingVisible(false);
+        if (targetPlayer != null)
+            targetPlayer.SetSelectionRingVisible(false);
 
         targetMonster = null;
+        targetPlayer = null;
         currentTarget = default;
     }
 
-    internal bool TryPickMonsterUnderPointer(out CombatTargetSelection target)
+    internal bool TryPickTargetUnderPointer(out CombatTargetSelection target)
     {
         target = default;
         if (!isActiveAndEnabled) return false;
@@ -93,16 +93,20 @@ public sealed class MonsterTargetingController : MonoBehaviour
         foreach (RaycastHit hit in GetPointerHits(~0))
         {
             Collider collider = hit.collider;
-            MonsterNetworkView monster = collider.GetComponentInParent<MonsterNetworkView>();
             if ((targetLayers.value & (1 << collider.gameObject.layer)) != 0
-                && monster != null && monster.SelectionRing != null
-                && TryCreateMonsterTarget(monster, out target))
-                return true;
+                && TryCreatePointerTarget(collider, out target))
+            {
+                if (target.EntityType == "player"
+                    || (target.TargetTransform.TryGetComponent(out MonsterNetworkView monster)
+                        && monster.SelectionRing != null))
+                    return true;
+            }
 
             if (!collider.isTrigger)
                 break;
         }
 
+        target = default;
         return false;
     }
 
@@ -110,6 +114,17 @@ public sealed class MonsterTargetingController : MonoBehaviour
     {
         if (!isActiveAndEnabled || monster == null || monster.SelectionRing == null
             || !TryCreateMonsterTarget(monster, out CombatTargetSelection target))
+            return false;
+
+        return TryLockTarget(target);
+    }
+
+    internal bool TryLockTarget(CombatTargetSelection target)
+    {
+        if (!isActiveAndEnabled || !IsValidTarget(target)) return false;
+        if (target.EntityType == "monster"
+            && (!target.TargetTransform.TryGetComponent(out MonsterNetworkView monster)
+                || monster.SelectionRing == null))
             return false;
 
         ConfirmCombatTarget(target);
@@ -123,17 +138,14 @@ public sealed class MonsterTargetingController : MonoBehaviour
             && currentTarget.EntityId == target.EntityId && currentTarget.EntityType == target.EntityType)
             return;
 
-        MonsterNetworkView monster = null;
-        if (target.EntityType == "monster"
-            && (!target.TargetTransform.TryGetComponent(out monster)
-                || !monster.IsTargetable || monster.EntityId != target.EntityId))
-            return;
-
         ClearTarget();
         currentTarget = target;
-        targetMonster = monster;
+        target.TargetTransform.TryGetComponent(out targetMonster);
+        target.TargetTransform.TryGetComponent(out targetPlayer);
         if (targetMonster != null)
             targetMonster.SetSelectionRingVisible(true);
+        if (targetPlayer != null)
+            targetPlayer.SetSelectionRingVisible(true);
     }
 
     private void ResolveCamera()
@@ -164,20 +176,24 @@ public sealed class MonsterTargetingController : MonoBehaviour
 
         for (int index = 0; index < hits.Length; index++)
         {
-            RemotePlayerSync player = hits[index].collider.GetComponentInParent<RemotePlayerSync>();
-            // Model-side sync components can still be present until the end of their spawn frame.
-            while (player != null)
-            {
-                if (TryCreatePlayerTarget(player, out target)) return true;
-                Transform parent = player.transform.parent;
-                player = parent == null ? null : parent.GetComponentInParent<RemotePlayerSync>();
-            }
-
-            MonsterNetworkView monster = hits[index].collider.GetComponentInParent<MonsterNetworkView>();
-            if (TryCreateMonsterTarget(monster, out target)) return true;
+            if (TryCreatePointerTarget(hits[index].collider, out target)) return true;
         }
 
         return false;
+    }
+
+    private static bool TryCreatePointerTarget(Collider collider, out CombatTargetSelection target)
+    {
+        RemotePlayerSync player = collider.GetComponentInParent<RemotePlayerSync>();
+        // Model-side sync components can still be present until the end of their spawn frame.
+        while (player != null)
+        {
+            if (TryCreatePlayerTarget(player, out target)) return true;
+            Transform parent = player.transform.parent;
+            player = parent == null ? null : parent.GetComponentInParent<RemotePlayerSync>();
+        }
+
+        return TryCreateMonsterTarget(collider.GetComponentInParent<MonsterNetworkView>(), out target);
     }
 
     private RaycastHit[] GetPointerHits(int layers)
@@ -248,12 +264,20 @@ public sealed class MonsterTargetingController : MonoBehaviour
 
     private static bool IsValidTarget(CombatTargetSelection target)
     {
-        return target.IsValid && target.TargetTransform.gameObject.activeInHierarchy;
+        if (!target.IsValid || !target.TargetTransform.gameObject.activeInHierarchy) return false;
+        if (target.EntityType == "monster")
+            return target.TargetTransform.TryGetComponent(out MonsterNetworkView monster)
+                && monster.IsTargetable && monster.EntityId == target.EntityId;
+        if (target.EntityType == "player")
+            return target.TargetTransform.TryGetComponent(out RemotePlayerSync player)
+                && player.isActiveAndEnabled && !player.IsDead && player.CharacterDbId > 0
+                && player.CharacterDbId.ToString(CultureInfo.InvariantCulture) == target.EntityId;
+        return false;
     }
 
     private static bool TryCreatePlayerTarget(RemotePlayerSync player, out CombatTargetSelection target)
     {
-        if (player == null || !player.isActiveAndEnabled || player.CharacterDbId <= 0)
+        if (player == null || !player.isActiveAndEnabled || player.IsDead || player.CharacterDbId <= 0)
         {
             target = default;
             return false;

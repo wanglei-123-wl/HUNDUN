@@ -191,7 +191,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         Transform activeRotationTarget = GetRotationTarget();
         CombatTargetSelection lockedTarget = combatController == null
             ? default
-            : combatController.LockedMonsterTarget;
+            : combatController.LockedTarget;
         Transform lockedMonster = lockedTarget.TargetTransform;
         bool trackMonster = lockedMonster != null && !leftDragging && !rightDragging;
         bool stoppedTracking = lockedOrbitYaw.HasValue && !trackMonster;
