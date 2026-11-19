@@ -8,6 +8,7 @@ using Game.CharacterPanel.Runtime;
 using Game.CharacterPanel.Protocol;
 using Game.Cultivation.Runtime;
 using Game.Client.BattleSync;
+using Game.Client.MapTraversal;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -37,6 +38,9 @@ public partial class GameSession : MonoBehaviour
     [SerializeField, Min(1f)] private float worldRecoveryTimeout = 30f;
     [SerializeField, Min(1f)] private float gateEnterWorldTimeout = 10f;
     [SerializeField, Min(1f)] private float mapTransferSnapshotTimeout = 20f;
+    [SerializeField, Min(1f)] private float mapTraversalLoadTimeout = 60f;
+    private readonly MapTraversalSession mapTraversal = new MapTraversalSession();
+    private BattleSyncReadyContext? mapTraversalWaitingTransferReady;
 
     [Header("References")]
     [SerializeField] private NetworkManager networkManager;
@@ -152,6 +156,20 @@ public partial class GameSession : MonoBehaviour
     public bool IsCurrentMap(string worldSceneId, string mapId) => IsWorldReady
         && string.Equals(sceneId, worldSceneId, System.StringComparison.Ordinal)
         && string.Equals(activeMapId, mapId, System.StringComparison.Ordinal);
+    public MapTraversalQuery CurrentMapTraversal => IsWorldReady && mapTraversal.IsReady(sceneId, activeMapId)
+        ? mapTraversal.Current : null;
+    internal bool IsMapTraversalReady(string worldSceneId, string mapId) => mapTraversal.IsReady(worldSceneId, mapId);
+    internal bool IsMapTraversalPrepared(string worldSceneId, string mapId) => mapTraversal.IsPrepared(worldSceneId, mapId);
+    internal bool CommitMapTraversal(string worldSceneId, string mapId) => mapTraversal.Commit(worldSceneId, mapId);
+
+    internal IEnumerator PrepareMapTraversal(string worldSceneId, string mapId, long epoch, System.Func<bool> extraValid = null)
+    {
+        NetworkManager owner = NetworkManager.Instance;
+        yield return mapTraversal.Prepare(worldSceneId, mapId,
+            () => this != null && !returningToLogin && owner != null && NetworkManager.Instance == owner
+                && owner.IsConnected && owner.ConnectionEpoch == epoch && (extraValid == null || extraValid()),
+            mapTraversalLoadTimeout);
+    }
     public bool PvpEnabled { get; private set; }
     public int LocalEnterWorldHp { get; private set; } = -1;
     public long LocalEnterWorldCombatRevision { get; private set; } = -1;
@@ -187,6 +205,7 @@ public partial class GameSession : MonoBehaviour
     {
         if (returningToLogin) return;
         returningToLogin = true;
+        mapTraversal.Dispose();
         WorldEntryLoadingView entryView = WorldEntryLoadingView.ActiveWorldEntry;
         LocalNickname = string.Empty;
         EquipmentOperationSessionId = string.Empty;
@@ -415,6 +434,8 @@ public partial class GameSession : MonoBehaviour
             }
 
             messageDispatcher.ReplayDeferredWorldMessages();
+            if (!IsMapTraversalReady(sceneId, activeMapId))
+                StartCoroutine(PrepareRecoveredMapTraversal(sceneId, activeMapId, epoch));
             return;
         }
 
@@ -444,6 +465,20 @@ public partial class GameSession : MonoBehaviour
             if (operation.IsValid()) Addressables.Release(operation);
             HandleRecoveryFailed("World resources failed to load. Please update game resources.");
         }
+    }
+
+    private IEnumerator PrepareRecoveredMapTraversal(string recoveredSceneId, string recoveredMapId, long epoch)
+    {
+        yield return PrepareMapTraversal(recoveredSceneId, recoveredMapId, epoch);
+        if (this == null || returningToLogin || networkManager == null || !networkManager.IsConnected
+            || networkManager.ConnectionEpoch != epoch || sceneId != recoveredSceneId || activeMapId != recoveredMapId)
+            yield break;
+        if (!CommitMapTraversal(recoveredSceneId, recoveredMapId))
+        {
+            HandleRecoveryFailed("地图资源准备失败，请更新游戏资源后重试。");
+            yield break;
+        }
+        StartLocalPlayerInput();
     }
 
     private void HandleRecoveryFailed(string message)
@@ -502,6 +537,7 @@ public partial class GameSession : MonoBehaviour
 
     private void OnDestroy()
     {
+        mapTraversal.Dispose();
         if (localGroundRing != null)
             Destroy(localGroundRing.gameObject);
         StopSession(false);
@@ -674,6 +710,7 @@ public partial class GameSession : MonoBehaviour
         }
 
         sessionStarted = false;
+        mapTraversal.Dispose();
         pendingDefaultAttackMode = null;
         defaultAttackModeSceneSessionId = null;
         mapTransferPaused = false;
@@ -1553,7 +1590,14 @@ public partial class GameSession : MonoBehaviour
                 return;
             }
 
+            if (!IsMapTraversalReady(transfer.sceneId, transfer.mapId))
+            {
+                mapTraversalWaitingTransferReady = context;
+                return;
+            }
+
             pendingMapTransfer = null;
+            mapTraversalWaitingTransferReady = null;
             mapTransferSnapshotDeadline = 0f;
             enterWorldConfirmed = true;
             mapTransferPaused = false;
@@ -1607,6 +1651,8 @@ public partial class GameSession : MonoBehaviour
 
     private void CancelMapTransferLoad()
     {
+        mapTraversal.CancelPending();
+        mapTraversalWaitingTransferReady = null;
         if (mapTransferLoadCoroutine != null)
         {
             StopCoroutine(mapTransferLoadCoroutine);
@@ -1681,15 +1727,16 @@ public partial class GameSession : MonoBehaviour
         }
 
         yield return operation;
-        mapTransferLoadCoroutine = null;
-        mapTransferSceneOperation = default;
         if (pendingMapTransfer != result || networkManager == null
             || !networkManager.IsConnected || networkManager.ConnectionEpoch != epoch
             || messageDispatcher == null || messageDispatcher.HasDeferredWorldOverflow)
         {
             if (operation.Status == AsyncOperationStatus.Succeeded
                 && operation.Result.Scene.IsValid())
+            {
                 SceneManager.UnloadSceneAsync(operation.Result.Scene);
+                mapTransferSceneOperation = default;
+            }
             RecoverWorldSession("map_transfer_connection_changed");
             yield break;
         }
@@ -1715,6 +1762,8 @@ public partial class GameSession : MonoBehaviour
 
         sceneId = result.sceneId;
         activeMapId = result.mapId;
+        mapTransferSnapshotDeadline = Time.realtimeSinceStartup
+            + Mathf.Max(mapTransferSnapshotTimeout, mapTraversalLoadTimeout);
         if (!TryGetLocalPlayerInputController(out var movementInput) || !movementInput.ApplyMovementControl(result.movementControl))
         {
             RecoverWorldSession("map_transfer_movement_control_failed");
@@ -1740,7 +1789,33 @@ public partial class GameSession : MonoBehaviour
 
         messageDispatcher.ReplayDeferredWorldMessages();
         if (messageDispatcher.HasDeferredWorldOverflow)
+        {
             RecoverWorldSession("map_transfer_message_overflow");
+            yield break;
+        }
+        if (!IsMapTraversalReady(result.sceneId, result.mapId))
+        {
+            // Movement control is acknowledged above while resource preparation keeps input paused.
+            yield return PrepareMapTraversal(result.sceneId, result.mapId, epoch, () => pendingMapTransfer == result);
+            if (this == null || returningToLogin || networkManager == null || !networkManager.IsConnected
+                || networkManager.ConnectionEpoch != epoch || pendingMapTransfer != result)
+                yield break;
+            if (!CommitMapTraversal(result.sceneId, result.mapId))
+            {
+                RecoverWorldSession("map_transfer_traversal_data_failed");
+                yield break;
+            }
+        }
+        mapTransferLoadCoroutine = null;
+        mapTransferSceneOperation = default;
+        if (pendingMapTransfer != null)
+            mapTransferSnapshotDeadline = Time.realtimeSinceStartup + Mathf.Max(1f, mapTransferSnapshotTimeout);
+        if (mapTraversalWaitingTransferReady.HasValue)
+        {
+            BattleSyncReadyContext ready = mapTraversalWaitingTransferReady.Value;
+            mapTraversalWaitingTransferReady = null;
+            HandleBattleSyncReady(ready);
+        }
     }
 
     public void HandleWorldSnapshot(string json)
@@ -1774,12 +1849,19 @@ public partial class GameSession : MonoBehaviour
     private void HandleMovementControl(string json) =>
         ApplyMovementControl(JsonUtility.FromJson<MovementControlNotification>(json)?.control);
 
-    private void HandleMovementControlResult(string json) =>
-        localPlayerInputController?.ReceiveMovementControlResult(JsonUtility.FromJson<MovementControlReply>(json)?.result);
+    private void HandleMovementControlResult(string json)
+    {
+        var result = JsonUtility.FromJson<MovementControlReply>(json)?.result;
+        BattleSyncDiagnosticsLogger.LogMovementControlReply(
+            networkManager == null ? 0 : networkManager.ConnectionEpoch, sceneId, activeMapId, result, false);
+        localPlayerInputController?.ReceiveMovementControlResult(result);
+    }
 
     private void HandleMovementCorrection(string json)
     {
         var result = JsonUtility.FromJson<MovementControlReply>(json)?.result;
+        BattleSyncDiagnosticsLogger.LogMovementControlReply(
+            networkManager == null ? 0 : networkManager.ConnectionEpoch, sceneId, activeMapId, result, true);
         if (result?.needsControlAck == true)
             ApplyMovementControl(result.control);
     }
@@ -1788,7 +1870,18 @@ public partial class GameSession : MonoBehaviour
     {
         if (control == null || (mapTransferPaused && pendingMapTransfer == null && control.mode == "normal"))
             return;
-        if (localPlayerInputController?.ApplyMovementControl(control) == true && control.reason == "respawn")
+        bool diagnostics = BattleSyncDiagnosticsLogger.Enabled;
+        Transform localRoot = localPlayerRootObject == null ? null : localPlayerRootObject.transform;
+        Vector3 localBefore = diagnostics && localRoot != null ? localRoot.position : Vector3.zero;
+        Vector3 velocityBefore = diagnostics && predictedCharacterMotor != null
+            ? predictedCharacterMotor.Velocity : Vector3.zero;
+        bool accepted = localPlayerInputController?.ApplyMovementControl(control) == true;
+        if (diagnostics)
+            BattleSyncDiagnosticsLogger.LogMovementControl(
+                networkManager == null ? 0 : networkManager.ConnectionEpoch, sceneId, activeMapId,
+                control, localBefore, localRoot == null ? localBefore : localRoot.position, velocityBefore,
+                localRoot == null ? null : localRoot.GetComponent<CharacterController>(), accepted);
+        if (accepted && control.reason == "respawn")
             LocalRespawnControlReceived?.Invoke();
     }
 
@@ -1822,7 +1915,8 @@ public partial class GameSession : MonoBehaviour
 
     internal void StartLocalPlayerInput()
     {
-        if (localPlayerDead || !enterWorldConfirmed || WorldEntryLoadingView.ActiveWorldEntry != null)
+        if (localPlayerDead || !enterWorldConfirmed || WorldEntryLoadingView.ActiveWorldEntry != null
+            || !IsMapTraversalReady(sceneId, activeMapId))
         {
             return;
         }
@@ -1871,7 +1965,7 @@ public partial class GameSession : MonoBehaviour
         if (TryGetLocalPlayerInputController(out LocalPlayerInputController input))
         {
             if (control != null) input.ApplyMovementControl(control);
-            if (IsWorldReady && !localPlayerDead && inputWasEnabledForTransfer)
+            if (IsWorldReady && !localPlayerDead && inputWasEnabledForTransfer && IsMapTraversalReady(sceneId, activeMapId))
                 input.SetInputEnabled(true);
         }
     }
@@ -1913,7 +2007,7 @@ public partial class GameSession : MonoBehaviour
     public void ResumeLocalPlayerControl()
     {
         if (localPlayerDead || mapTransferPaused || !enterWorldConfirmed
-            || WorldEntryLoadingView.ActiveWorldEntry != null)
+            || WorldEntryLoadingView.ActiveWorldEntry != null || !IsMapTraversalReady(sceneId, activeMapId))
         {
             return;
         }
@@ -2151,7 +2245,8 @@ public partial class GameSession : MonoBehaviour
         localPlayerInputController.Bind(
             predictedCharacterMotor,
             localPlayerReconciler,
-            localPlayerVisualSmoother
+            localPlayerVisualSmoother,
+            this
         );
 
         BindLocalSkillRelease(localPlayerRoot);

@@ -1,0 +1,60 @@
+{
+  "querySourceFingerprint": "8b053108a3e12413777598b2ca96329921a460c14fc0248665a53ff145a77026",
+  "sourceRoot": "F:\\游戏项目\\gameserver\\GameServer",
+  "files": [
+    {
+      "sourceFile": "Game.BattleCore/Maps/IWorldSurfaceQuery.cs",
+      "sourceSha256": "8e85d4e2f800f965854fd8ec21f81df99645e66ad3f90d71cb3818d33e08f123",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/IWorldSurfaceQuery.cs",
+      "adaptedSha256": "06e3b6fa7f792ec81e78aebd666febd0984ea3615693d7076d272904b77e7b6b"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/ServerMapManifest.cs",
+      "sourceSha256": "b28c14885261610c2f44ec34db93a0c6869063f7790bcc7f67dba49303f00ec1",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/ServerMapManifest.cs",
+      "adaptedSha256": "bfb48e8bdfdafab30ceeb943f870b6442f7466ac2e80ea9bd8654839b02d9d4a"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/ServerMapData.cs",
+      "sourceSha256": "f12ea191f5bc0ec972b70a858cdcb860dcf6748a4d921af3c7bbb17b69630f1a",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/ServerMapData.cs",
+      "adaptedSha256": "f9fc00729f57a6836f66d9978fd9664bafae136cda6ae603f7034f3760dda944"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/ServerMapCollider.cs",
+      "sourceSha256": "6ff1bed915038d50e337a2f079a78bb0f6b9913747ced65e3ad15e81b2e68e90",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/ServerMapCollider.cs",
+      "adaptedSha256": "238701645904e9bf4e63b8b3784563923c1d394c578d6c1b60cf06213e21c4db"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/ServerMapCollisionIndex.cs",
+      "sourceSha256": "b0d719255b85665d92831ff8eab7a1c61ee007911a7902a68d74ad325276919f",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/ServerMapCollisionIndex.cs",
+      "adaptedSha256": "fbc5733e60d8c92cd39342be54018b06be1bd67b8759b8a55286c47af6bc26b1"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/ServerMapGroundSurfaceIndex.cs",
+      "sourceSha256": "8cc5e3b068351898e7ccf6703a4cf458b302ba0618a2df0f3ce00eec9fef6f11",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/ServerMapGroundSurfaceIndex.cs",
+      "adaptedSha256": "b39d043e716c6cbe53d56a64f302541758e4bcdd8e1de17ad4c14217fd52ee50"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/ServerMapMeshCollisionIndex.cs",
+      "sourceSha256": "991c30db455727294cbc5c0a9136ba94fb20d43ec9a2e953feca2921bfc5f417",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/ServerMapMeshCollisionIndex.cs",
+      "adaptedSha256": "9d24e9eadb31b3327f927d94a80485841a7ffcca1f862c8862448cd75fdc33a6"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/TriangleDistance.cs",
+      "sourceSha256": "928dfcc5bd7e0ee6b8651f580c8ff4e16f3b6e79b3264f6ad25dff3e7017738f",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/TriangleDistance.cs",
+      "adaptedSha256": "86198980591e7c10ca18a9a101cdd34778c512358eb71d0a1c5d51c715872b67"
+    },
+    {
+      "sourceFile": "Game.BattleCore/Maps/MapTraversal.cs",
+      "sourceSha256": "e65c024c77c659fb13db63f220740ed6f6353f587ad9eb0ed2675f111a503631",
+      "adaptedFile": "Assets/Scripts/MapTraversal/Geometry/MapTraversal.cs",
+      "adaptedSha256": "32c1acd078a9c452247dae4cf822dde24ebaa9b8d1929966311d7bbd332ee0cb"
+    }
+  ]
+}

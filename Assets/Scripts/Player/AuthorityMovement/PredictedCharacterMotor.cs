@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public sealed class PredictedCharacterMotor : MonoBehaviour
+public sealed partial class PredictedCharacterMotor : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
@@ -122,8 +122,6 @@ public sealed class PredictedCharacterMotor : MonoBehaviour
         velocity = horizontal + Vector3.up * vertical;
         grounded = onGround;
     }
-
-    public CollisionFlags MoveLocally(Vector3 displacement) => controller.Move(displacement);
 
     public void PresentPredictedInput(PlayerInputFrame input, bool jumpStarted = false)
     {

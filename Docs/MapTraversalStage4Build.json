@@ -1,0 +1,123 @@
+{
+  "stage": "4-addressables-build",
+  "requestId": "aef67df63c064a3d94daefc3fd41aadc",
+  "startedAtUtc": "2026-11-19T09:47:56.5109158Z",
+  "status": "succeeded",
+  "verificationOnly": true,
+  "addressablesContentBuilt": true,
+  "testsRun": false,
+  "published": false,
+  "runningServerVersionVerified": false,
+  "profile": "LocalTrial",
+  "buildTarget": "StandaloneWindows64",
+  "querySourceFingerprint": "8b053108a3e12413777598b2ca96329921a460c14fc0248665a53ff145a77026",
+  "contentBuildStartedAtUtc": "2026-11-19T09:46:35.3134050Z",
+  "catalog": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\catalog_0.1.json",
+    "bytes": 52874,
+    "sha256": "ecb2eb961e2820dcd98ddba103b06ac76243c436f3b169d69a6bd8d959525923"
+  },
+  "catalogHashFile": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\catalog_0.1.hash",
+    "bytes": 32,
+    "sha256": "43ccfc25da518598390978833967095f4c3f568c7ee705a13356b7e1000e45e3"
+  },
+  "runtimeSettings": {
+    "path": "F:\\游戏项目\\HUNDUN\\Library\\com.unity.addressables\\aa\\Windows\\settings.json",
+    "bytes": 3935,
+    "sha256": "cc053dd167f5db3c602617212b90527580e2bc275762890ec7d94e2cd9cb430c"
+  },
+  "addresses": [
+    {
+      "address": "game/map-traversal/map_demo_1",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_demo_1_20b363d9ffc874c8a7a721ebb2675052.bundle"
+      ]
+    },
+    {
+      "address": "game/map-traversal/map_001",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_001_397c5c2cd6997c9c3c5723b593d153c1.bundle"
+      ]
+    },
+    {
+      "address": "game/map-traversal/map_005",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_005_0ceda6e3a1a86a37f5371ec05e9530d9.bundle"
+      ]
+    },
+    {
+      "address": "game/map-traversal/map_006",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_006_1854dbde088e76845355a2c3da857912.bundle"
+      ]
+    },
+    {
+      "address": "game/map-traversal/map_007",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_007_a78dcc603a9cd07e38490b71c8a68513.bundle"
+      ]
+    },
+    {
+      "address": "game/map-traversal/map_008",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_008_1fbd0f7a648f2d191ad47773bcdc327a.bundle"
+      ]
+    },
+    {
+      "address": "game/map-traversal/map_009",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_009_b403d67736f988bbb8a419e1b523e360.bundle"
+      ]
+    },
+    {
+      "address": "game/map-traversal/map_010",
+      "bundles": [
+        "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_010_2f0f6f0c327abaadaad5a1250e330298.bundle"
+      ]
+    }
+  ],
+  "bundles": {
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_demo_1_20b363d9ffc874c8a7a721ebb2675052.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_demo_1_20b363d9ffc874c8a7a721ebb2675052.bundle",
+      "bytes": 39730230,
+      "sha256": "f1f353ed443140cffd3a4bd567b8904e9c6d6e3df0dc988a2b9e53470e08c931"
+    },
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_001_397c5c2cd6997c9c3c5723b593d153c1.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_001_397c5c2cd6997c9c3c5723b593d153c1.bundle",
+      "bytes": 6294764,
+      "sha256": "edefc30614b6047b3da11a40ed28ff3c556f09975a9df774a085cdded3e67da9"
+    },
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_005_0ceda6e3a1a86a37f5371ec05e9530d9.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_005_0ceda6e3a1a86a37f5371ec05e9530d9.bundle",
+      "bytes": 3303609,
+      "sha256": "e043d525edba27f2c83a80a14e51ad41e3e39d7535cb430c173b7d259d0cdf6d"
+    },
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_006_1854dbde088e76845355a2c3da857912.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_006_1854dbde088e76845355a2c3da857912.bundle",
+      "bytes": 1873431,
+      "sha256": "1f3e5efff681ce1c0335a274ab1c87a5d8c8b69efc7e12dfdc73427a28415c5a"
+    },
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_007_a78dcc603a9cd07e38490b71c8a68513.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_007_a78dcc603a9cd07e38490b71c8a68513.bundle",
+      "bytes": 4785125,
+      "sha256": "6e46b040c2ac7e02654c34849478b69356e4d4f9b5164cc975aa9bd609f9b8e5"
+    },
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_008_1fbd0f7a648f2d191ad47773bcdc327a.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_008_1fbd0f7a648f2d191ad47773bcdc327a.bundle",
+      "bytes": 7444781,
+      "sha256": "f8a9fda2600b77a18e1ecf1f2cfd9bd91fc5354c368a6f524f393fa5c1293d8d"
+    },
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_009_b403d67736f988bbb8a419e1b523e360.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_009_b403d67736f988bbb8a419e1b523e360.bundle",
+      "bytes": 2401928,
+      "sha256": "227778be4c264299693962645f101004e54171a40b0045b57fb0c81e5e150f6e"
+    },
+    "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_010_2f0f6f0c327abaadaad5a1250e330298.bundle": {
+      "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remoteworldmaps_assets_game\\map-traversal\\map_010_2f0f6f0c327abaadaad5a1250e330298.bundle",
+      "bytes": 2514086,
+      "sha256": "5957b9ff9c1cca38711d91ef3d27864554d97ae52720576d26dea4d9ae2d9d74"
+    }
+  },
+  "finishedAtUtc": "2026-11-19T09:47:57.8660878Z"
+}

@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public sealed partial class LocalPlayerInputController : MonoBehaviour
 {
     private PredictedCharacterMotor predictedMotor;
+    private GameSession movementSession;
     private Animator meditationAnimator;
     private PlayerInputKeys previousDirectionTap;
     private double previousDirectionTapTime;
@@ -157,10 +158,12 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     public void Bind(
         PredictedCharacterMotor motor,
         LocalPlayerReconciler playerReconciler,
-        LocalPlayerVisualSmoother smoother)
+        LocalPlayerVisualSmoother smoother,
+        GameSession session)
     {
         ResetRollInput();
         predictedMotor = motor;
+        movementSession = session;
         meditationAnimator = null;
         Animator animator = motor?.VisualAnimator;
         if (animator != null)

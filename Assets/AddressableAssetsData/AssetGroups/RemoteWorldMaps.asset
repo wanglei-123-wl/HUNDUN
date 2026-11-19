@@ -47,6 +47,46 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2093cd39f2e54ba2b1713d5c4e6fbb13
+    m_Address: game/map-traversal/map_demo_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31a523593b94400b803649f52d7c7b69
+    m_Address: game/map-traversal/map_001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2f38d8e8e294779a1591eb783f4b800
+    m_Address: game/map-traversal/map_005
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7f7622be527e4b12aa79d8e1d3ee8606
+    m_Address: game/map-traversal/map_006
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d0bcec673ee4857840140f171219c38
+    m_Address: game/map-traversal/map_007
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e07cd550f60a4abab49aa88ec8ca3b07
+    m_Address: game/map-traversal/map_008
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15b4b1c0cd4d404ba85060076489f560
+    m_Address: game/map-traversal/map_009
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7559987530f24633a5b456f35b540b17
+    m_Address: game/map-traversal/map_010
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
   m_SchemaSet:

@@ -8,6 +8,30 @@ HUNDUN 进场发送 `movementProtocolVersion=2`。客户端应收齐 Gate 返回
 - 已学习且服务端标记自身目标的技能由技能栏以本角色为目标发送，位移类技能的实际位移由 Gate 推进。双击方向键沿用现有普通翻滚操作。
 - `player_input` 和输入回放已移除。进场不接受旧移动协议。应用层会话心跳仍独立维护 Token 和连接。
 
+## 客户端地图通行约束
+
+`WorldMapLayerLoader` 在进场时准备当前地图的通行数据，`GameSession` 在切图时更换查询。当前地图未就绪时不开放本地输入。数据来源和校验值记录在 `MapTraversalStage2Import.json`，资源包地址为 `game/map-traversal/{mapId}`，构建版需要重建并分发对应 Addressables 资源。
+
+`PredictedCharacterMotor.MapTraversal.cs` 在每段普通位移执行前，使用移动控制点下发的半径和高度查询整段路径。地面移动使用后端导入的支撑面、碰撞体和通行算法；旧版地图沿用后端移动使用的 walkable 检查。不能整段通过时，搜索仍能通过的前缀，不做跨角点的横纵轴拆分。Unity 碰撞处理后的实际位置也再次校验，防止滑动或重叠恢复把角色推到禁止区域。跳跃和下落使用胶囊体扫掠，并保留落地、碰顶事件。
+
+走路、跑步和普通翻滚共用这条路径。本地被地图挡住后清除水平方向和速度并发送 `stop`；同一位置持续按住被挡方向不会反复起步，松键、转向、跳跃或位置变化后可重新尝试。停止发送失败时先重发，再处理后续移动和位置引用请求。诊断开启时输出 `local_traversal_blocked`，记录地图包校验值、请求位置、接受位置及角色尺寸。
+
+技能冲刺、传送、复活及其他受控位移继续使用服务端控制点，不由本地通行查询改写。当前只能确认导入包和本地后端源码对应，尚未验证运行中服务端的数据版本；这不能保证消除所有服务端纠正。
+
+本阶段按用户要求没有运行自动化测试或游戏场景测试，脚本编译检查单独进行。
+
+## 构建地图通行资源
+
+Unity 编辑器菜单：`Tools > Resource Update > Build Map Traversal Content`。该入口保持当前 Addressables Profile、分组和资源地址，先核对导入清单中的地图包与 SHA256，再构建当前配置的完整资源目录。构建后检查地图包地址能否解析到生成的 Bundle，并记录目录及地图 Bundle 的文件校验值。结果写入 `Docs/MapTraversalStage4Build.json`；只有 `status` 为 `succeeded` 才表示构建及目录检查均完成。
+
+若原生构建已完成、仅后续校验失败，可用 `Tools > Resource Update > Verify Map Traversal Content` 复核已有产物。此入口要求上一份报告记录原生构建成功，且配置、查询源码版本匹配，地图数据文件在该次构建后未修改；它不会重新打包场景或编译着色器。自动化工具可向 `Temp/MapTraversalContentVerify.request.json` 提交同样格式的一次性请求。
+
+编辑器未占用项目时，也可使用 Unity 的 `-batchmode -projectPath <项目绝对路径> -executeMethod MapTraversalContentBuild.BuildBatch` 执行同一入口，失败会返回非零退出码。编辑器占用项目时，需要在现有编辑器中触发菜单。自动化工具也可在 `Temp/MapTraversalContentBuild.request.json` 写入显式请求，字段为 `requestId`（无连字符 GUID）、`projectRoot` 和 `expiresAtUtc`；入口在导入后只领取一次有效请求，项目路径不符或过期请求不会执行。进入播放模式时不会自动退出播放或启动游戏测试。
+
+本地资源构建不发布文件，也不构建客户端程序。构建版使用新逻辑还需要重新构建客户端；远程资源分发需包含生成的目录、hash 和目录引用的 Bundle。后端运行版本是否与导入数据一致仍需另行确认。
+
+`RemoteWorldMaps` 按资源分别打包，地址中的斜杠会产生 Bundle 子目录。分发资源时需要保留这些子目录，不能只复制输出目录顶层的文件。
+
 ## 验证
 
 Unity 2022.3.62f1 使用项目引用编译游戏脚本。隔离编辑器使用实际移动组件和真实回环 Gate 验证 V2 握手、起步、500ms 持续移动、停止后无漂移、起跳与落地，服务端无移动纠正。传送协议、复活控制点、旁观者迟到状态隔离、拾取请求序号、相机输入和快捷栏另有定向测试。完整游戏场景和云端联调待验证。

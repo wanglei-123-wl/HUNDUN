@@ -165,6 +165,8 @@ internal static class StateFrameProcessorTests
         RespectSceneEpochAndRevision();
         ApplyArraysToPlayerPresentation();
         PreserveNewerMovementEventOverPositionFrame();
+        DisableDeadRemotePlayerCollidersAndRestoreOnRespawn();
+        KeepDeadRemotePlayerCollidersDisabledOnRebind();
         KeepNewerMonsterHealthWhenOldArrayArrives();
         Console.WriteLine("State frame processor tests passed.");
     }
@@ -371,6 +373,96 @@ internal static class StateFrameProcessorTests
             epoch = 1, revision = revision, mode = "normal",
             info = new MovementEventInfo { x = x, velocityX = speed, flags = MovementEventFlags.Walking }
         };
+    }
+
+    private static void DisableDeadRemotePlayerCollidersAndRestoreOnRespawn()
+    {
+        var view = new RemotePlayerSync();
+        view.Init(1001, "player-1001", "Remote");
+        var body = new Collider();
+        var controller = new CharacterController();
+        var originallyDisabled = new Collider { enabled = false };
+        var inactiveChildBody = new Collider();
+        view.gameObject.TestComponents.AddRange(new object[] { body, controller, originallyDisabled });
+        view.gameObject.InactiveTestComponents.Add(inactiveChildBody);
+        var otherPlayer = new RemotePlayerSync();
+        var otherBody = new Collider();
+        otherPlayer.gameObject.TestComponents.Add(otherBody);
+
+        var store = new CombatStateStore();
+        store.BeginScene("world_001");
+        store.StateChanged += (key, state) =>
+        {
+            if (key.EntityType == "player" && key.EntityId == "1001")
+                view.ApplyCombatLife(state);
+        };
+        var entity = new CombatEntityMessage { entityType = "player", entityId = "1001" };
+        Check(store.MergeState("world_001", new CombatStateMessage
+        {
+            entity = entity, hp = 100, maxHp = 100, lifeState = "Alive", combatRevision = 10
+        }), "Alive snapshot seed failed.");
+        Check(body.enabled && controller.enabled && inactiveChildBody.enabled && !originallyDisabled.enabled,
+            "An alive state must preserve the prefab's original collider settings.");
+
+        Check(store.MergeEventHealth("world_001", entity, 0, 100, "Dead", 11, 101),
+            "Authoritative death failed to enter the combat state store.");
+        Check(view.IsDead && !body.enabled && !controller.enabled && !inactiveChildBody.enabled
+            && !originallyDisabled.enabled && view.gameObject.activeSelf && otherBody.enabled,
+            "A remote death must disable its body, CharacterController and inactive-child colliders without hiding the corpse or changing another player.");
+
+        Check(store.MergeState("world_001", new CombatStateMessage
+        {
+            entity = entity, hp = 0, maxHp = 100, lifeState = "Dead", combatRevision = 12
+        }), "Repeated dead snapshot failed.");
+        Check(!body.enabled && !controller.enabled, "A repeated death state must keep the corpse non-collidable.");
+        view.ApplyCombatLife(new CombatStateData(100, 100, "Alive", 10, 0));
+        view.ApplyCombatLife(new CombatStateData(100, 100, "Alive", 12, 0));
+        Check(view.IsDead && !body.enabled && !controller.enabled,
+            "Old or equal-revision alive updates must not restore dead-player collision.");
+
+        Check(store.MergeEventHealth("world_001", entity, 100, 100, "Alive", 13, 103),
+            "Authoritative respawn failed to enter the combat state store.");
+        Check(!view.IsDead && body.enabled && controller.enabled && inactiveChildBody.enabled
+            && !originallyDisabled.enabled,
+            "Respawn must restore the pre-death collider settings, including keeping originally disabled colliders disabled.");
+        view.ApplyCombatLife(new CombatStateData(0, 100, "Dead", 12, 0));
+        Check(!view.IsDead && body.enabled, "A delayed death update must not disable a respawned player's body.");
+
+        Check(store.MergeState("world_001", new CombatStateMessage
+        {
+            entity = entity, hp = 0, maxHp = 100, lifeState = "Dead", combatRevision = 14
+        }) && view.IsDead && !body.enabled, "A dead state upsert must disable collision without waiting for a death event.");
+        Check(store.MergeEventHealth("world_001", entity, 100, 100, "Alive", 15, 105)
+            && body.enabled && controller.enabled && !originallyDisabled.enabled,
+            "A second death/respawn cycle must retain the original collider settings.");
+    }
+
+    private static void KeepDeadRemotePlayerCollidersDisabledOnRebind()
+    {
+        var view = new RemotePlayerSync();
+        view.Init(1001, "player-1001", "Remote");
+        var body = new Collider();
+        var originallyDisabled = new Collider { enabled = false };
+        view.gameObject.TestComponents.AddRange(new object[] { body, originallyDisabled });
+        view.ApplyCombatLife(new CombatStateData(0, 100, "Dead", 20, 0), alreadyDeadAtSpawn: true);
+        Check(view.IsDead && !body.enabled && !originallyDisabled.enabled,
+            "A player first observed as dead must have no active body collision.");
+
+        var replacementBody = new Collider();
+        view.gameObject.TestComponents.Add(replacementBody);
+        view.BindPresentation(new GameObject(), new Transform());
+        Check(!body.enabled && !replacementBody.enabled,
+            "Binding a new visual to an already-dead player must disable its colliders immediately.");
+        view.ApplyCombatLife(new CombatStateData(100, 100, "Alive", 21, 0));
+        Check(body.enabled && replacementBody.enabled && !originallyDisabled.enabled,
+            "Rebinding while dead must not overwrite the saved pre-death collider state.");
+
+        view.ApplyCombatLife(new CombatStateData(0, 100, "Dead", 22, 0));
+        view.Init(1001, "player-1001", "Remote");
+        Check(view.IsDead && !body.enabled, "Refreshing the same identity must not undo death collision.");
+        view.Init(1002, "player-1002", "Other");
+        Check(!view.IsDead && body.enabled && replacementBody.enabled && !originallyDisabled.enabled,
+            "Reusing a view for a new player must clear the old identity's saved death-collision state.");
     }
 
     private static void KeepNewerMonsterHealthWhenOldArrayArrives()

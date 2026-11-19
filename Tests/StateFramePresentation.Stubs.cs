@@ -24,16 +24,31 @@ namespace UnityEngine
         public readonly Transform transform = new Transform();
         public readonly GameObject gameObject = new GameObject();
         protected T GetComponentInChildren<T>() where T : class { return null; }
+        public T[] GetComponentsInChildren<T>(bool includeInactive) => gameObject.GetComponentsInChildren<T>(includeInactive);
     }
 
     public sealed class GameObject
     {
         public string name;
-        public void SetActive(bool active) { }
+        public bool activeSelf = true;
+        public readonly List<object> TestComponents = new List<object>();
+        public readonly List<object> InactiveTestComponents = new List<object>();
+        public void SetActive(bool active) { activeSelf = active; }
         public bool TryGetComponent<T>(out T value) where T : class { value = null; return false; }
         public T GetComponentInChildren<T>(bool includeInactive) where T : class => null;
-        public T[] GetComponentsInChildren<T>(bool includeInactive) => Array.Empty<T>();
+        public T[] GetComponentsInChildren<T>(bool includeInactive)
+        {
+            var result = new List<T>();
+            foreach (object component in TestComponents)
+                if (component is T typed) result.Add(typed);
+            if (includeInactive)
+                foreach (object component in InactiveTestComponents)
+                    if (component is T typed) result.Add(typed);
+            return result.ToArray();
+        }
     }
+    public class Collider { public bool enabled = true; }
+    public sealed class CharacterController : Collider { }
     public sealed class Transform
     {
         public Vector3 position;

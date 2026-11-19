@@ -386,6 +386,113 @@ namespace Game.Client.BattleSync
             }
         }
 
+        public static void LogMovementEventSent(long connectionEpoch, MovementEventRequest message)
+        {
+            if (!Enabled || message?.info == null) return;
+            MovementEventInfo info = message.info;
+            WriteMovementRecord("movement_event_sent",
+                "connectionEpoch=" + connectionEpoch,
+                "sceneSessionId=" + message.sceneSessionId,
+                "movementEpoch=" + message.movementEpoch,
+                "sequence=" + message.sequence,
+                "kind=" + message.@event,
+                "clientTimeMs=" + info.clientTimeMs,
+                "position=" + FormatVector(info.Position),
+                "velocity=" + FormatVector(info.Velocity),
+                "yaw=" + info.yaw.ToString("R", CultureInfo.InvariantCulture),
+                "flags=" + (int)info.flags,
+                "fallTimeMs=" + info.fallTimeMs);
+        }
+
+        public static void LogMovementControlReply(long connectionEpoch, string sceneId, string mapId,
+            MovementControlEvaluation result, bool correction)
+        {
+            if (!Enabled || result == null) return;
+            WriteMovementRecord(correction ? "movement_correction_received" : "movement_control_result_received",
+                "connectionEpoch=" + connectionEpoch,
+                "sceneId=" + sceneId,
+                "mapId=" + mapId,
+                "errorCode=" + result.errorCode,
+                "success=" + result.success,
+                "needsControlAck=" + result.needsControlAck,
+                "acceptedSequence=" + result.acceptedSequence,
+                "revision=" + result.revision,
+                "movementEpoch=" + (result.control?.epoch ?? 0),
+                "reason=" + result.control?.reason,
+                "mode=" + result.control?.mode,
+                "serverPosition=" + (result.control == null ? "unavailable" : FormatVector(result.control.Position)));
+        }
+
+        public static void LogMovementControl(long connectionEpoch, string sceneId, string mapId,
+            MovementEventControl control, Vector3 localBefore, Vector3 localAfter,
+            Vector3 localVelocityBefore, CharacterController controller, bool accepted)
+        {
+            if (!Enabled || control == null) return;
+            WriteMovementRecord("movement_control_received",
+                "connectionEpoch=" + connectionEpoch,
+                "sceneId=" + sceneId,
+                "mapId=" + mapId,
+                "sceneSessionId=" + control.sceneSessionId,
+                "movementEpoch=" + control.epoch,
+                "nextSequence=" + control.nextSequence,
+                "serverTime=" + control.serverTime,
+                "reason=" + control.reason,
+                "mode=" + control.mode,
+                "accepted=" + accepted,
+                "localBefore=" + FormatVector(localBefore),
+                "localAfter=" + FormatVector(localAfter),
+                "serverPosition=" + FormatVector(control.Position),
+                "positionChange=" + Vector3.Distance(localBefore, localAfter).ToString("R", CultureInfo.InvariantCulture),
+                "localVelocityBefore=" + FormatVector(localVelocityBefore),
+                "serverRadius=" + control.radius.ToString("R", CultureInfo.InvariantCulture),
+                "serverHeight=" + control.height.ToString("R", CultureInfo.InvariantCulture),
+                "serverWalkSpeed=" + control.walkSpeed.ToString("R", CultureInfo.InvariantCulture),
+                "serverRunSpeed=" + control.runSpeed.ToString("R", CultureInfo.InvariantCulture),
+                "serverGravity=" + control.gravity.ToString("R", CultureInfo.InvariantCulture),
+                "grounded=" + control.grounded,
+                "controllerRadius=" + FormatControllerValue(controller, controller == null ? 0f : controller.radius),
+                "controllerHeight=" + FormatControllerValue(controller, controller == null ? 0f : controller.height),
+                "controllerSkin=" + FormatControllerValue(controller, controller == null ? 0f : controller.skinWidth),
+                "controllerStep=" + FormatControllerValue(controller, controller == null ? 0f : controller.stepOffset),
+                "controllerSlope=" + FormatControllerValue(controller, controller == null ? 0f : controller.slopeLimit));
+        }
+
+        public static void LogLocalTraversalBlocked(long connectionEpoch, long movementEpoch,
+            string sceneId, string mapId, string packageFingerprint, Vector3 from, Vector3 requested, Vector3 accepted,
+            float radius, float height, bool grounded)
+        {
+            if (!Enabled) return;
+            WriteMovementRecord("local_traversal_blocked",
+                "connectionEpoch=" + connectionEpoch,
+                "movementEpoch=" + movementEpoch,
+                "sceneId=" + sceneId,
+                "mapId=" + mapId,
+                "packageSha256=" + packageFingerprint,
+                "from=" + FormatVector(from),
+                "requested=" + FormatVector(requested),
+                "accepted=" + FormatVector(accepted),
+                "radius=" + radius.ToString("R", CultureInfo.InvariantCulture),
+                "height=" + height.ToString("R", CultureInfo.InvariantCulture),
+                "grounded=" + grounded);
+        }
+
+        private static string FormatVector(Vector3 value) => string.Format(CultureInfo.InvariantCulture,
+            "{0:R},{1:R},{2:R}", value.x, value.y, value.z);
+
+        private static string FormatControllerValue(CharacterController controller, float value) =>
+            controller == null ? "unavailable" : value.ToString("R", CultureInfo.InvariantCulture);
+
+        private static void WriteMovementRecord(string eventName, params string[] fields)
+        {
+            try
+            {
+                Write(eventName, fields);
+            }
+            catch (IOException) { Close(); }
+            catch (UnauthorizedAccessException) { Close(); }
+            catch (ObjectDisposedException) { Close(); }
+        }
+
         private static void Write(string eventName, params string[] fields)
         {
             lock (SyncRoot)

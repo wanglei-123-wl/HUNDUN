@@ -1,0 +1,8 @@
+<linker>
+  <assembly fullname="Assembly-CSharp">
+    <type fullname="Game.Client.MapTraversal.MapTraversalPackageDescriptor" preserve="all" />
+    <type fullname="Game.Client.MapTraversal.MapTraversalPackageFile" preserve="all" />
+    <type fullname="Game.Client.MapTraversal.Geometry.ServerMapManifest" preserve="all" />
+    <type fullname="Game.Client.MapTraversal.Geometry.MapVector3" preserve="all" />
+  </assembly>
+</linker>

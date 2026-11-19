@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Game.Client.BattleSync;
 using UnityEngine;
@@ -44,6 +45,7 @@ public class RemotePlayerSync : MonoBehaviour
     private long lastAttackActionSequence;
     private long lastAttackEventId;
     private long lifeCombatRevision = -1;
+    private readonly Dictionary<Collider, bool> deathColliderStates = new Dictionary<Collider, bool>();
     public bool IsDead { get; private set; }
 
     public long CharacterDbId => characterDbId;
@@ -148,6 +150,8 @@ public class RemotePlayerSync : MonoBehaviour
             modelSync.enabled = false;
             Destroy(modelSync);
         }
+        if (IsDead)
+            SetDeathCollidersDisabled(true);
     }
 
     public void Init(long remoteCharacterDbId, string remoteCharacterId, string remoteDisplayName)
@@ -166,6 +170,7 @@ public class RemotePlayerSync : MonoBehaviour
             lastAttackEventId = 0;
             lifeCombatRevision = -1;
             IsDead = false;
+            SetDeathCollidersDisabled(false);
             PlayerDeathAnimation.SetDead(animator, false);
         }
 
@@ -284,12 +289,34 @@ public class RemotePlayerSync : MonoBehaviour
             return;
 
         lifeCombatRevision = state.CombatRevision;
+        SetDeathCollidersDisabled(dead);
         if (IsDead == dead)
             return;
 
         IsDead = dead;
         currentAnim = "";
         PlayerDeathAnimation.SetDead(animator, dead, alreadyDeadAtSpawn);
+    }
+
+    private void SetDeathCollidersDisabled(bool disabled)
+    {
+        if (disabled)
+        {
+            foreach (Collider collider in GetComponentsInChildren<Collider>(true))
+            {
+                if (!deathColliderStates.ContainsKey(collider))
+                    deathColliderStates.Add(collider, collider.enabled);
+                collider.enabled = false;
+            }
+            return;
+        }
+
+        foreach (KeyValuePair<Collider, bool> saved in deathColliderStates)
+        {
+            if (saved.Key != null)
+                saved.Key.enabled = saved.Value;
+        }
+        deathColliderStates.Clear();
     }
 
     public void StopNetworkInterpolation()

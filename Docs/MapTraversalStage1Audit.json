@@ -1,0 +1,999 @@
+{
+  "stage": "1-data-audit-and-diagnostics",
+  "generatedAtUtc": "2026-11-19T08:27:28.4145177Z",
+  "clientProjectRoot": "F:\\游戏项目\\HUNDUN",
+  "serverSourceRoot": "F:\\游戏项目\\gameserver\\GameServer",
+  "sourceCatalog": "F:\\游戏项目\\HUNDUN\\Assets\\Scripts\\WorldMapSceneCatalog.cs",
+  "runningServerVersionVerified": false,
+  "gameReproductionPerformed": false,
+  "automatedTestsRun": false,
+  "runtimeMapLoadingImplemented": false,
+  "localTraversalPreventionImplemented": false,
+  "clientControllerDefaultsSource": "F:\\游戏项目\\HUNDUN\\Assets\\Scripts\\GameSession.cs",
+  "clientControllerDefaults": {
+    "localPlayerControllerHeight": 2.0,
+    "localPlayerControllerRadius": 0.5,
+    "localPlayerControllerSlopeLimit": 45.0,
+    "localPlayerControllerStepOffset": 0.3,
+    "localPlayerControllerSkinWidth": 0.08
+  },
+  "controllerDefaultsAreRuntimeMeasurements": false,
+  "clientExporterFormatVersion": 1,
+  "clientRuntimeServerMapReferences": [],
+  "clientEnterWorldMapFingerprintFields": [],
+  "serverTraversalSourceFiles": [
+    {
+      "file": "F:\\游戏项目\\gameserver\\GameServer\\Game.BattleCore\\Maps\\ServerMapData.cs",
+      "sha256": "f12ea191f5bc0ec972b70a858cdcb860dcf6748a4d921af3c7bbb17b69630f1a"
+    },
+    {
+      "file": "F:\\游戏项目\\gameserver\\GameServer\\Game.BattleCore\\Maps\\ServerMapGroundSurfaceIndex.cs",
+      "sha256": "8cc5e3b068351898e7ccf6703a4cf458b302ba0618a2df0f3ce00eec9fef6f11"
+    },
+    {
+      "file": "F:\\游戏项目\\gameserver\\GameServer\\Game.BattleCore\\Maps\\ServerMapMeshCollisionIndex.cs",
+      "sha256": "991c30db455727294cbc5c0a9136ba94fb20d43ec9a2e953feca2921bfc5f417"
+    },
+    {
+      "file": "F:\\游戏项目\\gameserver\\GameServer\\Game.BattleCore\\Maps\\ServerMapCollider.cs",
+      "sha256": "6ff1bed915038d50e337a2f079a78bb0f6b9913747ced65e3ad15e81b2e68e90"
+    },
+    {
+      "file": "F:\\游戏项目\\gameserver\\GameServer\\Game.BattleCore\\Maps\\ServerMapCollisionIndex.cs",
+      "sha256": "b0d719255b85665d92831ff8eab7a1c61ee007911a7902a68d74ad325276919f"
+    },
+    {
+      "file": "F:\\游戏项目\\gameserver\\GameServer\\Game.BattleCore\\Maps\\TriangleDistance.cs",
+      "sha256": "928dfcc5bd7e0ee6b8651f580c8ff4e16f3b6e79b3264f6ad25dff3e7017738f"
+    },
+    {
+      "file": "F:\\游戏项目\\gameserver\\GameServer\\Game.BattleCore\\Maps\\MapTraversal.cs",
+      "sha256": "e65c024c77c659fb13db63f220740ed6f6353f587ad9eb0ed2675f111a503631"
+    }
+  ],
+  "maps": [
+    {
+      "sceneId": "world_001",
+      "mapId": "map_demo_1",
+      "sceneAddress": "game/scene/demo1-map",
+      "comparison": "format-and-content-differ",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_demo_1",
+        "manifest": {
+          "formatVersion": 3,
+          "groundSurfaceFile": "groundsurfaces.bin",
+          "sceneId": "world_001",
+          "mapId": "map_demo_1",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -16,
+            "y": 0,
+            "z": -12
+          },
+          "boundsMin": {
+            "x": -16,
+            "y": 0,
+            "z": -12
+          },
+          "boundsMax": {
+            "x": 624,
+            "y": 200,
+            "z": 628
+          },
+          "cellSize": 0.5,
+          "width": 1280,
+          "height": 1280,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "meshColliderFile": "meshcolliders.bin",
+          "collisionRootOffsetY": 0,
+          "collisionSkinWidth": 0.08,
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": ""
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": false,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "3271670fba35f2f466a6b738bfcff48e8232db97bd934277a788701f6cbdf691",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 98756,
+            "sha256": "dfbb8c10d22a31a6b86579017550fd89b7f1f4a82edbdf8efc60b37a37ea7cb8",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "groundsurfaces.bin",
+            "exists": true,
+            "bytes": 83747212,
+            "sha256": "f3ee650a330ceabfa8f2d1a03e1d66c8f1352ea0101b1e082007d78c91dc614f",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 6553600,
+            "sha256": "d9060032aebeab950f525b5dd35b8f878dcc94ea15dd540ed2db795e19d6eab0",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 640,
+            "sha256": "9120c983c61674eb1867ced2641175167ca811b01ad7ed5f58c90e233eadb540",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "meshcolliders.bin",
+            "exists": true,
+            "bytes": 48003756,
+            "sha256": "a25435d5d427022283874648b41afc32b73266d108643c41bf01c2466714cff7",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 3990632,
+            "sha256": "dcc7b995987fbe001f22e67494e97c8cbddc345abac32656932f4fb8b0ff13b6",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 1638400,
+            "sha256": "0adf979f5eb5c206aecb0f4887f9a7343915b3d67c391611507889bbe52bb605",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          }
+        ]
+      },
+      "clientExportPackage": {
+        "directory": "F:\\游戏项目\\HUNDUN\\Assets\\ServerMapData\\world_001_map_demo_1",
+        "manifest": {
+          "formatVersion": 1,
+          "sceneId": "world_001",
+          "mapId": "map_demo_1",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -16,
+            "y": 0,
+            "z": -12
+          },
+          "boundsMin": {
+            "x": -16,
+            "y": 0,
+            "z": -12
+          },
+          "boundsMax": {
+            "x": 624,
+            "y": 200,
+            "z": 628
+          },
+          "cellSize": 0.5,
+          "width": 1280,
+          "height": 1280,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": null
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": false,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "ac0766217eb92385c9741f0e0b5ee1ec983c26c7ab59f2177c177dab53c8a293",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 93428,
+            "sha256": "de444af31a4bcfb84e8fe3690d5096d0f9ad38245a592224573890fdc91dd3ae",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 6553600,
+            "sha256": "3612362a02eef94c5a3aa13b9e913286ac8d5a86bb2e9ddcd4606a24940e92a9",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 491,
+            "sha256": "d806437be30171c06e1718bc2f585a00553def67ebebf8e65d1dbe37c89ebca0",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 5096644,
+            "sha256": "eca2987ea9715916a89bef0c057e665de42cd07ba79866b9cf285cccd61ecd60",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 1638400,
+            "sha256": "109a385b26a022b60a72a28691ae52edc31782c0bc12f48bffa59bea7c73289d",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          }
+        ]
+      },
+      "navigationBakeSource": null,
+      "navigationBakeSettings": null
+    },
+    {
+      "sceneId": "world_002",
+      "mapId": "map_001",
+      "sceneAddress": "game/scene/map001",
+      "comparison": "client-data-missing",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_001",
+        "manifest": {
+          "formatVersion": 1,
+          "sceneId": "world_002",
+          "mapId": "map_001",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -202.0,
+            "y": 0.0,
+            "z": -152.0
+          },
+          "boundsMin": {
+            "x": -202.0,
+            "y": 5.009849548339844,
+            "z": -152.0
+          },
+          "boundsMax": {
+            "x": 202.0,
+            "y": 136.45144653320312,
+            "z": 152.0
+          },
+          "cellSize": 0.25,
+          "width": 1616,
+          "height": 1216,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": ""
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": false,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "827382692d9cbde3775d036722dff07163b195c0d76faac86c1a5f8d6643c89d",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 1809284,
+            "sha256": "017c36afc34210b730d20b829765bfa9dd4352995fd923f01d96fc838129bcf3",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 7860224,
+            "sha256": "cb0a85ec0e4feeab7dbff60c308c08266b3083f3b45563056f0ceb21d939e4dc",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 660,
+            "sha256": "d0d6272a5250bb2e57b966e5b83ddb98bb3a53da47fcf5a2c0c9adfef63ebcd9",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 380428,
+            "sha256": "08b98618b35ee6fc72bbc5a2d03cefe6db379bc409326b4b165196fd5d0efce0",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 1965056,
+            "sha256": "d2a0b3a9b9b1330f67fe19862082987942bfe4a1543f2e14dfbb16289bda97a7",
+            "recordedSha256": null,
+            "recordedHashMatches": null
+          }
+        ]
+      },
+      "clientExportPackage": null,
+      "navigationBakeSource": null,
+      "navigationBakeSettings": null
+    },
+    {
+      "sceneId": "world005",
+      "mapId": "map_005",
+      "sceneAddress": "game/scene/world005",
+      "comparison": "client-data-missing",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_005",
+        "manifest": {
+          "formatVersion": 3,
+          "sceneId": "world005",
+          "mapId": "map_005",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -150.5,
+            "y": 0,
+            "z": -376.5
+          },
+          "boundsMin": {
+            "x": -150.5,
+            "y": -8.704391956329346,
+            "z": -376.5
+          },
+          "boundsMax": {
+            "x": 150.5,
+            "y": 113.68767547607422,
+            "z": 365.5
+          },
+          "cellSize": 0.5,
+          "width": 602,
+          "height": 1484,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "meshColliderFile": "meshcolliders.bin",
+          "groundSurfaceFile": "groundsurfaces.bin",
+          "collisionRootOffsetY": 0,
+          "collisionSkinWidth": 0.08,
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": null
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": true,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "948fc90431a83e75d7b851ae3ff850bd0079a482380c9513857b61bda3de589b",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 20,
+            "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedSha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "groundsurfaces.bin",
+            "exists": true,
+            "bytes": 2304412,
+            "sha256": "97354033a28a9e497c77027964b618f1e6f1d7411459472086f9b2de14a038a3",
+            "recordedSha256": "97354033a28a9e497c77027964b618f1e6f1d7411459472086f9b2de14a038a3",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 3573472,
+            "sha256": "1baec600928ce5d030c6fe44405de01edf47afbcc85ac9bd42cce5d3ee0056e1",
+            "recordedSha256": "1baec600928ce5d030c6fe44405de01edf47afbcc85ac9bd42cce5d3ee0056e1",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 737,
+            "sha256": "7f1cfd3b17d5e4889eaf3b1080bd32c25d5bf6abd43b0db39a0e54af2f592e9a",
+            "recordedSha256": "7f1cfd3b17d5e4889eaf3b1080bd32c25d5bf6abd43b0db39a0e54af2f592e9a",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "meshcolliders.bin",
+            "exists": true,
+            "bytes": 2367980,
+            "sha256": "2631bbf0c874ef983e88bfc2b0cf37c6f7b7ff5e4de9942e6f7ea2c2bfef428b",
+            "recordedSha256": "2631bbf0c874ef983e88bfc2b0cf37c6f7b7ff5e4de9942e6f7ea2c2bfef428b",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 381892,
+            "sha256": "c971e8fa22494154e88d84b3c517d5d13efe21b418402515b36f21821fc35a71",
+            "recordedSha256": "c971e8fa22494154e88d84b3c517d5d13efe21b418402515b36f21821fc35a71",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 893368,
+            "sha256": "d5c4f33798ed4453c5b3ca05a99e3d462230584a7cbc26365e890d80afe2a9cb",
+            "recordedSha256": "d5c4f33798ed4453c5b3ca05a99e3d462230584a7cbc26365e890d80afe2a9cb",
+            "recordedHashMatches": true
+          }
+        ]
+      },
+      "clientExportPackage": null,
+      "navigationBakeSource": "F:\\游戏项目\\HUNDUN\\Assets\\地图\\world005\\Editor\\MapNavBuilder.cs",
+      "navigationBakeSettings": {
+        "agentRadius": 0.36,
+        "agentHeight": 1.84,
+        "agentClimb": 0.35,
+        "agentSlope": 43.0
+      }
+    },
+    {
+      "sceneId": "world006",
+      "mapId": "map_006",
+      "sceneAddress": "game/scene/world006",
+      "comparison": "client-data-missing",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_006",
+        "manifest": {
+          "formatVersion": 3,
+          "sceneId": "world006",
+          "mapId": "map_006",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -88.5,
+            "y": 0,
+            "z": -286
+          },
+          "boundsMin": {
+            "x": -88.5,
+            "y": -8.414498329162598,
+            "z": -286
+          },
+          "boundsMax": {
+            "x": 88.5,
+            "y": 51.65305709838867,
+            "z": 285.5
+          },
+          "cellSize": 0.5,
+          "width": 354,
+          "height": 1143,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "meshColliderFile": "meshcolliders.bin",
+          "groundSurfaceFile": "groundsurfaces.bin",
+          "collisionRootOffsetY": 0,
+          "collisionSkinWidth": 0.08,
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": null
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": true,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "70badf55e89d39f6f14774b48d329428987d4753e5809831284f19d171efe4ba",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 20,
+            "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedSha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "groundsurfaces.bin",
+            "exists": true,
+            "bytes": 1115764,
+            "sha256": "efdaa5cc174bcb61f25024b7d0bd42092915dd730eb8711f923d40faee572f77",
+            "recordedSha256": "efdaa5cc174bcb61f25024b7d0bd42092915dd730eb8711f923d40faee572f77",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 1618488,
+            "sha256": "1529e9ccca76b2070f921ab2c300822c7ad66667121b467d761c5815f9cfddd6",
+            "recordedSha256": "1529e9ccca76b2070f921ab2c300822c7ad66667121b467d761c5815f9cfddd6",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 729,
+            "sha256": "545428bc82b0dcbe06a8f65109300ef33c01bfa55194c988ac7d57aaa322904c",
+            "recordedSha256": "545428bc82b0dcbe06a8f65109300ef33c01bfa55194c988ac7d57aaa322904c",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "meshcolliders.bin",
+            "exists": true,
+            "bytes": 1647852,
+            "sha256": "77179df9780129dfdb72d587c00b51c3ab6bfbfcc39bc490f96272c90885a663",
+            "recordedSha256": "77179df9780129dfdb72d587c00b51c3ab6bfbfcc39bc490f96272c90885a663",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 180384,
+            "sha256": "2f2655fdbbb70dbc6e7a7e4e1e21374533598db0dd95dac10bd292aa533bcd00",
+            "recordedSha256": "2f2655fdbbb70dbc6e7a7e4e1e21374533598db0dd95dac10bd292aa533bcd00",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 404622,
+            "sha256": "a0aa3fb821eaf9f654564745b741ef16cf809760357c952852e3ca480118f777",
+            "recordedSha256": "a0aa3fb821eaf9f654564745b741ef16cf809760357c952852e3ca480118f777",
+            "recordedHashMatches": true
+          }
+        ]
+      },
+      "clientExportPackage": null,
+      "navigationBakeSource": "F:\\游戏项目\\HUNDUN\\Assets\\地图\\world006\\Editor\\MapNavBuilder.cs",
+      "navigationBakeSettings": {
+        "agentRadius": 0.36,
+        "agentHeight": 1.84,
+        "agentClimb": 0.35,
+        "agentSlope": 43.0
+      }
+    },
+    {
+      "sceneId": "world007",
+      "mapId": "map_007",
+      "sceneAddress": "game/scene/world007",
+      "comparison": "client-data-missing",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_007",
+        "manifest": {
+          "formatVersion": 3,
+          "sceneId": "world007",
+          "mapId": "map_007",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -281,
+            "y": 0,
+            "z": -281
+          },
+          "boundsMin": {
+            "x": -281,
+            "y": -4.268913984298706,
+            "z": -281
+          },
+          "boundsMax": {
+            "x": 280.5,
+            "y": 54.443763732910156,
+            "z": 281
+          },
+          "cellSize": 0.5,
+          "width": 1123,
+          "height": 1124,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "meshColliderFile": "meshcolliders.bin",
+          "groundSurfaceFile": "groundsurfaces.bin",
+          "collisionRootOffsetY": 0,
+          "collisionSkinWidth": 0.08,
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": null
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": true,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "55abc19de8dc80c735a37af383bc414879c5b19660569881f43888e6d612e4c7",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 20,
+            "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedSha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "groundsurfaces.bin",
+            "exists": true,
+            "bytes": 1683772,
+            "sha256": "7b21daf66da5157021133dab213f753a745927a4552138d00e494a85a16c2677",
+            "recordedSha256": "7b21daf66da5157021133dab213f753a745927a4552138d00e494a85a16c2677",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 5049008,
+            "sha256": "1d7aff540318e03236e3899a76a614d1e5eba93602a88df34e1914d2dba3f625",
+            "recordedSha256": "1d7aff540318e03236e3899a76a614d1e5eba93602a88df34e1914d2dba3f625",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 728,
+            "sha256": "915bf6db20ec7d8ae747cd12f8c0ec7857f8b301d09762c488d3f43a5a53cd25",
+            "recordedSha256": "915bf6db20ec7d8ae747cd12f8c0ec7857f8b301d09762c488d3f43a5a53cd25",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "meshcolliders.bin",
+            "exists": true,
+            "bytes": 1401828,
+            "sha256": "8be47b65c197f8d8d70c05866dd3f2478250dce8971bf94a098c61a379ba4865",
+            "recordedSha256": "8be47b65c197f8d8d70c05866dd3f2478250dce8971bf94a098c61a379ba4865",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 277532,
+            "sha256": "91a33186e9a21f10884bdf679e1d6b3f8d9698fdb92ab058168434b1bb135871",
+            "recordedSha256": "91a33186e9a21f10884bdf679e1d6b3f8d9698fdb92ab058168434b1bb135871",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 1262252,
+            "sha256": "123409ee23522babe10566145939e4c35475076825b2d679d5cbb95429860ad3",
+            "recordedSha256": "123409ee23522babe10566145939e4c35475076825b2d679d5cbb95429860ad3",
+            "recordedHashMatches": true
+          }
+        ]
+      },
+      "clientExportPackage": null,
+      "navigationBakeSource": "F:\\游戏项目\\HUNDUN\\Assets\\地图\\world007\\Editor\\MapNavBuilder.cs",
+      "navigationBakeSettings": {
+        "agentRadius": 0.36,
+        "agentHeight": 1.84,
+        "agentClimb": 0.35,
+        "agentSlope": 43.0
+      }
+    },
+    {
+      "sceneId": "world008",
+      "mapId": "map_008",
+      "sceneAddress": "game/scene/world008",
+      "comparison": "client-data-missing",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_008",
+        "manifest": {
+          "formatVersion": 3,
+          "sceneId": "world008",
+          "mapId": "map_008",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -372.5,
+            "y": 0,
+            "z": -375
+          },
+          "boundsMin": {
+            "x": -372.5,
+            "y": -3.1380650997161865,
+            "z": -375
+          },
+          "boundsMax": {
+            "x": 373.5,
+            "y": 173.00364685058594,
+            "z": 374
+          },
+          "cellSize": 0.5,
+          "width": 1492,
+          "height": 1498,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "meshColliderFile": "meshcolliders.bin",
+          "groundSurfaceFile": "groundsurfaces.bin",
+          "collisionRootOffsetY": 0,
+          "collisionSkinWidth": 0.08,
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": null
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": true,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "40f93e473619948bcbd141999cea8523302c3e743ba7210050b844ca8612d446",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 20,
+            "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedSha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "groundsurfaces.bin",
+            "exists": true,
+            "bytes": 2894596,
+            "sha256": "c52317008309367b12c636260da3bf45a5a5114e59f280ff5f4dab9a1db4e042",
+            "recordedSha256": "c52317008309367b12c636260da3bf45a5a5114e59f280ff5f4dab9a1db4e042",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 8940064,
+            "sha256": "6c0e6f2f62fc8313863acfc072a3e6330e7da727a98c11ac0107500aa602131f",
+            "recordedSha256": "6c0e6f2f62fc8313863acfc072a3e6330e7da727a98c11ac0107500aa602131f",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 733,
+            "sha256": "b0b3e6604d75f6f3d1f4d06eb333248ad3d25cef5d6f0b516f7cb5ed36babb86",
+            "recordedSha256": "b0b3e6604d75f6f3d1f4d06eb333248ad3d25cef5d6f0b516f7cb5ed36babb86",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "meshcolliders.bin",
+            "exists": true,
+            "bytes": 2466768,
+            "sha256": "be92d335f4375029ed47c37565b54de05617289aad8a3946c5d6a8eb8176bc28",
+            "recordedSha256": "be92d335f4375029ed47c37565b54de05617289aad8a3946c5d6a8eb8176bc28",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 522476,
+            "sha256": "7c4eca345604b011c3bc0987c8714042e3c30cbc9875b76cedb17df4ffa8aae1",
+            "recordedSha256": "7c4eca345604b011c3bc0987c8714042e3c30cbc9875b76cedb17df4ffa8aae1",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 2235016,
+            "sha256": "680ba438b13d1f43f4b4367eb956331ce8aa1b05f7bff9184fc1445188782625",
+            "recordedSha256": "680ba438b13d1f43f4b4367eb956331ce8aa1b05f7bff9184fc1445188782625",
+            "recordedHashMatches": true
+          }
+        ]
+      },
+      "clientExportPackage": null,
+      "navigationBakeSource": "F:\\游戏项目\\HUNDUN\\Assets\\地图\\world008\\Editor\\MapNavBuilder.cs",
+      "navigationBakeSettings": {
+        "agentRadius": 0.36,
+        "agentHeight": 1.84,
+        "agentClimb": 0.35,
+        "agentSlope": 43.0
+      }
+    },
+    {
+      "sceneId": "world009",
+      "mapId": "map_009",
+      "sceneAddress": "game/scene/world009",
+      "comparison": "client-data-missing",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_009",
+        "manifest": {
+          "formatVersion": 3,
+          "sceneId": "world009",
+          "mapId": "map_009",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -185.5,
+            "y": 0,
+            "z": -184.5
+          },
+          "boundsMin": {
+            "x": -185.5,
+            "y": -4.90103816986084,
+            "z": -184.5
+          },
+          "boundsMax": {
+            "x": 184.5,
+            "y": 24.04415512084961,
+            "z": 185
+          },
+          "cellSize": 0.5,
+          "width": 740,
+          "height": 739,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "meshColliderFile": "meshcolliders.bin",
+          "groundSurfaceFile": "groundsurfaces.bin",
+          "collisionRootOffsetY": 0,
+          "collisionSkinWidth": 0.08,
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": null
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": true,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "d746b51bd9f5a795ff9ade0187a28929edb491516c84642fb81739a58244653d",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 20,
+            "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedSha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "groundsurfaces.bin",
+            "exists": true,
+            "bytes": 1070944,
+            "sha256": "316ef24be59af35d9b106da5818f0807b0ed7e8198c0f7b58f67570c5da8a0fc",
+            "recordedSha256": "316ef24be59af35d9b106da5818f0807b0ed7e8198c0f7b58f67570c5da8a0fc",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 2187440,
+            "sha256": "e41409cbad38911ba9d616d1db609144186a161947b4e2ecfdf9211f5573186c",
+            "recordedSha256": "e41409cbad38911ba9d616d1db609144186a161947b4e2ecfdf9211f5573186c",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 732,
+            "sha256": "bff887b0097dc07c2a6260ef7ec9a844816f8edc89e8ed9843df7746bff89965",
+            "recordedSha256": "bff887b0097dc07c2a6260ef7ec9a844816f8edc89e8ed9843df7746bff89965",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "meshcolliders.bin",
+            "exists": true,
+            "bytes": 1728616,
+            "sha256": "9513080973373786d1fac28970ba70a5f162e10722082735d47961b18b6a09f9",
+            "recordedSha256": "9513080973373786d1fac28970ba70a5f162e10722082735d47961b18b6a09f9",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 145200,
+            "sha256": "aff83c119c0641b3ec1e87ce22aaa5c1c37f2293cbc54d3855f3f1067847a215",
+            "recordedSha256": "aff83c119c0641b3ec1e87ce22aaa5c1c37f2293cbc54d3855f3f1067847a215",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 546860,
+            "sha256": "471bb72a3c921513dfafb693d03e30f01373a798f703388f34da1303f6d3ac5e",
+            "recordedSha256": "471bb72a3c921513dfafb693d03e30f01373a798f703388f34da1303f6d3ac5e",
+            "recordedHashMatches": true
+          }
+        ]
+      },
+      "clientExportPackage": null,
+      "navigationBakeSource": "F:\\游戏项目\\HUNDUN\\Assets\\地图\\world009\\Editor\\MapNavBuilder.cs",
+      "navigationBakeSettings": {
+        "agentRadius": 0.36,
+        "agentHeight": 1.84,
+        "agentClimb": 0.35,
+        "agentSlope": 43.0
+      }
+    },
+    {
+      "sceneId": "world010",
+      "mapId": "map_010",
+      "sceneAddress": "game/scene/world010",
+      "comparison": "client-data-missing",
+      "serverSourcePackage": {
+        "directory": "F:\\游戏项目\\gameserver\\GameServer\\Game.Host.Gate\\MapData\\map_010",
+        "manifest": {
+          "formatVersion": 3,
+          "sceneId": "world010",
+          "mapId": "map_010",
+          "coordinateSystem": "UnityLeftHanded_YUp",
+          "origin": {
+            "x": -150.5,
+            "y": 0,
+            "z": -150.5
+          },
+          "boundsMin": {
+            "x": -150.5,
+            "y": -34.98605728149414,
+            "z": -150.5
+          },
+          "boundsMax": {
+            "x": 150.5,
+            "y": 58.759647369384766,
+            "z": 150.5
+          },
+          "cellSize": 0.5,
+          "width": 602,
+          "height": 602,
+          "heightFile": "heightfield.bin",
+          "walkableFile": "walkable.bin",
+          "colliderFile": "colliders.bin",
+          "meshColliderFile": "meshcolliders.bin",
+          "groundSurfaceFile": "groundsurfaces.bin",
+          "collisionRootOffsetY": 0,
+          "collisionSkinWidth": 0.08,
+          "navMeshFile": "navmesh.bin",
+          "regionsFile": null
+        },
+        "requiredFilesPresent": true,
+        "checksumFilePresent": true,
+        "recordedChecksumMismatchCount": 0,
+        "packageFingerprintSha256": "a90352136c97944c67f76340f3ae5364fa3fcf9797f2a710d5ce382c1592bdd6",
+        "files": [
+          {
+            "name": "colliders.bin",
+            "exists": true,
+            "bytes": 20,
+            "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedSha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "groundsurfaces.bin",
+            "exists": true,
+            "bytes": 1035880,
+            "sha256": "4cc3b46bd1f02bf86e6306141bfea7e0fb21e34b1ffceb71837985a078957918",
+            "recordedSha256": "4cc3b46bd1f02bf86e6306141bfea7e0fb21e34b1ffceb71837985a078957918",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "heightfield.bin",
+            "exists": true,
+            "bytes": 1449616,
+            "sha256": "6a0be95dc4eec1915bf04f5de2ee1ce17462383f8561aa032ec3c59a8d2242e7",
+            "recordedSha256": "6a0be95dc4eec1915bf04f5de2ee1ce17462383f8561aa032ec3c59a8d2242e7",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "manifest.json",
+            "exists": true,
+            "bytes": 736,
+            "sha256": "8e33bc26c0bdb256b9308dba089eef07885718e2aa8577eaadd17ab35a48462c",
+            "recordedSha256": "8e33bc26c0bdb256b9308dba089eef07885718e2aa8577eaadd17ab35a48462c",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "meshcolliders.bin",
+            "exists": true,
+            "bytes": 3928220,
+            "sha256": "020bb2011143d0464d4573086ea0b6f56c4d426503ad8a397434eb1be4430e5e",
+            "recordedSha256": "020bb2011143d0464d4573086ea0b6f56c4d426503ad8a397434eb1be4430e5e",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "navmesh.bin",
+            "exists": true,
+            "bytes": 173532,
+            "sha256": "b38eef04080d7cc811ea2d7c92de719bfae55a5758c9c1444758587dbc4f2409",
+            "recordedSha256": "b38eef04080d7cc811ea2d7c92de719bfae55a5758c9c1444758587dbc4f2409",
+            "recordedHashMatches": true
+          },
+          {
+            "name": "walkable.bin",
+            "exists": true,
+            "bytes": 362404,
+            "sha256": "05f3c33b951f2b7c83076b561b60886a6a421cec8d512b8494272e904dd3e18f",
+            "recordedSha256": "05f3c33b951f2b7c83076b561b60886a6a421cec8d512b8494272e904dd3e18f",
+            "recordedHashMatches": true
+          }
+        ]
+      },
+      "clientExportPackage": null,
+      "navigationBakeSource": "F:\\游戏项目\\HUNDUN\\Assets\\地图\\world010\\Editor\\MapNavBuilder.cs",
+      "navigationBakeSettings": {
+        "agentRadius": 0.36,
+        "agentHeight": 1.84,
+        "agentClimb": 0.35,
+        "agentSlope": 43.0
+      }
+    }
+  ]
+}

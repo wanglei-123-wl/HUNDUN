@@ -445,6 +445,7 @@ public class NetworkManager
         message.sequence = movementSequence + 1;
         if (!Send(message)) return false;
         movementSequence = message.sequence;
+        BattleSyncDiagnosticsLogger.LogMovementEventSent(ConnectionEpoch, message);
         return true;
     }
 

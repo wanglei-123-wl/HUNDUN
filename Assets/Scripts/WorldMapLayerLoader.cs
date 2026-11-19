@@ -98,10 +98,28 @@ public sealed class WorldMapLayerLoader : MonoBehaviour
         if (loadingView != null)
             loadingView.Report(WorldEntryLoadingView.TargetMapLoadedProgress, "正在初始化游戏会话");
         gameSession.StartSession();
+        if (gameSession.IsReturningToLogin) yield break;
+
+        if (loadingView != null)
+            loadingView.Report(WorldEntryLoadingView.TargetMapLoadedProgress, "正在准备地图");
+        // Keep network handshakes active, but do not open local input until the map query is ready.
+        yield return gameSession.PrepareMapTraversal(sceneId, mapId, connectionEpoch,
+            () => gameSession.LocalCharacterDbId <= 0 || gameSession.LocalCharacterDbId == characterDbId);
+        if (gameSession.IsReturningToLogin) yield break;
+        if (!gameSession.IsMapTraversalPrepared(sceneId, mapId)
+            || network == null || NetworkManager.Instance != network || !network.IsConnected
+            || network.ConnectionEpoch != connectionEpoch
+            || !gameSession.CommitMapTraversal(sceneId, mapId))
+        {
+            FailEntry("地图资源准备失败，请更新游戏资源后重试。", "map_traversal_data_failed");
+            yield break;
+        }
 
         if (loadingView != null)
             yield return WaitForInitialPlayerData(loadingView, network, connectionEpoch,
                 characterDbId, sceneId, mapId);
+        else
+            gameSession.StartLocalPlayerInput();
     }
 
     private IEnumerator WaitForInitialPlayerData(WorldEntryLoadingView loadingView,

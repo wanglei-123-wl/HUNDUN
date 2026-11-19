@@ -1,0 +1,377 @@
+{
+  "stage": "2-map-data-import",
+  "generatedAtUtc": "2026-11-19T08:44:59.3606759Z",
+  "serverSourceRoot": "F:\\游戏项目\\gameserver\\GameServer",
+  "querySourceFingerprint": "8b053108a3e12413777598b2ca96329921a460c14fc0248665a53ff145a77026",
+  "runningServerVersionVerified": false,
+  "addressablesContentBuilt": false,
+  "testsRun": false,
+  "maps": [
+    {
+      "sceneId": "world_001",
+      "mapId": "map_demo_1",
+      "formatVersion": 3,
+      "address": "game/map-traversal/map_demo_1",
+      "asset": "Assets/MapTraversalData/map_demo_1.bytes",
+      "packageFingerprint": "3271670fba35f2f466a6b738bfcff48e8232db97bd934277a788701f6cbdf691",
+      "archiveSha256": "7dd152c72fbcb7f9203fd138adaee732ed34249b01ec733e9d1696131bf2d9d2",
+      "archiveBytes": 40924685,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 98756,
+          "sha256": "dfbb8c10d22a31a6b86579017550fd89b7f1f4a82edbdf8efc60b37a37ea7cb8"
+        },
+        {
+          "name": "groundsurfaces.bin",
+          "bytes": 83747212,
+          "sha256": "f3ee650a330ceabfa8f2d1a03e1d66c8f1352ea0101b1e082007d78c91dc614f"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 6553600,
+          "sha256": "d9060032aebeab950f525b5dd35b8f878dcc94ea15dd540ed2db795e19d6eab0"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 640,
+          "sha256": "9120c983c61674eb1867ced2641175167ca811b01ad7ed5f58c90e233eadb540"
+        },
+        {
+          "name": "meshcolliders.bin",
+          "bytes": 48003756,
+          "sha256": "a25435d5d427022283874648b41afc32b73266d108643c41bf01c2466714cff7"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 3990632,
+          "sha256": "dcc7b995987fbe001f22e67494e97c8cbddc345abac32656932f4fb8b0ff13b6"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 1638400,
+          "sha256": "0adf979f5eb5c206aecb0f4887f9a7343915b3d67c391611507889bbe52bb605"
+        }
+      ]
+    },
+    {
+      "sceneId": "world_002",
+      "mapId": "map_001",
+      "formatVersion": 1,
+      "address": "game/map-traversal/map_001",
+      "asset": "Assets/MapTraversalData/map_001.bytes",
+      "packageFingerprint": "827382692d9cbde3775d036722dff07163b195c0d76faac86c1a5f8d6643c89d",
+      "archiveSha256": "8442de108e4d9f3cddaf8d761227529b4d90ee08b20e848e8641339570099425",
+      "archiveBytes": 6299825,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 1809284,
+          "sha256": "017c36afc34210b730d20b829765bfa9dd4352995fd923f01d96fc838129bcf3"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 7860224,
+          "sha256": "cb0a85ec0e4feeab7dbff60c308c08266b3083f3b45563056f0ceb21d939e4dc"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 660,
+          "sha256": "d0d6272a5250bb2e57b966e5b83ddb98bb3a53da47fcf5a2c0c9adfef63ebcd9"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 380428,
+          "sha256": "08b98618b35ee6fc72bbc5a2d03cefe6db379bc409326b4b165196fd5d0efce0"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 1965056,
+          "sha256": "d2a0b3a9b9b1330f67fe19862082987942bfe4a1543f2e14dfbb16289bda97a7"
+        }
+      ]
+    },
+    {
+      "sceneId": "world005",
+      "mapId": "map_005",
+      "formatVersion": 3,
+      "address": "game/map-traversal/map_005",
+      "asset": "Assets/MapTraversalData/map_005.bytes",
+      "packageFingerprint": "948fc90431a83e75d7b851ae3ff850bd0079a482380c9513857b61bda3de589b",
+      "archiveSha256": "bc65cd4d7e8e048a92254cf66fa76f7f7ccc79dfa70c6ec734f0e0a31582ea49",
+      "archiveBytes": 3324165,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 20,
+          "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2"
+        },
+        {
+          "name": "groundsurfaces.bin",
+          "bytes": 2304412,
+          "sha256": "97354033a28a9e497c77027964b618f1e6f1d7411459472086f9b2de14a038a3"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 3573472,
+          "sha256": "1baec600928ce5d030c6fe44405de01edf47afbcc85ac9bd42cce5d3ee0056e1"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 737,
+          "sha256": "7f1cfd3b17d5e4889eaf3b1080bd32c25d5bf6abd43b0db39a0e54af2f592e9a"
+        },
+        {
+          "name": "meshcolliders.bin",
+          "bytes": 2367980,
+          "sha256": "2631bbf0c874ef983e88bfc2b0cf37c6f7b7ff5e4de9942e6f7ea2c2bfef428b"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 381892,
+          "sha256": "c971e8fa22494154e88d84b3c517d5d13efe21b418402515b36f21821fc35a71"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 893368,
+          "sha256": "d5c4f33798ed4453c5b3ca05a99e3d462230584a7cbc26365e890d80afe2a9cb"
+        }
+      ]
+    },
+    {
+      "sceneId": "world006",
+      "mapId": "map_006",
+      "formatVersion": 3,
+      "address": "game/map-traversal/map_006",
+      "asset": "Assets/MapTraversalData/map_006.bytes",
+      "packageFingerprint": "70badf55e89d39f6f14774b48d329428987d4753e5809831284f19d171efe4ba",
+      "archiveSha256": "e6ea6b4334d4a48c43bb0bfd85640a65f188c06328d82d0103c1206f00672dc5",
+      "archiveBytes": 1898482,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 20,
+          "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2"
+        },
+        {
+          "name": "groundsurfaces.bin",
+          "bytes": 1115764,
+          "sha256": "efdaa5cc174bcb61f25024b7d0bd42092915dd730eb8711f923d40faee572f77"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 1618488,
+          "sha256": "1529e9ccca76b2070f921ab2c300822c7ad66667121b467d761c5815f9cfddd6"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 729,
+          "sha256": "545428bc82b0dcbe06a8f65109300ef33c01bfa55194c988ac7d57aaa322904c"
+        },
+        {
+          "name": "meshcolliders.bin",
+          "bytes": 1647852,
+          "sha256": "77179df9780129dfdb72d587c00b51c3ab6bfbfcc39bc490f96272c90885a663"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 180384,
+          "sha256": "2f2655fdbbb70dbc6e7a7e4e1e21374533598db0dd95dac10bd292aa533bcd00"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 404622,
+          "sha256": "a0aa3fb821eaf9f654564745b741ef16cf809760357c952852e3ca480118f777"
+        }
+      ]
+    },
+    {
+      "sceneId": "world007",
+      "mapId": "map_007",
+      "formatVersion": 3,
+      "address": "game/map-traversal/map_007",
+      "asset": "Assets/MapTraversalData/map_007.bytes",
+      "packageFingerprint": "55abc19de8dc80c735a37af383bc414879c5b19660569881f43888e6d612e4c7",
+      "archiveSha256": "45559a141c8685ffb41a0080f7f46a5e78bb610393050ae74688c9774047e57e",
+      "archiveBytes": 4791430,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 20,
+          "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2"
+        },
+        {
+          "name": "groundsurfaces.bin",
+          "bytes": 1683772,
+          "sha256": "7b21daf66da5157021133dab213f753a745927a4552138d00e494a85a16c2677"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 5049008,
+          "sha256": "1d7aff540318e03236e3899a76a614d1e5eba93602a88df34e1914d2dba3f625"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 728,
+          "sha256": "915bf6db20ec7d8ae747cd12f8c0ec7857f8b301d09762c488d3f43a5a53cd25"
+        },
+        {
+          "name": "meshcolliders.bin",
+          "bytes": 1401828,
+          "sha256": "8be47b65c197f8d8d70c05866dd3f2478250dce8971bf94a098c61a379ba4865"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 277532,
+          "sha256": "91a33186e9a21f10884bdf679e1d6b3f8d9698fdb92ab058168434b1bb135871"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 1262252,
+          "sha256": "123409ee23522babe10566145939e4c35475076825b2d679d5cbb95429860ad3"
+        }
+      ]
+    },
+    {
+      "sceneId": "world008",
+      "mapId": "map_008",
+      "formatVersion": 3,
+      "address": "game/map-traversal/map_008",
+      "asset": "Assets/MapTraversalData/map_008.bytes",
+      "packageFingerprint": "40f93e473619948bcbd141999cea8523302c3e743ba7210050b844ca8612d446",
+      "archiveSha256": "a1d569be69e779fef0199bf9a5cc17714672a9a73235105c1b9a8fc7dd2fdcd8",
+      "archiveBytes": 7464629,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 20,
+          "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2"
+        },
+        {
+          "name": "groundsurfaces.bin",
+          "bytes": 2894596,
+          "sha256": "c52317008309367b12c636260da3bf45a5a5114e59f280ff5f4dab9a1db4e042"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 8940064,
+          "sha256": "6c0e6f2f62fc8313863acfc072a3e6330e7da727a98c11ac0107500aa602131f"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 733,
+          "sha256": "b0b3e6604d75f6f3d1f4d06eb333248ad3d25cef5d6f0b516f7cb5ed36babb86"
+        },
+        {
+          "name": "meshcolliders.bin",
+          "bytes": 2466768,
+          "sha256": "be92d335f4375029ed47c37565b54de05617289aad8a3946c5d6a8eb8176bc28"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 522476,
+          "sha256": "7c4eca345604b011c3bc0987c8714042e3c30cbc9875b76cedb17df4ffa8aae1"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 2235016,
+          "sha256": "680ba438b13d1f43f4b4367eb956331ce8aa1b05f7bff9184fc1445188782625"
+        }
+      ]
+    },
+    {
+      "sceneId": "world009",
+      "mapId": "map_009",
+      "formatVersion": 3,
+      "address": "game/map-traversal/map_009",
+      "asset": "Assets/MapTraversalData/map_009.bytes",
+      "packageFingerprint": "d746b51bd9f5a795ff9ade0187a28929edb491516c84642fb81739a58244653d",
+      "archiveSha256": "86eaf56ece6866dec8857643d45a39e85dfb3735c8cc5d21461e3e178802f4f5",
+      "archiveBytes": 2409078,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 20,
+          "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2"
+        },
+        {
+          "name": "groundsurfaces.bin",
+          "bytes": 1070944,
+          "sha256": "316ef24be59af35d9b106da5818f0807b0ed7e8198c0f7b58f67570c5da8a0fc"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 2187440,
+          "sha256": "e41409cbad38911ba9d616d1db609144186a161947b4e2ecfdf9211f5573186c"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 732,
+          "sha256": "bff887b0097dc07c2a6260ef7ec9a844816f8edc89e8ed9843df7746bff89965"
+        },
+        {
+          "name": "meshcolliders.bin",
+          "bytes": 1728616,
+          "sha256": "9513080973373786d1fac28970ba70a5f162e10722082735d47961b18b6a09f9"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 145200,
+          "sha256": "aff83c119c0641b3ec1e87ce22aaa5c1c37f2293cbc54d3855f3f1067847a215"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 546860,
+          "sha256": "471bb72a3c921513dfafb693d03e30f01373a798f703388f34da1303f6d3ac5e"
+        }
+      ]
+    },
+    {
+      "sceneId": "world010",
+      "mapId": "map_010",
+      "formatVersion": 3,
+      "address": "game/map-traversal/map_010",
+      "asset": "Assets/MapTraversalData/map_010.bytes",
+      "packageFingerprint": "a90352136c97944c67f76340f3ae5364fa3fcf9797f2a710d5ce382c1592bdd6",
+      "archiveSha256": "c9ff01be56fde14e738495691435ef1549a89cadbbfe9fc68ab19856535d5499",
+      "archiveBytes": 2542314,
+      "files": [
+        {
+          "name": "colliders.bin",
+          "bytes": 20,
+          "sha256": "6f98ca41905fc9ab7f7f5fdf6ce7e0417a15a9d444cd657b030ddbde92ffa1c2"
+        },
+        {
+          "name": "groundsurfaces.bin",
+          "bytes": 1035880,
+          "sha256": "4cc3b46bd1f02bf86e6306141bfea7e0fb21e34b1ffceb71837985a078957918"
+        },
+        {
+          "name": "heightfield.bin",
+          "bytes": 1449616,
+          "sha256": "6a0be95dc4eec1915bf04f5de2ee1ce17462383f8561aa032ec3c59a8d2242e7"
+        },
+        {
+          "name": "manifest.json",
+          "bytes": 736,
+          "sha256": "8e33bc26c0bdb256b9308dba089eef07885718e2aa8577eaadd17ab35a48462c"
+        },
+        {
+          "name": "meshcolliders.bin",
+          "bytes": 3928220,
+          "sha256": "020bb2011143d0464d4573086ea0b6f56c4d426503ad8a397434eb1be4430e5e"
+        },
+        {
+          "name": "navmesh.bin",
+          "bytes": 173532,
+          "sha256": "b38eef04080d7cc811ea2d7c92de719bfae55a5758c9c1444758587dbc4f2409"
+        },
+        {
+          "name": "walkable.bin",
+          "bytes": 362404,
+          "sha256": "05f3c33b951f2b7c83076b561b60886a6a421cec8d512b8494272e904dd3e18f"
+        }
+      ]
+    }
+  ]
+}

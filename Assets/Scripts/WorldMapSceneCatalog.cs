@@ -51,4 +51,12 @@ public static class WorldMapSceneCatalog
         mapId = null;
         return false;
     }
+
+    public static bool TryGetTraversalAddress(string sceneId, string mapId, out string address)
+    {
+        address = null;
+        if (!TryGetAddress(sceneId, mapId, out _)) return false;
+        address = "game/map-traversal/" + mapId;
+        return true;
+    }
 }

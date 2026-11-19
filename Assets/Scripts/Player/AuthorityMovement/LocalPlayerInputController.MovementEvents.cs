@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Game.Client.BattleSync;
 using UnityEngine;
 
 public sealed partial class LocalPlayerInputController
@@ -7,6 +8,7 @@ public sealed partial class LocalPlayerInputController
     private const MovementEventFlags DirectionFlags = MovementEventFlags.Forward | MovementEventFlags.Backward
         | MovementEventFlags.StrafeLeft | MovementEventFlags.StrafeRight;
     private const MovementEventFlags TurnFlags = MovementEventFlags.TurnLeft | MovementEventFlags.TurnRight;
+    private const int MovementStepMilliseconds = 16;
     private static readonly Stopwatch MovementClock = Stopwatch.StartNew();
     private MovementEventControl movementControl;
     private MovementEventPolicy movementPolicy;
@@ -17,6 +19,9 @@ public sealed partial class LocalPlayerInputController
     private float airSpeed;
     private long stepAt, airStartedAt, lastAnalogFacingAt, controlAckAt;
     private long ownedServerTick, deathMovementEpoch;
+    private bool traversalStopPending;
+    private Vector3 blockedTraversalDirection, blockedTraversalPosition;
+    private bool blockedTraversalGrounded;
     private static long MovementNow => MovementClock.ElapsedMilliseconds;
 
     internal void BeginMovement(MovementEventControl control, MovementEventPolicy policy)
@@ -43,6 +48,8 @@ public sealed partial class LocalPlayerInputController
             network.MovementGravity = control.gravity;
             movementFlags = control.flags;
             travelDirection = Vector3.zero;
+            traversalStopPending = false;
+            blockedTraversalDirection = Vector3.zero;
             lastSent = null;
             controlAckAt = stepAt = airStartedAt = lastAnalogFacingAt = MovementNow;
             ownedServerTick = 0;
@@ -105,6 +112,26 @@ public sealed partial class LocalPlayerInputController
         clientTick = input.ClientTick;
         bool run = input.IsRunning;
         Vector3 direction = predictedMotor.MovementDirection(input);
+        bool groundedForTraversal = (movementFlags & MovementEventFlags.Falling) == 0;
+        if (blockedTraversalDirection != Vector3.zero)
+        {
+            if (direction == Vector3.zero || input.JumpPressed || groundedForTraversal != blockedTraversalGrounded
+                || (transform.position - blockedTraversalPosition).sqrMagnitude > .0025f
+                || Vector3.Angle(direction, blockedTraversalDirection) > 4f)
+                blockedTraversalDirection = Vector3.zero;
+            else
+                direction = Vector3.zero;
+        }
+        if (direction != Vector3.zero && ((movementFlags & DirectionFlags) == 0
+            || Vector3.Angle(travelDirection, direction) > 4f))
+        {
+            float probeSpeed = predictedMotor.Speed(run) * .995f;
+            Vector3 from = transform.position;
+            Vector3 probe = from + direction * (probeSpeed * MovementStepMilliseconds * .001f);
+            if (!PredictedCharacterMotor.TryTraversalTarget(movementSession == null ? null : movementSession.CurrentMapTraversal,
+                from, probe, movementControl.radius, movementControl.height, groundedForTraversal, out _, out _))
+                direction = Vector3.zero;
+        }
         MovementEventFlags directional = ReadDirectionFlags(input, direction);
         MovementEventFlags turning = MovementEventFlags.None;
         if (input.FaceCamera && direction == Vector3.zero)
@@ -179,6 +206,11 @@ public sealed partial class LocalPlayerInputController
 
     private bool AdvanceMovement(long now)
     {
+        if (traversalStopPending)
+        {
+            if (!Report("stop", stepAt, Vector3.zero)) return false;
+            traversalStopPending = false;
+        }
         if (now - stepAt >= movementPolicy.movingTimeoutMs && IsActive)
             return false; // The server will supply a fresh control point for the interrupted segment.
 
@@ -190,8 +222,13 @@ public sealed partial class LocalPlayerInputController
 
         while (stepAt < now)
         {
-            long end = Math.Min(stepAt + 16, now);
+            long end = Math.Min(stepAt + MovementStepMilliseconds, now);
             if (!StepMovement(end)) return false;
+            if (!IsActive)
+            {
+                stepAt = now;
+                break;
+            }
         }
         if (now - (lastSent?.clientTimeMs ?? controlAckAt) >= movementPolicy.heartbeatIntervalMs)
             return Report("heartbeat", now);
@@ -208,7 +245,10 @@ public sealed partial class LocalPlayerInputController
         Vector3 before = transform.position;
         if ((movementFlags & TurnFlags) != 0)
             predictedMotor.SetHeading(predictedMotor.TurnStep(targetTurnYaw, dt));
-        CollisionFlags collisions = predictedMotor.MoveLocally(travelDirection * (MovementSpeed * dt) + Vector3.up * deltaY);
+        Vector3 requestedDisplacement = travelDirection * (MovementSpeed * dt) + Vector3.up * deltaY;
+        CollisionFlags collisions = predictedMotor.MoveLocally(requestedDisplacement,
+            movementSession == null ? null : movementSession.CurrentMapTraversal,
+            movementControl.radius, movementControl.height, onGround, out bool horizontalBlocked);
         stepAt = end;
 
         Vector3 displacement = transform.position - before;
@@ -236,7 +276,22 @@ public sealed partial class LocalPlayerInputController
 
         onGround = (movementFlags & MovementEventFlags.Falling) == 0;
         predictedMotor.SetLocalMotion(horizontalVelocity, onGround ? 0f : vertical, onGround);
-        return edge == null || Report(edge, end);
+        bool edgeReported = edge == null || Report(edge, end);
+        if (!horizontalBlocked || (movementFlags & DirectionFlags) == 0) return edgeReported;
+
+        blockedTraversalDirection = travelDirection;
+        blockedTraversalPosition = transform.position;
+        blockedTraversalGrounded = onGround;
+        var query = movementSession == null ? null : movementSession.CurrentMapTraversal;
+        BattleSyncDiagnosticsLogger.LogLocalTraversalBlocked(NetworkManager.Instance.ConnectionEpoch,
+            movementControl.epoch, query?.SceneId, query?.MapId, query?.PackageFingerprint,
+            before, before + requestedDisplacement, transform.position, movementControl.radius, movementControl.height, onGround);
+        movementFlags &= ~DirectionFlags;
+        SetTravelDirection(Vector3.zero);
+        traversalStopPending = true;
+        if (!edgeReported || !Report("stop", end, Vector3.zero)) return false;
+        traversalStopPending = false;
+        return true;
     }
 
     private bool IsActive => (movementFlags & (DirectionFlags | TurnFlags | MovementEventFlags.Falling)) != 0;
