@@ -46,6 +46,8 @@ public sealed partial class LocalPlayerInputController
 
         if (movementControl?.epoch != control.epoch || movementControl.sceneSessionId != control.sceneSessionId)
         {
+            bool resetDirectionBasis = movementControl == null
+                || movementControl.sceneSessionId != control.sceneSessionId || control.reason == "respawn";
             combatController?.CancelCombatApproach();
             movementControl = control;
             network.BeginMovementControl(control);
@@ -64,6 +66,11 @@ public sealed partial class LocalPlayerInputController
             ResetRollInput();
             reconciler.ApplyControl(control, control.reason == "movement_blocked" || control.reason == "movement_timeout"
                 || control.reason == "movement_speed_exceeded" || control.reason == "movement_unsupported");
+            if (resetDirectionBasis)
+            {
+                if (cameraFollow == null) cameraFollow = FindObjectOfType<ThirdPersonCameraFollow>();
+                cameraFollow?.ResetMovementYaw(control.yaw);
+            }
         }
 
         if (control.mode != "normal" || network.MovementReady)
@@ -145,6 +152,13 @@ public sealed partial class LocalPlayerInputController
                 direction = Vector3.zero;
         }
         MovementEventFlags directional = ReadDirectionFlags(input, direction);
+        // Only straight forward movement recenters the camera. Strafing,
+        // diagonals and retreat retain the existing observation direction.
+        cameraFollow?.SetForwardMovement(directional == MovementEventFlags.Forward);
+        // Retreat moves opposite the input basis while the character continues
+        // facing forward. Rolls keep their existing directional facing.
+        float? facingYaw = (directional & MovementEventFlags.Backward) != 0
+            && rollDirection == PlayerInputKeys.None ? input.CameraYaw : (float?)null;
         if (direction == Vector3.zero && HasDirectionalInput(input.Keys) && combatController?.HasCombatApproach == true)
             combatController.CancelCombatApproach("前方道路受阻，自动追击已停止");
         MovementEventFlags turning = ResolveTurnFlags(input, direction, now);
@@ -161,7 +175,7 @@ public sealed partial class LocalPlayerInputController
         bool changedDirection = oldDirection != directional;
         if (changedDirection)
         {
-            SetTravelDirection(direction);
+            SetTravelDirection(direction, facingYaw);
             movementFlags = (movementFlags & ~DirectionFlags) | directional;
             string kind = (directional & ~oldDirection) != 0 ? "start" : "stop";
             if (!Report(kind, now, travelDirection * MovementSpeed)) return false;
@@ -169,7 +183,7 @@ public sealed partial class LocalPlayerInputController
         else if (direction != Vector3.zero && now - lastAnalogFacingAt >= 50
             && Vector3.Angle(travelDirection, direction) > 4f)
         {
-            SetTravelDirection(direction);
+            SetTravelDirection(direction, facingYaw);
             lastAnalogFacingAt = now;
             if (!Report("facing", now, direction * MovementSpeed)) return false;
         }
@@ -249,11 +263,11 @@ public sealed partial class LocalPlayerInputController
         return wanted;
     }
 
-    private void SetTravelDirection(Vector3 direction)
+    private void SetTravelDirection(Vector3 direction, float? facingYaw = null)
     {
         travelDirection = direction;
         if (direction != Vector3.zero)
-            predictedMotor.SetHeading(Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
+            predictedMotor.SetHeading(facingYaw ?? Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
         predictedMotor.SetLocalMotion(direction * MovementSpeed, predictedMotor.Velocity.y, predictedMotor.IsGrounded);
     }
 

@@ -6,6 +6,7 @@ using UnityEngine;
 public partial class RemotePlayerSync : MonoBehaviour
 {
     private const string RunningParameter = "IsRunning";
+    private const string BackwardParameter = "IsMovingBackward";
 
     [Header("Identity")]
     [SerializeField] private long characterDbId;
@@ -35,6 +36,7 @@ public partial class RemotePlayerSync : MonoBehaviour
     private bool hasReceivedState;
     private bool hasMoveBoolParameter;
     private bool hasRunningParameter;
+    private bool hasBackwardParameter;
     private bool hasAttackTriggerParameter;
     private bool attackEventsDriveAnimation;
     private long lastServerTick;
@@ -262,6 +264,9 @@ public partial class RemotePlayerSync : MonoBehaviour
         bool walking = (flags & MovementEventFlags.Walking) != 0;
         bool airborne = (flags & MovementEventFlags.Falling) != 0;
         ApplyRemoteRoll(incoming.ActiveRoll);
+        if (hasBackwardParameter)
+            animator.SetBool(BackwardParameter, !airborne
+                && Vector3.Dot(new Vector3(v.x, 0f, v.z), targetRotation * Vector3.forward) < -0.05f);
         if (movementGroundedParameter) animator.SetBool("IsGrounded", !airborne);
         if (movementJumpParameter && airborne && !wasAirborne && movement.info.jumpSpeed > 0f && !IsDead)
             animator.SetTrigger("Jump");
@@ -464,6 +469,7 @@ public partial class RemotePlayerSync : MonoBehaviour
     {
         hasMoveBoolParameter = false;
         hasRunningParameter = false;
+        hasBackwardParameter = false;
         hasAttackTriggerParameter = false;
         movementGroundedParameter = movementJumpParameter = meditationAnimatorParameter = false;
         CacheRemoteRollClip();
@@ -490,6 +496,10 @@ public partial class RemotePlayerSync : MonoBehaviour
             if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == RunningParameter)
             {
                 hasRunningParameter = true;
+            }
+            if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == BackwardParameter)
+            {
+                hasBackwardParameter = true;
             }
 
             if (parameter.type == AnimatorControllerParameterType.Trigger && parameter.name == attackTriggerName)

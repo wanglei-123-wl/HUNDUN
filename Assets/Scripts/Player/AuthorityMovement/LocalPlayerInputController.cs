@@ -177,6 +177,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
     private void OnDisable()
     {
+        cameraFollow?.SetForwardMovement(false);
         combatController?.CancelCombatApproach();
         EndMeditation();
         rollReported = false;
@@ -252,6 +253,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         rightClickTarget = default;
         mouseLeftDragDistance = 0f;
         basicAttackMovementGate.Reset();
+        cameraFollow?.SetForwardMovement(false);
         cameraFollow = null;
         ResolveCombatController();
         combatController?.SetCombatEnabled(enabled, resetSequence);
@@ -360,7 +362,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
         rollDirection = tappedDirections;
         rollRequestedAt = now;
-        rollCameraYaw = ReadCameraYaw();
+        rollCameraYaw = ReadMovementYaw();
     }
 
     private bool IsRollAnimationPlaying() => ReadRollAnimatorState().IsTag(RollTag);
@@ -441,9 +443,9 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
             actions &= ~(PlayerInputActions.MouseLeftHeld | PlayerInputActions.MouseRightHeld);
         }
 
-        float cameraYaw = rollMoving ? rollCameraYaw : ReadCameraYaw();
         bool hasMovementInput = HasDirectionalInput(keys)
             || HasBothMouseButtons(actions);
+        float cameraYaw = rollMoving ? rollCameraYaw : ReadMovementYaw();
 
         return new PlayerInputFrame
         {
@@ -462,8 +464,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         };
     }
 
-    private float ReadCameraYaw() => cameraFollow == null
-        ? transform.eulerAngles.y : cameraFollow.CameraYaw;
+    private float ReadMovementYaw() => cameraFollow == null
+        ? transform.eulerAngles.y : cameraFollow.ReadMovementYaw();
 
     private static PlayerInputKeys ReadDirectionalKeys(bool pressedThisFrame)
     {

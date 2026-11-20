@@ -19,6 +19,10 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     public float minPitch = -80f;
     public float maxPitch = 80f;
 
+    [Header("Movement Follow")]
+    [SerializeField, Min(0.01f)] private float movementAlignSmoothTime = 0.35f;
+    [SerializeField, Min(1f)] private float movementAlignTurnSpeed = 360f;
+
     [Header("Target Lock")]
     [SerializeField, Min(0.01f)] private float lockBlendTime = 0.35f;
     [SerializeField, Min(1f)] private float lockOrbitTurnSpeed = 360f;
@@ -41,6 +45,11 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     private readonly RaycastHit[] collisionHits = new RaycastHit[CollisionBufferSize];
 
     private LocalPlayerCombatController combatController;
+    private PredictedCharacterMotor movementMotor;
+    private float movementYaw;
+    private bool hasMovementYaw;
+    private bool alignWithForwardMovement;
+    private float movementAlignVelocity;
     private Transform trackedMonster;
     private float trackingBlend;
     private float? lockedOrbitYaw;
@@ -82,6 +91,10 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         Transform activeRotationTarget = GetRotationTarget();
         yaw = activeRotationTarget != null ? activeRotationTarget.eulerAngles.y : transform.eulerAngles.y;
         characterLookYaw = yaw;
+        movementYaw = yaw;
+        hasMovementYaw = activeRotationTarget != null;
+        movementMotor = activeRotationTarget == null
+            ? null : activeRotationTarget.GetComponent<PredictedCharacterMotor>();
         float scenePitch = NormalizePitch(transform.eulerAngles.x);
         pitch = Mathf.Approximately(scenePitch, 0f) ? defaultPitch : scenePitch;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
@@ -103,8 +116,36 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         trackingBlend = 0f;
         lockedOrbitYaw = null;
         unlockViewOffset = Quaternion.identity;
+        alignWithForwardMovement = false;
+        movementAlignVelocity = 0f;
+        leftDragging = rightDragging = false;
         SetCursorCaptured(false);
     }
+
+    internal float ReadMovementYaw()
+    {
+        // A/D can turn the model toward travel without redefining "forward".
+        // Retain the same input basis across key releases and direction changes;
+        // only explicit right-drag steering or a control reset replaces it.
+        if (CharacterLookActive)
+            ResetMovementYaw(characterLookYaw);
+        else if (!hasMovementYaw)
+        {
+            Transform character = GetRotationTarget();
+            if (character != null) ResetMovementYaw(character.eulerAngles.y);
+        }
+
+        return movementYaw;
+    }
+
+    internal void ResetMovementYaw(float characterYaw)
+    {
+        movementYaw = Mathf.Repeat(characterYaw, 360f);
+        hasMovementYaw = true;
+    }
+
+    internal void SetForwardMovement(bool forwardOnly) =>
+        alignWithForwardMovement = forwardOnly;
 
     public void SampleInput()
     {
@@ -193,12 +234,28 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             ? default
             : combatController.LockedTarget;
         Transform lockedMonster = lockedTarget.TargetTransform;
-        bool trackMonster = lockedMonster != null && !leftDragging && !rightDragging;
+        if (movementMotor == null && activeRotationTarget != null)
+            activeRotationTarget.TryGetComponent(out movementMotor);
+        Vector3 velocity = movementMotor == null ? Vector3.zero : movementMotor.Velocity;
+        bool moving = velocity.x * velocity.x + velocity.z * velocity.z > 0.0025f;
+        bool manualOrbit = leftDragging || rightDragging;
+        bool trackMonster = lockedMonster != null && !manualOrbit && !moving;
         bool stoppedTracking = lockedOrbitYaw.HasValue && !trackMonster;
         Vector3 followPosition = activeFollowTarget.position;
         UpdateLockedOrbit(trackMonster ? lockedTarget : default, followPosition);
 
         bool uiBlocked = GameplayUiInputGuard.BlocksGameplayInput;
+        if (moving && alignWithForwardMovement
+            && !manualOrbit && !uiBlocked && activeRotationTarget != null)
+        {
+            yaw = Mathf.SmoothDampAngle(yaw, activeRotationTarget.eulerAngles.y,
+                ref movementAlignVelocity, Mathf.Max(0.01f, movementAlignSmoothTime),
+                Mathf.Max(1f, movementAlignTurnSpeed), Time.unscaledDeltaTime);
+        }
+        else
+        {
+            movementAlignVelocity = 0f;
+        }
         float scroll = uiBlocked ? 0f : Input.mouseScrollDelta.y;
         if (Mathf.Abs(scroll) > 0.001f)
             desiredDistance = Mathf.Clamp(desiredDistance - scroll * zoomSpeed, minDistance, maxDistance);
@@ -283,12 +340,22 @@ public class ThirdPersonCameraFollow : MonoBehaviour
 
     public void BindTargets(Transform newFollowTarget, Transform newRotationTarget)
     {
+        bool changedRotationTarget = GetRotationTarget() != newRotationTarget;
         followTarget = newFollowTarget;
         rotationTarget = newRotationTarget;
         target = newRotationTarget;
         combatController = newRotationTarget == null
             ? null
             : newRotationTarget.GetComponent<LocalPlayerCombatController>();
+        movementMotor = newRotationTarget == null
+            ? null : newRotationTarget.GetComponent<PredictedCharacterMotor>();
+        if (changedRotationTarget)
+        {
+            hasMovementYaw = newRotationTarget != null;
+            if (newRotationTarget != null) ResetMovementYaw(newRotationTarget.eulerAngles.y);
+            alignWithForwardMovement = false;
+            movementAlignVelocity = 0f;
+        }
     }
 
     private void UpdateLockedOrbit(CombatTargetSelection lockedTarget, Vector3 followPosition)

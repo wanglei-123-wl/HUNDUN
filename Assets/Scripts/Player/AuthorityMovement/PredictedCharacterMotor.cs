@@ -20,6 +20,7 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
 
     private const float AttackMovementRecoverySeconds = 0.3f;
     private const string RunningParameter = "IsRunning";
+    private const string BackwardParameter = "IsMovingBackward";
     private const string GroundedParameter = "IsGrounded";
     private const string JumpParameter = "Jump";
     private const string LocomotionTag = "Locomotion";
@@ -30,6 +31,7 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
     private bool hasMoveBoolParameter;
     private bool hasAttackTriggerParameter;
     private bool hasRunningParameter;
+    private bool hasBackwardParameter;
     private bool hasGroundedParameter;
     private bool hasJumpParameter;
     private bool running;
@@ -43,6 +45,8 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
     internal Animator VisualAnimator => animator;
     public Vector3 Velocity => velocity;
     public bool IsGrounded => grounded;
+    internal bool IsMovingBackward =>
+        Vector3.Dot(new Vector3(velocity.x, 0f, velocity.z), transform.forward) < -0.05f;
     public float Gravity => gravity;
 
     private bool AttackMovementLocked => authoritativeAttackLocked || attackAnimationLocked
@@ -154,6 +158,10 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
         if (hasRunningParameter)
         {
             animator.SetBool(RunningParameter, isMoving && running);
+        }
+        if (hasBackwardParameter)
+        {
+            animator.SetBool(BackwardParameter, isMoving && grounded && IsMovingBackward);
         }
         if (hasGroundedParameter)
         {
@@ -391,6 +399,7 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
         hasMoveBoolParameter = false;
         hasAttackTriggerParameter = false;
         hasRunningParameter = false;
+        hasBackwardParameter = false;
         hasGroundedParameter = false;
         hasJumpParameter = false;
 
@@ -417,6 +426,10 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
             if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == RunningParameter)
             {
                 hasRunningParameter = true;
+            }
+            if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == BackwardParameter)
+            {
+                hasBackwardParameter = true;
             }
             if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == GroundedParameter)
             {
