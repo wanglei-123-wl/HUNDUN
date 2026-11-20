@@ -72,6 +72,11 @@ public sealed partial class LocalPlayerInputController
 
     private bool TryRequestMeditation(bool sitting)
     {
+        // Keep a single request in flight. Held movement must not replace the
+        // pending stand request every frame or restart meditation while rising.
+        if (pendingMeditationRequest != null || sitting == isMeditating)
+            return false;
+
         var request = new MeditationSetRequest
         {
             msgId = "meditation_set",
@@ -149,8 +154,19 @@ public sealed partial class LocalPlayerInputController
         if (snapshot != null) ApplyMeditationState(snapshot);
     }
 
-    private bool IsMeditationBlockingInput() =>
-        pendingMeditationRequest?.isMeditating ?? isMeditating;
+    private bool IsMeditationBlockingInput()
+    {
+        if (pendingMeditationRequest != null || isMeditating) return true;
+        if (meditationAnimator == null || !meditationAnimator.isActiveAndEnabled) return false;
+        // The server can confirm standing before the stand-up clip finishes.
+        // Include the outgoing transition so its last blended frames stay locked.
+        return meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
+            || (meditationAnimator.IsInTransition(0)
+                && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag));
+    }
+
+    private bool IsMeditationActionBlocked() =>
+        isActiveAndEnabled && inputEnabled && IsMeditationBlockingInput();
 
     private void ClearMeditationRequest()
     {

@@ -30,6 +30,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         new BasicAttackMovementGate();
 
     private static readonly int MeditatingParameter = Animator.StringToHash("IsMeditating");
+    private static readonly int SeatedLoopState = Animator.StringToHash("Base Layer.打坐中");
     private const double DirectionDoubleTapSeconds = 0.25;
     private const double RollAnimationEnterTimeoutSeconds = 0.25;
     // Let normal movement braking finish as the roll animation returns to standing.
@@ -76,7 +77,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         PlayerInputKeys taps = jumpRequested ? PlayerInputKeys.None : ReadDirectionalKeys(pressedThisFrame: true);
         UpdateRollInput(FilterMeditationKeys(taps), Time.unscaledTimeAsDouble,
             !gameplayBlocked && !IsMeditationBlockingInput());
-        gameplayBlocked |= rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying();
+        gameplayBlocked |= IsMeditationBlockingInput()
+            || rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying();
         if (gameplayBlocked) combatController?.CancelCombatApproach();
         if (gameplayBlocked)
         {
@@ -188,12 +190,12 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         }
 
         bool alive = !movementSession.IsLocalPlayerDead;
-        // The server posture also drives effects for models without a sitting clip.
+        // The sit-down and stand-up clips share the Meditation tag; only the
+        // fully entered seated loop may show the meditation effect.
         bool meditating = alive && isMeditating && inputEnabled && NetworkManager.Instance?.MovementReady == true
-            && (meditationAnimator == null || (meditationAnimator.isActiveAndEnabled
-                && (meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
-                    || (meditationAnimator.IsInTransition(0)
-                        && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag)))));
+            && meditationAnimator != null && meditationAnimator.isActiveAndEnabled
+            && !meditationAnimator.IsInTransition(0)
+            && meditationAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash == SeatedLoopState;
         effectStateSource.Publish(new PlayerEffectState(alive, meditating));
     }
 
@@ -230,6 +232,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.FlushLocalMovement = FlushMovement;
+            NetworkManager.Instance.LocalPlayerActionBlocked = IsMeditationActionBlocked;
             if (movementControl?.IsValidFor(NetworkManager.Instance.SceneSessionId) == true)
                 predictedMotor.ApplyMovementSettings(movementControl);
         }
@@ -407,7 +410,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         bool gameplayPaused = GameplayUiInputGuard.BlocksGameplayInput;
         bool rollMoving = rollPlaying && rollDirection != PlayerInputKeys.None && !gameplayPaused
             && rollState.normalizedTime < RollBrakingStartNormalizedTime;
-        bool uiBlocked = gameplayPaused || rollBlocking;
+        bool uiBlocked = gameplayPaused || rollBlocking || meditationBlocked;
         PlayerInputKeys keys = rollMoving ? rollDirection | PlayerInputKeys.Shift
             : uiBlocked ? PlayerInputKeys.None : FilterMeditationKeys(ReadKeys());
         PlayerInputActions actions = uiBlocked ? PlayerInputActions.None : FilterMeditationActions(ReadHeldActions());

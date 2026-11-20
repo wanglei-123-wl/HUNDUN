@@ -262,7 +262,7 @@ public sealed class MonsterTargetingController : MonoBehaviour
         return angle <= fallbackHalfAngle;
     }
 
-    private static bool IsValidTarget(CombatTargetSelection target)
+    internal static bool IsValidTarget(CombatTargetSelection target)
     {
         if (!target.IsValid || !target.TargetTransform.gameObject.activeInHierarchy) return false;
         if (target.EntityType == "monster")

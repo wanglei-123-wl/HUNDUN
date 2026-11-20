@@ -4,7 +4,6 @@ public partial class RemotePlayerSync
 {
     private static readonly int RemoteMeditatingParameter = Animator.StringToHash("IsMeditating");
     private static readonly int SeatedLoopState = Animator.StringToHash("Base Layer.打坐中");
-    private const string RemoteMeditationTag = "Meditation";
 
     private long meditationRevision = -1;
     private bool remoteMeditating;
@@ -54,11 +53,10 @@ public partial class RemotePlayerSync
             return;
         }
 
-        bool showMeditating = remoteMeditating && (!meditationAnimatorParameter
-            || (animator != null && animator.isActiveAndEnabled
-                && (animator.GetCurrentAnimatorStateInfo(0).IsTag(RemoteMeditationTag)
-                    || (animator.IsInTransition(0)
-                        && animator.GetNextAnimatorStateInfo(0).IsTag(RemoteMeditationTag)))));
+        bool showMeditating = remoteMeditating && meditationAnimatorParameter
+            && animator != null && animator.isActiveAndEnabled
+            && !animator.IsInTransition(0)
+            && animator.GetCurrentAnimatorStateInfo(0).fullPathHash == SeatedLoopState;
         remoteEffectState.Publish(new PlayerEffectState(!IsDead, showMeditating));
     }
 }

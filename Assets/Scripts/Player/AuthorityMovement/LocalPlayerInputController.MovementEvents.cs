@@ -119,7 +119,9 @@ public sealed partial class LocalPlayerInputController
         // movement events, map checks and heartbeat schedule as manual input.
         ApplyCombatApproachInput(input);
         clientTick = input.ClientTick;
-        bool run = input.IsRunning;
+        // Do not emit walk/run changes in response to suppressed meditation input.
+        bool run = IsMeditationBlockingInput()
+            ? (movementFlags & MovementEventFlags.Walking) == 0 : input.IsRunning;
         Vector3 direction = predictedMotor.MovementDirection(input);
         bool groundedForTraversal = (movementFlags & MovementEventFlags.Falling) == 0;
         if (blockedTraversalDirection != Vector3.zero)
@@ -426,5 +428,7 @@ public sealed partial class LocalPlayerInputController
         var network = NetworkManager.Instance;
         if (network != null && network.FlushLocalMovement == FlushMovement)
             network.FlushLocalMovement = null;
+        if (network != null && network.LocalPlayerActionBlocked == IsMeditationActionBlocked)
+            network.LocalPlayerActionBlocked = null;
     }
 }

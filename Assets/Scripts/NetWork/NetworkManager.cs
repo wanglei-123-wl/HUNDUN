@@ -66,6 +66,9 @@ public class NetworkManager
     private long movementEpoch, movementSequence;
     private bool movementReady;
     internal Func<bool> FlushLocalMovement { get; set; }
+    internal Func<bool> LocalPlayerActionBlocked { get; set; }
+    internal bool AreLocalPlayerActionsBlocked =>
+        localPlayerActionsBlocked || LocalPlayerActionBlocked?.Invoke() == true;
     internal int MovementHeartbeatIntervalMs { get; set; }
     internal float MovementGravity { get; set; }
     internal bool MovementReady => movementReady && !string.IsNullOrEmpty(SceneSessionId);
@@ -346,7 +349,7 @@ public class NetworkManager
         bool transferRequest = message is MapTransferRequest;
         bool playerOperation = message is MovementReferencedRequest
             || message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto;
-        if (localPlayerActionsBlocked && playerOperation)
+        if (playerOperation && AreLocalPlayerActionsBlocked)
             return false;
         if (playerOperation && sceneOperationsPaused && !transferRequest)
             return false;

@@ -214,6 +214,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         CancelCombatApproach();
         string normalizedSkillId = NormalizeSkillId(requestedSkillId);
         if (!combatEnabled
+            || NetworkManager.Instance?.AreLocalPlayerActionsBlocked == true
             || clientTick <= 0
             || nextSkillRequestSequence == long.MaxValue
             || string.IsNullOrEmpty(normalizedSkillId))
@@ -254,8 +255,8 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         bool selfTarget = learned?.progress?.attributes?.targetType == "self";
         CombatTargetSelection target = default;
         if (!selfTarget && !(targetingController != null
-            && targetingController.TryResolveCombatTarget(out target) && target.IsValid
-            && target.EntityType == "monster"))
+            && targetingController.TryResolveCombatTarget(out target)
+            && MonsterTargetingController.IsValidTarget(target)))
             return false;
 
         // Range comes from the learned skill's current server attributes.
@@ -275,7 +276,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             requestSequence = requestSequence,
             clientTick = clientTick,
             skillId = normalizedSkillId,
-            targetType = selfTarget ? "player" : "monster",
+            targetType = selfTarget ? "player" : target.EntityType,
             targetId = selfTarget ? session.LocalCharacterDbId.ToString(CultureInfo.InvariantCulture) : target.EntityId
         };
 
@@ -286,7 +287,11 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
         nextSkillRequestSequence = requestSequence;
         TrackAttackForLock(networkManager, request.skillId, requestSequence);
-        if (!selfTarget) FaceAttackTarget(target);
+        if (!selfTarget)
+        {
+            targetingController.ConfirmCombatTarget(target);
+            FaceAttackTarget(target);
+        }
         latestSkillCooldownSequences[normalizedSkillId] = requestSequence;
         skillCooldownDeadlines[normalizedSkillId] =
             Time.unscaledTime + Mathf.Max(0.01f, 技能统一冷却秒数);
@@ -303,15 +308,16 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         awaitingSkillAcceptance[normalizedSkillId] = requestSequence;
         Debug.Log("[SkillCast][TX] skillId=" + normalizedSkillId
             + " requestSequence=" + requestSequence
-            + " targetType=" + target.EntityType
-            + " targetId=" + target.EntityId);
+            + " targetType=" + request.targetType
+            + " targetId=" + request.targetId);
         return true;
     }
 
     public bool TrySendBasicAttack(long clientTick, float aimYaw)
     {
         CancelCombatApproach();
-        if (!combatEnabled || clientTick <= 0 || nextActionSequence == long.MaxValue)
+        if (!combatEnabled || NetworkManager.Instance?.AreLocalPlayerActionsBlocked == true
+            || clientTick <= 0 || nextActionSequence == long.MaxValue)
         {
             return false;
         }
@@ -322,7 +328,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
             && targetingController.TryResolveCombatTarget(out target)
             && target.IsValid;
 
-        if (hasTarget && target.EntityType == "monster" && SameTarget(target, LockedTarget)
+        if (hasTarget && SameTarget(target, LockedTarget)
             && !IsInsideApproachRange(target, basicAttackRange))
         {
             BeginCombatApproach(target, null, basicAttackRange, FindObjectOfType<GameSession>());
@@ -401,8 +407,9 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         NetworkManager network = NetworkManager.Instance;
         if (session == null || !session.IsWorldReady || session.IsLocalPlayerDead
             || network == null || !network.MovementReady || network.SceneOperationsPaused
+            || network.AreLocalPlayerActionsBlocked
             || !TryGetComponent(out LocalPlayerInputController input) || !input.isActiveAndEnabled || !input.IsInputEnabled
-            || !target.TargetTransform.TryGetComponent(out MonsterNetworkView monster) || !monster.IsTargetable)
+            || !MonsterTargetingController.IsValidTarget(target))
             return;
         targetingController.ConfirmCombatTarget(target);
         if (!SameTarget(target, LockedTarget)) return;
@@ -423,9 +430,10 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         NetworkManager network = NetworkManager.Instance;
         if (!combatEnabled || !isActiveAndEnabled || pending.Session == null || !pending.Session.IsWorldReady
             || pending.Session.IsLocalPlayerDead || network == null || !network.MovementReady
-            || network.SceneOperationsPaused || network.ConnectionEpoch != pending.ConnectionEpoch
+            || network.SceneOperationsPaused || network.AreLocalPlayerActionsBlocked
+            || network.ConnectionEpoch != pending.ConnectionEpoch
             || network.SceneSessionId != pending.SceneSessionId || !SameTarget(pending.Target, LockedTarget)
-            || !pending.Target.TargetTransform.TryGetComponent(out MonsterNetworkView monster) || !monster.IsTargetable)
+            || !MonsterTargetingController.IsValidTarget(pending.Target))
         {
             CancelCombatApproach();
             return false;
@@ -1029,11 +1037,11 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
         string requestedSkillId, string targetType, string targetId,
         Vector3 targetPosition, GameObject effectPrefab)
     {
-        if (!string.Equals(targetType, "monster",
-            System.StringComparison.Ordinal)
+        if ((!string.Equals(targetType, "monster", System.StringComparison.Ordinal)
+                && !string.Equals(targetType, "player", System.StringComparison.Ordinal))
             || string.IsNullOrWhiteSpace(targetId))
         {
-            Debug.LogWarning("[SkillCast] Target effect has no valid monster target: "
+            Debug.LogWarning("[SkillCast] Target effect has no valid target: "
                 + requestedSkillId);
             return null;
         }
