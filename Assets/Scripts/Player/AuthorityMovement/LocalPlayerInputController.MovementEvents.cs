@@ -55,6 +55,7 @@ public sealed partial class LocalPlayerInputController
             travelDirection = Vector3.zero;
             traversalStopPending = false;
             blockedTraversalDirection = Vector3.zero;
+            ClearGroundSlide();
             lookTargetTracked = false;
             lastSent = null;
             controlAckAt = stepAt = airStartedAt = lastAnalogFacingAt = MovementNow;
@@ -115,9 +116,19 @@ public sealed partial class LocalPlayerInputController
 
     private bool UpdateMovement(PlayerInputFrame input, long now)
     {
-        if (predictedMotor == null || movementControl == null || !AdvanceMovement(now)) return false;
-        // Refresh after advancing the previous segment, then use the same
-        // movement events, map checks and heartbeat schedule as manual input.
+        if (predictedMotor == null || movementControl == null) return false;
+
+        bool manualSlideInput = CanSlideForInput(input);
+        Vector3 manualDirection = manualSlideInput ? predictedMotor.MovementDirection(input) : Vector3.zero;
+        bool sameSlideInput = manualDirection != Vector3.zero && groundSlideIntent != Vector3.zero
+            && Vector3.Angle(groundSlideIntent, manualDirection) <= GroundSlideInputAngle;
+        bool slideInputChanged = IsGroundSliding && !sameSlideInput;
+        // Advance the elapsed segment at its previous speed. A new input
+        // already sampled this frame cancels any further automatic turns.
+        if (!sameSlideInput) groundSlideIntent = Vector3.zero;
+        if (!AdvanceMovement(now)) return false;
+        if (!sameSlideInput) ClearGroundSlide();
+
         ApplyCombatApproachInput(input);
         clientTick = input.ClientTick;
         // Do not emit walk/run changes in response to suppressed meditation input.
@@ -125,6 +136,9 @@ public sealed partial class LocalPlayerInputController
             ? (movementFlags & MovementEventFlags.Walking) == 0 : input.IsRunning;
         Vector3 direction = predictedMotor.MovementDirection(input);
         bool groundedForTraversal = (movementFlags & MovementEventFlags.Falling) == 0;
+        groundSlideIntent = manualSlideInput && groundedForTraversal && predictedMotor.IsGrounded
+            ? direction : Vector3.zero;
+        groundSlideWantsRun = run;
         if (blockedTraversalDirection != Vector3.zero)
         {
             if (direction == Vector3.zero || input.JumpPressed || groundedForTraversal != blockedTraversalGrounded
@@ -134,15 +148,37 @@ public sealed partial class LocalPlayerInputController
             else
                 direction = Vector3.zero;
         }
+        if (direction != Vector3.zero && IsGroundSliding)
+        {
+            direction = travelDirection;
+            run = false;
+        }
         if (direction != Vector3.zero && ((movementFlags & DirectionFlags) == 0
             || Vector3.Angle(travelDirection, direction) > 4f))
         {
             float probeSpeed = predictedMotor.Speed(run) * .995f;
             Vector3 from = transform.position;
             Vector3 probe = from + direction * (probeSpeed * MovementStepMilliseconds * .001f);
-            if (!PredictedCharacterMotor.TryTraversalTarget(movementSession == null ? null : movementSession.CurrentMapTraversal,
-                from, probe, movementControl.radius, movementControl.height, groundedForTraversal, out _, out _))
-                direction = Vector3.zero;
+            var query = MovementMap;
+            if (!PredictedCharacterMotor.TryTraversalTarget(query, from, probe, movementControl.radius,
+                movementControl.height, groundedForTraversal, out _, out _))
+            {
+                if (TryChooseGroundSlide(query, now, out Vector3 slideDirection))
+                {
+                    direction = slideDirection;
+                    run = false;
+                }
+                else
+                {
+                    if (groundSlideIntent != Vector3.zero && (movementFlags & DirectionFlags) == 0)
+                    {
+                        blockedTraversalDirection = groundSlideIntent;
+                        blockedTraversalPosition = from;
+                        blockedTraversalGrounded = groundedForTraversal;
+                    }
+                    direction = Vector3.zero;
+                }
+            }
         }
         MovementEventFlags directional = ReadDirectionFlags(input, direction);
         if (direction == Vector3.zero && HasDirectionalInput(input.Keys) && combatController?.HasCombatApproach == true)
@@ -166,7 +202,7 @@ public sealed partial class LocalPlayerInputController
             string kind = (directional & ~oldDirection) != 0 ? "start" : "stop";
             if (!Report(kind, now, travelDirection * MovementSpeed)) return false;
         }
-        else if (direction != Vector3.zero && now - lastAnalogFacingAt >= 50
+        else if (direction != Vector3.zero && (slideInputChanged || now - lastAnalogFacingAt >= 50)
             && Vector3.Angle(travelDirection, direction) > 4f)
         {
             SetTravelDirection(direction);
@@ -199,6 +235,7 @@ public sealed partial class LocalPlayerInputController
         if (input.HasAction(PlayerInputActions.PrimaryAction)
             && combatController?.TrySendBasicAttack(input.ClientTick, input.CameraYaw) != true)
             input.Actions &= ~PlayerInputActions.PrimaryAction;
+        input.IsRunning = run;
         predictedMotor.PresentPredictedInput(input, jump);
         return true;
     }
@@ -216,8 +253,16 @@ public sealed partial class LocalPlayerInputController
         return true;
     }
 
-    private float MovementSpeed => Mathf.Max(0f,
-        predictedMotor.Speed((movementFlags & MovementEventFlags.Walking) == 0) * .995f);
+    private float MovementSpeed
+    {
+        get
+        {
+            float speed = IsGroundSliding
+                ? Mathf.Min(predictedMotor.Speed(true) * GroundSlideSpeedRatio, predictedMotor.Speed(false))
+                : predictedMotor.Speed((movementFlags & MovementEventFlags.Walking) == 0);
+            return Mathf.Max(0f, speed * .995f);
+        }
+    }
 
     private MovementEventFlags ResolveTurnFlags(PlayerInputFrame input, Vector3 direction, long now)
     {
@@ -303,14 +348,17 @@ public sealed partial class LocalPlayerInputController
             predictedMotor.SetLocalMotion(Vector3.zero, 0f, true);
             return true;
         }
+        var query = MovementMap;
+        if (onGround && !ResumeGroundSlideForward(query, stepAt)) return false;
+
         float age = (end - airStartedAt) * .001f;
         float vertical = onGround ? -.02f : airSpeed + predictedMotor.Gravity * age;
         float deltaY = onGround ? -.015f : (vertical - .5f * predictedMotor.Gravity * dt) * dt;
         Vector3 before = transform.position;
         Vector3 requestedDisplacement = travelDirection * (MovementSpeed * dt) + Vector3.up * deltaY;
-        CollisionFlags collisions = predictedMotor.MoveLocally(requestedDisplacement,
-            movementSession == null ? null : movementSession.CurrentMapTraversal,
-            movementControl.radius, movementControl.height, onGround, out bool horizontalBlocked);
+        CollisionFlags collisions = predictedMotor.MoveLocally(requestedDisplacement, query,
+            movementControl.radius, movementControl.height, onGround, out bool horizontalBlocked,
+            limitGroundSegment: IsGroundSliding || groundSlideIntent != Vector3.zero);
         stepAt = end;
 
         Vector3 displacement = transform.position - before;
@@ -322,6 +370,7 @@ public sealed partial class LocalPlayerInputController
             airStartedAt = end;
             airSpeed = vertical = 0f;
             edge = "fall";
+            ClearGroundSlide();
         }
         else if (!onGround && (collisions & CollisionFlags.Below) != 0 && vertical <= 0)
         {
@@ -341,12 +390,16 @@ public sealed partial class LocalPlayerInputController
         bool edgeReported = edge == null || Report(edge, end);
         if (!horizontalBlocked || (movementFlags & DirectionFlags) == 0) return edgeReported;
 
+        if (edgeReported && onGround && TryChooseGroundSlide(query, end, out Vector3 slideDirection,
+            predictedMotor.GroundSlideBlockNormal))
+            return SendGroundSlideTurn(slideDirection, false, end);
+
         combatController?.CancelCombatApproach("前方道路受阻，自动追击已停止");
 
-        blockedTraversalDirection = travelDirection;
+        blockedTraversalDirection = groundSlideIntent != Vector3.zero ? groundSlideIntent : travelDirection;
         blockedTraversalPosition = transform.position;
         blockedTraversalGrounded = onGround;
-        var query = movementSession == null ? null : movementSession.CurrentMapTraversal;
+        ClearGroundSlide();
         BattleSyncDiagnosticsLogger.LogLocalTraversalBlocked(NetworkManager.Instance.ConnectionEpoch,
             movementControl.epoch, query?.SceneId, query?.MapId, query?.PackageFingerprint,
             before, before + requestedDisplacement, transform.position, movementControl.radius, movementControl.height, onGround);
@@ -370,7 +423,9 @@ public sealed partial class LocalPlayerInputController
 
     internal bool StopMovementForTransfer()
     {
+        groundSlideIntent = Vector3.zero;
         if (!FlushMovement()) return false;
+        ClearGroundSlide();
         long now = stepAt;
         if ((movementFlags & DirectionFlags) != 0)
         {
@@ -403,10 +458,13 @@ public sealed partial class LocalPlayerInputController
         if (!horizontal.HasValue)
             horizontal = predictedMotor.Velocity;
         Vector3 velocity = horizontal.Value;
+        float yaw = Mathf.Repeat(transform.eulerAngles.y, 360f);
+        // Single-precision wrapping can round an almost-north heading to 360.
+        if (yaw >= 360f) yaw = 0f;
         var info = new MovementEventInfo
         {
             x = position.x, y = position.y, z = position.z,
-            yaw = Mathf.Repeat(transform.eulerAngles.y, 360f),
+            yaw = yaw,
             clientTimeMs = now, flags = movementFlags, velocityX = velocity.x, velocityZ = velocity.z
         };
         if ((movementFlags & MovementEventFlags.Falling) != 0)

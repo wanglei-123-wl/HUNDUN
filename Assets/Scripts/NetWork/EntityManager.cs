@@ -6,7 +6,7 @@ using Game.Client.Vfx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSyncSnapshotRoutingControl
+public partial class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSyncSnapshotRoutingControl
 {
     [Header("Remote Player")]
     [SerializeField] private RemoteCharacterPrefabSlot[] remoteCharacterPrefabs;
@@ -61,6 +61,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         RemoveNetworkRegistration();
         ClearMeditationPresentation();
         ClearRollPresentation();
+        ClearDrinkSession();
         remoteSkillCastInbox.EndSession(activeConnectionEpoch);
         remoteSkillTimeline.EndSession(activeConnectionEpoch);
         remoteSkillEffects.Clear();
@@ -91,6 +92,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         {
             ClearMeditationPresentation();
             ClearRollPresentation();
+            ClearDrinkSession();
             remoteSkillEffects.Clear();
         }
     }
@@ -118,6 +120,8 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             currentDispatcher.Register("player_leave_broadcast", HandlePlayerLeave);
         }
         currentDispatcher.Register("player_movement_event", HandleMovementEvent);
+        currentDispatcher.Register(PlayerDrinkEventMessage.MessageId, HandlePlayerDrinkEvent);
+        currentDispatcher.Register("heartbeat_result", HandleDrinkHeartbeat);
         currentDispatcher.Register("skill_cast_event", HandleSkillCastEvent);
         registeredDispatcher = currentDispatcher;
     }
@@ -133,6 +137,8 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         registeredDispatcher.Unregister("player_enter_broadcast", HandlePlayerEnterBroadcast);
         registeredDispatcher.Unregister("player_leave_broadcast", HandlePlayerLeave);
         registeredDispatcher.Unregister("player_movement_event", HandleMovementEvent);
+        registeredDispatcher.Unregister(PlayerDrinkEventMessage.MessageId, HandlePlayerDrinkEvent);
+        registeredDispatcher.Unregister("heartbeat_result", HandleDrinkHeartbeat);
         registeredDispatcher.Unregister("skill_cast_event", HandleSkillCastEvent);
         registeredDispatcher = null;
     }
@@ -283,7 +289,9 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             ? result.sceneId
             : (result.self == null ? "" : result.self.sceneId);
         NetworkManager network = NetworkManager.Instance;
+        ClearDrinkSession();
         activeConnectionEpoch = network == null ? 0 : network.ConnectionEpoch;
+        BeginDrinkSession(result.serverTime);
         remoteSkillCastInbox.BeginSession(activeConnectionEpoch,
             activeSceneId, resultCharacterDbId);
         remoteSkillTimeline.BeginSession(activeConnectionEpoch,
@@ -322,7 +330,9 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
     public BattleSyncApplyResult BeginSession(BattleSyncModuleSessionContext context)
     {
         if (!context.IsValid) return BattleSyncApplyResult.InvalidMessage;
+        ClearDrinkSession();
         activeConnectionEpoch = context.ConnectionEpoch;
+        BeginDrinkSession(0);
         activeSceneId = context.SceneId;
         localCharacterDbId = context.CharacterDbId;
         remoteSkillCastInbox.BeginSession(context.ConnectionEpoch,
@@ -343,6 +353,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         playerLeaveTimes.Clear();
         remoteSkillCastInbox.EndSession(connectionEpoch);
         remoteSkillTimeline.EndSession(connectionEpoch);
+        ClearDrinkSession();
         activeConnectionEpoch = 0;
         activeSceneId = string.Empty;
     }
@@ -402,6 +413,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         List<long> removeIds = new List<long>();
         foreach (long id in remotePlayers.Keys) if (!ids.Contains(id)) removeIds.Add(id);
         for (int i = 0; i < removeIds.Count; i++) RemoveRemotePlayer(removeIds[i], "world_snapshot");
+        ObserveDrinkServerTime(message.serverTime);
         return BattleSyncApplyResult.Applied;
     }
 

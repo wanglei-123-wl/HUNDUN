@@ -4,6 +4,17 @@ using UnityEngine;
 public sealed partial class PredictedCharacterMotor
 {
     private const int TraversalSearchIterations = 10;
+    private Vector3 groundSlideAttempt;
+    internal Vector3 GroundSlideBlockNormal { get; private set; }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (groundSlideAttempt == Vector3.zero || Mathf.Abs(hit.normal.y) >= .45f) return;
+        Vector3 horizontalNormal = new Vector3(hit.normal.x, 0f, hit.normal.z).normalized;
+        if (Vector3.Dot(groundSlideAttempt, horizontalNormal)
+            < Vector3.Dot(groundSlideAttempt, GroundSlideBlockNormal))
+            GroundSlideBlockNormal = horizontalNormal;
+    }
 
     // Grounded motion follows the server support sheet. Airborne motion sweeps
     // the same capsule, allowing jumps over obstacles without ignoring walls.
@@ -33,7 +44,7 @@ public sealed partial class PredictedCharacterMotor
     }
 
     internal CollisionFlags MoveLocally(Vector3 displacement, MapTraversalQuery query,
-        float radius, float height, bool onGround, out bool horizontalBlocked)
+        float radius, float height, bool onGround, out bool horizontalBlocked, bool limitGroundSegment = false)
     {
         Vector3 from = transform.position;
         Vector3 requested = from + displacement;
@@ -102,7 +113,11 @@ public sealed partial class PredictedCharacterMotor
         }
 
         if (landed) mapCollisions |= CollisionFlags.Below;
+        GroundSlideBlockNormal = Vector3.zero;
+        if (onGround && limitGroundSegment)
+            groundSlideAttempt = new Vector3(displacement.x, 0f, displacement.z).normalized;
         CollisionFlags collisions = controller.Move(target - from) | mapCollisions;
+        groundSlideAttempt = Vector3.zero;
         Vector3 actual = transform.position;
         // Unity can slide away from the requested segment during overlap or
         // stair recovery. Validate that result before exposing/sending it.
@@ -110,6 +125,15 @@ public sealed partial class PredictedCharacterMotor
             out Vector3 checkedTarget, out _);
         if (!onGround && actualValid)
             actualValid = Mathf.Abs(checkedTarget.y - actual.y) < .001f;
+        if (onGround && limitGroundSegment)
+        {
+            var horizontal = new Vector2(actual.x - from.x, actual.z - from.z);
+            var permitted = new Vector2(target.x - from.x, target.z - from.z);
+            // Contact recovery must stay inside the distance budget for this segment.
+            actualValid &= horizontal.magnitude <= permitted.magnitude + .0001f;
+            if ((collisions & CollisionFlags.Sides) != 0 && (horizontal - permitted).sqrMagnitude > .000001f)
+                horizontalBlocked = true;
+        }
         if (actual != from && !actualValid)
         {
             SetTransform(from, transform.rotation);
