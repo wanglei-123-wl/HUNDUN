@@ -829,6 +829,7 @@ public partial class GameSession : MonoBehaviour
 
         messageDispatcher.Register("enter_world_result", HandleEnterWorldResult);
         messageDispatcher.Register("error", HandleEnterWorldProtocolError);
+        RegisterMeditationMessages();
         messageDispatcher.Register("attribute_snapshot_result", HandleAttributeSnapshotResult);
         messageDispatcher.Register("progression_snapshot_result", HandleProgressionSnapshotResult);
         messageDispatcher.Register("skill_snapshot_result", HandleSkillSnapshotResult);
@@ -854,6 +855,7 @@ public partial class GameSession : MonoBehaviour
 
         messageDispatcher.Unregister("enter_world_result", HandleEnterWorldResult);
         messageDispatcher.Unregister("error", HandleEnterWorldProtocolError);
+        UnregisterMeditationMessages();
         messageDispatcher.Unregister("attribute_snapshot_result", HandleAttributeSnapshotResult);
         messageDispatcher.Unregister("progression_snapshot_result", HandleProgressionSnapshotResult);
         messageDispatcher.Unregister("skill_snapshot_result", HandleSkillSnapshotResult);
@@ -1254,6 +1256,7 @@ public partial class GameSession : MonoBehaviour
 
         ApplyLocalCharacterVisual(characterId, spawnPosition, spawnRotation);
         localPlayerInputController?.BeginMovement(result.movementControl, result.movementPolicy);
+        localPlayerInputController?.SeedMeditationState(selfState.meditation);
         ResolveReferences();
 
         if (entityManagerObject != null)
@@ -1792,6 +1795,7 @@ public partial class GameSession : MonoBehaviour
             RecoverWorldSession("map_transfer_movement_control_failed");
             yield break;
         }
+        movementInput.SeedMeditationState(result.self.meditation);
         LocalEnterWorldHp = result.self.maxHp > 0
             ? Mathf.Clamp(result.self.hp, 0, result.self.maxHp) : -1;
         if (IsLocalPlayerDeadAtSpawn(result.self)) EnterLocalDeadState();

@@ -342,6 +342,14 @@ public sealed partial class LocalPlayerInputController
 
     private bool IsActive => (movementFlags & (DirectionFlags | TurnFlags | MovementEventFlags.Falling)) != 0;
 
+    private bool StopMovementForMeditation()
+    {
+        return predictedMotor != null && predictedMotor.IsGrounded
+            && (movementFlags & MovementEventFlags.Falling) == 0
+            && StopMovementForTransfer() && predictedMotor.IsGrounded
+            && (movementFlags & MovementEventFlags.Falling) == 0;
+    }
+
     internal bool StopMovementForTransfer()
     {
         if (!FlushMovement()) return false;

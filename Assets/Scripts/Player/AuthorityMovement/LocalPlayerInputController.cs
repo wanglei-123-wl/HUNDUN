@@ -37,7 +37,6 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private const string RollTrigger = "Roll";
     private const string RollTag = "Roll";
     private const string MeditationTag = "Meditation";
-    private const string LocomotionTag = "Locomotion";
     private const float MouseClickDragThreshold = 4f;
     private const float MovingHorizontalSpeedSquared = 0.0025f;
 
@@ -46,6 +45,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
     private void Update()
     {
+        UpdateMeditationRequest();
         if (!inputEnabled || NetworkManager.Instance?.MovementReady != true)
         {
             combatController?.CancelCombatApproach();
@@ -71,9 +71,11 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (!gameplayBlocked && rollDirection == PlayerInputKeys.None && !IsRollAnimationPlaying())
             ApplyMeditationInput(Input.GetKeyDown(KeyCode.Q), heldKeys, heldActions, jumpRequested);
 
-        gameplayBlocked |= IsMeditationBlockingInput();
+        heldKeys = FilterMeditationKeys(heldKeys);
+        heldActions = FilterMeditationActions(heldActions);
         PlayerInputKeys taps = jumpRequested ? PlayerInputKeys.None : ReadDirectionalKeys(pressedThisFrame: true);
-        UpdateRollInput(taps, Time.unscaledTimeAsDouble, !gameplayBlocked);
+        UpdateRollInput(FilterMeditationKeys(taps), Time.unscaledTimeAsDouble,
+            !gameplayBlocked && !IsMeditationBlockingInput());
         gameplayBlocked |= rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying();
         if (gameplayBlocked) combatController?.CancelCombatApproach();
         if (gameplayBlocked)
@@ -186,14 +188,12 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         }
 
         bool alive = !movementSession.IsLocalPlayerDead;
-        // The intent closes the effect immediately on cancellation, while the
-        // animation tag prevents showing it before the sitting transition starts.
-        bool meditating = alive && inputEnabled && NetworkManager.Instance?.MovementReady == true
-            && meditationAnimator != null && meditationAnimator.isActiveAndEnabled
-            && meditationAnimator.GetBool(MeditatingParameter)
-            && (meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
-                || (meditationAnimator.IsInTransition(0)
-                    && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag)));
+        // The server posture also drives effects for models without a sitting clip.
+        bool meditating = alive && isMeditating && inputEnabled && NetworkManager.Instance?.MovementReady == true
+            && (meditationAnimator == null || (meditationAnimator.isActiveAndEnabled
+                && (meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
+                    || (meditationAnimator.IsInTransition(0)
+                        && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag)))));
         effectStateSource.Publish(new PlayerEffectState(alive, meditating));
     }
 
@@ -222,6 +222,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
             }
         }
 
+        SetMeditationPosture(isMeditating);
         reconciler = playerReconciler;
         visualSmoother = smoother;
         ResolveCombatController();
@@ -251,7 +252,9 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
         if (!enabled)
         {
-            EndMeditation();
+            RefreshMeditationScope();
+            if (movementSession?.IsLocalPlayerDead == true) EndMeditation();
+            RefreshEffectState();
             ResetRollInput();
             return;
         }
@@ -373,48 +376,6 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         rollEntered = false;
     }
 
-    private void ApplyMeditationInput(bool sitPressed, PlayerInputKeys keys,
-        PlayerInputActions actions, bool jumpPressed)
-    {
-        if (sitPressed)
-            combatController?.ClearCombatTarget();
-
-        if (meditationAnimator == null || !meditationAnimator.isActiveAndEnabled)
-            return;
-
-        if (HasDirectionalInput(keys) || HasBothMouseButtons(actions) || jumpPressed)
-        {
-            EndMeditation();
-            return;
-        }
-
-        if (!sitPressed || !predictedMotor.IsGrounded || predictedMotor.BlocksMovementForAttack()
-            || IsMeditationBlockingInput()
-            || !meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(LocomotionTag)
-            || (meditationAnimator.IsInTransition(0)
-                && !meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(LocomotionTag)))
-            return;
-
-        meditationAnimator.SetBool(MeditatingParameter, true);
-    }
-
-    private void EndMeditation()
-    {
-        if (meditationAnimator != null && meditationAnimator.isActiveAndEnabled
-            && meditationAnimator.GetBool(MeditatingParameter))
-            meditationAnimator.SetBool(MeditatingParameter, false);
-        RefreshEffectState();
-    }
-
-    private bool IsMeditationBlockingInput()
-    {
-        return meditationAnimator != null && meditationAnimator.isActiveAndEnabled
-            && (meditationAnimator.GetBool(MeditatingParameter)
-                || meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
-                || (meditationAnimator.IsInTransition(0)
-                    && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag)));
-    }
-
     private void ApplyCombatApproachInput(PlayerInputFrame input)
     {
         if (combatController == null || !combatController.HasCombatApproach) return;
@@ -443,13 +404,13 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         AnimatorStateInfo rollState = ReadRollAnimatorState();
         bool rollPlaying = rollState.IsTag(RollTag);
         bool rollBlocking = rollPlaying || rollDirection != PlayerInputKeys.None;
-        bool gameplayPaused = GameplayUiInputGuard.BlocksGameplayInput || meditationBlocked;
+        bool gameplayPaused = GameplayUiInputGuard.BlocksGameplayInput;
         bool rollMoving = rollPlaying && rollDirection != PlayerInputKeys.None && !gameplayPaused
             && rollState.normalizedTime < RollBrakingStartNormalizedTime;
         bool uiBlocked = gameplayPaused || rollBlocking;
         PlayerInputKeys keys = rollMoving ? rollDirection | PlayerInputKeys.Shift
-            : uiBlocked ? PlayerInputKeys.None : ReadKeys();
-        PlayerInputActions actions = uiBlocked ? PlayerInputActions.None : ReadHeldActions();
+            : uiBlocked ? PlayerInputKeys.None : FilterMeditationKeys(ReadKeys());
+        PlayerInputActions actions = uiBlocked ? PlayerInputActions.None : FilterMeditationActions(ReadHeldActions());
         basicAttackMovementGate.Observe(
             IsMovingForBasicAttack(keys, actions), Time.unscaledTime);
 

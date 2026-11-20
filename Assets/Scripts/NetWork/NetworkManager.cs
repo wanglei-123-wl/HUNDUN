@@ -382,6 +382,20 @@ public class NetworkManager
         return SendJson(json);
     }
 
+    internal bool SendMeditation(MeditationSetRequest request, bool firstSend)
+    {
+        if (string.IsNullOrEmpty(SceneSessionId) || request.sceneSessionId != SceneSessionId
+            || sceneOperationsPaused || localPlayerActionsBlocked)
+            return false;
+        if (firstSend && request.isMeditating)
+        {
+            if (!MovementReady) return false;
+            request.movementEpoch = movementEpoch;
+            request.movementSequence = movementSequence;
+        }
+        return Send(request);
+    }
+
     public bool SetSceneSessionId(long epoch, string value)
     {
         if (!IsConnected || epoch <= 0 || epoch != ConnectionEpoch

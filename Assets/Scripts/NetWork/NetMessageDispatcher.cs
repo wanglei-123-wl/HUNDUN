@@ -336,6 +336,9 @@ public class NetMessageDispatcher
             case "monster_state":
             case "monster_state_frame":
             case "combat_state_upsert":
+            case "meditation_state":
+            case "meditation_result":
+            case "meditation_vitals":
             case "skill_cast_event":
                 return true;
             default:

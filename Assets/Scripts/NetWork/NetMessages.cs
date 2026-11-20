@@ -164,6 +164,7 @@ public sealed class ProgressionSnapshotResult : NetMessageBase
 [Serializable]
 public class PlayerNetworkState
 {
+    public MeditationSnapshot meditation;
     public RemoteMovementSnapshot movement;
     public string userId;
     public string username;
@@ -388,6 +389,7 @@ public class WorldSnapshotMessage : NetMessageBase
 [Serializable]
 public class PlayerLeaveMessage : NetMessageBase
 {
+    public long visibilityRevision;
     public string userId;
     public string username;
     public long characterDbId;

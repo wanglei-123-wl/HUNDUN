@@ -3,7 +3,7 @@ using TMPro;
 using Game.Client.BattleSync;
 using UnityEngine;
 
-public class RemotePlayerSync : MonoBehaviour
+public partial class RemotePlayerSync : MonoBehaviour
 {
     private const string RunningParameter = "IsRunning";
 
@@ -169,6 +169,8 @@ public class RemotePlayerSync : MonoBehaviour
             lastAttackActionSequence = 0;
             lastAttackEventId = 0;
             lifeCombatRevision = -1;
+            meditationRevision = -1;
+            SetRemoteMeditationPosture(false);
             IsDead = false;
             SetDeathCollidersDisabled(false);
             PlayerDeathAnimation.SetDead(animator, false);
@@ -206,7 +208,9 @@ public class RemotePlayerSync : MonoBehaviour
         }
 
         lastServerTick = orderingTick > 0 ? orderingTick : lastServerTick;
-        if (!hasReceivedState) VisibilityRevision = state.visibilityRevision;
+        bool firstState = !hasReceivedState;
+        if (firstState) VisibilityRevision = state.visibilityRevision;
+        ApplyMeditationState(state.meditation, firstState);
         if (state.movement?.IsValid == true)
         {
             ApplyMovementEvent(state.movement);
@@ -294,6 +298,7 @@ public class RemotePlayerSync : MonoBehaviour
             return;
 
         IsDead = dead;
+        if (dead) SetRemoteMeditationPosture(false);
         currentAnim = "";
         PlayerDeathAnimation.SetDead(animator, dead, alreadyDeadAtSpawn);
     }
@@ -349,6 +354,8 @@ public class RemotePlayerSync : MonoBehaviour
         lastServerTick = 0;
         movement = null;
         VisibilityRevision = 0;
+        meditationRevision = -1;
+        SetRemoteMeditationPosture(false);
         currentAnim = "";
 
         if (animator == null)
@@ -413,7 +420,7 @@ public class RemotePlayerSync : MonoBehaviour
             return;
         }
 
-        if (currentAnim == animName)
+        if (remoteMeditating || currentAnim == animName)
         {
             return;
         }
@@ -447,7 +454,7 @@ public class RemotePlayerSync : MonoBehaviour
         hasMoveBoolParameter = false;
         hasRunningParameter = false;
         hasAttackTriggerParameter = false;
-        movementGroundedParameter = movementJumpParameter = false;
+        movementGroundedParameter = movementJumpParameter = meditationAnimatorParameter = false;
 
         if (animator == null)
         {
@@ -459,6 +466,8 @@ public class RemotePlayerSync : MonoBehaviour
         for (int i = 0; i < parameters.Length; i++)
         {
             AnimatorControllerParameter parameter = parameters[i];
+            meditationAnimatorParameter |= parameter.type == AnimatorControllerParameterType.Bool
+                && parameter.nameHash == RemoteMeditatingParameter;
             movementGroundedParameter |= parameter.type == AnimatorControllerParameterType.Bool && parameter.name == "IsGrounded";
             movementJumpParameter |= parameter.type == AnimatorControllerParameterType.Trigger && parameter.name == "Jump";
 
