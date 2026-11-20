@@ -195,7 +195,7 @@ Invoke-Lifecycle $controller 'OnDisable'
 if ($innerSource -match 'hudToggleButton|KeyCode\.C|GetKeyDown') {
     throw 'The inner navigation controller must not handle the external entry.'
 }
-$guid = [regex]::Match($meta, '(?m)^guid: ([0-9a-f]{32})$').Groups[1].Value
+$guid = [regex]::Match($meta, '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
 if (-not $guid) { throw 'Window controller GUID missing.' }
 Assert-Match (Get-SceneBlock '1' '860000000000500001') (
     'component: \{fileID: 860000000000500003\}.*?' +

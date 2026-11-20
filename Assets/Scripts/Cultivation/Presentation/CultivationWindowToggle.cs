@@ -81,7 +81,7 @@ namespace Game.Cultivation.Presentation
             GameNoticeService.Show("技能学习成功");
         }
 
-        private void Close()
+        public void Close()
         {
             if (cultivationWindow != null && cultivationWindow != gameObject
                 && cultivationWindow.activeSelf)

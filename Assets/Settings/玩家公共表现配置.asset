@@ -14,10 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   skillReleaseOffset: {x: 0.055, y: 1.009, z: 0.256}
   玩家特效列表:
+  - 特效名称: MeshFX_Wind
+    粒子预制体: {fileID: 2867752102684665680, guid: 2637d6ace7b8b364cac5fe84b6831ea4, type: 3}
+    挂载位置: 0
+    位置偏移: {x: 0, y: 0, z: 0}
+    触发方式: 1
+    播放方式: 1
+    显示条件: 1
+  - 特效名称: MeshFX_Healing
+    粒子预制体: {fileID: 9040973356947985541, guid: d9b20a15b7565c4428244f6cb78f140f, type: 3}
+    挂载位置: 0
+    位置偏移: {x: 0, y: 0, z: 0}
+    触发方式: 2
+    播放方式: 1
+    显示条件: 3
   - 特效名称: MeshFX_Galaxy
     粒子预制体: {fileID: 2552478186150723766, guid: c897d02378412ca458c1cebc9bd85895, type: 3}
     挂载位置: 0
     位置偏移: {x: 0, y: 0, z: 0}
-    触发方式: 2
+    触发方式: 1
     播放方式: 1
     显示条件: 3
