@@ -57,37 +57,42 @@
     {
       "sceneId": "world_002",
       "mapId": "map_001",
-      "formatVersion": 1,
+      "formatVersion": 2,
       "address": "game/map-traversal/map_001",
       "asset": "Assets/MapTraversalData/map_001.bytes",
-      "packageFingerprint": "d95c4416cad48ca7ac8ab62655a7bf66b3f9f80615f42248b58acbf137b72718",
-      "archiveSha256": "d40f0c6bd163d919cc3d02bd0137b0a41c9cd88eefd193730e3fbd3c816e39d1",
-      "archiveBytes": 6547381,
+      "packageFingerprint": "6de125b7c725035d2715f40424953019c4cfbb12c020e6543525e96874fce160",
+      "archiveSha256": "4e4cf71b25fada9336a372375848238599bbb66df080b4456cd6719afa7774b3",
+      "archiveBytes": 6522166,
       "files": [
         {
           "name": "colliders.bin",
-          "bytes": 4264628,
-          "sha256": "800fcec82f64695e4f8ce7ed618ab51ba443ef768d3192203270bd800b102261"
+          "sha256": "3e93610368aefe9c55bdaddc61386c918cca9c22570dacb21cb97ea900a7fcdf",
+          "bytes": 1622948
         },
         {
           "name": "heightfield.bin",
-          "bytes": 7860224,
-          "sha256": "cb0a85ec0e4feeab7dbff60c308c08266b3083f3b45563056f0ceb21d939e4dc"
+          "sha256": "cb0a85ec0e4feeab7dbff60c308c08266b3083f3b45563056f0ceb21d939e4dc",
+          "bytes": 7860224
         },
         {
           "name": "manifest.json",
-          "bytes": 660,
-          "sha256": "d0d6272a5250bb2e57b966e5b83ddb98bb3a53da47fcf5a2c0c9adfef63ebcd9"
+          "sha256": "f554b5e9e4d58ba526e9bd1b30317848b34c5f3b1a12eada480a1769f8ab6df7",
+          "bytes": 692
+        },
+        {
+          "name": "meshcolliders.bin",
+          "sha256": "425f305b1e3364309183d04c2c84fdc4aacbdc01b04d966e23b96c57d48030b9",
+          "bytes": 350564
         },
         {
           "name": "navmesh.bin",
-          "bytes": 398060,
-          "sha256": "2f12d0c350cbc006157a0fc16912bbc80242f5c9d48ac62c94fbc5e4557b9284"
+          "sha256": "2abd8642a49e0c0eb82df1fbe0200981d5bbe78a769ffdc42441300fced532b5",
+          "bytes": 1409180
         },
         {
           "name": "walkable.bin",
-          "bytes": 1965056,
-          "sha256": "04c568a2fbafa3e583739947dad79092b547a7adf4f9cae774e3df361cba166f"
+          "sha256": "f01c2d3864779fe590bb5003f4dee535280133527fb5d6f7d4c6237259f3cbd8",
+          "bytes": 1965056
         }
       ]
     },
