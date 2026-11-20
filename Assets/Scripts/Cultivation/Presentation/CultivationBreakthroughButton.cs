@@ -1,4 +1,3 @@
-using Game.CharacterPanel.Protocol;
 using Game.CharacterPanel.Runtime;
 using Game.Cultivation.Protocol;
 using Game.Cultivation.Runtime;
@@ -15,9 +14,11 @@ namespace Game.Cultivation.Presentation
     {
         [SerializeField] private GameSession session;
         [SerializeField] private InventoryModuleRuntime inventory;
+        [SerializeField] private CultivationWindowToggle window;
 
         private Button button;
         private JingjieBreakthroughRuntime runtime;
+        private JingjieBreakthroughPresentation presentation;
 
         private void OnEnable()
         {
@@ -25,6 +26,8 @@ namespace Game.Cultivation.Presentation
                 session = FindObjectOfType<GameSession>();
             if (inventory == null)
                 inventory = FindObjectOfType<InventoryModuleRuntime>();
+            if (window == null)
+                window = FindObjectOfType<CultivationWindowToggle>();
             button = GetComponent<Button>();
             button.onClick.AddListener(Click);
             BindRuntime();
@@ -46,9 +49,10 @@ namespace Game.Cultivation.Presentation
 
         private void Click()
         {
-            if (CanAttempt() && runtime.TryBreakthrough())
+            if (CanAttempt() && presentation != null && presentation.TryBreakthrough(session))
             {
                 Refresh();
+                window?.Close();
                 return;
             }
 
@@ -68,18 +72,12 @@ namespace Game.Cultivation.Presentation
             runtime = current;
             if (runtime == null)
                 return;
-            runtime.ResultConfirmed += HandleResult;
-            runtime.RequestRejected += HandleRejection;
-            runtime.RequestTimedOut += HandleTimeout;
+            presentation = JingjieBreakthroughPresentation.Ensure(runtime);
         }
 
         private void UnbindRuntime()
         {
-            if (runtime == null)
-                return;
-            runtime.ResultConfirmed -= HandleResult;
-            runtime.RequestRejected -= HandleRejection;
-            runtime.RequestTimedOut -= HandleTimeout;
+            presentation = null;
             runtime = null;
         }
 
@@ -92,6 +90,7 @@ namespace Game.Cultivation.Presentation
                 && !string.IsNullOrWhiteSpace(session.JingjieOperationSessionId)
                 && network != null && network.IsConnected
                 && runtime != null && !runtime.HasUnresolvedOperation
+                && presentation != null && !presentation.IsBusy
                 && CanAttempt();
         }
 
@@ -119,50 +118,5 @@ namespace Game.Cultivation.Presentation
                 session.LocalCharacterDbId);
         }
 
-        private void HandleResult(JingjieBreakthroughResultDto result)
-        {
-            Refresh();
-            if (result == null || result.idempotentReplay)
-                return;
-
-            GameNoticeService.Show(result.success
-                ? "突破成功" : DescribeError(result.errorCode));
-        }
-
-        private void HandleRejection(string errorCode)
-        {
-            Refresh();
-            GameNoticeService.Show(DescribeError(errorCode));
-        }
-
-        private void HandleTimeout()
-        {
-            Refresh();
-            GameNoticeService.Show("突破结果尚未确认，请重新连接后确认");
-        }
-
-        private static string DescribeError(string code)
-        {
-            switch (code)
-            {
-                case "jingjie_exp_insufficient":
-                    return "修为不足";
-                case "required_items_insufficient":
-                    return "突破材料不足";
-                case "max_jingjie":
-                    return "当前境界暂无可突破路径";
-                case "jingjie_disabled":
-                    return "境界突破暂不可用";
-                case "jingjie_operation_busy":
-                    return "突破处理中，请稍后";
-                case "jingjie_operation_conflict":
-                case "jingjie_persist_failed":
-                case "invalid_jingjie_request":
-                case "not_authenticated":
-                    return "突破结果尚未确认，请重新连接后确认";
-                default:
-                    return "突破失败，请稍后再试";
-            }
-        }
     }
 }

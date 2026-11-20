@@ -41433,6 +41433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   session: {fileID: 2108349142}
   inventory: {fileID: 390961493}
+  window: {fileID: 860000000000500005}
 --- !u!114 &2200000010
 MonoBehaviour:
   m_ObjectHideFlags: 0
