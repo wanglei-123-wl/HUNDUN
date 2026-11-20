@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Client.BattleSync.Protocol;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class MonsterNetworkView : MonoBehaviour
     private bool hasStateSequence;
     private bool hasEventSequence;
     private bool receivedDeathState;
+    private readonly Dictionary<Collider, bool> deathColliderStates = new Dictionary<Collider, bool>();
 
     public string EntityId => viewRoot == null ? "" : viewRoot.EntityId;
     public long LastStateSequence => lastStateSequence;
@@ -59,6 +61,7 @@ public class MonsterNetworkView : MonoBehaviour
         if (string.Equals(state, "Dead", StringComparison.OrdinalIgnoreCase))
         {
             receivedDeathState = true;
+            SetDeathCollidersDisabled(true);
             SetMovementPath(null, 0);
         }
 
@@ -117,6 +120,8 @@ public class MonsterNetworkView : MonoBehaviour
     {
         ResolveViewRoot();
 
+        SetDeathCollidersDisabled(false);
+        receivedDeathState = false;
         lastStateSequence = 0;
         lastEventSequence = 0;
         hasStateSequence = false;
@@ -148,17 +153,38 @@ public class MonsterNetworkView : MonoBehaviour
             ? Mathf.Clamp(currentHp, 0, safeMaxHp)
             : Mathf.Max(0, currentHp);
 
-        if (CurrentHp == safeCurrentHp && MaxHp == safeMaxHp)
-        {
-            return;
-        }
-
+        bool healthChanged = CurrentHp != safeCurrentHp || MaxHp != safeMaxHp;
         if (CurrentHp == 0 && safeCurrentHp > 0)
             receivedDeathState = false;
 
         CurrentHp = safeCurrentHp;
         MaxHp = safeMaxHp;
-        OnHealthChanged?.Invoke(CurrentHp, MaxHp);
+        // MaxHp == 0 is the uninitialized view, not proof of death.
+        // Reconcile even unchanged HP so reinitializing a pooled view can
+        // restore colliders after a death-only notification.
+        SetDeathCollidersDisabled(receivedDeathState || (MaxHp > 0 && CurrentHp == 0));
+        if (healthChanged) OnHealthChanged?.Invoke(CurrentHp, MaxHp);
+    }
+
+    private void SetDeathCollidersDisabled(bool disabled)
+    {
+        if (disabled)
+        {
+            foreach (Collider collider in GetComponentsInChildren<Collider>(true))
+            {
+                if (collider == null) continue;
+                if (!deathColliderStates.ContainsKey(collider))
+                    deathColliderStates.Add(collider, collider.enabled);
+                collider.enabled = false;
+            }
+            return;
+        }
+
+        foreach (KeyValuePair<Collider, bool> saved in deathColliderStates)
+        {
+            if (saved.Key != null) saved.Key.enabled = saved.Value;
+        }
+        deathColliderStates.Clear();
     }
 
     private bool IsMatchingEntity(string incomingEntityId)
