@@ -19,6 +19,7 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
     [SerializeField] private float attackEnterTimeout = 0.75f;
 
     private const float AttackMovementRecoverySeconds = 0.3f;
+    private const float BasicAttackIntervalSeconds = 0.2f;
     private const string RunningParameter = "IsRunning";
     private const string BackwardParameter = "IsMovingBackward";
     private const string GroundedParameter = "IsGrounded";
@@ -41,8 +42,26 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
     private bool attackStateEntered;
     private float attackRequestTime;
     private float attackMovementUnlockTime = float.NegativeInfinity;
+    private float nextBasicAttackTime = float.NegativeInfinity;
+    private uint completedBasicAttackCount;
 
     internal Animator VisualAnimator => animator;
+    internal uint CompletedBasicAttackCount
+    {
+        get
+        {
+            RefreshAttackMovementLock();
+            return completedBasicAttackCount;
+        }
+    }
+    internal bool CanStartBasicAttack
+    {
+        get
+        {
+            RefreshAttackMovementLock();
+            return CanStartPredictedAttack && Time.unscaledTime >= nextBasicAttackTime;
+        }
+    }
     public Vector3 Velocity => velocity;
     public bool IsGrounded => grounded;
     internal bool IsMovingBackward =>
@@ -363,6 +382,8 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
         {
             attackAnimationLocked = false;
             attackStateEntered = false;
+            completedBasicAttackCount++;
+            nextBasicAttackTime = Time.unscaledTime + BasicAttackIntervalSeconds;
             attackMovementUnlockTime = Time.unscaledTime + AttackMovementRecoverySeconds;
             return;
         }
@@ -381,6 +402,7 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
         attackAnimationLocked = false;
         attackStateEntered = false;
         attackMovementUnlockTime = float.NegativeInfinity;
+        nextBasicAttackTime = float.NegativeInfinity;
     }
 
     private bool IsAttackState(AnimatorStateInfo stateInfo)

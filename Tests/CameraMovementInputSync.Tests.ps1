@@ -9,7 +9,7 @@ if (-not $sample.Success -or -not $update.Success -or
     $update.Value.IndexOf('cameraFollow?.SampleInput();') -lt 0 -or
     $update.Value.IndexOf('cameraFollow?.SampleInput();') -gt $update.Value.IndexOf('UpdateMovement(CreateInputFrame(), MovementNow)') -or
     $input -notmatch 'CameraYaw = cameraYaw' -or
-    $input -notmatch 'cameraFollow\.CameraYaw') {
+    $input -notmatch 'cameraFollow\.ReadMovementYaw\(\)') {
     throw 'Camera input must be sampled before movement and reused for the render frame.'
 }
 

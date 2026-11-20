@@ -68,6 +68,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
     private long nextSkillRequestSequence;
     private bool combatEnabled;
     private LocalPlayerVisualSmoother visualSmoother;
+    private ThirdPersonCameraFollow cameraFollow;
     private CombatMessageReceiver combatReceiver;
     private MonsterSnapshotManager monsterManager;
     private readonly Queue<(string ActionId, long Sequence)> recentAttacks =
@@ -483,11 +484,17 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
     private void FaceAttackTarget(CombatTargetSelection target)
     {
-        if (visualSmoother != null
-            && target.TryGetHorizontalYaw(visualSmoother.VisualWorldPosition, out float yaw))
-        {
+        Vector3 origin = visualSmoother != null ? visualSmoother.VisualWorldPosition : transform.position;
+        if (!target.TryGetHorizontalYaw(origin, out float yaw)) return;
+
+        if (visualSmoother != null)
             visualSmoother.FaceCombatTargetImmediately(yaw);
-        }
+        else
+            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+
+        if (target.EntityType != "monster") return;
+        if (cameraFollow == null) cameraFollow = FindObjectOfType<ThirdPersonCameraFollow>();
+        cameraFollow?.AlignWithAttackFacing(yaw);
     }
 
     private void TrackAttackForLock(NetworkManager network, string actionId, long sequence)

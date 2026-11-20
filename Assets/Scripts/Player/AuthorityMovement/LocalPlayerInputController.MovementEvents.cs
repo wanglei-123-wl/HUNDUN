@@ -48,7 +48,7 @@ public sealed partial class LocalPlayerInputController
         {
             bool resetDirectionBasis = movementControl == null
                 || movementControl.sceneSessionId != control.sceneSessionId || control.reason == "respawn";
-            combatController?.CancelCombatApproach();
+            CancelCombatIntent();
             movementControl = control;
             network.BeginMovementControl(control);
             network.MovementHeartbeatIntervalMs = movementPolicy.heartbeatIntervalMs;
@@ -196,7 +196,7 @@ public sealed partial class LocalPlayerInputController
         float? facingYaw = (directional & MovementEventFlags.Backward) != 0
             && rollDirection == PlayerInputKeys.None ? input.CameraYaw : (float?)null;
         if (direction == Vector3.zero && HasDirectionalInput(input.Keys) && combatController?.HasCombatApproach == true)
-            combatController.CancelCombatApproach("前方道路受阻，自动追击已停止");
+            CancelCombatIntent("前方道路受阻，自动追击已停止");
         MovementEventFlags turning = ResolveTurnFlags(input, direction, now);
 
         bool wasWalking = (movementFlags & MovementEventFlags.Walking) != 0;
@@ -246,9 +246,14 @@ public sealed partial class LocalPlayerInputController
 
         if (HasDirectionalInput(input.Keys) || HasBothMouseButtons(input.Actions) || input.FaceCamera)
             visualSmoother?.ClearCombatFacing();
-        if (input.HasAction(PlayerInputActions.PrimaryAction)
-            && combatController?.TrySendBasicAttack(input.ClientTick, input.CameraYaw) != true)
-            input.Actions &= ~PlayerInputActions.PrimaryAction;
+        if (input.HasAction(PlayerInputActions.PrimaryAction))
+        {
+            if (predictedMotor.CanStartBasicAttack
+                && combatController?.TrySendBasicAttack(input.ClientTick, input.CameraYaw) == true)
+                RecordBasicAttackRequest();
+            else
+                input.Actions &= ~PlayerInputActions.PrimaryAction;
+        }
         input.IsRunning = run;
         predictedMotor.PresentPredictedInput(input, jump);
         return true;
@@ -408,7 +413,7 @@ public sealed partial class LocalPlayerInputController
             predictedMotor.GroundSlideBlockNormal))
             return SendGroundSlideTurn(slideDirection, false, end);
 
-        combatController?.CancelCombatApproach("前方道路受阻，自动追击已停止");
+        CancelCombatIntent("前方道路受阻，自动追击已停止");
 
         blockedTraversalDirection = groundSlideIntent != Vector3.zero ? groundSlideIntent : travelDirection;
         blockedTraversalPosition = transform.position;

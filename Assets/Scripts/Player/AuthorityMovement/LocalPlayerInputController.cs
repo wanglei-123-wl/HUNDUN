@@ -29,6 +29,10 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private float mouseLeftDragDistance;
     private readonly BasicAttackMovementGate basicAttackMovementGate =
         new BasicAttackMovementGate();
+    private CombatTargetSelection repeatingAttackTarget;
+    private uint repeatingAttackCompletionCount;
+    private long repeatingAttackConnectionEpoch;
+    private string repeatingAttackSceneSessionId;
 
     private static readonly int MeditatingParameter = Animator.StringToHash("IsMeditating");
     private static readonly int SeatedLoopState = Animator.StringToHash("Base Layer.打坐中");
@@ -50,7 +54,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         UpdateMeditationRequest();
         if (!inputEnabled || NetworkManager.Instance?.MovementReady != true)
         {
-            combatController?.CancelCombatApproach();
+            CancelCombatIntent();
             return;
         }
 
@@ -66,9 +70,11 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         bool jumpRequested = Input.GetKeyDown(KeyCode.Space);
         // Manual input always takes ownership from an outstanding attack intent.
         // Check before reading new attacks so a new command can replace the old one.
-        if (gameplayBlocked || Input.anyKeyDown || HasDirectionalInput(heldKeys)
+        if (gameplayBlocked || (Input.anyKeyDown && !Input.GetMouseButtonDown(0)) || HasDirectionalInput(heldKeys)
             || HasBothMouseButtons(heldActions) || Input.mouseScrollDelta.sqrMagnitude > 0f
             || (cameraFollow != null && cameraFollow.CharacterLookActive))
+            CancelCombatIntent();
+        else if (Input.GetMouseButtonDown(0))
             combatController?.CancelCombatApproach();
         if (!gameplayBlocked && rollDirection == PlayerInputKeys.None && !IsRollAnimationPlaying())
             ApplyMeditationInput(Input.GetKeyDown(KeyCode.Q), heldKeys, heldActions, jumpRequested);
@@ -80,7 +86,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
             !gameplayBlocked && !IsMeditationBlockingInput());
         gameplayBlocked |= IsMeditationBlockingInput()
             || rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying();
-        if (gameplayBlocked) combatController?.CancelCombatApproach();
+        if (gameplayBlocked) CancelCombatIntent();
         if (gameplayBlocked)
         {
             pendingMouseLeftDown = false;
@@ -178,7 +184,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private void OnDisable()
     {
         cameraFollow?.SetForwardMovement(false);
-        combatController?.CancelCombatApproach();
+        CancelCombatIntent();
         EndMeditation();
         rollReported = false;
         ResetRollInput();
@@ -233,7 +239,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         reconciler = playerReconciler;
         visualSmoother = smoother;
         ResolveCombatController();
-        combatController.CancelCombatApproach();
+        CancelCombatIntent();
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.FlushLocalMovement = FlushMovement;
@@ -254,6 +260,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         rightClickTarget = default;
         mouseLeftDragDistance = 0f;
         basicAttackMovementGate.Reset();
+        CancelCombatIntent();
         cameraFollow?.SetForwardMovement(false);
         cameraFollow = null;
         ResolveCombatController();
@@ -394,12 +401,12 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     {
         if (combatController == null || !combatController.HasCombatApproach) return;
         if (GameplayUiInputGuard.BlocksGameplayInput || IsMeditationBlockingInput()
-            || rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying()
-            || predictedMotor.BlocksMovementForAttack())
+            || rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying())
         {
-            combatController.CancelCombatApproach();
+            CancelCombatIntent();
             return;
         }
+        if (predictedMotor.BlocksMovementForAttack()) return;
         if (!combatController.TryReadCombatApproach(out Vector3 direction, out bool basicAttack)) return;
         input.Keys = direction == Vector3.zero ? PlayerInputKeys.None : PlayerInputKeys.W | PlayerInputKeys.Shift;
         input.Actions &= ~(PlayerInputActions.PrimaryAction | PlayerInputActions.MouseLeftHeld | PlayerInputActions.MouseRightHeld);
@@ -410,6 +417,56 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
             input.LookYaw = input.CameraYaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         else if (basicAttack && basicAttackMovementGate.CanAttack(Time.unscaledTime))
             input.Actions |= PlayerInputActions.PrimaryAction;
+    }
+
+    private void CancelCombatIntent(string reason = null)
+    {
+        repeatingAttackTarget = default;
+        repeatingAttackConnectionEpoch = 0;
+        repeatingAttackSceneSessionId = null;
+        combatController?.CancelCombatApproach(reason);
+    }
+
+    private void RecordBasicAttackRequest()
+    {
+        CombatTargetSelection target = combatController.LockedTarget;
+        NetworkManager network = NetworkManager.Instance;
+        // Only an explicitly selected monster enables continuous attacks.
+        if (target.EntityType != "monster" || !MonsterTargetingController.IsValidTarget(target)
+            || network == null)
+        {
+            repeatingAttackTarget = default;
+            return;
+        }
+
+        repeatingAttackTarget = target;
+        repeatingAttackCompletionCount = predictedMotor.CompletedBasicAttackCount;
+        repeatingAttackConnectionEpoch = network.ConnectionEpoch;
+        repeatingAttackSceneSessionId = network.SceneSessionId;
+    }
+
+    private bool CanRepeatBasicAttack()
+    {
+        if (!repeatingAttackTarget.IsValid) return false;
+        NetworkManager network = NetworkManager.Instance;
+        CombatTargetSelection target = combatController != null ? combatController.LockedTarget : default;
+        if (!inputEnabled || movementSession == null || !movementSession.IsWorldReady
+            || movementSession.IsLocalPlayerDead || network == null || !network.IsConnected
+            || !network.MovementReady || network.SceneOperationsPaused || network.AreLocalPlayerActionsBlocked
+            || network.ConnectionEpoch != repeatingAttackConnectionEpoch
+            || network.SceneSessionId != repeatingAttackSceneSessionId
+            || target.TargetTransform != repeatingAttackTarget.TargetTransform
+            || target.EntityType != repeatingAttackTarget.EntityType
+            || target.EntityId != repeatingAttackTarget.EntityId
+            || !MonsterTargetingController.IsValidTarget(repeatingAttackTarget))
+        {
+            CancelCombatIntent();
+            return false;
+        }
+
+        // No repeat before the requested animation has actually entered and ended.
+        return predictedMotor.CompletedBasicAttackCount != repeatingAttackCompletionCount
+            && predictedMotor.CanStartBasicAttack;
     }
 
     private PlayerInputFrame CreateInputFrame()
@@ -428,8 +485,10 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         basicAttackMovementGate.Observe(
             IsMovingForBasicAttack(keys, actions), Time.unscaledTime);
 
-        if (!uiBlocked && pendingMouseLeftDown
-            && basicAttackMovementGate.CanAttack(Time.unscaledTime))
+        bool repeatAttack = !uiBlocked && CanRepeatBasicAttack();
+        if (!uiBlocked && (pendingMouseLeftDown || repeatAttack)
+            && basicAttackMovementGate.CanAttack(Time.unscaledTime)
+            && predictedMotor.CanStartBasicAttack)
         {
             actions |= PlayerInputActions.PrimaryAction;
         }

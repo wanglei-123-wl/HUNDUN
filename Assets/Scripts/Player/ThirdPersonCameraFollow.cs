@@ -23,10 +23,9 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     [SerializeField, Min(0.01f)] private float movementAlignSmoothTime = 0.35f;
     [SerializeField, Min(1f)] private float movementAlignTurnSpeed = 360f;
 
-    [Header("Target Lock")]
-    [SerializeField, Min(0.01f)] private float lockBlendTime = 0.35f;
-    [SerializeField, Min(1f)] private float lockOrbitTurnSpeed = 360f;
-    [SerializeField, Min(1f)] private float lockViewTurnSpeed = 540f;
+    [Header("Attack Follow")]
+    [SerializeField, Min(0.01f)] private float attackAlignSmoothTime = 0.25f;
+    [SerializeField, Min(1f)] private float attackAlignTurnSpeed = 360f;
 
     [Header("Zoom")]
     public float minDistance = 0.6f;
@@ -41,7 +40,6 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     public float collisionRecoverySpeed = 8f;
 
     private const int CollisionBufferSize = 24;
-    private const float LockOrbitMinimumDistance = 0.4f;
     private readonly RaycastHit[] collisionHits = new RaycastHit[CollisionBufferSize];
 
     private LocalPlayerCombatController combatController;
@@ -50,10 +48,8 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     private bool hasMovementYaw;
     private bool alignWithForwardMovement;
     private float movementAlignVelocity;
-    private Transform trackedMonster;
-    private float trackingBlend;
-    private float? lockedOrbitYaw;
-    private Quaternion unlockViewOffset = Quaternion.identity;
+    private float? attackFacingYaw;
+    private float attackAlignVelocity;
     private float yaw;
     private float pitch = 20f;
     private float desiredDistance;
@@ -73,18 +69,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     internal bool IsRightMouseDragging => rightDragging;
     public bool CharacterLookActive =>
         rightDragging && !GameplayUiInputGuard.BlocksGameplayInput;
-    public float CameraYaw
-    {
-        get
-        {
-            if (lockedOrbitYaw.HasValue)
-                return transform.eulerAngles.y;
-
-            return unlockViewOffset == Quaternion.identity
-                ? yaw
-                : (Quaternion.Euler(pitch, yaw, 0f) * unlockViewOffset).eulerAngles.y;
-        }
-    }
+    public float CameraYaw => yaw;
 
     private void Start()
     {
@@ -112,10 +97,8 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         transform.position -= appliedShakeOffset;
         appliedShakeOffset = Vector3.zero;
         shakeFrame = -1;
-        trackedMonster = null;
-        trackingBlend = 0f;
-        lockedOrbitYaw = null;
-        unlockViewOffset = Quaternion.identity;
+        attackFacingYaw = null;
+        attackAlignVelocity = 0f;
         alignWithForwardMovement = false;
         movementAlignVelocity = 0f;
         leftDragging = rightDragging = false;
@@ -126,7 +109,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     {
         // A/D can turn the model toward travel without redefining "forward".
         // Retain the same input basis across key releases and direction changes;
-        // only explicit right-drag steering or a control reset replaces it.
+        // right-drag steering, attack facing or a control reset replaces it.
         if (CharacterLookActive)
             ResetMovementYaw(characterLookYaw);
         else if (!hasMovementYaw)
@@ -146,6 +129,53 @@ public class ThirdPersonCameraFollow : MonoBehaviour
 
     internal void SetForwardMovement(bool forwardOnly) =>
         alignWithForwardMovement = forwardOnly;
+
+    internal void AlignWithAttackFacing(float characterYaw)
+    {
+        if (GetRotationTarget() == null) return;
+        if (!attackFacingYaw.HasValue) attackAlignVelocity = 0f;
+        attackFacingYaw = Mathf.Repeat(characterYaw, 360f);
+        movementAlignVelocity = 0f;
+        ResetMovementYaw(characterYaw);
+    }
+
+    private void UpdateFacingAlignment(Transform character, bool moving, bool manualOrbit, bool uiBlocked)
+    {
+        if (manualOrbit || uiBlocked || moving)
+        {
+            attackFacingYaw = null;
+            attackAlignVelocity = 0f;
+        }
+
+        if (manualOrbit || uiBlocked)
+        {
+            movementAlignVelocity = 0f;
+            return;
+        }
+
+        if (attackFacingYaw.HasValue)
+        {
+            yaw = Mathf.SmoothDampAngle(yaw, attackFacingYaw.Value,
+                ref attackAlignVelocity, Mathf.Max(0.01f, attackAlignSmoothTime),
+                Mathf.Max(1f, attackAlignTurnSpeed), Time.unscaledDeltaTime);
+            if (Mathf.Abs(Mathf.DeltaAngle(yaw, attackFacingYaw.Value)) < 0.1f)
+            {
+                yaw = attackFacingYaw.Value;
+                attackFacingYaw = null;
+                attackAlignVelocity = 0f;
+            }
+        }
+        else if (moving && alignWithForwardMovement && character != null)
+        {
+            yaw = Mathf.SmoothDampAngle(yaw, character.eulerAngles.y,
+                ref movementAlignVelocity, Mathf.Max(0.01f, movementAlignSmoothTime),
+                Mathf.Max(1f, movementAlignTurnSpeed), Time.unscaledDeltaTime);
+        }
+        else
+        {
+            movementAlignVelocity = 0f;
+        }
+    }
 
     public void SampleInput()
     {
@@ -221,41 +251,25 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             if (appliedShakeOffset != Vector3.zero)
                 transform.position = basePosition;
             appliedShakeOffset = Vector3.zero;
-            trackedMonster = null;
-            trackingBlend = 0f;
-            lockedOrbitYaw = null;
-            unlockViewOffset = Quaternion.identity;
+            attackFacingYaw = null;
+            attackAlignVelocity = 0f;
             return;
         }
 
         SampleInput();
         Transform activeRotationTarget = GetRotationTarget();
-        CombatTargetSelection lockedTarget = combatController == null
-            ? default
-            : combatController.LockedTarget;
-        Transform lockedMonster = lockedTarget.TargetTransform;
+        // Selection is only a collision exclusion; it never drives the view.
+        Transform collisionIgnoredTarget = combatController == null
+            ? null : combatController.LockedTarget.TargetTransform;
         if (movementMotor == null && activeRotationTarget != null)
             activeRotationTarget.TryGetComponent(out movementMotor);
         Vector3 velocity = movementMotor == null ? Vector3.zero : movementMotor.Velocity;
         bool moving = velocity.x * velocity.x + velocity.z * velocity.z > 0.0025f;
         bool manualOrbit = leftDragging || rightDragging;
-        bool trackMonster = lockedMonster != null && !manualOrbit && !moving;
-        bool stoppedTracking = lockedOrbitYaw.HasValue && !trackMonster;
         Vector3 followPosition = activeFollowTarget.position;
-        UpdateLockedOrbit(trackMonster ? lockedTarget : default, followPosition);
 
         bool uiBlocked = GameplayUiInputGuard.BlocksGameplayInput;
-        if (moving && alignWithForwardMovement
-            && !manualOrbit && !uiBlocked && activeRotationTarget != null)
-        {
-            yaw = Mathf.SmoothDampAngle(yaw, activeRotationTarget.eulerAngles.y,
-                ref movementAlignVelocity, Mathf.Max(0.01f, movementAlignSmoothTime),
-                Mathf.Max(1f, movementAlignTurnSpeed), Time.unscaledDeltaTime);
-        }
-        else
-        {
-            movementAlignVelocity = 0f;
-        }
+        UpdateFacingAlignment(activeRotationTarget, moving, manualOrbit, uiBlocked);
         float scroll = uiBlocked ? 0f : Input.mouseScrollDelta.y;
         if (Mathf.Abs(scroll) > 0.001f)
             desiredDistance = Mathf.Clamp(desiredDistance - scroll * zoomSpeed, minDistance, maxDistance);
@@ -272,7 +286,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             desiredDistance,
             activeFollowTarget,
             activeRotationTarget,
-            lockedMonster
+            collisionIgnoredTarget
         );
 
         bool obstructed = collisionDistance < desiredDistance - 0.001f;
@@ -295,19 +309,16 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         {
             float followWeight = 1f - Mathf.Exp(-followSmooth * Time.unscaledDeltaTime);
             targetPosition = Vector3.Lerp(basePosition, targetPosition, followWeight);
-            if (lockedMonster != null)
+            // A smoothed orbit must also keep its path clear while turning.
+            Vector3 followPath = targetPosition - lookPoint;
+            float followDistance = followPath.magnitude;
+            float clearDistance = FindCollisionDistance(lookPoint, followPath,
+                followDistance, activeFollowTarget, activeRotationTarget, collisionIgnoredTarget);
+            if (clearDistance < followDistance)
             {
-                // Following the previous orbit can swing the camera across a wall.
-                Vector3 followPath = targetPosition - lookPoint;
-                float followDistance = followPath.magnitude;
-                float clearDistance = FindCollisionDistance(lookPoint, followPath,
-                    followDistance, activeFollowTarget, activeRotationTarget, lockedMonster);
-                if (clearDistance < followDistance)
-                {
-                    targetPosition = lookPoint + followPath * (clearDistance / followDistance);
-                    currentDistance = Mathf.Min(currentDistance, clearDistance);
-                    obstructed = true;
-                }
+                targetPosition = lookPoint + followPath * (clearDistance / followDistance);
+                currentDistance = Mathf.Min(currentDistance, clearDistance);
+                obstructed = true;
             }
         }
 
@@ -317,14 +328,13 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             Vector3 shakenPath = targetPosition + shakeOffset - lookPoint;
             float shakenDistance = shakenPath.magnitude;
             float clearDistance = FindCollisionDistance(lookPoint, shakenPath,
-                shakenDistance, activeFollowTarget, activeRotationTarget, lockedMonster);
+                shakenDistance, activeFollowTarget, activeRotationTarget, collisionIgnoredTarget);
             if (clearDistance >= shakenDistance)
                 appliedShakeOffset = shakeOffset;
         }
 
         transform.position = targetPosition + appliedShakeOffset;
-        transform.rotation = ResolveViewRotation(orbitRotation, trackMonster ? lockedMonster : null,
-            targetPosition, stoppedTracking);
+        transform.rotation = orbitRotation;
     }
 
     public void AddShakeOffset(Vector3 worldOffset)
@@ -355,63 +365,9 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             if (newRotationTarget != null) ResetMovementYaw(newRotationTarget.eulerAngles.y);
             alignWithForwardMovement = false;
             movementAlignVelocity = 0f;
+            attackFacingYaw = null;
+            attackAlignVelocity = 0f;
         }
-    }
-
-    private void UpdateLockedOrbit(CombatTargetSelection lockedTarget, Vector3 followPosition)
-    {
-        if (!lockedTarget.IsValid)
-        {
-            trackedMonster = null;
-            trackingBlend = 0f;
-            lockedOrbitYaw = null;
-            return;
-        }
-
-        if (trackedMonster != lockedTarget.TargetTransform)
-        {
-            trackedMonster = lockedTarget.TargetTransform;
-            trackingBlend = 0f;
-        }
-        trackingBlend = Mathf.MoveTowards(trackingBlend, 1f, Time.unscaledDeltaTime / Mathf.Max(0.01f, lockBlendTime));
-
-        float orbitYaw = lockedOrbitYaw ?? yaw;
-        if (lockedTarget.TryGetHorizontalYaw(followPosition, out float targetYaw, LockOrbitMinimumDistance))
-            orbitYaw = Mathf.MoveTowardsAngle(orbitYaw, targetYaw,
-                lockOrbitTurnSpeed * Time.unscaledDeltaTime * Mathf.SmoothStep(0f, 1f, trackingBlend));
-
-        lockedOrbitYaw = orbitYaw;
-        yaw = orbitYaw;
-    }
-
-    private Quaternion ResolveViewRotation(Quaternion orbitRotation, Transform lockedMonster,
-        Vector3 cameraPosition, bool stoppedTracking)
-    {
-        float turnStep = lockViewTurnSpeed * Time.unscaledDeltaTime;
-        if (lockedMonster == null)
-        {
-            if (stoppedTracking)
-                unlockViewOffset = Quaternion.Inverse(orbitRotation) * transform.rotation;
-
-            unlockViewOffset = Quaternion.RotateTowards(unlockViewOffset, Quaternion.identity, turnStep);
-            return orbitRotation * unlockViewOffset;
-        }
-
-        Vector3 focus = lockedMonster.position + Vector3.up * targetHeight;
-        if (lockedMonster.TryGetComponent(out CapsuleCollider capsule) && capsule.enabled)
-            focus = capsule.bounds.center;
-
-        Vector3 aim = focus - cameraPosition;
-        if (aim.sqrMagnitude <= 0.0001f) return transform.rotation;
-
-        float horizontalDistance = new Vector2(aim.x, aim.z).magnitude;
-        float viewYaw = horizontalDistance > 0.01f
-            ? Mathf.Atan2(aim.x, aim.z) * Mathf.Rad2Deg
-            : transform.eulerAngles.y;
-        float viewPitch = Mathf.Atan2(-aim.y, horizontalDistance) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(Mathf.Clamp(viewPitch, minPitch, maxPitch), viewYaw, 0f);
-        return Quaternion.RotateTowards(transform.rotation, targetRotation,
-            turnStep * Mathf.SmoothStep(0f, 1f, trackingBlend));
     }
 
     private float FindCollisionDistance(
@@ -420,7 +376,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         float distance,
         Transform activeFollowTarget,
         Transform activeRotationTarget,
-        Transform lockedMonster)
+        Transform collisionIgnoredTarget)
     {
         if (distance <= 0f || direction.sqrMagnitude <= 0.0001f)
             return distance;
@@ -442,7 +398,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             Collider hitCollider = collisionHits[index].collider;
             if (hitCollider == null
                 || IsPlayerCollider(hitCollider.transform, activeFollowTarget, activeRotationTarget)
-                || IsSameHierarchy(hitCollider.transform, lockedMonster))
+                || IsSameHierarchy(hitCollider.transform, collisionIgnoredTarget))
                 continue;
 
             nearestDistance = Mathf.Min(
