@@ -60,9 +60,9 @@
       "formatVersion": 2,
       "address": "game/map-traversal/map_001",
       "asset": "Assets/MapTraversalData/map_001.bytes",
-      "packageFingerprint": "6de125b7c725035d2715f40424953019c4cfbb12c020e6543525e96874fce160",
-      "archiveSha256": "4e4cf71b25fada9336a372375848238599bbb66df080b4456cd6719afa7774b3",
-      "archiveBytes": 6522166,
+      "packageFingerprint": "811df66790f1fe16955cf29bd778efced999c0a1131c219e442f6ef9b31ad48a",
+      "archiveSha256": "257b2a1c9f7d81858d590e4de612d00b87c84b47e2f70b089cb0f7eb7224ac60",
+      "archiveBytes": 6522146,
       "files": [
         {
           "name": "colliders.bin",
@@ -91,7 +91,7 @@
         },
         {
           "name": "walkable.bin",
-          "sha256": "f01c2d3864779fe590bb5003f4dee535280133527fb5d6f7d4c6237259f3cbd8",
+          "sha256": "ab0fb0b9426c9ba0f56b070cbccb1c72cd5eb5a655bb6aedbf3564c227d27db5",
           "bytes": 1965056
         }
       ]
