@@ -8,8 +8,10 @@ public sealed class PlayerEffectPresenter : MonoBehaviour
 {
     private readonly Dictionary<string, GameObject> activeEffects =
         new Dictionary<string, GameObject>(StringComparer.Ordinal);
+    private readonly HashSet<string> conditionEpisodes = new HashSet<string>(StringComparer.Ordinal);
 
     private PlayerPresentationSettings settings;
+    private PlayerEffectStateSource stateSource;
     private Transform followTarget;
     private Transform skillReleasePoint;
     private GameObject visual;
@@ -33,6 +35,8 @@ public sealed class PlayerEffectPresenter : MonoBehaviour
             && presenter.skillReleasePoint == skillReleasePoint)
         {
             presenter.SetVisual(visual);
+            presenter.AttachStateSource();
+            presenter.RefreshConditions();
             return;
         }
 
@@ -41,12 +45,18 @@ public sealed class PlayerEffectPresenter : MonoBehaviour
         presenter.followTarget = followTarget;
         presenter.skillReleasePoint = skillReleasePoint;
         presenter.SetVisual(visual);
+        presenter.AttachStateSource();
         if (presenter.isActiveAndEnabled)
+        {
             presenter.PlaySpawnEffects();
+            presenter.RefreshConditions();
+        }
     }
 
     public void ClearBinding()
     {
+        DetachStateSource();
+        stateSource = null;
         settings = null;
         followTarget = null;
         skillReleasePoint = null;
@@ -100,13 +110,74 @@ public sealed class PlayerEffectPresenter : MonoBehaviour
         Release(instance);
     }
 
-    private void OnEnable() => PlaySpawnEffects();
+    private void OnEnable()
+    {
+        if (settings == null) return;
+        AttachStateSource();
+        PlaySpawnEffects();
+        RefreshConditions();
+    }
 
-    private void OnDisable() => StopAllEffects();
+    private void OnDisable()
+    {
+        DetachStateSource();
+        StopAllEffects();
+    }
+
+    private void OnDestroy() => ClearBinding();
+
+    private void AttachStateSource()
+    {
+        if (settings == null) return;
+        if (stateSource == null && !TryGetComponent(out stateSource))
+            stateSource = gameObject.AddComponent<PlayerEffectStateSource>();
+        stateSource.Changed -= RefreshConditions;
+        if (isActiveAndEnabled) stateSource.Changed += RefreshConditions;
+    }
+
+    private void DetachStateSource()
+    {
+        if (stateSource != null) stateSource.Changed -= RefreshConditions;
+    }
+
+    private bool ConditionsMet(PlayerEffectDefinition definition)
+    {
+        PlayerEffectConditions conditions = definition.Conditions;
+        const PlayerEffectConditions supported = PlayerEffectConditions.Alive | PlayerEffectConditions.Meditating;
+        if ((conditions & ~supported) != 0) return false;
+        if (conditions == PlayerEffectConditions.None) return true;
+        PlayerEffectState state = stateSource != null ? stateSource.Current : default;
+        return state.IsKnown
+            && ((conditions & PlayerEffectConditions.Alive) == 0 || state.IsAlive)
+            && ((conditions & PlayerEffectConditions.Meditating) == 0 || state.IsMeditating);
+    }
+
+    private void RefreshConditions()
+    {
+        if (settings == null || !isActiveAndEnabled) return;
+        foreach (PlayerEffectDefinition definition in settings.PlayerEffects)
+        {
+            if (definition == null || string.IsNullOrWhiteSpace(definition.EffectId)) continue;
+            string id = definition.EffectId;
+            if (!ConditionsMet(definition))
+            {
+                conditionEpisodes.Remove(id);
+                Stop(id);
+                continue;
+            }
+            if (definition.Trigger != PlayerEffectTrigger.WhileCondition) continue;
+            bool missingLoop = definition.Playback == PlayerEffectPlayback.Loop
+                && (!activeEffects.TryGetValue(id, out GameObject instance) || instance == null);
+            // Once effects fire only on eligibility edges. Loop effects can
+            // recover a lost instance without creating duplicates.
+            if ((!conditionEpisodes.Contains(id) || missingLoop) && TryStartEffect(definition))
+                conditionEpisodes.Add(id);
+        }
+    }
 
     private void PlaySpawnEffects()
     {
-        if (settings == null)
+        if (settings == null || !isActiveAndEnabled)
             return;
 
         foreach (PlayerEffectDefinition definition in settings.PlayerEffects)
@@ -118,6 +189,9 @@ public sealed class PlayerEffectPresenter : MonoBehaviour
 
     private bool TryStartEffect(PlayerEffectDefinition definition)
     {
+        // All entry points, including manual TryPlay and spawn playback, use
+        // the same gate. Shared definitions are never mutated at runtime.
+        if (settings == null || !isActiveAndEnabled || !ConditionsMet(definition)) return false;
         string effectName = definition.EffectName;
         if (definition.Prefab == null || string.IsNullOrWhiteSpace(effectName)
             || (activeEffects.TryGetValue(effectName, out GameObject current) && current != null))
@@ -190,6 +264,7 @@ public sealed class PlayerEffectPresenter : MonoBehaviour
         foreach (GameObject instance in activeEffects.Values)
             Release(instance);
         activeEffects.Clear();
+        conditionEpisodes.Clear();
     }
 
     private static void Release(GameObject instance)

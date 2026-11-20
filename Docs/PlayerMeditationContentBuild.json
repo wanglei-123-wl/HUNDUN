@@ -1,0 +1,90 @@
+{
+  "scope": "local-meditation-effect-content",
+  "status": "succeeded",
+  "requestId": "2107117bd98a44f48a6be80d933b9820",
+  "startedAtUtc": "2026-11-19T11:57:58.7828956Z",
+  "finishedAtUtc": "2026-11-19T12:00:08.2970424Z",
+  "verifiedAtUtc": "2026-11-19T12:01:25.3011514Z",
+  "profile": "LocalTrial",
+  "buildTarget": "StandaloneWindows64",
+  "settingsAsset": {
+    "path": "Assets/Settings/玩家公共表现配置.asset",
+    "sha256": "5970621495bdd0c1a5fcd0ddf576216a3873599675d2c8cb8902cb2a86ef9f2b",
+    "effectId": "MeshFX_Galaxy",
+    "trigger": "WhileCondition",
+    "conditions": [
+      "Alive",
+      "Meditating"
+    ],
+    "playback": "Loop"
+  },
+  "worldScene": {
+    "address": "game/scene/world",
+    "source": "Assets/Scenes/WorldShell.unity",
+    "sourceSha256": "4e25bbc969dea2a412218ac3ce3f8661d806e06a86f152a31ed7a1613fefe056",
+    "dependencies": [
+      {
+        "internalId": "http://127.0.0.1:18761/StandaloneWindows64/remotegamecontent_assets_all_a3f945cc3becabdfa44558f93a26c1d6.bundle",
+        "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remotegamecontent_assets_all_a3f945cc3becabdfa44558f93a26c1d6.bundle",
+        "bytes": 155470210,
+        "sha256": "246e9b99ce501282b6b60c17431369aaa82d5106c1f82724a82b2004f07842a0"
+      },
+      {
+        "internalId": "{UnityEngine.AddressableAssets.Addressables.RuntimePath}\\StandaloneWindows64\\64aaea1d9abfd84b538513a81e94375a_unitybuiltinshaders_d6ab62ac7095c26cdbaa99b824cb1342.bundle",
+        "path": "F:\\游戏项目\\HUNDUN\\Library\\com.unity.addressables\\aa\\Windows\\StandaloneWindows64\\64aaea1d9abfd84b538513a81e94375a_unitybuiltinshaders_d6ab62ac7095c26cdbaa99b824cb1342.bundle",
+        "bytes": 688588,
+        "sha256": "ff5fe1aa648b7a205b71fc3f076bb3f5acc1436d9a753d1216d5cc51c8071ab0"
+      },
+      {
+        "internalId": "{UnityEngine.AddressableAssets.Addressables.RuntimePath}\\StandaloneWindows64\\bootstrapshared_assets_all_377f1d3467dfed743be38354a01b3e57.bundle",
+        "path": "F:\\游戏项目\\HUNDUN\\Library\\com.unity.addressables\\aa\\Windows\\StandaloneWindows64\\bootstrapshared_assets_all_377f1d3467dfed743be38354a01b3e57.bundle",
+        "bytes": 9915349,
+        "sha256": "3271738c29449d7cd0c53d4aefa9236c431554525924fc2646ae3768518919c8"
+      },
+      {
+        "internalId": "http://127.0.0.1:18761/StandaloneWindows64/remotegamecontent_scenes_all_ae00c62e8f0541942c950e305f39f7e6.bundle",
+        "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\remotegamecontent_scenes_all_ae00c62e8f0541942c950e305f39f7e6.bundle",
+        "bytes": 735087824,
+        "sha256": "e45c6d406d37ed0cffcb9b324aa0da4252b92c86363fa482d1430f0e9d3ad489"
+      }
+    ]
+  },
+  "catalog": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\catalog_0.1.json",
+    "bytes": 52870,
+    "sha256": "c7399e14bd892198d5514cc2378d14146aa99037cf3c01125b35961e3956a609"
+  },
+  "catalogHashFile": {
+    "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\catalog_0.1.hash",
+    "bytes": 32,
+    "sha256": "8bbc5762fff3e6af4df85620c026687599a68ccc7f31339b7377aa4a8c1591c5"
+  },
+  "runtimeSettings": {
+    "path": "F:\\游戏项目\\HUNDUN\\Library\\com.unity.addressables\\aa\\Windows\\settings.json",
+    "bytes": 3935,
+    "sha256": "cc053dd167f5db3c602617212b90527580e2bc275762890ec7d94e2cd9cb430c"
+  },
+  "sourceFiles": [
+    {
+      "path": "Assets/Scripts/Player/PlayerEffectStateSource.cs",
+      "sha256": "fd949da533b507130a117717e2e3ce822421d6a9ac2a710cca542ce93a566890"
+    },
+    {
+      "path": "Assets/Scripts/Player/PlayerEffectPresenter.cs",
+      "sha256": "874c4253d3a7ccf6c8fae816188d4a8fdd1e255af2d595196dcaa40042bd6492"
+    },
+    {
+      "path": "Assets/Scripts/Player/PlayerPresentationSettings.cs",
+      "sha256": "031349c91fba2553c625210e52612f546bd4a2dbc38005e7b6415b4eb552465e"
+    },
+    {
+      "path": "Assets/Scripts/Player/AuthorityMovement/LocalPlayerInputController.cs",
+      "sha256": "17f59bcadc086ca8749b654e3c1bd321dcbd34516a0f5366ff0bca9351b2eaf6"
+    }
+  ],
+  "nativeBuildReport": "Docs/MapTraversalStage4Build.json",
+  "testsRun": false,
+  "published": false,
+  "playerBuildCreated": false,
+  "bundleSerializedSettingsIndependentlyInspected": false
+}

@@ -1,9 +1,9 @@
 {
   "stage": "4-addressables-build",
-  "requestId": "aef67df63c064a3d94daefc3fd41aadc",
-  "startedAtUtc": "2026-11-19T09:47:56.5109158Z",
+  "requestId": "2107117bd98a44f48a6be80d933b9820",
+  "startedAtUtc": "2026-11-19T11:57:58.7828956Z",
   "status": "succeeded",
-  "verificationOnly": true,
+  "verificationOnly": false,
   "addressablesContentBuilt": true,
   "testsRun": false,
   "published": false,
@@ -11,16 +11,15 @@
   "profile": "LocalTrial",
   "buildTarget": "StandaloneWindows64",
   "querySourceFingerprint": "8b053108a3e12413777598b2ca96329921a460c14fc0248665a53ff145a77026",
-  "contentBuildStartedAtUtc": "2026-11-19T09:46:35.3134050Z",
   "catalog": {
     "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\catalog_0.1.json",
-    "bytes": 52874,
-    "sha256": "ecb2eb961e2820dcd98ddba103b06ac76243c436f3b169d69a6bd8d959525923"
+    "bytes": 52870,
+    "sha256": "c7399e14bd892198d5514cc2378d14146aa99037cf3c01125b35961e3956a609"
   },
   "catalogHashFile": {
     "path": "F:\\游戏项目\\HUNDUN\\Build\\RemoteContent\\StandaloneWindows64\\catalog_0.1.hash",
     "bytes": 32,
-    "sha256": "43ccfc25da518598390978833967095f4c3f568c7ee705a13356b7e1000e45e3"
+    "sha256": "8bbc5762fff3e6af4df85620c026687599a68ccc7f31339b7377aa4a8c1591c5"
   },
   "runtimeSettings": {
     "path": "F:\\游戏项目\\HUNDUN\\Library\\com.unity.addressables\\aa\\Windows\\settings.json",
@@ -119,5 +118,5 @@
       "sha256": "5957b9ff9c1cca38711d91ef3d27864554d97ae52720576d26dea4d9ae2d9d74"
     }
   },
-  "finishedAtUtc": "2026-11-19T09:47:57.8660878Z"
+  "finishedAtUtc": "2026-11-19T12:00:08.2970424Z"
 }

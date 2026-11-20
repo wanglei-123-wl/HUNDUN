@@ -7,6 +7,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private PredictedCharacterMotor predictedMotor;
     private GameSession movementSession;
     private Animator meditationAnimator;
+    private PlayerEffectStateSource effectStateSource;
     private PlayerInputKeys previousDirectionTap;
     private double previousDirectionTapTime;
     private PlayerInputKeys rollDirection;
@@ -47,6 +48,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     {
         if (!inputEnabled || NetworkManager.Instance?.MovementReady != true)
         {
+            combatController?.CancelCombatApproach();
             return;
         }
 
@@ -60,6 +62,12 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         PlayerInputKeys heldKeys = ReadKeys();
         PlayerInputActions heldActions = ReadHeldActions();
         bool jumpRequested = Input.GetKeyDown(KeyCode.Space);
+        // Manual input always takes ownership from an outstanding attack intent.
+        // Check before reading new attacks so a new command can replace the old one.
+        if (gameplayBlocked || Input.anyKeyDown || HasDirectionalInput(heldKeys)
+            || HasBothMouseButtons(heldActions) || Input.mouseScrollDelta.sqrMagnitude > 0f
+            || (cameraFollow != null && cameraFollow.CharacterLookActive))
+            combatController?.CancelCombatApproach();
         if (!gameplayBlocked && rollDirection == PlayerInputKeys.None && !IsRollAnimationPlaying())
             ApplyMeditationInput(Input.GetKeyDown(KeyCode.Q), heldKeys, heldActions, jumpRequested);
 
@@ -67,6 +75,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         PlayerInputKeys taps = jumpRequested ? PlayerInputKeys.None : ReadDirectionalKeys(pressedThisFrame: true);
         UpdateRollInput(taps, Time.unscaledTimeAsDouble, !gameplayBlocked);
         gameplayBlocked |= rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying();
+        if (gameplayBlocked) combatController?.CancelCombatApproach();
         if (gameplayBlocked)
         {
             pendingMouseLeftDown = false;
@@ -110,6 +119,10 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         }
 
         if (!UpdateMovement(CreateInputFrame(), MovementNow)) return;
+
+        if (!gameplayBlocked && basicAttackMovementGate.CanAttack(Time.unscaledTime)
+            && !predictedMotor.BlocksMovementForAttack())
+            combatController?.CompleteApproachSkill(CurrentClientTick);
 
         if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -155,6 +168,35 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
     }
 
+    private void LateUpdate() => RefreshEffectState();
+
+    private void OnDisable()
+    {
+        combatController?.CancelCombatApproach();
+        EndMeditation();
+    }
+
+    private void RefreshEffectState()
+    {
+        if (effectStateSource == null) return;
+        if (!isActiveAndEnabled || movementSession == null || !movementSession.IsWorldReady)
+        {
+            effectStateSource.Clear();
+            return;
+        }
+
+        bool alive = !movementSession.IsLocalPlayerDead;
+        // The intent closes the effect immediately on cancellation, while the
+        // animation tag prevents showing it before the sitting transition starts.
+        bool meditating = alive && inputEnabled && NetworkManager.Instance?.MovementReady == true
+            && meditationAnimator != null && meditationAnimator.isActiveAndEnabled
+            && meditationAnimator.GetBool(MeditatingParameter)
+            && (meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
+                || (meditationAnimator.IsInTransition(0)
+                    && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag)));
+        effectStateSource.Publish(new PlayerEffectState(alive, meditating));
+    }
+
     public void Bind(
         PredictedCharacterMotor motor,
         LocalPlayerReconciler playerReconciler,
@@ -164,6 +206,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         ResetRollInput();
         predictedMotor = motor;
         movementSession = session;
+        if (effectStateSource == null && !TryGetComponent(out effectStateSource))
+            effectStateSource = gameObject.AddComponent<PlayerEffectStateSource>();
         meditationAnimator = null;
         Animator animator = motor?.VisualAnimator;
         if (animator != null)
@@ -181,12 +225,14 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         reconciler = playerReconciler;
         visualSmoother = smoother;
         ResolveCombatController();
+        combatController.CancelCombatApproach();
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.FlushLocalMovement = FlushMovement;
             if (movementControl?.IsValidFor(NetworkManager.Instance.SceneSessionId) == true)
                 predictedMotor.ApplyMovementSettings(movementControl);
         }
+        RefreshEffectState();
     }
 
     public void SetInputEnabled(bool enabled, bool resetSequence = false)
@@ -214,6 +260,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         {
             clientTick = 0;
         }
+        RefreshEffectState();
     }
 
     private void ResolveCombatController()
@@ -356,6 +403,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (meditationAnimator != null && meditationAnimator.isActiveAndEnabled
             && meditationAnimator.GetBool(MeditatingParameter))
             meditationAnimator.SetBool(MeditatingParameter, false);
+        RefreshEffectState();
     }
 
     private bool IsMeditationBlockingInput()
@@ -365,6 +413,28 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
                 || meditationAnimator.GetCurrentAnimatorStateInfo(0).IsTag(MeditationTag)
                 || (meditationAnimator.IsInTransition(0)
                     && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag)));
+    }
+
+    private void ApplyCombatApproachInput(PlayerInputFrame input)
+    {
+        if (combatController == null || !combatController.HasCombatApproach) return;
+        if (GameplayUiInputGuard.BlocksGameplayInput || IsMeditationBlockingInput()
+            || rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying()
+            || predictedMotor.BlocksMovementForAttack())
+        {
+            combatController.CancelCombatApproach();
+            return;
+        }
+        if (!combatController.TryReadCombatApproach(out Vector3 direction, out bool basicAttack)) return;
+        input.Keys = direction == Vector3.zero ? PlayerInputKeys.None : PlayerInputKeys.W | PlayerInputKeys.Shift;
+        input.Actions &= ~(PlayerInputActions.PrimaryAction | PlayerInputActions.MouseLeftHeld | PlayerInputActions.MouseRightHeld);
+        input.IsRunning = direction != Vector3.zero;
+        input.FaceCamera = false;
+        input.JumpPressed = false;
+        if (direction != Vector3.zero)
+            input.LookYaw = input.CameraYaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        else if (basicAttack && basicAttackMovementGate.CanAttack(Time.unscaledTime))
+            input.Actions |= PlayerInputActions.PrimaryAction;
     }
 
     private PlayerInputFrame CreateInputFrame()
