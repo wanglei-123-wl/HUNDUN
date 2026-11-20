@@ -59,6 +59,7 @@ public sealed partial class LocalPlayerInputController
             lastSent = null;
             controlAckAt = stepAt = airStartedAt = lastAnalogFacingAt = MovementNow;
             ownedServerTick = 0;
+            rollReported = false;
             airSpeed = control.velocityY;
             ResetRollInput();
             reconciler.ApplyControl(control, control.reason == "movement_blocked" || control.reason == "movement_timeout"
@@ -191,12 +192,27 @@ public sealed partial class LocalPlayerInputController
             if (!Report("jump", now)) return false;
         }
 
+        if (!PublishRollTransition(now)) return false;
+
         if (HasDirectionalInput(input.Keys) || HasBothMouseButtons(input.Actions) || input.FaceCamera)
             visualSmoother?.ClearCombatFacing();
         if (input.HasAction(PlayerInputActions.PrimaryAction)
             && combatController?.TrySendBasicAttack(input.ClientTick, input.CameraYaw) != true)
             input.Actions &= ~PlayerInputActions.PrimaryAction;
         predictedMotor.PresentPredictedInput(input, jump);
+        return true;
+    }
+
+    private bool PublishRollTransition(long now)
+    {
+        if ((movementFlags & MovementEventFlags.Falling) != 0 || !predictedMotor.IsGrounded)
+            return true;
+
+        bool playing = (rollReported || (rollEntered && rollDirection != PlayerInputKeys.None))
+            && IsRollAnimationPlaying();
+        if (playing == rollReported) return true;
+        if (!Report(playing ? "roll_start" : "roll_end", now)) return false;
+        rollReported = playing;
         return true;
     }
 
@@ -403,6 +419,11 @@ public sealed partial class LocalPlayerInputController
         if (!NetworkManager.Instance.SendMovementEvent(new MovementEventRequest { @event = kind, info = info }))
             return false;
         lastSent = info;
+        if ((kind == "jump" || kind == "fall") && (rollReported || rollDirection != PlayerInputKeys.None))
+        {
+            rollReported = false;
+            ResetRollInput();
+        }
         if (kind == "turn_start" || kind == "turn_stop")
         {
             lastTurnEventAt = now;

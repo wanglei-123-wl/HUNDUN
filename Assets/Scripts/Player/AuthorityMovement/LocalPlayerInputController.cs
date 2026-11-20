@@ -14,6 +14,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private float rollCameraYaw;
     private double rollRequestedAt;
     private bool rollEntered;
+    private bool rollReported;
     private LocalPlayerReconciler reconciler;
     private LocalPlayerVisualSmoother visualSmoother;
     private LocalPlayerCombatController combatController;
@@ -178,6 +179,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     {
         combatController?.CancelCombatApproach();
         EndMeditation();
+        rollReported = false;
+        ResetRollInput();
     }
 
     private void RefreshEffectState()
@@ -256,7 +259,11 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (!enabled)
         {
             RefreshMeditationScope();
-            if (movementSession?.IsLocalPlayerDead == true) EndMeditation();
+            if (movementSession?.IsLocalPlayerDead == true)
+            {
+                EndMeditation();
+                rollReported = false;
+            }
             RefreshEffectState();
             ResetRollInput();
             return;

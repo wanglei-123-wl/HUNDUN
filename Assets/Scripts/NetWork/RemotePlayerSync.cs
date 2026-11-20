@@ -81,6 +81,7 @@ public partial class RemotePlayerSync : MonoBehaviour
             return;
         }
 
+        UpdateRemoteRoll();
         Vector3 destination = targetPosition;
         if (!IsDead && movement?.mode == "normal")
         {
@@ -169,6 +170,8 @@ public partial class RemotePlayerSync : MonoBehaviour
             lastAttackActionSequence = 0;
             lastAttackEventId = 0;
             lifeCombatRevision = -1;
+            EndRemoteRoll();
+            lastRemoteRollId = 0;
             meditationRevision = -1;
             SetRemoteMeditationPosture(false);
             IsDead = false;
@@ -186,7 +189,7 @@ public partial class RemotePlayerSync : MonoBehaviour
 
     public bool ApplyServerState(PlayerNetworkState state)
     {
-        if (state == null)
+        if (state == null || (state.movement?.ActiveRoll != null && !state.movement.IsValid))
         {
             return false;
         }
@@ -243,7 +246,7 @@ public partial class RemotePlayerSync : MonoBehaviour
     public bool ApplyMovementEvent(RemoteMovementSnapshot incoming)
     {
         if (!initialized || incoming?.IsValid != true
-            || (movement != null && incoming.revision <= movement.revision))
+            || (movement != null && (incoming.epoch < movement.epoch || incoming.revision <= movement.revision)))
             return false;
 
         bool wasAirborne = movement != null && (movement.info.flags & MovementEventFlags.Falling) != 0;
@@ -258,6 +261,7 @@ public partial class RemotePlayerSync : MonoBehaviour
         var flags = movement.info.flags;
         bool walking = (flags & MovementEventFlags.Walking) != 0;
         bool airborne = (flags & MovementEventFlags.Falling) != 0;
+        ApplyRemoteRoll(incoming.ActiveRoll);
         if (movementGroundedParameter) animator.SetBool("IsGrounded", !airborne);
         if (movementJumpParameter && airborne && !wasAirborne && movement.info.jumpSpeed > 0f && !IsDead)
             animator.SetTrigger("Jump");
@@ -298,7 +302,11 @@ public partial class RemotePlayerSync : MonoBehaviour
             return;
 
         IsDead = dead;
-        if (dead) SetRemoteMeditationPosture(false);
+        if (dead)
+        {
+            EndRemoteRoll();
+            SetRemoteMeditationPosture(false);
+        }
         currentAnim = "";
         PlayerDeathAnimation.SetDead(animator, dead, alreadyDeadAtSpawn);
     }
@@ -351,6 +359,8 @@ public partial class RemotePlayerSync : MonoBehaviour
 
     public void ClearPendingSnapshots()
     {
+        EndRemoteRoll();
+        lastRemoteRollId = 0;
         lastServerTick = 0;
         movement = null;
         VisibilityRevision = 0;
@@ -441,6 +451,7 @@ public partial class RemotePlayerSync : MonoBehaviour
             return;
         }
 
+        if (remoteRollPlaying) return;
         string targetState = isMoving ? runStateName : idleStateName;
 
         if (animator.HasState(0, Animator.StringToHash(targetState)))
@@ -455,6 +466,7 @@ public partial class RemotePlayerSync : MonoBehaviour
         hasRunningParameter = false;
         hasAttackTriggerParameter = false;
         movementGroundedParameter = movementJumpParameter = meditationAnimatorParameter = false;
+        CacheRemoteRollClip();
 
         if (animator == null)
         {

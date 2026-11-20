@@ -41,7 +41,11 @@ public partial class RemotePlayerSync
 
     private void LateUpdate() => PublishRemoteMeditationEffect();
 
-    private void OnDisable() => remoteEffectState?.Clear();
+    private void OnDisable()
+    {
+        EndRemoteRoll();
+        remoteEffectState?.Clear();
+    }
 
     private void PublishRemoteMeditationEffect()
     {

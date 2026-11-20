@@ -20,7 +20,7 @@ public class MovementReferencedRequest : NetMessageBase
 public sealed class MovementEventPolicy
 {
     public const int Version = 2;
-    public const int BroadcastVersion = 1;
+    public const int BroadcastVersion = 2;
     public const int MonsterSyncVersion = 2;
     public const string IncompatibleServerMessage =
         "游戏服务器的移动或怪物同步协议版本不匹配，请确认客户端与服务端版本配套。";
@@ -115,9 +115,26 @@ public sealed class RemoteMovementSnapshot
     public long epoch, revision, serverTime;
     public string mode;
     public MovementEventInfo info;
+    public RemoteRollSnapshot roll;
+
+    // JsonUtility initializes absent nested objects with all-zero fields.
+    public RemoteRollSnapshot ActiveRoll => roll != null && (roll.id != 0 || roll.elapsedMs != 0) ? roll : null;
 
     public bool IsValid => revision > 0 && epoch > 0 && info != null
-        && (mode == "normal" || mode == "controlled" || mode == "recovery");
+        && (mode == "normal" || mode == "controlled" || mode == "recovery")
+        && (ActiveRoll == null || (mode == "normal" && (info.flags & MovementEventFlags.Falling) == 0
+            && roll.IsValidFor(revision)));
+}
+
+[Serializable]
+public sealed class RemoteRollSnapshot
+{
+    public const int MaxDurationMs = 2000;
+    public long id;
+    public int elapsedMs;
+
+    internal bool IsValidFor(long revision) =>
+        id > 0 && id <= revision && elapsedMs >= 0 && elapsedMs < MaxDurationMs;
 }
 
 [Serializable]

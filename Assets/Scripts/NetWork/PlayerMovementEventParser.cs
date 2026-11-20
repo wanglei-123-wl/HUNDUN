@@ -6,13 +6,15 @@ internal static class PlayerMovementEventParser
 {
     private const string MessageId = "player_movement_event";
     private const int GroundFieldCount = 14;
-    private const int AirFieldCount = 16;
+    private const int ExtendedFieldCount = 16;
+    private const int RollStartCode = 13;
+    private const int RollEndCode = 14;
 
     // The array indexes match MovementBroadcastEvent and MovementBroadcastMode in Game.Protocol.
     private static readonly string[] Events =
     {
         "control", "start", "stop", "turn_start", "turn_stop", "facing", "walk",
-        "run", "jump", "fall", "land", "ceiling", "heartbeat"
+        "run", "jump", "fall", "land", "ceiling", "heartbeat", "roll_start", "roll_end"
     };
 
     private static readonly string[] Modes = { "normal", "controlled", "recovery" };
@@ -51,7 +53,7 @@ internal static class PlayerMovementEventParser
         string sceneSessionId = ReadString(root["sceneSessionId"]);
         if (string.IsNullOrWhiteSpace(sceneId) || string.IsNullOrWhiteSpace(sceneSessionId)
             || !(root["data"] is JArray data)
-            || (data.Count != GroundFieldCount && data.Count != AirFieldCount))
+            || (data.Count != GroundFieldCount && data.Count != ExtendedFieldCount))
             return false;
 
         if (!TryInteger(data[0], out long characterDbId, minimum: 1)
@@ -72,13 +74,26 @@ internal static class PlayerMovementEventParser
 
         var flags = (MovementEventFlags)flagsValue;
         bool airborne = (flags & MovementEventFlags.Falling) != 0;
-        if (data.Count != (airborne ? AirFieldCount : GroundFieldCount))
+        if (airborne && data.Count != ExtendedFieldCount)
             return false;
 
         float velocityY = 0;
         float jumpSpeed = 0;
         if (airborne && (!TryNumber(data[14], out velocityY) || !TryNumber(data[15], out jumpSpeed)))
             return false;
+
+        RemoteRollSnapshot roll = null;
+        if (!airborne && data.Count == ExtendedFieldCount)
+        {
+            if (modeCode != 0 || eventCode == RollEndCode
+                || !TryInteger(data[14], out long rollId, minimum: 1, maximum: revision)
+                || !TryInteger(data[15], out long elapsed, maximum: RemoteRollSnapshot.MaxDurationMs - 1)
+                || (eventCode == RollStartCode && rollId != revision))
+                return false;
+            roll = new RemoteRollSnapshot { id = rollId, elapsedMs = (int)elapsed };
+        }
+
+        if (eventCode == RollStartCode && roll == null) return false;
 
         message = new PlayerMovementEventMessage
         {
@@ -93,6 +108,7 @@ internal static class PlayerMovementEventParser
                 revision = revision,
                 mode = Modes[modeCode],
                 serverTime = serverTime,
+                roll = roll,
                 info = new MovementEventInfo
                 {
                     x = x, y = y, z = z, yaw = yaw, flags = flags,

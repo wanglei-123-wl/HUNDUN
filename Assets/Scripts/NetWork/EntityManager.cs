@@ -60,6 +60,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         RemoveMessageRegistration();
         RemoveNetworkRegistration();
         ClearMeditationPresentation();
+        ClearRollPresentation();
         remoteSkillCastInbox.EndSession(activeConnectionEpoch);
         remoteSkillTimeline.EndSession(activeConnectionEpoch);
         remoteSkillEffects.Clear();
@@ -89,6 +90,7 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         if (connectionEpoch == activeConnectionEpoch)
         {
             ClearMeditationPresentation();
+            ClearRollPresentation();
             remoteSkillEffects.Clear();
         }
     }
@@ -591,11 +593,20 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
             if (player != null) player.ClearMeditationPresentation();
     }
 
+    private void ClearRollPresentation()
+    {
+        pendingMovement.Clear();
+        foreach (RemotePlayerSync player in remotePlayers.Values)
+            if (player != null) player.EndRemoteRoll();
+    }
+
     private void HandleMovementEvent(string json)
     {
+        var network = NetworkManager.Instance;
         if (!PlayerMovementEventParser.TryParse(json, out var message)
             || message.characterDbId == localCharacterDbId || !IsActiveScene(message.sceneId)
-            || message.sceneSessionId != NetworkManager.Instance?.SceneSessionId)
+            || message.sceneSessionId != network?.SceneSessionId
+            || activeConnectionEpoch != network?.ConnectionEpoch)
             return;
 
         if (remotePlayers.TryGetValue(message.characterDbId, out var player) && player != null)
@@ -612,7 +623,8 @@ public class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBattleSync
         {
             if (message.visibilityRevision < previous.visibilityRevision
                 || (message.visibilityRevision == previous.visibilityRevision
-                    && message.movement.revision <= previous.movement.revision)) return;
+                    && (message.movement.epoch < previous.movement.epoch
+                        || message.movement.revision <= previous.movement.revision))) return;
         }
         else if (pendingMovement.Count >= 512) return;
         pendingMovement[message.characterDbId] = message;
