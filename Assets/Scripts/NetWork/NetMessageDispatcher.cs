@@ -206,6 +206,8 @@ public class NetMessageDispatcher
             return;
         }
 
+        if (deferringWorldMessages && header.msgId == PlayerDrinkEventMessage.MessageId) return;
+
         bool isWorldChat = (header.msgId == "chat_message" && header.channel == "world")
             || header.msgId == "world_chat_history"
             || header.msgId == "chat_send_result";

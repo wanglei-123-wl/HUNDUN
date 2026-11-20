@@ -182,6 +182,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         EndMeditation();
         rollReported = false;
         ResetRollInput();
+        ClearGroundSlide();
     }
 
     private void RefreshEffectState()
@@ -268,6 +269,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
             }
             RefreshEffectState();
             ResetRollInput();
+            ClearGroundSlide();
             return;
         }
 
