@@ -32,13 +32,13 @@ namespace Game.CharacterPanel.Presentation
         [SerializeField] private TMP_Text comprehension;
         [SerializeField] private TMP_Text currentExperience;
         [SerializeField] private TMP_Text requiredExperience;
-        [SerializeField] private TMP_Text totalExperience;
         [SerializeField] private Slider experienceSlider;
         [SerializeField] private Image experienceFill;
         private const string ProfessionRankNames = "一二三四五六七八九";
         private CultivationSessionRuntime cultivationRuntime;
         private bool subscribed;
         private int currentHp = -1;
+        private int maxHp;
 
         private void OnEnable()
         {
@@ -118,7 +118,7 @@ namespace Game.CharacterPanel.Presentation
         private void HandleStateChanged(CombatEntityKey key, CombatStateData state)
         {
             if (session == null || session.LocalEnterWorldHp < 0
-                || session.LocalCharacterDbId <= 0 || state == null
+                || session.LocalCharacterDbId <= 0 || state == null || state.MaxHp <= 0
                 || state.CombatRevision < session.LocalEnterWorldCombatRevision
                 || !string.Equals(key.EntityType, "player", StringComparison.Ordinal)
                 || !string.Equals(key.EntityId,
@@ -126,6 +126,7 @@ namespace Game.CharacterPanel.Presentation
                     StringComparison.Ordinal)) return;
 
             currentHp = state.Hp;
+            maxHp = state.MaxHp;
             RenderHealth();
         }
 
@@ -137,6 +138,7 @@ namespace Game.CharacterPanel.Presentation
                     ? session.LocalNickname : "--";
             if (realm != null) realm.text = "--";
             currentHp = session != null ? session.LocalEnterWorldHp : -1;
+            maxHp = session != null ? session.LocalEnterWorldMaxHp : 0;
             if (session != null && session.LocalEnterWorldHp >= 0
                 && session.LocalCharacterDbId > 0 && stateStore != null
                 && stateStore.TryGetState("player",
@@ -146,6 +148,7 @@ namespace Game.CharacterPanel.Presentation
                     new CombatEntityKey("player",
                         session.LocalCharacterDbId.ToString(CultureInfo.InvariantCulture)),
                     state);
+            RenderHealth();
             RenderAttributes(session != null ? session.LocalAttributeSnapshot : null);
             RenderProgression(session != null ? session.LocalProgressionSnapshot : null);
             if (alchemyTitle != null || forgingTitle != null || comprehension != null)
@@ -199,7 +202,6 @@ namespace Game.CharacterPanel.Presentation
                 critRate.text = values == null ? "--" : FormatBps(values.critRateBps);
             if (critDamage != null)
                 critDamage.text = values == null ? "--" : FormatBps(values.critDamageBps);
-            RenderHealth();
         }
 
         private void RenderProgression(ProgressionSnapshotResult result)
@@ -230,8 +232,6 @@ namespace Game.CharacterPanel.Presentation
                     ? cultivation.Progress : cultivation.Current;
             if (requiredExperience != null && requiredExperience != currentExperience)
                 requiredExperience.text = cultivation.Required;
-            if (totalExperience != null)
-                totalExperience.text = cultivation.Total;
 
             if (experienceSlider != null)
                 experienceSlider.value = cultivation.FillAmount;
@@ -246,26 +246,16 @@ namespace Game.CharacterPanel.Presentation
 
         private void RenderHealth()
         {
-            AttributeSnapshotResult attributes = session != null
-                ? session.LocalAttributeSnapshot : null;
-            bool hasMaxHp = attributes != null && attributes.success
-                && attributes.characterDbId == session.LocalCharacterDbId
-                && attributes.final != null;
-            int maxHp = hasMaxHp ? attributes.final.maxHp : 0;
+            bool available = currentHp >= 0 && maxHp > 0;
             if (healthFill != null)
-                healthFill.fillAmount = currentHp >= 0 && maxHp > 0
+                healthFill.fillAmount = available
                     ? Mathf.Clamp01(currentHp / (float)maxHp)
                     : 0f;
-            if (health == null) return;
-            if (currentHp < 0)
-            {
-                health.text = "--";
-                return;
-            }
-            string value = currentHp.ToString(CultureInfo.InvariantCulture);
-            health.text = hasMaxHp
-                ? value + "/" + maxHp.ToString(CultureInfo.InvariantCulture)
-                : value;
+            if (health != null)
+                health.text = available
+                    ? Math.Min(currentHp, maxHp).ToString(CultureInfo.InvariantCulture) + "/"
+                        + maxHp.ToString(CultureInfo.InvariantCulture)
+                    : "--";
         }
 
         private void Clear()
@@ -285,10 +275,10 @@ namespace Game.CharacterPanel.Presentation
             RenderCultivation(null);
             if (currentExperience != null) currentExperience.text = "--";
             if (requiredExperience != null) requiredExperience.text = "--";
-            if (totalExperience != null) totalExperience.text = "--";
             if (experienceSlider != null) experienceSlider.value = 0f;
             if (experienceFill != null) experienceFill.fillAmount = 0f;
             currentHp = -1;
+            maxHp = 0;
         }
 
         private void ResolveReferences()
@@ -305,7 +295,7 @@ namespace Game.CharacterPanel.Presentation
             if (attack == null || defense == null || mana == null
                 || magicAttack == null || magicDefense == null || critRate == null
                 || critDamage == null || currentExperience == null
-                || requiredExperience == null || totalExperience == null)
+                || requiredExperience == null)
             {
                 foreach (TMP_Text text in GetComponentsInChildren<TMP_Text>(true))
                 {
@@ -328,10 +318,6 @@ namespace Game.CharacterPanel.Presentation
                         case "升级所需经验":
                         case "所需经验":
                             if (requiredExperience == null) requiredExperience = text;
-                            break;
-                        case "总经验":
-                        case "历史经验":
-                            if (totalExperience == null) totalExperience = text;
                             break;
                     }
                 }

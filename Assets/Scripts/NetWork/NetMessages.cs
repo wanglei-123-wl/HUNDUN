@@ -105,6 +105,7 @@ public sealed class AttributeSnapshotResult : NetMessageBase
     public long characterDbId;
     public long attributeRevision;
     public long combatRevision;
+    public long serverTime;
     public AttributeSnapshotFinal final;
     public string errorCode;
     public string message;

@@ -20685,7 +20685,6 @@ MonoBehaviour:
   comprehension: {fileID: 0}
   currentExperience: {fileID: 0}
   requiredExperience: {fileID: 0}
-  totalExperience: {fileID: 0}
   experienceSlider: {fileID: 0}
   experienceFill: {fileID: 722376669}
 --- !u!1 &1184104598

@@ -120,10 +120,17 @@ public partial class GameSession : MonoBehaviour
     private long pendingAttributeSnapshotSequence;
     private float lastAttributeSnapshotRequestAt = float.NegativeInfinity;
     private bool attributeRefreshQueued;
+    private const float BreakthroughAttributeWaitSeconds = 0.5f;
+    private float breakthroughAttributeRefreshAt = float.PositiveInfinity;
+    private long breakthroughAttributeServerTime;
+    private bool breakthroughAttributeRepairQueued;
     private long nextProgressionSnapshotSequence;
     private long pendingProgressionSnapshotSequence;
     private float lastProgressionSnapshotRequestAt = float.NegativeInfinity;
     private bool progressionRefreshQueued;
+    private bool breakthroughProgressionRefreshQueued;
+    private long manaUpdateVersion;
+    private long progressionRequestManaVersion;
     private long nextAttackModeRequestSequence;
     private long defaultAttackModeConnectionEpoch;
     private string defaultAttackModeSceneSessionId;
@@ -174,6 +181,7 @@ public partial class GameSession : MonoBehaviour
     }
     public bool PvpEnabled { get; private set; }
     public int LocalEnterWorldHp { get; private set; } = -1;
+    public int LocalEnterWorldMaxHp { get; private set; }
     public long LocalEnterWorldCombatRevision { get; private set; } = -1;
     public AttributeSnapshotResult LocalAttributeSnapshot { get; private set; }
     public ProgressionSnapshotResult LocalProgressionSnapshot { get; private set; }
@@ -229,6 +237,7 @@ public partial class GameSession : MonoBehaviour
         锻造会话运行时.Instance?.SuspendSession(this);
         Game.PlayerTrade.Protocol.PlayerTradeRequestSequence.Suspend();
         LocalEnterWorldHp = -1;
+        LocalEnterWorldMaxHp = 0;
         LocalEnterWorldCombatRevision = -1;
         ResetAttributeSnapshot();
         ResetProgressionSnapshot();
@@ -340,6 +349,7 @@ public partial class GameSession : MonoBehaviour
         锻造会话运行时.Instance?.SuspendSession(this);
         Game.PlayerTrade.Protocol.PlayerTradeRequestSequence.Suspend();
         LocalEnterWorldHp = -1;
+        LocalEnterWorldMaxHp = 0;
         LocalEnterWorldCombatRevision = -1;
         ResetAttributeSnapshot();
         ResetProgressionSnapshot();
@@ -518,8 +528,7 @@ public partial class GameSession : MonoBehaviour
             RecoverWorldSession("map_transfer_snapshots_incomplete");
             return;
         }
-        if (attributeRefreshQueued) RequestAttributeSnapshot();
-        if (progressionRefreshQueued) RequestProgressionSnapshot();
+        FlushSnapshotRefreshes();
         RetryTimedOutSkillLearn();
         UpdateSkillBarSave();
         UpdateDefaultAttackMode();
@@ -593,6 +602,7 @@ public partial class GameSession : MonoBehaviour
         锻造会话运行时.Instance?.SuspendSession(this);
         Game.PlayerTrade.Protocol.PlayerTradeRequestSequence.Suspend();
         LocalEnterWorldHp = -1;
+        LocalEnterWorldMaxHp = 0;
         LocalEnterWorldCombatRevision = -1;
         ResetAttributeSnapshot();
         ResetProgressionSnapshot();
@@ -748,6 +758,7 @@ public partial class GameSession : MonoBehaviour
         锻造会话运行时.Instance?.SuspendSession(this);
         Game.PlayerTrade.Protocol.PlayerTradeRequestSequence.Suspend();
         LocalEnterWorldHp = -1;
+        LocalEnterWorldMaxHp = 0;
         LocalEnterWorldCombatRevision = -1;
         ResetAttributeSnapshot();
         ResetProgressionSnapshot();
@@ -975,6 +986,7 @@ public partial class GameSession : MonoBehaviour
         锻造会话运行时.Instance?.SuspendSession(this);
         Game.PlayerTrade.Protocol.PlayerTradeRequestSequence.Suspend();
         LocalEnterWorldHp = -1;
+        LocalEnterWorldMaxHp = 0;
         LocalEnterWorldCombatRevision = -1;
         ResetAttributeSnapshot();
         ResetProgressionSnapshot();
@@ -1215,8 +1227,9 @@ public partial class GameSession : MonoBehaviour
             resultCharacterDbId, ForgingProtocolVersion, ForgingOperationSessionId);
         Game.PlayerTrade.Protocol.PlayerTradeRequestSequence.EnterWorld(
             PlayerTradeOperationSessionId, resultCharacterDbId);
-        LocalEnterWorldHp = selfState != null && selfState.maxHp > 0
-            ? Mathf.Clamp(selfState.hp, 0, selfState.maxHp) : -1;
+        LocalEnterWorldMaxHp = selfState?.maxHp ?? 0;
+        LocalEnterWorldHp = LocalEnterWorldMaxHp > 0
+            ? Mathf.Clamp(selfState.hp, 0, LocalEnterWorldMaxHp) : -1;
         SetLocalPlayerDead(IsLocalPlayerDeadAtSpawn(selfState));
         LocalEnterWorldCombatRevision = selfState == null
             ? -1 : selfState.combatRevision;
@@ -1389,6 +1402,18 @@ public partial class GameSession : MonoBehaviour
             Debug.LogWarning("[AttackMode] 全体模式切换未确认。errorCode=" + result.errorCode);
     }
 
+    private void FlushSnapshotRefreshes()
+    {
+        if (Time.unscaledTime >= breakthroughAttributeRefreshAt)
+        {
+            breakthroughAttributeRefreshAt = float.PositiveInfinity;
+            breakthroughAttributeRepairQueued = true;
+            attributeRefreshQueued = true;
+        }
+        if (attributeRefreshQueued) RequestAttributeSnapshot();
+        if (progressionRefreshQueued) RequestProgressionSnapshot();
+    }
+
     public void RequestAttributeSnapshot()
     {
         if (!sessionStarted || returningToLogin || !gameSessionAccepted
@@ -1404,6 +1429,13 @@ public partial class GameSession : MonoBehaviour
         pendingAttributeSnapshotSequence = sequence;
         lastAttributeSnapshotRequestAt = Time.unscaledTime;
         attributeRefreshQueued = false;
+        if (breakthroughAttributeRepairQueued)
+        {
+            breakthroughAttributeRepairQueued = false;
+            // Gate handles the repair query before the growth query on this connection.
+            breakthroughProgressionRefreshQueued = true;
+            progressionRefreshQueued = true;
+        }
         Debug.Log("[AttributeSnapshot][TX] requestSequence=" + sequence);
     }
 
@@ -1418,17 +1450,19 @@ public partial class GameSession : MonoBehaviour
     {
         if (!sessionStarted || returningToLogin || !gameSessionAccepted
             || localCharacterDbId <= 0 || networkManager == null
-            || !networkManager.IsConnected
-            || Time.unscaledTime - lastProgressionSnapshotRequestAt < 1f) return;
-        if (pendingProgressionSnapshotSequence != 0
-            && Time.unscaledTime - lastProgressionSnapshotRequestAt < 10f) return;
+            || !networkManager.IsConnected) return;
+        float elapsed = Time.unscaledTime - lastProgressionSnapshotRequestAt;
+        if (!breakthroughProgressionRefreshQueued && elapsed < 1f) return;
+        if (pendingProgressionSnapshotSequence != 0 && elapsed < 10f) return;
 
         long sequence = nextProgressionSnapshotSequence + 1;
         if (!networkManager.Send(new ProgressionSnapshotRequest(sequence))) return;
         nextProgressionSnapshotSequence = sequence;
         pendingProgressionSnapshotSequence = sequence;
+        progressionRequestManaVersion = manaUpdateVersion;
         lastProgressionSnapshotRequestAt = Time.unscaledTime;
         progressionRefreshQueued = false;
+        breakthroughProgressionRefreshQueued = false;
         Debug.Log("[ProgressionSnapshot][TX] requestSequence=" + sequence);
     }
 
@@ -1446,11 +1480,16 @@ public partial class GameSession : MonoBehaviour
             || result.characterDbId != localCharacterDbId)
             return;
 
-        // Any pre-breakthrough snapshot still in flight cannot overwrite this result.
-        pendingProgressionSnapshotSequence = 0;
+        bool freshSuccess = result.success && !result.idempotentReplay;
         progressionRefreshQueued = true;
-        if (result.success && !result.idempotentReplay
-            && LocalProgressionSnapshot != null
+        // Keep one request in flight. Its reply is ignored if a breakthrough needs newer data.
+        breakthroughProgressionRefreshQueued = true;
+        if (freshSuccess)
+        {
+            breakthroughAttributeServerTime = result.serverTime;
+            breakthroughAttributeRefreshAt = Time.unscaledTime + BreakthroughAttributeWaitSeconds;
+        }
+        if (freshSuccess && LocalProgressionSnapshot != null
             && !string.IsNullOrWhiteSpace(result.jingjieId)
             && !string.IsNullOrWhiteSpace(result.jingjieName)
             && result.jingjieStage >= 0 && result.jingjieExp >= 0
@@ -1471,7 +1510,6 @@ public partial class GameSession : MonoBehaviour
             LocalProgressionSnapshot.totalJingjieExp = result.totalJingjieExp;
             LocalProgressionSnapshotChanged?.Invoke(LocalProgressionSnapshot);
         }
-        RequestProgressionSnapshot();
         if (result.success)
             RefiningSessionRuntime.Instance?.RequestSnapshot();
     }
@@ -1486,6 +1524,7 @@ public partial class GameSession : MonoBehaviour
             return false;
         }
 
+        manaUpdateVersion++;
         LocalProgressionSnapshot.currentMp = currentMp;
         LocalProgressionSnapshot.maxMp = maxMp;
         LocalProgressionSnapshotChanged?.Invoke(LocalProgressionSnapshot);
@@ -1514,22 +1553,31 @@ public partial class GameSession : MonoBehaviour
         AttributeSnapshotResult result;
         try { result = JsonUtility.FromJson<AttributeSnapshotResult>(json); }
         catch (System.Exception) { return; }
-        if (result == null || pendingAttributeSnapshotSequence == 0
-            || result.requestSequence != pendingAttributeSnapshotSequence
+        if (result == null || localCharacterDbId <= 0
             || result.characterDbId != localCharacterDbId
             || !sessionStarted || !gameSessionAccepted || returningToLogin) return;
 
-        pendingAttributeSnapshotSequence = 0;
+        bool automatic = result.requestSequence == 0;
+        if (automatic ? !IsWorldReady : result.requestSequence != pendingAttributeSnapshotSequence)
+            return;
+        if (!automatic)
+            pendingAttributeSnapshotSequence = 0;
         Debug.Log("[AttributeSnapshot][RX] requestSequence=" + result.requestSequence
             + " success=" + result.success
             + " attributeRevision=" + result.attributeRevision);
-        if (!result.success || result.final == null)
+        if (!result.success || result.final == null || result.final.maxHp <= 0
+            || result.attributeRevision < 0 || result.combatRevision < 0)
         {
             Debug.LogWarning("Attribute snapshot failed: " + (result.errorCode ?? result.message));
             return;
         }
         if (LocalAttributeSnapshot != null
-            && result.attributeRevision < LocalAttributeSnapshot.attributeRevision) return;
+            && (result.attributeRevision < LocalAttributeSnapshot.attributeRevision
+                || (result.attributeRevision == LocalAttributeSnapshot.attributeRevision
+                    && result.combatRevision < LocalAttributeSnapshot.combatRevision))) return;
+
+        if (result.serverTime >= breakthroughAttributeServerTime)
+            breakthroughAttributeRefreshAt = float.PositiveInfinity;
         LocalAttributeSnapshot = result;
         LocalAttributeSnapshotChanged?.Invoke(result);
     }
@@ -1547,9 +1595,11 @@ public partial class GameSession : MonoBehaviour
             return;
         if (result.characterDbId != localCharacterDbId)
             return;
+        pendingProgressionSnapshotSequence = 0;
+        if (breakthroughProgressionRefreshQueued)
+            return;
         if (!result.success)
         {
-            pendingProgressionSnapshotSequence = 0;
             Debug.LogWarning("Progression snapshot failed: "
                 + (result.errorCode ?? result.message));
             return;
@@ -1564,12 +1614,17 @@ public partial class GameSession : MonoBehaviour
                 result.nextJingjieId, result.nextJingjieStage,
                 result.nextJingjieName))
         {
-            pendingProgressionSnapshotSequence = 0;
             Debug.LogWarning("Progression snapshot has invalid realm fields.");
             return;
         }
 
-        pendingProgressionSnapshotSequence = 0;
+        if (LocalProgressionSnapshot != null && progressionRequestManaVersion != manaUpdateVersion)
+        {
+            if (result.maxMp != LocalProgressionSnapshot.maxMp)
+                progressionRefreshQueued = true;
+            result.currentMp = LocalProgressionSnapshot.currentMp;
+            result.maxMp = LocalProgressionSnapshot.maxMp;
+        }
         LocalProgressionSnapshot = result;
         Debug.Log("[ProgressionSnapshot][RX] requestSequence=" + result.requestSequence
             + " currentMp=" + result.currentMp
@@ -1584,6 +1639,9 @@ public partial class GameSession : MonoBehaviour
         pendingAttributeSnapshotSequence = 0;
         lastAttributeSnapshotRequestAt = float.NegativeInfinity;
         attributeRefreshQueued = false;
+        breakthroughAttributeRefreshAt = float.PositiveInfinity;
+        breakthroughAttributeServerTime = 0;
+        breakthroughAttributeRepairQueued = false;
     }
 
     private void ResetProgressionSnapshot()
@@ -1593,6 +1651,9 @@ public partial class GameSession : MonoBehaviour
         pendingProgressionSnapshotSequence = 0;
         lastProgressionSnapshotRequestAt = float.NegativeInfinity;
         progressionRefreshQueued = false;
+        breakthroughProgressionRefreshQueued = false;
+        manaUpdateVersion = 0;
+        progressionRequestManaVersion = 0;
     }
 
     private void HandleBattleSyncReady(BattleSyncReadyContext context)
@@ -1796,8 +1857,9 @@ public partial class GameSession : MonoBehaviour
             yield break;
         }
         movementInput.SeedMeditationState(result.self.meditation);
-        LocalEnterWorldHp = result.self.maxHp > 0
-            ? Mathf.Clamp(result.self.hp, 0, result.self.maxHp) : -1;
+        LocalEnterWorldMaxHp = result.self.maxHp;
+        LocalEnterWorldHp = LocalEnterWorldMaxHp > 0
+            ? Mathf.Clamp(result.self.hp, 0, LocalEnterWorldMaxHp) : -1;
         if (IsLocalPlayerDeadAtSpawn(result.self)) EnterLocalDeadState();
         if (localGroundRing != null)
             localGroundRing.SetGroundScene(operation.Result.Scene);
@@ -2022,6 +2084,8 @@ public partial class GameSession : MonoBehaviour
         if (!IsWorldReady || localPlayerInputController?.RestoreRespawnControl() != true)
             return false;
         SetLocalPlayerDead(false);
+        pendingProgressionSnapshotSequence = 0;
+        QueueProgressionSnapshotRefresh();
         return true;
     }
 

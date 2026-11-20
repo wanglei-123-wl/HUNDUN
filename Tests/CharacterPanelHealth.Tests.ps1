@@ -93,6 +93,7 @@ public sealed class GameSession
     public long LocalCharacterDbId = 42;
     public string LocalNickname = "tester";
     public int LocalEnterWorldHp = 75;
+    public int LocalEnterWorldMaxHp = 1090;
     public long LocalEnterWorldCombatRevision = 10;
     public AttributeSnapshotResult LocalAttributeSnapshot;
     public ProgressionSnapshotResult LocalProgressionSnapshot;
@@ -158,8 +159,9 @@ public struct CombatEntityKey
 public sealed class CombatStateData
 {
     public int Hp { get; }
+    public int MaxHp { get; }
     public long CombatRevision { get; }
-    public CombatStateData(int hp, long revision) { Hp = hp; CombatRevision = revision; }
+    public CombatStateData(int hp, int maxHp, long revision) { Hp = hp; MaxHp = maxHp; CombatRevision = revision; }
 }
 public sealed class CombatStateStore
 {
@@ -168,9 +170,9 @@ public sealed class CombatStateStore
     public event System.Action<CombatEntityKey, CombatStateData> StateChanged;
     public bool TryGetState(string type, string id, out CombatStateData state) =>
         states.TryGetValue(type + ":" + id, out state);
-    public void Set(string type, string id, int hp, long revision)
+    public void Set(string type, string id, int hp, long revision, int maxHp = 1090)
     {
-        var state = new CombatStateData(hp, revision);
+        var state = new CombatStateData(hp, maxHp, revision);
         states[type + ":" + id] = state;
         StateChanged?.Invoke(new CombatEntityKey(type, id), state);
     }
@@ -236,7 +238,6 @@ $runtime = [Game.Cultivation.Runtime.CultivationSessionRuntime]::new()
 [Game.Cultivation.Runtime.CultivationSessionRuntime]::Instance = $runtime
 $cultivation = [TMPro.TMP_Text]::new()
 $requiredCultivation = [TMPro.TMP_Text]::new()
-$totalCultivation = [TMPro.TMP_Text]::new()
 $healthFill = [UnityEngine.UI.Image]::new()
 $manaFill = [UnityEngine.UI.Image]::new()
 $cultivationFill = [UnityEngine.UI.Image]::new()
@@ -258,15 +259,14 @@ Set-Private $presenterInstance 'critDamage' $critDamage
 Set-Private $presenterInstance 'realm' $realm
 Set-Private $presenterInstance 'currentExperience' $cultivation
 Set-Private $presenterInstance 'requiredExperience' $requiredCultivation
-Set-Private $presenterInstance 'totalExperience' $totalCultivation
 Set-Private $presenterInstance 'experienceFill' $cultivationFill
 Set-Private $presenterInstance 'experienceSlider' $cultivationSlider
 
 Invoke-Private $presenterInstance 'OnEnable'
 Assert-Text $name 'tester' 'Nickname should remain bound.'
-Assert-Text $health '75' 'Opening must use enter_world self.hp.'
+Assert-Text $health '75/1090' 'Opening must use both enter_world health values.'
 Assert-Text $mana '--' 'Mana must wait for a progression snapshot.'
-Assert-Fill $healthFill 0 'HP fill must wait for the maximum HP snapshot.'
+Assert-Fill $healthFill (75.0 / 1090) 'HP fill must use the complete entry pair.'
 Assert-Fill $manaFill 0 'MP fill must wait for a progression snapshot.'
 Assert-Text $attack '--' 'Attributes must wait for a successful server snapshot.'
 Assert-Text $realm '--' 'Realm must wait for a successful progression snapshot.'
@@ -316,7 +316,6 @@ Assert-Text $mana '35/50' 'Current and maximum mana must come from progression.'
 Assert-Fill $manaFill 0.7 'MP fill must match current and maximum mana.'
 Assert-Text $cultivation '40' 'Character panel must show usable cultivation.'
 Assert-Text $requiredCultivation '100' 'Character panel requirement must be next-breakthrough cultivation.'
-Assert-Text $totalCultivation '60' 'Cumulative cultivation must not be level or usable experience.'
 if ([math]::Abs($cultivationFill.fillAmount - 0.4) -gt 0.0001 -or
     [math]::Abs($cultivationSlider.value - 0.4) -gt 0.0001) {
     throw 'Character panel cultivation fill and slider must match the cultivation panel.'
@@ -373,11 +372,11 @@ $result = [AttributeSnapshotResult]::new()
 $result.success = $true; $result.characterDbId = 99; $result.final = $values
 $session.Apply($result)
 Assert-Text $attack '--' 'Another character must not update local attributes.'
-Assert-Fill $healthFill 0 'Another character cannot update local HP fill.'
+Assert-Fill $healthFill (75.0 / 1090) 'Another character cannot update local HP fill.'
 $result.characterDbId = 42; $result.success = $false
 $session.Apply($result)
 Assert-Text $attack '--' 'Failed responses must not update attributes.'
-Assert-Fill $healthFill 0 'A failed attribute result cannot update HP fill.'
+Assert-Fill $healthFill (75.0 / 1090) 'A failed attribute result cannot update HP fill.'
 $result.success = $true
 $session.Apply($result)
 Assert-Text $attack '110' 'Attack must come from final.'
@@ -386,8 +385,8 @@ Assert-Text $magicAttack '75' 'Magic attack must come from final.'
 Assert-Text $magicDefense '32' 'Magic defense must come from final.'
 Assert-Text $critRate '5%' 'Critical rate must convert basis points.'
 Assert-Text $critDamage '150%' 'Critical damage must convert basis points.'
-Assert-Text $health '75/1090' 'Max HP must come from final; current HP from enter_world.'
-Assert-Fill $healthFill (75.0 / 1090) 'HP fill must use enter_world HP and final maximum HP.'
+Assert-Text $health '75/1090' 'An attribute snapshot must not replace the entry health pair.'
+Assert-Fill $healthFill (75.0 / 1090) 'HP fill must use the complete entry health pair.'
 $store.Set('player', '99', 5, 11)
 $store.Set('monster', '42', 5, 11)
 $store.Set('player', '42', 5, 9)
@@ -398,23 +397,28 @@ Assert-Text $health '60/1090' 'Current local combat state must update health.'
 Assert-Fill $healthFill (60.0 / 1090) 'Damage must shrink HP fill.'
 $store.Set('player', '42', 90, 12)
 Assert-Fill $healthFill (90.0 / 1090) 'Healing must grow HP fill.'
-$values.maxHp = 180
+$values.maxHp = 327
 $session.Apply($result)
-Assert-Fill $healthFill 0.5 'A changed maximum HP must refresh HP fill.'
-$values.maxHp = 0
+$store.Set('player', '42', 1023, 13, 1075)
+Assert-Text $health '1023/1075' 'A new combat pair cannot use the old attribute cap of 327.'
+Assert-Fill $healthFill (1023.0 / 1075) 'HP fill must track the same pair as the text.'
+$values.maxHp = 1375
 $session.Apply($result)
-Assert-Fill $healthFill 0 'Zero maximum HP must clear HP fill.'
-$values.maxHp = 1090
-$session.Apply($result)
-Assert-Fill $healthFill (90.0 / 1090) 'Restored maximum HP must refresh HP fill.'
+Assert-Text $health '1023/1075' 'An attribute push cannot overwrite either member of the HP pair.'
+$store.Set('player', '42', 1023, 14, 1375)
+Assert-Text $health '1023/1375' 'Increasing the health cap does not heal the player.'
+$store.Set('player', '42', 0, 15, 1375)
+Assert-Text $health '0/1375' 'Death must retain the current maximum HP.'
+$store.Set('player', '42', 1375, 16, 1375)
+Assert-Text $health '1375/1375' 'Respawn must apply health as one pair.'
 Invoke-Private $presenterInstance 'OnDisable'
 $professionSnapshot.forgingProfession.rank = 9
 $professionSnapshot.totalComprehension = 12345
 $runtime.Apply($professionSnapshot)
 Assert-Text $forgingTitle '炼器学徒' 'The closed panel must unsubscribe from cultivation updates.'
-$store.Set('player', '42', 50, 13)
-Assert-Text $health '90/1090' 'Closed panel must unsubscribe from live updates.'
-Assert-Fill $healthFill (90.0 / 1090) 'Closed panel must retain its last HP fill.'
+$store.Set('player', '42', 50, 17)
+Assert-Text $health '1375/1375' 'Closed panel must unsubscribe from live updates.'
+Assert-Fill $healthFill 1 'Closed panel must retain its last HP fill.'
 Invoke-Private $presenterInstance 'OnEnable'
 Assert-Text $alchemyTitle '一品炼丹师' 'Reopening must use the cached alchemy title.'
 Assert-Text $forgingTitle '九品炼器师' 'Reopening must use the cached forging title.'
@@ -469,7 +473,8 @@ Assert-Text $comprehension '--' 'Clearing the cultivation session must clear the
 Invoke-Private $presenterInstance 'OnDisable'
 
 $bindingsPresent = $scene -match '(?s)m_Script: \{fileID: 11500000, guid: c58c60ffbd7741429aeec66f2da79d4d, type: 3\}.*?stateStore: \{fileID: 1973135054\}.*?health: \{fileID: 476124679\}'
-$entryHpPresent = $sessionSource -match 'LocalEnterWorldHp = selfState'
+$entryHpPresent = $sessionSource -match 'LocalEnterWorldMaxHp = selfState\?\.maxHp' -and
+    $sessionSource -match 'Mathf\.Clamp\(selfState\.hp, 0, LocalEnterWorldMaxHp\)'
 $entryRevisionPresent = $sessionSource -match 'LocalEnterWorldCombatRevision = selfState'
 if (-not ($bindingsPresent -and $entryHpPresent -and $entryRevisionPresent)) {
     throw 'Scene and enter_world self bindings must remain connected.'
@@ -479,6 +484,10 @@ $worldScene = (Get-Content (Join-Path $root 'Assets/Scenes/WorldShell.unity') -R
 $worldPresenter = [regex]::Match($worldScene,
     '(?ms)^--- !u!114 &\d+\r?\n(?:(?!^--- !u!).)*?m_Script: \{fileID: 11500000, guid: c58c60ffbd7741429aeec66f2da79d4d, type: 3\}(?:(?!^--- !u!).)*').Value
 if (-not $worldPresenter) { throw 'WorldShell character presenter is missing.' }
+if ($worldPresenter -match '(?m)^  (totalExperience|attributePoints):' -or
+    $worldScene -match '(?:&|fileID: )200034200[0-7](?!\d)') {
+    throw 'WorldShell must not retain the removed total cultivation and attribute point rows.'
+}
 foreach ($binding in @(
     @('healthFill', '356852590'),
     @('manaFill', '1404490644'),
