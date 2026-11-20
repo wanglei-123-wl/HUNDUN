@@ -44,6 +44,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
 
     private LocalPlayerCombatController combatController;
     private PredictedCharacterMotor movementMotor;
+    private LocalPlayerInputController movementInput;
     private float movementYaw;
     private bool hasMovementYaw;
     private bool alignWithForwardMovement;
@@ -80,6 +81,8 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         hasMovementYaw = activeRotationTarget != null;
         movementMotor = activeRotationTarget == null
             ? null : activeRotationTarget.GetComponent<PredictedCharacterMotor>();
+        movementInput = activeRotationTarget == null
+            ? null : activeRotationTarget.GetComponent<LocalPlayerInputController>();
         float scenePitch = NormalizePitch(transform.eulerAngles.x);
         pitch = Mathf.Approximately(scenePitch, 0f) ? defaultPitch : scenePitch;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
@@ -139,15 +142,18 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         ResetMovementYaw(characterYaw);
     }
 
-    private void UpdateFacingAlignment(Transform character, bool moving, bool manualOrbit, bool uiBlocked)
+    private void UpdateFacingAlignment(Transform character, bool moving, bool manualOrbit, bool uiBlocked,
+        bool automaticallyAvoidingObstacle)
     {
-        if (manualOrbit || uiBlocked || moving)
+        if (manualOrbit || uiBlocked || moving || automaticallyAvoidingObstacle)
         {
             attackFacingYaw = null;
             attackAlignVelocity = 0f;
         }
 
-        if (manualOrbit || uiBlocked)
+        // Automatic detours may turn the model while forward input stays held.
+        // Keep the observation angle and discard recentering momentum until the detour ends.
+        if (manualOrbit || uiBlocked || automaticallyAvoidingObstacle)
         {
             movementAlignVelocity = 0f;
             return;
@@ -263,13 +269,16 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             ? null : combatController.LockedTarget.TargetTransform;
         if (movementMotor == null && activeRotationTarget != null)
             activeRotationTarget.TryGetComponent(out movementMotor);
+        if (movementInput == null && activeRotationTarget != null)
+            activeRotationTarget.TryGetComponent(out movementInput);
+        bool automaticallyAvoidingObstacle = movementInput != null && movementInput.IsAutomaticallyAvoidingObstacle;
         Vector3 velocity = movementMotor == null ? Vector3.zero : movementMotor.Velocity;
         bool moving = velocity.x * velocity.x + velocity.z * velocity.z > 0.0025f;
         bool manualOrbit = leftDragging || rightDragging;
         Vector3 followPosition = activeFollowTarget.position;
 
         bool uiBlocked = GameplayUiInputGuard.BlocksGameplayInput;
-        UpdateFacingAlignment(activeRotationTarget, moving, manualOrbit, uiBlocked);
+        UpdateFacingAlignment(activeRotationTarget, moving, manualOrbit, uiBlocked, automaticallyAvoidingObstacle);
         float scroll = uiBlocked ? 0f : Input.mouseScrollDelta.y;
         if (Mathf.Abs(scroll) > 0.001f)
             desiredDistance = Mathf.Clamp(desiredDistance - scroll * zoomSpeed, minDistance, maxDistance);
@@ -359,6 +368,8 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             : newRotationTarget.GetComponent<LocalPlayerCombatController>();
         movementMotor = newRotationTarget == null
             ? null : newRotationTarget.GetComponent<PredictedCharacterMotor>();
+        movementInput = newRotationTarget == null
+            ? null : newRotationTarget.GetComponent<LocalPlayerInputController>();
         if (changedRotationTarget)
         {
             hasMovementYaw = newRotationTarget != null;

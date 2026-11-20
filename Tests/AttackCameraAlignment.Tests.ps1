@@ -21,7 +21,8 @@ if ($camera -match 'lockedOrbitYaw|UpdateLockedOrbit|ResolveViewRotation|trackMo
     throw 'Persistent target-driven camera rotation must be removed.'
 }
 $late = Read-Block $camera 'private void LateUpdate('
-if ($late -notmatch 'UpdateFacingAlignment\(activeRotationTarget, moving, manualOrbit, uiBlocked\)' -or
+if ($late -notmatch 'UpdateFacingAlignment\(activeRotationTarget, moving, manualOrbit, uiBlocked, automaticallyAvoidingObstacle\)' -or
+    $late -notmatch 'movementInput\.IsAutomaticallyAvoidingObstacle' -or
     $late -notmatch 'transform.rotation = orbitRotation;' -or
     $late -match 'TryGetHorizontalYaw') {
     throw 'The rendered view must use the free orbit and the explicit facing alignment.'
@@ -101,8 +102,10 @@ public sealed class ThirdPersonCameraFollow
     public float Yaw { get => yaw; set => yaw = value; }
     public bool Pending => attackFacingYaw.HasValue;
     private Transform GetRotationTarget() => Character;
-    public void Tick(bool manual = false, bool blocked = false, bool moving = false, bool forward = false)
-    { alignWithForwardMovement = forward; UpdateFacingAlignment(Character, moving, manual, blocked); }
+    public float MovementAlignVelocity => movementAlignVelocity;
+    public void Tick(bool manual = false, bool blocked = false, bool moving = false, bool forward = false,
+        bool avoiding = false)
+    { alignWithForwardMovement = forward; UpdateFacingAlignment(Character, moving, manual, blocked, avoiding); }
     __CAMERA__
 }
 public sealed class LocalPlayerVisualSmoother
@@ -171,6 +174,28 @@ public static class AttackCameraAlignmentTests
         camera.Tick(moving: true);
         Check(!camera.Pending && Near(camera.Yaw, previousYaw), "Strafing must cancel the old attack turn without recentering the view.");
 
+        camera.Yaw = 35;
+        camera.Character.rotation = Quaternion.Euler(0, 120, 0);
+        camera.Tick(moving: true, forward: true);
+        Check(camera.MovementAlignVelocity != 0, "Normal forward movement must still recenter the camera.");
+        previousYaw = camera.Yaw;
+        for (int frame = 0; frame < 60; frame++)
+        {
+            camera.Character.rotation = Quaternion.Euler(0, frame % 2 == 0 ? 120 : 300, 0);
+            camera.Tick(moving: true, forward: true, avoiding: true);
+            Check(Near(camera.Yaw, previousYaw) && camera.MovementAlignVelocity == 0,
+                "Automatic left/right obstacle turns must preserve view yaw and discard recentering momentum.");
+        }
+        camera.AlignWithAttackFacing(180);
+        camera.Tick(moving: true, forward: true, avoiding: true);
+        Check(!camera.Pending && Near(camera.Yaw, previousYaw), "Obstacle avoidance must not retain an old attack camera turn.");
+        camera.Yaw = 70;
+        camera.Tick(manual: true, moving: true, forward: true, avoiding: true);
+        Check(Near(camera.Yaw, 70), "Mouse orbit must remain free during obstacle avoidance.");
+        camera.Character.rotation = Quaternion.Euler(0, 120, 0);
+        camera.Tick(moving: true, forward: true);
+        Check(camera.Yaw > 70 && camera.Yaw < 120, "After avoidance ends, normal forward following must resume smoothly.");
+
         camera = ThirdPersonCameraFollow.Current = new ThirdPersonCameraFollow();
         combat = new CombatFacingHarness();
         combat.Attack(new CombatTargetSelection("player", "player-1", monster));
@@ -187,4 +212,4 @@ $sources = "using System;`nusing UnityEngine;`n" + ((@($selection, $harness) -jo
     -replace '(?m)^using (System|UnityEngine);[ \t]*\r?\n', '')
 Add-Type -TypeDefinition $sources -IgnoreWarnings -WarningAction SilentlyContinue
 [AttackCameraAlignmentTests]::Run()
-Write-Output 'PASS: free target selection, attack-facing smooth camera alignment, manual overrides and movement handoff.'
+Write-Output 'PASS: free target selection, attack alignment, stable obstacle-avoidance camera, manual orbit and movement handoff.'

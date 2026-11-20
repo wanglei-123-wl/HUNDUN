@@ -17,6 +17,7 @@ public sealed partial class LocalPlayerInputController
     private long groundSlideForwardProbeAt;
 
     private bool IsGroundSliding => groundSlideSide != 0;
+    internal bool IsAutomaticallyAvoidingObstacle => IsGroundSliding;
     private MapTraversalQuery MovementMap => movementSession == null ? null : movementSession.CurrentMapTraversal;
 
     private bool CanSlideForInput(PlayerInputFrame input) =>
