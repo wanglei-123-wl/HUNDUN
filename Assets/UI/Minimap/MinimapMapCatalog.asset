@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b738b0d23f1a41b458b3a2d2f2e98769, type: 3}
+  m_Name: MinimapMapCatalog
+  m_EditorClassIdentifier: 
+  maps:
+  - sceneId: world_002
+    mapId: map_001
+    displayName: "\u957F\u98CE\u6751"
+    texture: {fileID: 2800000, guid: 08b3d5dda16c3ae468412e2141a0b3d1, type: 3}
+    minXZ: {x: -202, y: -152}
+    maxXZ: {x: 202, y: 152}
+  - sceneId: world005
+    mapId: map_005
+    displayName: "\u836F\u7075\u8C37"
+    texture: {fileID: 2800000, guid: 8c6a3dbc00c3cf44dafd756eb4cc428c, type: 3}
+    minXZ: {x: -150, y: -400}
+    maxXZ: {x: 150, y: 400}
+  - sceneId: world006
+    mapId: map_006
+    displayName: "\u7EC8\u672B\u5927\u9053"
+    texture: {fileID: 2800000, guid: 6c8939adbd2934c4f887ad61577cdf5d, type: 3}
+    minXZ: {x: -100, y: -300}
+    maxXZ: {x: 100, y: 300}
+  - sceneId: world007
+    mapId: map_007
+    displayName: "\u5251\u51A2\u8352\u539F"
+    texture: {fileID: 2800000, guid: 16b0fcacd3fc646439bdec11fe573006, type: 3}
+    minXZ: {x: -300, y: -300}
+    maxXZ: {x: 300, y: 300}
+  - sceneId: world008
+    mapId: map_008
+    displayName: "\u4E07\u5996\u5CAD"
+    texture: {fileID: 2800000, guid: 4b3c4e59f514ac14390501f35e403d82, type: 3}
+    minXZ: {x: -400, y: -400}
+    maxXZ: {x: 400, y: 400}
+  - sceneId: world009
+    mapId: map_009
+    displayName: "\u96F7\u6CFD\u7981\u5730"
+    texture: {fileID: 2800000, guid: 3c6b491f1cb084348ad13675d71c2563, type: 3}
+    minXZ: {x: -200, y: -200}
+    maxXZ: {x: 200, y: 200}
+  - sceneId: world010
+    mapId: map_010
+    displayName: "\u5730\u8109\u706B\u7A9F"
+    texture: {fileID: 2800000, guid: b678e7b23bb7db04aaf4cb402594812f, type: 3}
+    minXZ: {x: -150, y: -150}
+    maxXZ: {x: 150, y: 150}

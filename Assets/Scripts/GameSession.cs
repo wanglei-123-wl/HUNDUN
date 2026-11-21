@@ -165,6 +165,28 @@ public partial class GameSession : MonoBehaviour
     public bool IsCurrentMap(string worldSceneId, string mapId) => IsWorldReady
         && string.Equals(sceneId, worldSceneId, System.StringComparison.Ordinal)
         && string.Equals(activeMapId, mapId, System.StringComparison.Ordinal);
+    internal bool TryGetMinimapPose(out string worldSceneId, out string mapId,
+        out Vector2 positionXZ, out float yaw)
+    {
+        worldSceneId = null;
+        mapId = null;
+        positionXZ = default;
+        yaw = 0f;
+        if (!IsWorldReady || worldRecoveryPending || mapTransferPaused
+            || WorldEntryLoadingView.ActiveWorldEntry != null
+            || string.IsNullOrEmpty(activeMapId)
+            || localPlayerRootObject == null || !localPlayerRootObject.activeInHierarchy)
+            return false;
+
+        Transform player = localPlayerRootObject.transform;
+        Vector3 position = player.position;
+        worldSceneId = sceneId;
+        mapId = activeMapId;
+        positionXZ = new Vector2(position.x, position.z);
+        yaw = player.eulerAngles.y;
+        return true;
+    }
+
     public MapTraversalQuery CurrentMapTraversal => IsWorldReady && mapTraversal.IsReady(sceneId, activeMapId)
         ? mapTraversal.Current : null;
     internal bool IsMapTraversalReady(string worldSceneId, string mapId) => mapTraversal.IsReady(worldSceneId, mapId);

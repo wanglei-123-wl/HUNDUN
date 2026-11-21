@@ -71,6 +71,23 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
     private long activeConnectionEpoch;
     private BattleSyncSnapshotRoutingMode snapshotRoutingMode = BattleSyncSnapshotRoutingMode.LegacySelfRegistered;
 
+    public void CopyLivingMonsterPositions(string sceneId, List<Vector2> positions)
+    {
+        positions.Clear();
+        if (!isActiveAndEnabled || !string.Equals(activeSceneId, sceneId, StringComparison.Ordinal))
+            return;
+
+        foreach (MonsterClientEntry monster in monsters.Values)
+        {
+            MonsterNetworkView view = monster.networkView;
+            if (view == null || !view.IsTargetable || monster.gameObject == null)
+                continue;
+
+            Vector3 position = monster.gameObject.transform.position;
+            positions.Add(new Vector2(position.x, position.z));
+        }
+    }
+
     private void OnEnable()
     {
         EnsureMessageRegistration();
