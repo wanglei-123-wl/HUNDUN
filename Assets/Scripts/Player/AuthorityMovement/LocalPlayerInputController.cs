@@ -356,7 +356,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
         if (tappedDirections == PlayerInputKeys.None) return;
         if (tappedDirections != PlayerInputKeys.W && tappedDirections != PlayerInputKeys.A
-            && tappedDirections != PlayerInputKeys.S && tappedDirections != PlayerInputKeys.D)
+            && tappedDirections != PlayerInputKeys.D)
         {
             previousDirectionTap = PlayerInputKeys.None;
             return;
