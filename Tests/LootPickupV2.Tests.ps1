@@ -75,6 +75,7 @@ public sealed class PickupFixture
     public readonly LootNetworkSender Sender = new();
     public readonly WorldLootViewManager View = new();
     public readonly LootFeedbackPresenter Feedback = new();
+    public readonly LootSyncService Sync = new();
     public readonly LootPickupService Service;
     public readonly LootErrorHandler Errors;
     public long Tick = 10L;
@@ -90,7 +91,7 @@ public sealed class PickupFixture
     public PickupFixture(LootPickupSessionState session = null)
     {
         Service = new LootPickupService(Store, Sender, View,
-            new LootSyncService(), new LootSystemSettings(), () => Tick,
+            Sync, new LootSystemSettings(), () => Tick,
             () => UnityEngine.Time.realtimeSinceStartup, session);
         Errors = new LootErrorHandler(Store, View, Service, Feedback, new LootErrorTextProvider());
         Service.PickupPending += _ => Pending++;
@@ -183,9 +184,7 @@ Assert-True ($timedOut.Reconciliation -eq 1 -and $timedOut.Sender.Sends -eq 2) '
 Assert-True ($timedOut.Sender.LastSequence -eq 1 -and
     $timedOut.Service.NextRequestSequence -eq 1) 'Retry does not consume another pickup sequence.'
 Assert-True ($timedOut.Sender.Messages.Count -eq 2 -and
-    $timedOut.Sender.Messages[0].Sequence -eq $timedOut.Sender.Messages[1].Sequence -and
-    $timedOut.Sender.Messages[0].Tick -eq $timedOut.Sender.Messages[1].Tick -and
-    $timedOut.Sender.Messages[0].LootId -eq $timedOut.Sender.Messages[1].LootId) 'Timeout retry must preserve all fields of the original pickup request.'
+    $timedOut.Sender.Messages[0] -eq $timedOut.Sender.Messages[1]) 'Timeout retry must preserve all fields of the original pickup request.'
 $timedOut.Service.ResolveReconcilingRequests()
 Assert-True ($timedOut.Service.PickupSuspended -and
     $timedOut.Service.NextRequestSequence -eq 1) 'An unconfirmed timed-out request cannot allocate another sequence.'
@@ -200,9 +199,7 @@ $pendingTimeout.Service.UpdateTimeouts()
 Assert-True ($pendingTimeout.Sender.Sends -eq 2 -and
     $pendingTimeout.Reconciliation -eq 0 -and
     $pendingTimeout.Service.PendingCount -eq 1) 'Pending timeout must query the server with the original request before snapshot repair.'
-Assert-True ($pendingTimeout.Sender.Messages[0].Sequence -eq $pendingTimeout.Sender.Messages[1].Sequence -and
-    $pendingTimeout.Sender.Messages[0].Tick -eq $pendingTimeout.Sender.Messages[1].Tick -and
-    $pendingTimeout.Sender.Messages[0].LootId -eq $pendingTimeout.Sender.Messages[1].LootId) 'Pending retry must preserve all original fields.'
+Assert-True ($pendingTimeout.Sender.Messages[0] -eq $pendingTimeout.Sender.Messages[1]) 'Pending retry must preserve all original fields.'
 $null = $pendingTimeout.Service.HandlePickupResult($pending)
 Assert-True ($pendingTimeout.Pending -eq 1) 'Duplicate pending must not restart the timeout.'
 [UnityEngine.Time]::realtimeSinceStartup = 4
@@ -225,18 +222,24 @@ $beforeSceneChange.Store.Items.Add($lootId, [LootState]::new())
 $beforeSceneChange.Store.Items[$lootId].SceneId = 'world_001'
 $null = $beforeSceneChange.Service.RequestPickup($lootId)
 $afterSceneChange = [PickupFixture]::new($sharedSession)
+$afterSceneChange.Sync.CurrentSceneId = 'world007'
+$destinationLootId = '0199a1b2-c3d4-7e5f-9a9b-0c1d2e3f4a5b'
+$afterSceneChange.Store.Items.Add($destinationLootId, [LootState]::new())
+$afterSceneChange.Store.Items[$destinationLootId].SceneId = 'world007'
 Assert-True ($afterSceneChange.Service.PendingCount -eq 1 -and
     $afterSceneChange.Service.NextRequestSequence -eq 1 -and
-    $afterSceneChange.Service.RequestPickup($lootId) -eq [LootPickupRequestResult]::AlreadyPending) 'Module recreation on the same Gate connection keeps the request.'
+    $afterSceneChange.Service.RequestPickup($destinationLootId) -eq [LootPickupRequestResult]::AlreadyPending) 'The next scene cannot overwrite an unresolved pickup from the source scene.'
 Assert-True ($afterSceneChange.Service.HandlePickupResult($pending) -and
     $afterSceneChange.Service.NextRequestSequence -eq 2) 'Recreated module accepts pending for its original request.'
 Assert-True ($afterSceneChange.Service.HandlePickupResult($success) -and
     $afterSceneChange.Service.PendingCount -eq 0 -and
     $afterSceneChange.Service.NextRequestSequence -eq 2) 'Recreated module accepts the final result.'
-$afterSceneChange.Store.Items.Add($lootId, [LootState]::new())
-$afterSceneChange.Store.Items[$lootId].SceneId = 'world_001'
-Assert-True ($afterSceneChange.Service.RequestPickup($lootId) -eq [LootPickupRequestResult]::Sent -and
-    $afterSceneChange.Sender.LastSequence -eq 2) 'Next pickup uses the consumed sequence plus one.'
+Assert-True ($afterSceneChange.Service.RequestPickup($destinationLootId) -eq [LootPickupRequestResult]::Sent -and
+    $afterSceneChange.Sender.LastSequence -eq 2 -and
+    $afterSceneChange.Sender.Messages[0].Item3 -eq $destinationLootId) 'Next pickup uses the consumed sequence plus one for the destination loot.'
+Assert-True ($afterSceneChange.Service.HandlePickupResult($success) -and
+    $afterSceneChange.Succeeded -eq 1 -and
+    $afterSceneChange.Service.PendingCount -eq 1) 'Duplicate source-scene success cannot credit twice or close the destination request.'
 $afterSceneChange.Service.ResetConnectionState()
 Assert-True ($afterSceneChange.Service.PendingCount -eq 0 -and
     $afterSceneChange.Service.NextRequestSequence -eq 1 -and

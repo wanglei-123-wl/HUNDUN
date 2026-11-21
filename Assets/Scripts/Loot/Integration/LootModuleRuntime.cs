@@ -148,6 +148,19 @@ public sealed class LootModuleRuntime : MonoBehaviour, ILootBattleSyncModule,
         module?.ResetConnectionState(); activeConnectionEpoch = 0;
     }
 
+    public BattleSyncApplyResult SwitchScene(BattleSyncModuleSessionContext context)
+    {
+        if (!context.IsValid) return BattleSyncApplyResult.InvalidMessage;
+        if (context.ConnectionEpoch != activeConnectionEpoch) return BattleSyncApplyResult.IgnoredStale;
+        if (module == null) return BattleSyncApplyResult.RetryableFailure;
+
+        // Ground loot belongs to the scene. Pickup receipts and sequence numbers
+        // remain valid for the same connection after a map transfer.
+        LeaveScene(currentSceneId);
+        EnterScene(context.SceneId);
+        return BattleSyncApplyResult.Applied;
+    }
+
     public BattleSyncApplyResult ApplyLootSnapshot(NewLootSnapshot message)
     {
         if (message == null || !TryInitialize()) return BattleSyncApplyResult.InvalidMessage;
