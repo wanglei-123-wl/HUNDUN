@@ -112,6 +112,11 @@ public sealed partial class PredictedCharacterMotor
             }
         }
 
+        // Keep the native contact probe below the next point on a walkable slope.
+        // A fixed probe can be shorter than the descent during a single movement step.
+        if (onGround && target.y < from.y && query?.FormatVersion == 3)
+            target.y -= GroundProbeExtraDrop(query, from, target);
+
         if (landed) mapCollisions |= CollisionFlags.Below;
         GroundSlideBlockNormal = Vector3.zero;
         if (onGround && limitGroundSegment)
@@ -142,5 +147,19 @@ public sealed partial class PredictedCharacterMotor
                 : displacement.y > 0f ? CollisionFlags.Above : CollisionFlags.None;
         }
         return collisions;
+    }
+
+    private float GroundProbeExtraDrop(MapTraversalQuery query, Vector3 from, Vector3 target)
+    {
+        var horizontal = new Vector2(target.x - from.x, target.z - from.z);
+        if (horizontal.sqrMagnitude == 0f ||
+            !query.TryGetGroundHeight(from.x, from.z, out double sourceGround) ||
+            !query.TryGetGroundHeight(target.x, target.z, out double targetGround))
+            return 0f;
+
+        double drop = sourceGround - targetGround;
+        float slope = Mathf.Min(controller.slopeLimit, 89f) * Mathf.Deg2Rad;
+        float maxDrop = Mathf.Min(.1f, horizontal.magnitude * Mathf.Tan(slope) + .0001f);
+        return drop > 0 && drop <= maxDrop ? (float)drop : 0f;
     }
 }
