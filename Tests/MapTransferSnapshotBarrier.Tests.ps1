@@ -73,4 +73,15 @@ Assert-True ($transferMethod.Contains('!TryBeginModule(moduleBindings.Combat,') 
     $game.Contains('CompleteCommittedTransfer();')) `
     'The transfer must retain business modules and replay after the new scene is ready.'
 
+$lootRuntime = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Loot/Integration/LootModuleRuntime.cs') -Raw
+$switchLootScene = [regex]::Match($lootRuntime,
+    '(?s)public BattleSyncApplyResult SwitchScene\(.*?(?=public BattleSyncApplyResult ApplyLootSnapshot)').Value
+Assert-True ($transferMethod.Contains('loot.SwitchScene(moduleContext)') -and
+    $transferMethod -notmatch '(EndModule|TryBeginModule)\(moduleBindings\.Loot' -and
+    $switchLootScene.Contains('context.ConnectionEpoch != activeConnectionEpoch') -and
+    $switchLootScene.Contains('LeaveScene(currentSceneId);') -and
+    $switchLootScene.Contains('EnterScene(context.SceneId);') -and
+    -not $switchLootScene.Contains('ResetConnectionState')) `
+    'The transfer must clear old ground loot and keep the connection-owned pickup sequence and pending results.'
+
 Write-Output 'PASS: same-connection transfer barrier, scene isolation and repeat-map generation.'

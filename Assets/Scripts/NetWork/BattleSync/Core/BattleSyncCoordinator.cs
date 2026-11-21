@@ -562,7 +562,6 @@ namespace Game.Client.BattleSync
             string moduleError = string.Empty;
             EndModule(moduleBindings.Player, epoch, "Player", ref moduleError);
             EndModule(moduleBindings.Monster, epoch, "Monster", ref moduleError);
-            EndModule(moduleBindings.Loot, epoch, "Loot", ref moduleError);
             EndModule(moduleBindings.Combat, epoch, "Combat", ref moduleError);
             if (!string.IsNullOrEmpty(moduleError))
                 return CreateResult(BattleSyncCoordinatorStatus.ModuleEndFailed,
@@ -581,9 +580,23 @@ namespace Game.Client.BattleSync
                         context.CharacterDbId, context.SnapshotRevision,
                         clock.NowMilliseconds);
                 if (!TryBeginModule(moduleBindings.Player, moduleContext, "Player", out moduleError)
-                    || !TryBeginModule(moduleBindings.Monster, moduleContext, "Monster", out moduleError)
-                    || !TryBeginModule(moduleBindings.Loot, moduleContext, "Loot", out moduleError)
-                    || !TryBeginModule(moduleBindings.Combat, moduleContext, "Combat", out moduleError))
+                    || !TryBeginModule(moduleBindings.Monster, moduleContext, "Monster", out moduleError))
+                    return CreateResult(BattleSyncCoordinatorStatus.ModuleBeginFailed,
+                        operation, epoch, moduleError);
+
+                ILootBattleSyncModule loot = moduleBindings.Loot;
+                if (!IsUnavailableModule(loot))
+                {
+                    BattleSyncApplyResult lootResult = loot.SwitchScene(moduleContext);
+                    if (lootResult != BattleSyncApplyResult.Applied
+                        && lootResult != BattleSyncApplyResult.AlreadyApplied)
+                    {
+                        return CreateResult(BattleSyncCoordinatorStatus.ModuleBeginFailed,
+                            operation, epoch, "Loot module rejected SwitchScene with " + lootResult + ".");
+                    }
+                }
+
+                if (!TryBeginModule(moduleBindings.Combat, moduleContext, "Combat", out moduleError))
                     return CreateResult(BattleSyncCoordinatorStatus.ModuleBeginFailed,
                         operation, epoch, moduleError);
             }

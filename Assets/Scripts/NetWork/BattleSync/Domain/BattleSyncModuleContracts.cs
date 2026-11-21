@@ -201,6 +201,8 @@ namespace Game.Client.BattleSync
     public interface ILootBattleSyncModule
         : IBattleSyncModuleLifecycle
     {
+        BattleSyncApplyResult SwitchScene(BattleSyncModuleSessionContext context);
+
         BattleSyncApplyResult ApplyLootSnapshot(
             Game.Client.BattleSync.Protocol.LootSnapshotMessageDto message);
 
