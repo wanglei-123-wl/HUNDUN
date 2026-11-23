@@ -52,14 +52,27 @@ public sealed class NetMessageDispatcher
     public void Unregister(string id, System.Action<string> action) { handlers.Remove(id); }
     public void Receive(string id, string json) { if (handlers.TryGetValue(id, out var action)) action(json); }
 }
-public sealed class AuthResult { public bool success; }
+public sealed class AuthResult
+{
+    public bool success;
+    public string token, errorCode;
+}
 public sealed class AuthApiClient
 {
     public static string SentToken;
+    public static string RequestId;
+    public static int Timeout;
     public static System.Action<AuthResult> Complete;
-    public void LogoutGameSession(string token, System.Action<AuthResult> handler)
+    public void LogoutGameSession(string token, System.Action<AuthResult> handler, int timeoutSeconds)
     {
         SentToken = token;
+        Timeout = timeoutSeconds;
+        Complete = handler;
+    }
+    public void ReturnToCharacterSelect(string token, string requestId, System.Action<AuthResult> handler)
+    {
+        SentToken = token;
+        RequestId = requestId;
         Complete = handler;
     }
 }
@@ -70,6 +83,9 @@ public static class AuthSessionTest
     public static bool Accept(AuthSession auth, NetworkManager network, long epoch, EnterWorldResult reply) =>
         auth.AcceptGameEntry(network, epoch, reply);
     public static void Logout(AuthSession auth, System.Action callback) => auth.LogoutGameSession(callback);
+    public static void Return(AuthSession auth, System.Action<AuthResult> callback) => auth.ReturnToCharacterSelect(callback);
+    public static bool ConsumeReturn(AuthSession auth) => auth.TryConsumeCharacterSelectReturn();
+    public static void Quit(AuthSession auth) => auth.QuitGame();
 }
 public sealed class NetworkEndpointSnapshot
 {
@@ -95,16 +111,24 @@ namespace UnityEngine
     public class MonoBehaviour
     {
         public GameObject gameObject = new GameObject();
+        public System.Collections.IEnumerator Coroutine;
         public int GetInstanceID() { return 1; }
         public T GetComponent<T>() where T : class { return null; }
+        protected void StartCoroutine(System.Collections.IEnumerator coroutine)
+        {
+            Coroutine = coroutine;
+            coroutine.MoveNext();
+        }
         protected static void Destroy(object value) {}
         protected static void DontDestroyOnLoad(object value) {}
     }
+    public sealed class WaitForSecondsRealtime { public WaitForSecondsRealtime(float seconds) {} }
     public static class Time { public static double realtimeSinceStartupAsDouble; }
     public static class Application
     {
         public static System.Func<bool> wantsToQuit { get; set; }
-        public static void Quit() {}
+        public static int Quits;
+        public static void Quit() { Quits++; }
     }
     public static class JsonUtility
     {
@@ -237,3 +261,50 @@ Assert-True ([AuthApiClient]::SentToken -eq 'logout-game-ticket' -and $network.R
 [AuthApiClient]::Complete.Invoke([AuthResult]@{ success = $true })
 Assert-True ($script:logoutFinished -and $network.Disconnects -eq 1 -and $session.GameSessionToken -eq '') 'Logout completion must clear the ticket and close the original TCP connection.'
 Write-Output 'PASS: lifecycle V1, monotonic expiry, stale epoch, final kick, and HTTP-before-disconnect.'
+
+foreach ($noticeFirst in @($true, $false)) {
+    $session.SaveSession('account-token', 'account-test', 'user-test')
+    $null = $session.SaveGameSession('return-game-ticket', $future)
+    $network = [NetworkManager]::new()
+    [NetworkManager]::Instance = $network
+    $dispatcher = [NetMessageDispatcher]::new()
+    Assert-True ([AuthSessionTest]::Send($session, $network, $dispatcher, 42)) 'Bind the old Gate connection before returning.'
+    $script:returnResult = $null
+    [AuthSessionTest]::Return($session, [Action[AuthResult]]{ param($result) $script:returnResult = $result })
+    $requestId = [Guid]::ParseExact([AuthApiClient]::RequestId, 'D')
+    Assert-True ($requestId -ne [Guid]::Empty -and [AuthApiClient]::SentToken -eq 'return-game-ticket' -and
+        $network.ReconnectSuspended -and $session.IsLoggingOut) 'Send a canonical request ID with the game token and suspend reconnect.'
+
+    if ($noticeFirst) {
+        $dispatcher.Receive('account_kicked', '{"reason":"return_to_character_select"}')
+        Assert-True ($network.Disconnects -eq 1 -and $session.GameSessionToken -eq 'return-game-ticket' -and
+            $null -eq $script:returnResult) 'Expected Gate notice must close the old socket while preserving the HTTP exchange.'
+        [AuthApiClient]::Complete.Invoke($null)
+        Assert-True ($session.Coroutine.MoveNext()) 'Lost HTTP response must schedule a retry.'
+        Assert-True ($session.Coroutine.MoveNext()) 'Wait for the replay response.'
+        Assert-True ([AuthApiClient]::RequestId -eq $requestId.ToString('D') -and
+            [AuthApiClient]::SentToken -eq 'return-game-ticket') 'Retries must use the same ID and original token.'
+    }
+
+    [AuthApiClient]::Complete.Invoke([AuthResult]@{ success = $true; token = 'selection-login-token' })
+    Assert-True (-not $session.Coroutine.MoveNext() -and $script:returnResult.success) 'A successful exchange must complete.'
+    if (-not $noticeFirst) { $dispatcher.Receive('account_kicked', '{"reason":"return_to_character_select"}') }
+    Assert-True ($session.GameSessionToken -eq '' -and $session.LoginToken -eq 'selection-login-token' -and
+        $session.UserId -eq 'account-test' -and $session.Username -eq 'user-test') 'Preserve the new login token and identity when the old connection ends.'
+    Assert-True ([AuthSessionTest]::ConsumeReturn($session) -and -not [AuthSessionTest]::ConsumeReturn($session)) 'Open character selection exactly once.'
+}
+
+$session.SaveSession('login-before-rejection', 'account-test', 'user-test')
+$null = $session.SaveGameSession('rejected-game-ticket', $future)
+[AuthSessionTest]::Return($session, [Action[AuthResult]]{ param($result) $script:returnResult = $result })
+[AuthApiClient]::Complete.Invoke([AuthResult]@{ errorCode = 'token_invalid_or_expired' })
+Assert-True (-not $session.Coroutine.MoveNext() -and $script:returnResult.errorCode -eq 'token_invalid_or_expired' -and
+    -not $session.IsLoggingOut -and -not [AuthSessionTest]::ConsumeReturn($session)) 'Terminal auth rejection must finish without retry or selection handoff.'
+
+$session.SaveSession('login-ticket-to-quit', 'account-test', 'user-test')
+[AuthSessionTest]::Quit($session)
+Assert-True ([AuthApiClient]::SentToken -eq 'login-ticket-to-quit' -and [AuthApiClient]::Timeout -eq 3 -and
+    [UnityEngine.Application]::Quits -eq 0) 'Quit should try the current login token with a short timeout.'
+[AuthApiClient]::Complete.Invoke($null)
+Assert-True ([UnityEngine.Application]::Quits -eq 1 -and $session.LoginToken -eq '') 'Quit must clear local credentials and close even if HTTP fails.'
+Write-Output 'PASS: return notice order, request replay, account identity, one-time handoff, terminal rejection, and quit after HTTP failure.'

@@ -44479,6 +44479,9 @@ MonoBehaviour:
   exitWindow: {fileID: 1739274038}
   menuContent: {fileID: 471584290}
   continueButton: {fileID: 1381009768}
+  logoutButton: {fileID: 271775295}
+  quitButton: {fileID: 1644284682}
+  gameSession: {fileID: 2108349142}
 --- !u!1 &1391164144545938121
 GameObject:
   m_ObjectHideFlags: 0

@@ -46,12 +46,18 @@ public class LoginUITMP : MonoBehaviour
     {
         string gateFailure = GateEntryHandoff.TakeFailure(out long retryCharacterDbId);
         WorldEntryLoadingView.CloseWorldEntry();
-        if (string.IsNullOrEmpty(gateFailure))
-            return;
-
         CharacterSelectPanelUI selection = characterSelectView != null
             ? characterSelectView.GetComponent<CharacterSelectPanelUI>() : null;
         AuthSession auth = AuthSession.Instance;
+        if (selection != null && auth != null && auth.TryConsumeCharacterSelectReturn())
+        {
+            ShowCharacterSelectView();
+            selection.InitializeAfterLogin();
+            return;
+        }
+
+        if (string.IsNullOrEmpty(gateFailure)) return;
+
         if (retryCharacterDbId > 0 && selection != null && auth != null && auth.HasValidGameSession)
         {
             ShowCharacterSelectView();

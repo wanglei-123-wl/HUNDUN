@@ -227,13 +227,59 @@ public partial class GameSession : MonoBehaviour
         else auth.LogoutGameSession(() => ReturnToLogin("logout"));
     }
 
+    internal bool ReturnToCharacterSelect()
+    {
+        AuthSession auth = AuthSession.Instance;
+        if (returningToLogin || (auth != null && auth.IsLoggingOut)) return false;
+
+        StopWorldRecovery();
+        StopEnterWorldWhenReady();
+        StopLocalPlayerInput();
+        if (auth == null)
+        {
+            ReturnToLogin("return_to_character_select", false, "游戏会话已失效，请重新登录。");
+            return true;
+        }
+
+        auth.ReturnToCharacterSelect(result =>
+        {
+            if (result != null && result.success)
+            {
+                ReturnToLogin("return_to_character_select", true, null);
+                return;
+            }
+
+            string message = result?.errorCode == "token_invalid_or_expired"
+                ? "游戏会话已失效，请重新登录。"
+                : "暂时无法返回角色选择，请重新登录。";
+            ReturnToLogin("return_to_character_select", false, message);
+        });
+        return true;
+    }
+
+    internal bool QuitGame()
+    {
+        AuthSession auth = AuthSession.Instance;
+        if (returningToLogin || (auth != null && auth.IsLoggingOut)) return false;
+
+        returningToLogin = true;
+        StopWorldRecovery();
+        StopEnterWorldWhenReady();
+        StopLocalPlayerInput();
+        if (auth != null) auth.QuitGame();
+        else AuthSession.CloseGame();
+        return true;
+    }
+
     private void HandleGameSessionEnded(string reason)
     {
         GateEntryHandoff.SetFailure(AuthSession.GameSessionEndedMessage(reason));
         ReturnToLogin(reason);
     }
 
-    public void ReturnToLogin(string reason)
+    public void ReturnToLogin(string reason) => ReturnToLogin(reason, false, null);
+
+    private void ReturnToLogin(string reason, bool keepLoginSession, string exitFailure)
     {
         if (returningToLogin) return;
         returningToLogin = true;
@@ -272,7 +318,8 @@ public partial class GameSession : MonoBehaviour
         bool sessionRejected = reason == "game_session_rejected"
             || reason == "game_session_missing_or_expired"
             || AuthSession.IsTerminalGameSessionReason(reason);
-        if (entryView != null && !sessionRejected && auth != null && auth.HasValidGameSession
+        if (!keepLoginSession && exitFailure == null && entryView != null && !sessionRejected
+            && auth != null && auth.HasValidGameSession
             && long.TryParse(PlayerPrefs.GetString(SelectedCharacterDbIdKey, ""), out long retryCharacterDbId)
             && retryCharacterDbId > 0
             && !string.IsNullOrWhiteSpace(PlayerPrefs.GetString(SelectedCharacterIdKey, "")))
@@ -281,11 +328,13 @@ public partial class GameSession : MonoBehaviour
         }
         else
         {
-            auth?.ClearSession();
+            if (!keepLoginSession) auth?.ClearSession();
             PlayerPrefs.DeleteKey(SelectedCharacterIdKey);
             PlayerPrefs.DeleteKey(SelectedCharacterDbIdKey);
             PlayerPrefs.Save();
-            if (entryView != null && sessionRejected)
+            if (keepLoginSession || exitFailure != null)
+                GateEntryHandoff.SetFailure(exitFailure);
+            else if (entryView != null && sessionRejected)
                 GateEntryHandoff.SetFailure(AuthSession.GameSessionEndedMessage(reason));
         }
         Debug.Log("Returning to login scene. reason=" + (reason ?? string.Empty));

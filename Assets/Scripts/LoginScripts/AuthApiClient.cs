@@ -95,9 +95,17 @@ public class AuthApiClient : MonoBehaviour
         SendAuthRequest("/api/v1/auth/guest-login", request, onComplete);
     }
 
-    internal void LogoutGameSession(string token, Action<AuthResult> onComplete)
+    internal void LogoutGameSession(string token, Action<AuthResult> onComplete, int timeoutSeconds = 0)
     {
-        SendAuthRequest("/api/auth/logout", new LogoutGameSessionRequest { token = token }, onComplete);
+        SendAuthRequest("/api/auth/logout", new LogoutGameSessionRequest { token = token }, onComplete,
+            timeoutSeconds: timeoutSeconds);
+    }
+
+    internal void ReturnToCharacterSelect(string token, string requestId, Action<AuthResult> onComplete)
+    {
+        SendAuthRequest("/api/auth/return-to-character-select",
+            new ReturnToCharacterSelectRequest { token = token, requestId = requestId }, onComplete,
+            timeoutSeconds: 4, parseResponse: ParseCharacterSelectReturn);
     }
 
     [Serializable]
@@ -106,16 +114,34 @@ public class AuthApiClient : MonoBehaviour
         public string token;
     }
 
+    [Serializable]
+    private sealed class ReturnToCharacterSelectRequest
+    {
+        public string token;
+        public string requestId;
+    }
+
+    [Serializable]
+    private sealed class ReturnToCharacterSelectResponse
+    {
+        public bool success = false;
+        public string code = null;
+        public string message = null;
+        public string token = null;
+        public long expiresAt = 0;
+    }
+
     public void SendAuthorizedRequest<T>(string path, T requestData, Action<AuthResult> onComplete)
     {
         SendAuthRequest(path, requestData, onComplete, true);
     }
 
-    private void SendAuthRequest<T>(string path, T requestData, Action<AuthResult> onComplete, bool requireAuth = false)
+    private void SendAuthRequest<T>(string path, T requestData, Action<AuthResult> onComplete,
+        bool requireAuth = false, int timeoutSeconds = 0, Func<string, AuthResult> parseResponse = null)
     {
         bool traceLogin = string.Equals(path, "/api/auth/login", StringComparison.Ordinal);
         long traceId = traceLogin ? Interlocked.Increment(ref nextLoginTraceId) : 0;
-        if (useMockServer)
+        if (useMockServer && parseResponse == null && timeoutSeconds == 0)
         {
             if (traceLogin)
                 Debug.LogWarning("[AUTH_LOGIN] id=" + traceId + " stage=mock_mode no_http_request=true");
@@ -140,7 +166,8 @@ public class AuthApiClient : MonoBehaviour
             Debug.Log("[AUTH_LOGIN] id=" + traceId + " stage=http_coroutine_start host="
                 + httpUri.Host + " port=" + httpUri.Port);
         }
-        StartCoroutine(SendHttpJson(path, requestData, onComplete, requireAuth, settings, traceId));
+        StartCoroutine(SendHttpJson(path, requestData, onComplete, requireAuth, settings, traceId,
+            timeoutSeconds > 0 ? timeoutSeconds : requestTimeout, parseResponse ?? ParseAuthResult));
     }
 
     private IEnumerator MockAuthRequest<T>(T requestData, Action<AuthResult> onComplete)
@@ -158,7 +185,8 @@ public class AuthApiClient : MonoBehaviour
     }
 
     private IEnumerator SendHttpJson<T>(string path, T requestData, Action<AuthResult> onComplete,
-        bool requireAuth, NetworkEndpointSnapshot settings, long traceId)
+        bool requireAuth, NetworkEndpointSnapshot settings, long traceId, int timeoutSeconds,
+        Func<string, AuthResult> parseResponse)
     {
         string json = JsonUtility.ToJson(requestData);
         byte[] body = Encoding.UTF8.GetBytes(json);
@@ -182,15 +210,15 @@ public class AuthApiClient : MonoBehaviour
                 request.SetRequestHeader("Authorization", authorization);
             }
 
-            request.timeout = requestTimeout;
+            request.timeout = timeoutSeconds;
 
             if (traceId > 0)
                 Debug.Log("[AUTH_LOGIN] id=" + traceId + " stage=http_send method=POST url="
-                    + request.url + " bytes=" + body.Length + " timeoutSeconds=" + requestTimeout);
+                    + request.url + " bytes=" + body.Length + " timeoutSeconds=" + timeoutSeconds);
             yield return request.SendWebRequest();
 
             string responseText = request.downloadHandler != null ? request.downloadHandler.text : "";
-            AuthResult result = ParseAuthResult(responseText);
+            AuthResult result = parseResponse(responseText);
             if (traceId > 0)
                 Debug.Log("[AUTH_LOGIN] id=" + traceId + " stage=http_complete status="
                     + request.responseCode + " result=" + request.result
@@ -254,6 +282,30 @@ public class AuthApiClient : MonoBehaviour
         catch (Exception)
         {
             return AuthResult.Fail("服务器响应无效");
+        }
+    }
+
+    private static AuthResult ParseCharacterSelectReturn(string json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return null;
+
+        try
+        {
+            var response = JsonUtility.FromJson<ReturnToCharacterSelectResponse>(json);
+            if (response == null) return null;
+
+            return new AuthResult
+            {
+                success = response.success && !string.IsNullOrWhiteSpace(response.token) && response.expiresAt > 0,
+                errorCode = response.code,
+                message = response.message,
+                token = response.token,
+                expiresAt = response.expiresAt
+            };
+        }
+        catch (ArgumentException)
+        {
+            return null;
         }
     }
 

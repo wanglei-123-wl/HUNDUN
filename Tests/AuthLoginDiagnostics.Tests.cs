@@ -246,6 +246,36 @@ internal static class AuthLoginDiagnosticsTests
             && Has("networkError=Cannot connect"),
             "A connection failure did not identify the network stage.");
         CheckNoSecrets();
+
+        const string operationId = "11a6ea9e-4faa-435a-9874-8a8d4b5fa564";
+        UnityWebRequest.OnSend = request =>
+        {
+            request.result = UnityWebRequest.Result.Success;
+            request.responseCode = 200;
+            request.downloadHandler.text = "{\"success\":false,\"code\":\"token_invalid_or_expired\"}";
+        };
+        client.ReturnToCharacterSelect(SecretToken, operationId, result => callback = result);
+        sent = UnityWebRequest.LastRequest;
+        using (JsonDocument requestBody = JsonDocument.Parse(sent.uploadHandler.data))
+        {
+            Check(sent.method == "POST" && sent.url.EndsWith("/api/auth/return-to-character-select")
+                && sent.timeout == 4 && requestBody.RootElement.GetProperty("token").GetString() == SecretToken
+                && requestBody.RootElement.GetProperty("requestId").GetString() == operationId,
+                "Return to selection must send the original token and request ID to the exchange route.");
+        }
+        Check(!callback.success && callback.errorCode == "token_invalid_or_expired",
+            "A string business error must remain a failure even on HTTP 200.");
+
+        UnityWebRequest.OnSend = request =>
+        {
+            request.result = UnityWebRequest.Result.Success;
+            request.responseCode = 200;
+            request.downloadHandler.text = "{\"success\":true,\"token\":\"replacement\",\"expiresAt\":2000000000}";
+        };
+        client.ReturnToCharacterSelect(SecretToken, operationId, result => callback = result);
+        Check(callback.success && callback.token == "replacement" && callback.expiresAt == 2000000000,
+            "The exchange must read the replacement login token and its expiry.");
+        CheckNoSecrets();
         Console.WriteLine("Auth login diagnostics tests passed.");
     }
 

@@ -5,6 +5,7 @@
 // 这个脚本不负责登录请求、不负责注册请求、不负责 UI 显示、不负责判断账号密码是否正确。
 
 using System;
+using System.Collections;
 using System.Globalization;
 using UnityEngine; // 使用 Unity 的 MonoBehaviour 和 PlayerPrefs。
 
@@ -47,6 +48,8 @@ public class AuthSession : MonoBehaviour // 登录状态管理脚本，挂在 Sc
     private long lastServerTimeMs;
     private double serverTimeReceivedAt;
     private bool quitAfterLogout;
+    private bool isReturningToCharacterSelect;
+    private bool openCharacterSelectOnLoad;
 
     private double EstimatedServerUnixSeconds => lastServerTimeMs > 0
         ? lastServerTimeMs / 1000d + (Time.realtimeSinceStartupAsDouble - serverTimeReceivedAt)
@@ -186,7 +189,7 @@ public class AuthSession : MonoBehaviour // 登录状态管理脚本，挂在 Sc
 
     internal static bool IsTerminalGameSessionReason(string reason) =>
         reason == "token_invalid_or_expired" || reason == "token_format_invalid"
-        || reason == "kicked_by_new_login" || reason == "logout";
+        || reason == "kicked_by_new_login" || reason == "logout" || reason == "return_to_character_select";
 
     internal static string GameSessionEndedMessage(string reason) =>
         reason == "kicked_by_new_login" ? "账号已在其他设备登录，请重新登录。"
@@ -284,8 +287,20 @@ public class AuthSession : MonoBehaviour // 登录状态管理脚本，挂在 Sc
     private void HandleAccountKicked(string json)
     {
         var notice = JsonUtility.FromJson<AccountKickedMessage>(json);
-        if (notice != null && (notice.reason == "kicked_by_new_login" || notice.reason == "logout"))
-            EndBoundGameSession(notice.reason);
+        if (notice == null) return;
+
+        if (notice.reason == "return_to_character_select" && isReturningToCharacterSelect)
+        {
+            NetworkManager network = boundNetwork;
+            if (network != null && network == NetworkManager.Instance && network.IsConnected
+                && network.ConnectionEpoch == boundEpoch && boundToken == GameSessionToken
+                && MatchesEndpoint(network.EndpointIdentity))
+                network.Disconnect();
+            return;
+        }
+
+        if (notice.reason == "kicked_by_new_login" || notice.reason == "logout"
+            || notice.reason == "return_to_character_select") EndBoundGameSession(notice.reason);
     }
 
     private void HandleGameSessionError(string json)
@@ -334,50 +349,147 @@ public class AuthSession : MonoBehaviour // 登录状态管理脚本，挂在 Sc
         ReconnectWindowSeconds = 0;
         lastServerTimeMs = 0;
         IsLoggingOut = false;
+        isReturningToCharacterSelect = false;
+        openCharacterSelectOnLoad = false;
         PlayerPrefs.DeleteKey(GameTokenKey);
         PlayerPrefs.DeleteKey(GameTokenExpiryKey);
         PlayerPrefs.DeleteKey(GameReconnectWindowKey);
     }
 
-    internal void LogoutGameSession(Action onComplete)
+    internal void ReturnToCharacterSelect(Action<AuthResult> onComplete)
     {
         if (IsLoggingOut) return;
-        NetworkManager network = NetworkManager.Instance;
+
         string token = GameSessionToken;
         string endpoint = NetworkEndpointRuntime.Load()?.Identity;
-        if (string.IsNullOrEmpty(token) || !MatchesEndpoint(endpoint))
+        if (string.IsNullOrWhiteSpace(token) || !MatchesEndpoint(endpoint))
         {
-            ClearSession();
-            onComplete?.Invoke();
+            onComplete(new AuthResult { errorCode = "token_invalid_or_expired" });
             return;
         }
 
         IsLoggingOut = true;
-        if (network != null && network.EndpointIdentity != endpoint) network = null;
-        network?.SuspendAutoReconnect();
-        AuthApiClient api = GetComponent<AuthApiClient>();
-        if (api == null) api = gameObject.AddComponent<AuthApiClient>();
-        api.LogoutGameSession(token, result =>
+        isReturningToCharacterSelect = true;
+        SuspendGameConnection(endpoint);
+        StartCoroutine(ExchangeGameToken(token, endpoint, ticketGeneration, onComplete));
+    }
+
+    private IEnumerator ExchangeGameToken(string token, string endpoint, int generation, Action<AuthResult> onComplete)
+    {
+        AuthApiClient api = GetAuthApiClient();
+        string requestId = Guid.NewGuid().ToString("D");
+        AuthResult result = null;
+        for (int attempt = 0; attempt < 3; attempt++)
         {
-            if (!IsLoggingOut || GameSessionToken != token || !MatchesEndpoint(endpoint)) return;
+            if (!IsCurrentCharacterSelectReturn(endpoint, generation)) break;
+
+            bool completed = false;
+            api.ReturnToCharacterSelect(token, requestId, reply =>
+            {
+                result = reply;
+                completed = true;
+            });
+            while (!completed && IsCurrentCharacterSelectReturn(endpoint, generation)) yield return null;
+            if (result != null && (result.success || result.errorCode == "token_invalid_or_expired"
+                || result.errorCode == "invalid_request_id")) break;
+
+            if (attempt < 2) yield return new WaitForSecondsRealtime(0.25f * (attempt + 1));
+        }
+
+        if (!isReturningToCharacterSelect || ticketGeneration != generation) yield break;
+        if (!IsCurrentCharacterSelectReturn(endpoint, generation)) result = null;
+        isReturningToCharacterSelect = false;
+        IsLoggingOut = false;
+
+        if (result != null && result.success)
+        {
+            SaveSession(result.token, UserId, Username);
+            openCharacterSelectOnLoad = true;
+        }
+
+        if (quitAfterLogout) LogoutGameSession(null);
+        else onComplete(result);
+    }
+
+    private bool IsCurrentCharacterSelectReturn(string endpoint, int generation) =>
+        isReturningToCharacterSelect && ticketGeneration == generation && MatchesEndpoint(endpoint)
+        && NetworkEndpointRuntime.Load()?.Identity == endpoint;
+
+    internal bool TryConsumeCharacterSelectReturn()
+    {
+        bool openSelection = openCharacterSelectOnLoad && IsLoggedIn
+            && MatchesEndpoint(NetworkEndpointRuntime.Load()?.Identity);
+        openCharacterSelectOnLoad = false;
+        return openSelection;
+    }
+
+    internal void QuitGame()
+    {
+        quitAfterLogout = true;
+        LogoutGameSession(null);
+    }
+
+    internal void LogoutGameSession(Action onComplete)
+    {
+        if (IsLoggingOut) return;
+        string token = string.IsNullOrEmpty(GameSessionToken) ? LoginToken : GameSessionToken;
+        string endpoint = NetworkEndpointRuntime.Load()?.Identity;
+        NetworkManager network = SuspendGameConnection(endpoint);
+        if (string.IsNullOrEmpty(token) || !MatchesEndpoint(endpoint))
+        {
+            FinishLogout(network, onComplete);
+            return;
+        }
+
+        IsLoggingOut = true;
+        int generation = ticketGeneration;
+        GetAuthApiClient().LogoutGameSession(token, result =>
+        {
+            if (!IsLoggingOut || ticketGeneration != generation) return;
             if (result == null || !result.success)
                 Debug.LogWarning("[Auth] Game session logout could not be confirmed.");
-            ClearSession();
-            if (network != null && network.EndpointIdentity == endpoint)
-                network.Disconnect();
-            onComplete?.Invoke();
-            if (quitAfterLogout) Application.Quit();
-        });
+            FinishLogout(network, onComplete);
+        }, quitAfterLogout ? 3 : 0);
+    }
+
+    private AuthApiClient GetAuthApiClient()
+    {
+        AuthApiClient api = GetComponent<AuthApiClient>();
+        return api != null ? api : gameObject.AddComponent<AuthApiClient>();
+    }
+
+    private static NetworkManager SuspendGameConnection(string endpoint)
+    {
+        NetworkManager network = NetworkManager.Instance;
+        if (network == null || network.EndpointIdentity != endpoint) return null;
+        network.SuspendAutoReconnect();
+        return network;
+    }
+
+    private void FinishLogout(NetworkManager network, Action onComplete)
+    {
+        ClearSession();
+        if (network != null && network.IsConnected) network.Disconnect();
+        if (quitAfterLogout) CloseGame();
+        else onComplete?.Invoke();
+    }
+
+    internal static void CloseGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
 #if !UNITY_EDITOR
     private bool HandleWantsToQuit()
     {
-        if (string.IsNullOrEmpty(GameSessionToken)
+        if ((string.IsNullOrEmpty(GameSessionToken) && string.IsNullOrEmpty(LoginToken))
             || !MatchesEndpoint(NetworkEndpointRuntime.Load()?.Identity))
             return true;
-        quitAfterLogout = true;
-        LogoutGameSession(null);
+        QuitGame();
         return false;
     }
 #endif

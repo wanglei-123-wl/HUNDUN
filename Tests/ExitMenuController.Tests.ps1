@@ -35,6 +35,7 @@ namespace UnityEngine.UI
 {
     public sealed class Button
     {
+        public bool interactable = true;
         public readonly ClickEvent onClick = new ClickEvent();
         public sealed class ClickEvent
         {
@@ -46,6 +47,13 @@ namespace UnityEngine.UI
             public void Invoke() { foreach (var action in listeners.ToArray()) action(); }
         }
     }
+}
+public sealed class GameSession
+{
+    public int ReturnCalls, QuitCalls;
+    public bool AcceptExit;
+    public bool ReturnToCharacterSelect() { ReturnCalls++; return AcceptExit; }
+    public bool QuitGame() { QuitCalls++; return AcceptExit; }
 }
 public static class GameplayUiInputGuard
 {
@@ -81,10 +89,16 @@ $window = [UnityEngine.GameObject]::new()
 $content = [UnityEngine.GameObject]::new()
 $content.parent = $window
 $button = [UnityEngine.UI.Button]::new()
+$logoutButton = [UnityEngine.UI.Button]::new()
+$quitButton = [UnityEngine.UI.Button]::new()
+$session = [GameSession]::new()
 $type = $controller.GetType()
 $type.GetField('exitWindow', $flags).SetValue($controller, $window)
 $type.GetField('menuContent', $flags).SetValue($controller, $content)
 $type.GetField('continueButton', $flags).SetValue($controller, $button)
+$type.GetField('logoutButton', $flags).SetValue($controller, $logoutButton)
+$type.GetField('quitButton', $flags).SetValue($controller, $quitButton)
+$type.GetField('gameSession', $flags).SetValue($controller, $session)
 $awake = $type.GetMethod('Awake', $flags)
 $enable = $type.GetMethod('OnEnable', $flags)
 $disable = $type.GetMethod('OnDisable', $flags)
@@ -135,6 +149,35 @@ $type.GetField('exitWindow', $flags).SetValue($controller, $window)
 $type.GetField('menuContent', $flags).SetValue($controller, $null)
 $controller.Show()
 Require (-not $window.activeSelf) 'Missing menu content must not open an empty modal root.'
+$type.GetField('menuContent', $flags).SetValue($controller, $content)
+
+foreach ($action in @('logout', 'quit')) {
+    $controller = [Game.UI.ExitMenuController]::new()
+    $type.GetField('exitWindow', $flags).SetValue($controller, $window)
+    $type.GetField('menuContent', $flags).SetValue($controller, $content)
+    $type.GetField('continueButton', $flags).SetValue($controller, $button)
+    $type.GetField('logoutButton', $flags).SetValue($controller, $logoutButton)
+    $type.GetField('quitButton', $flags).SetValue($controller, $quitButton)
+    $session = [GameSession]::new()
+    $type.GetField('gameSession', $flags).SetValue($controller, $session)
+    $exit = if ($action -eq 'logout') { $logoutButton } else { $quitButton }
+    $enable.Invoke($controller, @()) | Out-Null
+    $controller.Show()
+    $exit.onClick.Invoke()
+    Require ($button.interactable -and $logoutButton.interactable -and $quitButton.interactable) 'A rejected exit must leave buttons available.'
+    $session.AcceptExit = $true
+    $exit.onClick.Invoke()
+    $button.onClick.Invoke()
+    $logoutButton.onClick.Invoke()
+    $quitButton.onClick.Invoke()
+    Require ($controller.IsOpen -and -not $button.interactable -and -not $logoutButton.interactable -and
+        -not $quitButton.interactable) 'A pending exit must keep the modal open and disable all three buttons.'
+    $expectedReturnCalls = if ($action -eq 'logout') { 2 } else { 0 }
+    Require ($session.ReturnCalls -eq $expectedReturnCalls -and $session.QuitCalls -eq (2 - $expectedReturnCalls)) 'Route each action once after it is accepted.'
+    $disable.Invoke($controller, @()) | Out-Null
+    Require ($logoutButton.onClick.Count -eq 0 -and $quitButton.onClick.Count -eq 0) 'Remove both exit listeners on disable.'
+    $button.interactable = $logoutButton.interactable = $quitButton.interactable = $true
+}
 
 $guid = [regex]::Match($meta, '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
 Require ($guid.Length -eq 32) 'Missing script GUID.'
@@ -153,8 +196,13 @@ Require ($binding -match "guid: $guid" -and
     $background -match 'm_IsActive: 1' -and
     $backgroundTransform -match 'm_Father: \{fileID: 1739274042\}' -and
     $continue -match 'm_Interactable: 1') 'Bind enabled menu content under the outer window; Awake must hide the window even if the editor preview is enabled.'
-foreach ($id in @('271775295', '1644284682')) {
-    $otherButton = Scene-Block '114' $id
-    Require ($otherButton -match 'm_OnClick:\s+m_PersistentCalls:\s+m_Calls: \[\]') 'Do not bind Logout or Quit.'
-}
-Write-Output 'PASS: hidden-child regression, visible menu/input synchronization, Continue release, repeated cycles and scene wiring.'
+$logout = Scene-Block '114' '271775295'
+$quit = Scene-Block '114' '1644284682'
+$worldSession = Scene-Block '114' '2108349142'
+Require ($binding -match 'logoutButton: \{fileID: 271775295\}' -and
+    $binding -match 'quitButton: \{fileID: 1644284682\}' -and
+    $binding -match 'gameSession: \{fileID: 2108349142\}' -and
+    $logout -match 'm_GameObject: \{fileID: 271775293\}' -and
+    $quit -match 'm_GameObject: \{fileID: 1644284680\}' -and
+    $worldSession -match 'm_Enabled: 1') 'Bind Logout and Quit to the real WorldShell buttons and session.'
+Write-Output 'PASS: ESC visibility and input, Continue, logout and quit routing, duplicate prevention, and scene wiring.'
