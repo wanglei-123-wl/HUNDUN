@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 public static class WorldMapSceneCatalog
 {
@@ -34,6 +35,15 @@ public static class WorldMapSceneCatalog
 
         address = null;
         return false;
+    }
+
+    public static IEnumerable<string> GetAllResourceAddresses()
+    {
+        foreach (var map in Maps)
+        {
+            yield return map.Address;
+            yield return "game/map-traversal/" + map.MapId;
+        }
     }
 
     public static bool TryGetMapByAddress(string address, out string sceneId, out string mapId)

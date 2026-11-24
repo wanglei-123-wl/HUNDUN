@@ -8,6 +8,8 @@ $transferDtos = [regex]::Match($messages,
     '(?s)\[Serializable\]\s*public sealed class MapTransferOptionsRequest.*?(?=\[Serializable\]\s*public class ServerErrorMessage)')
 if (-not $transferDtos.Success) { throw 'Map transfer DTOs were not found.' }
 $coordinator = [regex]::Replace($coordinator, '(?m)^using [^;]+;\r?\n', '')
+$preflight = (Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/MapTransferResourcePreflight.cs') -Raw) `
+    -replace '(?m)^using [^;]+;\r?\n', ''
 
 $stubs = @'
 using System;
@@ -17,6 +19,9 @@ using System.Text.Json;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.AddressableAssets.ResourceLocators;
 using Game.UI.Notice;
 
 public class NetMessageBase { public string msgId; public string type; }
@@ -92,7 +97,33 @@ public sealed class VillageTeleportPanel {
         Handler?.Invoke(new MapTransferRoute { routeId = route, sceneId = scene, mapId = map });
     }
 }
-public static class TestWorld { public static VillageTeleportPanel Panel; }
+public static class TestWorld {
+    public static VillageTeleportPanel Panel;
+    public static bool HoldCoroutines;
+    public static readonly List<Coroutine> Pending = new List<Coroutine>();
+    public static void ResumeAll() {
+        foreach (var c in Pending.ToArray()) {
+            if (c.Active) while (c.Routine.MoveNext()) {}
+            c.Active = false;
+        }
+        Pending.Clear();
+    }
+}
+public sealed class MapTransferStatusView {
+    public static MapTransferStatusView Last;
+    public string Message;
+    public bool Visible;
+    public bool IsVisible => Visible;
+    public bool MinimumDisplayElapsed => UnityEngine.Time.realtimeSinceStartup - shownAt >= 3.5f;
+    private float shownAt;
+    public object gameObject;
+    public static MapTransferStatusView Create(object owner) => Last = new MapTransferStatusView();
+    public void BeginDestination(string scene, string map) { shownAt = UnityEngine.Time.realtimeSinceStartup; }
+    public void Show(string message) { Message = message; Visible = true; }
+    public void ShowFailure(string message, bool recovering) { Show(message); }
+    public void Hide() { Visible = false; }
+    public void Release() { Hide(); }
+}
 namespace Game.UI.Notice {
     public static class GameNoticeService {
         public static string Last;
@@ -102,15 +133,25 @@ namespace Game.UI.Notice {
 namespace UnityEngine {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DisallowMultipleComponent : Attribute {}
-    public class Coroutine {}
+    public class TextAsset {}
+    public class Coroutine { public IEnumerator Routine; public bool Active; }
     public class MonoBehaviour {
+        public object transform;
+        public static void Destroy(object value) {}
         public T FindObjectOfType<T>(bool includeInactive) where T : class =>
             TestWorld.Panel as T;
         public Coroutine StartCoroutine(IEnumerator routine) {
-            while (routine.MoveNext()) {}
-            return new Coroutine();
+            var c = new Coroutine { Routine = routine, Active = true };
+            if (TestWorld.HoldCoroutines) {
+                if (routine.MoveNext()) TestWorld.Pending.Add(c);
+                else c.Active = false;
+            } else { while (routine.MoveNext()) {} c.Active = false; }
+            return c;
         }
-        public void StopCoroutine(Coroutine coroutine) {}
+        public void StopCoroutine(Coroutine coroutine) {
+            coroutine.Active = false;
+            (coroutine.Routine as IDisposable)?.Dispose();
+        }
     }
     public static class Time { public static float realtimeSinceStartup; }
     public static class Debug {
@@ -129,6 +170,40 @@ namespace UnityEngine.ResourceManagement.AsyncOperations {
         public Exception OperationException;
         public bool IsValid() => Status != AsyncOperationStatus.None;
     }
+    public struct AsyncOperationHandle<T> {
+        public AsyncOperationStatus Status;
+        public T Result;
+        public Exception OperationException;
+        public bool IsValid() => Status != AsyncOperationStatus.None;
+    }
+}
+namespace UnityEngine.ResourceManagement.ResourceProviders { public struct SceneInstance {} }
+namespace UnityEngine.ResourceManagement.ResourceLocations {
+    public interface IResourceLocation {
+        string InternalId { get; }
+        string ProviderId { get; }
+        Type ResourceType { get; }
+        IList<IResourceLocation> Dependencies { get; }
+    }
+    public sealed class TestLocation : IResourceLocation {
+        public string InternalId { get; set; }
+        public string ProviderId { get; set; } = "test";
+        public Type ResourceType { get; set; }
+        public IList<IResourceLocation> Dependencies { get; set; }
+    }
+}
+namespace UnityEngine.AddressableAssets.ResourceLocators {
+    public interface IResourceLocator {
+        bool Locate(object key, Type type, out IList<IResourceLocation> locations);
+    }
+    public sealed class TestLocator : IResourceLocator {
+        public readonly Dictionary<string, IResourceLocation> Entries = new Dictionary<string, IResourceLocation>();
+        public bool Locate(object key, Type type, out IList<IResourceLocation> locations) {
+            locations = null;
+            if (!Entries.TryGetValue((string)key, out var item)) return false;
+            locations = new[] { item }; return true;
+        }
+    }
 }
 namespace UnityEngine.AddressableAssets {
     public static class Addressables {
@@ -136,16 +211,27 @@ namespace UnityEngine.AddressableAssets {
         public static int Downloads;
         public static int Releases;
         public static object LastAddress;
+        public static IResourceLocation[] LastLocations;
+        public static long MissingBytes;
+        public static readonly List<IResourceLocator> ResourceLocators = new List<IResourceLocator>();
+        public static AsyncOperationHandle<long> GetDownloadSizeAsync(IEnumerable locations) {
+            var copy = new List<IResourceLocation>();
+            foreach (IResourceLocation location in locations) copy.Add(location);
+            LastLocations = copy.ToArray();
+            LastAddress = LastLocations[0].InternalId;
+            return new AsyncOperationHandle<long> { Status = NextStatus, Result = MissingBytes };
+        }
         public static AsyncOperationHandle DownloadDependenciesAsync(object address) {
             Downloads++;
             LastAddress = address;
             return new AsyncOperationHandle { Status = NextStatus };
         }
         public static void Release(AsyncOperationHandle handle) { Releases++; }
+        public static void Release<T>(AsyncOperationHandle<T> handle) { Releases++; }
     }
 }
 '@
-$source = $stubs + "`n" + $transferDtos.Value + "`n" + $catalog + "`n" + $coordinator
+$source = $stubs + "`n" + $transferDtos.Value + "`n" + $catalog + "`n" + $preflight + "`n" + $coordinator
 Add-Type -TypeDefinition $source -IgnoreWarnings | Out-Null
 
 function Assert-True($condition, [string]$message) {
@@ -170,6 +256,21 @@ function Emit-Result($dispatcher, $request, [bool]$success, [string]$transferId,
     $dispatcher.Emit('map_transfer_result', $payload)
 }
 function New-Harness {
+    [TestWorld]::HoldCoroutines = $false
+    [TestWorld]::Pending.Clear()
+    [UnityEngine.AddressableAssets.Addressables]::Downloads = 0
+    [UnityEngine.AddressableAssets.Addressables]::Releases = 0
+    [UnityEngine.AddressableAssets.Addressables]::MissingBytes = 0
+    [UnityEngine.AddressableAssets.Addressables]::ResourceLocators.Clear()
+    $locator = [UnityEngine.AddressableAssets.ResourceLocators.TestLocator]::new()
+    foreach ($address in [WorldMapSceneCatalog]::GetAllResourceAddresses()) {
+        $type = if ($address.StartsWith('game/scene/')) {
+            [UnityEngine.ResourceManagement.ResourceProviders.SceneInstance]
+        } else { [UnityEngine.TextAsset] }
+        $locator.Entries.Add($address, [UnityEngine.ResourceManagement.ResourceLocations.TestLocation]@{
+            InternalId = $address; ResourceType = $type })
+    }
+    [UnityEngine.AddressableAssets.Addressables]::ResourceLocators.Add($locator)
     [NetworkManager]::Instance = [NetworkManager]::new()
     [NetMessageDispatcher]::Instance = [NetMessageDispatcher]::new()
     [TestWorld]::Panel = [VillageTeleportPanel]::new()
@@ -225,18 +326,23 @@ $ready = [MapTransferReadyRequest]$h.Network.Sent[2]
 Assert-True ($ready.loaded -and $ready.transferId -eq $id -and
     $ready.sceneSessionId -eq 'source-session') `
     'Prepared resources must report ready using the source session.'
-Assert-True ([UnityEngine.AddressableAssets.Addressables]::Releases -eq 1) `
-    'The dependency operation must be released after preparing.'
+Assert-True ([UnityEngine.AddressableAssets.Addressables]::Releases -eq 2 -and
+    [UnityEngine.AddressableAssets.Addressables]::Downloads -eq 0 -and
+    [UnityEngine.AddressableAssets.Addressables]::LastLocations[1].InternalId -eq 'game/map-traversal/map_demo_1') `
+    'Both cache checks must release their handles and cover traversal without downloading.'
 Prepare $h $request $id
 Assert-True ($h.Network.Sent.Count -eq 3) 'Repeated prepare must not download or send twice.'
 Emit-Result $h.Dispatcher $request $true $id 19
 Emit-Result $h.Dispatcher $request $true $id 19
 Assert-True ($script:commits -eq 1 -and $h.Owner.PauseCount -eq 1) `
     'Success must be delivered once to the commit handler without resuming source input.'
+Assert-True ([MapTransferStatusView]::Last.Visible -and [MapTransferStatusView]::Last.Message.Contains('进入地图')) `
+    'The status must remain visible until destination loading and snapshot application finish.'
 $h.Network.SceneOperationsPaused = $false
 $h.Service.CompleteCommittedTransfer()
 Assert-True ($null -ne $h.Panel.Handler -and $h.Owner.PauseCount -eq 1) `
     'Only the completed destination barrier may unlock the next transfer.'
+Assert-True (-not [MapTransferStatusView]::Last.Visible) 'Completed destination loading must hide its own status.'
 $h.Service.Shutdown()
 
 $h = New-Harness
@@ -262,7 +368,8 @@ $h.Panel.Click('gm-route')
 $request = [MapTransferRequest]$h.Network.Sent[0]
 Emit-Result $h.Dispatcher $request $false '' 23
 Assert-True ($h.Owner.PauseCount -eq 0 -and $h.Owner.ResumedAt -eq 23 -and
-    -not $h.Network.SceneOperationsPaused -and $null -ne $h.Panel.Handler) `
+    -not $h.Network.SceneOperationsPaused -and $null -eq $h.Panel.Handler -and
+    [MapTransferStatusView]::Last.Visible) `
     'A rejected request must resume with the server-provided next input sequence.'
 $h.Service.Shutdown()
 
@@ -356,6 +463,7 @@ foreach ($leg in $legs) {
     $h.Owner.MapId = $leg.Map
     $h.Owner.SceneSessionId = $destinationSession
     $h.Network.SceneOperationsPaused = $false
+    [UnityEngine.Time]::realtimeSinceStartup += 3.5
     $h.Service.CompleteCommittedTransfer()
 }
 Assert-True (($script:destinations -join ',') -eq ($legs.Scene -join ',') -and
@@ -404,4 +512,132 @@ Emit-Result $h.Dispatcher $request $true $id 19 'world010' 'map_010'
 Assert-True ($script:fireCavernCommit.sceneId -eq 'world010') 'The fire cavern result must reach the commit handler.'
 $h.Service.Shutdown()
 
-Write-Output 'PASS: Gate map IDs, repeated transfers, target checks, retries, failure recovery and success deduplication.'
+# New preflight regression cases run the actual asynchronous coordinator.
+foreach ($missing in @('game/scene/world005', 'game/map-traversal/map_005')) {
+    $h = New-Harness
+    $h.Service.SetCommitHandler([Action[MapTransferResult]]{ param($result) })
+    [UnityEngine.AddressableAssets.Addressables]::ResourceLocators[0].Entries.Remove($missing) | Out-Null
+    $h.Panel.Click('luxian003', 'world005', 'map_005')
+    Assert-True ($h.Owner.PauseCount -eq 0 -and $h.Network.Sent.Count -eq 0 -and
+        -not $h.Network.SceneOperationsPaused -and $null -eq $h.Panel.Handler -and
+        [MapTransferStatusView]::Last.Visible -and
+        [Game.UI.Notice.GameNoticeService]::Last.Contains('重启游戏')) `
+        "Missing resource $missing must block before pausing input or sending a request."
+    $h.Service.Shutdown()
+}
+
+foreach ($failure in @('bytes', 'operation')) {
+    $h = New-Harness
+    $h.Service.SetCommitHandler([Action[MapTransferResult]]{ param($result) })
+    if ($failure -eq 'bytes') { [UnityEngine.AddressableAssets.Addressables]::MissingBytes = 8192 }
+    else { [UnityEngine.AddressableAssets.Addressables]::NextStatus = [UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus]::Failed }
+    $h.Panel.Click('luxian003', 'world005', 'map_005')
+    Assert-True ($h.Owner.PauseCount -eq 0 -and $h.Network.Sent.Count -eq 0 -and
+        [UnityEngine.AddressableAssets.Addressables]::Downloads -eq 0 -and
+        [UnityEngine.AddressableAssets.Addressables]::Releases -eq 1 -and
+        [MapTransferStatusView]::Last.Visible) `
+        'Missing cache or failed size probe must preserve control and never start a download.'
+    $h.Service.Shutdown()
+}
+
+foreach ($cancel in @('timeout', 'disconnect', 'epoch', 'session', 'handler', 'shutdown', 'duplicate')) {
+    $h = New-Harness
+    $h.Service.SetCommitHandler([Action[MapTransferResult]]{ param($result) })
+    [TestWorld]::HoldCoroutines = $true
+    $h.Panel.Click('luxian003', 'world005', 'map_005')
+    Assert-True ($h.Owner.PauseCount -eq 0 -and $h.Network.Sent.Count -eq 0 -and
+        -not $h.Network.SceneOperationsPaused -and $null -eq $h.Panel.Handler -and
+        [MapTransferStatusView]::Last.Message.Contains('检查地图')) `
+        'While checking, movement stays enabled and repeated menu actions are disabled.'
+    # Unsolicited handshake messages must be ignored before a request is sent.
+    $h.Dispatcher.Emit('map_transfer_prepare', '{}')
+    $h.Dispatcher.Emit('map_transfer_result', '{}')
+    switch ($cancel) {
+        'timeout' { Tick $h 11 }
+        'disconnect' { $h.Network.Disconnect() }
+        'epoch' { $h.Network.ConnectionEpoch++; Tick $h 1 }
+        'session' { $h.Owner.SceneSessionId = 'changed-session' }
+        'handler' { $h.Service.SetCommitHandler($null) }
+        'shutdown' { $h.Service.Shutdown() }
+        'duplicate' { $h.Panel.Click('other-route', 'world007', 'map_007') }
+    }
+    [TestWorld]::ResumeAll()
+    if ($cancel -eq 'duplicate') {
+        Assert-True ($h.Network.Sent.Count -eq 1 -and $h.Network.Sent[0].routeId -eq 'luxian003' -and
+            $h.Owner.PauseCount -eq 1) 'A second click cannot replace the in-flight destination.'
+    } else {
+        Assert-True ($h.Owner.PauseCount -eq 0 -and $h.Network.Sent.Count -eq 0 -and
+            [UnityEngine.AddressableAssets.Addressables]::Releases -eq 1 -and
+            $null -eq $h.Owner.RecoveryReason -and
+            ([MapTransferStatusView]::Last.Visible -eq ($cancel -ne 'shutdown'))) `
+            "Preflight cancellation at $cancel must release handles and never send late requests or reset the world."
+    }
+    $h.Service.Shutdown()
+}
+
+$h = New-Harness
+$h.Service.SetCommitHandler([Action[MapTransferResult]]{ param($result) })
+$h.Panel.Click('luxian003', 'world005', 'map_005')
+$request = [MapTransferRequest]$h.Network.Sent[0]
+[UnityEngine.AddressableAssets.Addressables]::MissingBytes = 1024
+$id = [Guid]::NewGuid().ToString('D')
+Prepare $h $request $id 'world005' 'map_005'
+Assert-True (-not $h.Network.Sent[1].loaded -and
+    [UnityEngine.AddressableAssets.Addressables]::Downloads -eq 0 -and
+    [MapTransferStatusView]::Last.Message.Contains('取消')) `
+    'Cache loss after the initial probe must cancel the reservation without downloading.'
+$payload = @{ requestId=$request.requestId; transferId=$id; success=$false;
+    sceneSessionId=$request.sceneSessionId; errorCode='client_load_failed' } | ConvertTo-Json -Compress
+$h.Dispatcher.Emit('map_transfer_result', $payload)
+Assert-True ($h.Owner.PauseCount -eq 0 -and [Game.UI.Notice.GameNoticeService]::Last.Contains('重启游戏') -and
+    [MapTransferStatusView]::Last.Visible) 'A rejected cache-loss transfer must retain the actionable error in the destination label.'
+$h.Service.Shutdown()
+
+$h = New-Harness
+$h.Service.SetCommitHandler([Action[MapTransferResult]]{ param($result) })
+$h.Panel.Click('luxian003', 'world005', 'map_005')
+$h.Service.NotifyWorldRecovery()
+Assert-True ([MapTransferStatusView]::Last.Visible -and
+    [Game.UI.Notice.GameNoticeService]::Last.Contains('重新连接')) `
+    'Destination load or snapshot recovery must retain status and explain recovery.'
+$h.Service.Shutdown()
+
+$h = New-Harness
+$h.Service.SetCommitHandler([Action[MapTransferResult]]{ param($result) })
+$h.Panel.Click('luxian003', 'world005', 'map_005')
+$request = [MapTransferRequest]$h.Network.Sent[0]
+[TestWorld]::HoldCoroutines = $true
+$id = [Guid]::NewGuid().ToString('D')
+Prepare $h $request $id 'world005' 'map_005'
+Tick $h 26
+[TestWorld]::ResumeAll()
+Assert-True ($h.Network.Sent.Count -eq 2 -and -not $h.Network.Sent[1].loaded -and
+    [UnityEngine.AddressableAssets.Addressables]::Releases -eq 2 -and
+    [UnityEngine.AddressableAssets.Addressables]::Downloads -eq 0) `
+    'A stalled preparation recheck must release its operation and send loaded=false exactly once.'
+Emit-Result $h.Dispatcher $request $false $id 27 'world005' 'map_005'
+Assert-True ($h.Owner.PauseCount -eq 0 -and [MapTransferStatusView]::Last.Visible) `
+    'A server rejection after preparation timeout must retain its error message.'
+$h.Service.Shutdown()
+
+$h = New-Harness
+$entries = [UnityEngine.AddressableAssets.Addressables]::ResourceLocators[0].Entries
+$scene = $entries['game/scene/world005']
+$traversal = $entries['game/map-traversal/map_005']
+$bundle = [UnityEngine.ResourceManagement.ResourceLocations.TestLocation]@{ InternalId='scene-bundle'; ResourceType=[object] }
+$shared = [UnityEngine.ResourceManagement.ResourceLocations.TestLocation]@{ InternalId='shared-bundle'; ResourceType=[object] }
+$scene.Dependencies = [UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation[]]@($bundle)
+$bundle.Dependencies = [UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation[]]@($shared)
+$shared.Dependencies = [UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation[]]@($bundle)
+$traversal.Dependencies = [UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation[]]@($shared)
+$locations = [MapTransferResourcePreflight]::Resolve('world005', 'map_005', [UnityEngine.AddressableAssets.Addressables]::ResourceLocators)
+Assert-True ($locations.Count -eq 4 -and $locations[0] -eq $scene -and $locations[1] -eq $traversal) `
+    'The cache size probe must include shared nested bundles exactly once even in a dependency cycle.'
+$traversal.ResourceType = [object]
+$failed = $false
+try { [MapTransferResourcePreflight]::Resolve('world005', 'map_005', [UnityEngine.AddressableAssets.Addressables]::ResourceLocators) | Out-Null }
+catch { $failed = $true }
+Assert-True $failed 'An address with the wrong resource type must fail instead of treating it as ready.'
+$h.Service.Shutdown()
+
+Write-Output 'PASS: map and traversal cache preflight, non-blocking cancellation, status, Gate handshake and repeated transfers.'

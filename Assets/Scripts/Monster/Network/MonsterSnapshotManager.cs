@@ -174,7 +174,7 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
                 || string.IsNullOrWhiteSpace(items[i].monsterId)
                 || items[i].spawnGeneration < 0 || !ids.Add(items[i].monsterInstanceId))
                 return BattleSyncApplyResult.InvalidMessage;
-        if (WorldEntryLoadingView.ActiveWorldEntry != null)
+        if (WorldEntryLoadingView.ActiveWorldEntry != null || message.reason == "map_transfer")
         {
             foreach (MonsterStateDto item in items)
             {

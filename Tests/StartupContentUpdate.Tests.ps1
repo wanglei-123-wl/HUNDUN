@@ -1,6 +1,9 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $source = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
+$synchronization = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupCatalogSynchronization.cs') -Raw
+$plan = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceDownloadPlan.cs') -Raw
+$combined = $source + $synchronization + $plan
 $settings = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AddressableAssetSettings.asset') -Raw
 $schema = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AssetGroups/Schemas/RemoteTrialOnly_BundledAssetGroupSchema.asset') -Raw
 $group = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AssetGroups/RemoteTrialOnly.asset') -Raw
@@ -11,44 +14,45 @@ $required = @(
     'Addressables.InitializeAsync(false)',
     'RemoteGameContent.BootstrapFontAddress',
     'Addressables.CheckForCatalogUpdates(false)',
-    'Addressables.UpdateCatalogs(catalogs, false)',
-    'Addressables.LoadResourceLocationsAsync(',
-    'RemoteGameContent.RequiredContentLabel',
+    'Addressables.UpdateCatalogs(false, catalogs, false)',
+    'StartupResourceDownloadPlan.Create(Addressables.ResourceLocators)',
     'RemoteGameContent.ItemTableAddress',
     'requiredItemIcons.GetRequiredRemoteIconAddresses()',
-    'IEnumerable downloadKeys = keys',
-    'Addressables.GetDownloadSizeAsync(downloadKeys)',
-    'Addressables.DownloadDependenciesAsync(',
-    'downloadKeys, Addressables.MergeMode.Union, false)',
-    'Addressables.MergeMode.Union',
+    'new StartupResourceDownloadOperation(plan.DownloadLocations',
+    'yield return cacheVerification.Run()',
+    'yield return catalogSync.ConfirmBeforeLogin()',
+    'yield return allResources.Run()',
+    'if (!allResources.Succeeded)',
     'RemoteItemIconCache.Load(addresses)',
     'requiredItemIcons.AreRequiredRemoteIconsLoaded(out string missingItemId)',
     'if (addresses.Count == 0)',
-    'download.GetDownloadStatus().DownloadedBytes',
-    'download.Status == AsyncOperationStatus.Succeeded',
     'retryButton.SetActive(true)',
     'while (!retryRequested)',
     'Addressables.Release(initialize)',
     'Addressables.Release(check)',
     'Addressables.Release(update)',
-    'Addressables.Release(size)',
-    'Addressables.Release(download)'
+    'Application.isEditor'
 )
 foreach ($token in $required) {
-    if (-not $source.Contains($token)) { throw "Startup updater is missing: $token" }
+    if (-not $combined.Contains($token)) { throw "Startup updater is missing: $token" }
 }
-if ($source.IndexOf('Addressables.CheckForCatalogUpdates(false)') -gt
-    $source.IndexOf('Addressables.LoadAssetAsync<TMP_FontAsset>')) {
+if ($source.IndexOf('yield return catalogSync.Run()') -gt
+    $source.IndexOf('GameFontService.Load()')) {
     throw 'Refresh the catalog before loading the bootstrap font from an old cached catalog.'
 }
-if ($source -notmatch 'if \(!downloadedSuccessfully\)(?s:.*?)Fail\("资源下载失败"\)' -or
+if ($source.IndexOf('ReleaseAttemptContent();') -gt $source.IndexOf('yield return catalogSync.Run()') -or
+    $source.IndexOf('yield return cacheVerification.Run()') -gt $source.IndexOf('GameFontService.Load()') -or
+    $source.IndexOf('yield return catalogSync.ConfirmBeforeLogin()') -lt $source.IndexOf('RemoteItemIconCache.Load(addresses)')) {
+    throw 'Release previous handles before updates, validate cached bundles before loading assets, and confirm the server version before login.'
+}
+if ($source -notmatch 'if \(!allResources.Succeeded\)(?s:.*?)Fail\(StartupUiText.ResourcesDownloadFailed\)' -or
     $source -notmatch 'RemoteItemIconCache.Clear\(\)' -or
-    $source -notmatch 'keys\.AddRange\(addresses\)') {
-    throw 'Failed downloads must stop startup; only item-table icons and game content should download.'
+    $source -match 'gameLocations.Result.Count == requiredAddresses.Length') {
+    throw 'Failed or incomplete full-resource downloads must stop startup; do not retain the fixed-map label boundary.'
 }
 
-if ($settings -notmatch '(?m)^  m_DisableCatalogUpdateOnStart: 1$' -or
-    $settings -notmatch '(?m)^  m_CatalogRequestsTimeout: 5$' -or
+if ($settings -notmatch '(?m)^  m_DisableCatalogUpdateOnStart: 1\r?$' -or
+    $settings -notmatch '(?m)^  m_CatalogRequestsTimeout: 5\r?$' -or
     $schema -notmatch '(?s)m_BuildPath:\s+m_Id: c3f93f389ba4bd04eaa9b6259c3c1029' -or
     $schema -notmatch '(?s)m_LoadPath:\s+m_Id: 23bbf730465448142a8d74e00d6f2c14' -or
     $group -notmatch 'm_Address: trial/icon/huichun' -or

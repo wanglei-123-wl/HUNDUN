@@ -52,14 +52,11 @@ foreach ($local in @(
 $updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
 $controller = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupSceneController.cs') -Raw
 $endpoint = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceEndpoint.cs') -Raw
-$settings = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceServerSettings.cs') -Raw
 if ($controller.IndexOf('resourceSettings.TryApply(') -lt 0 -or
     $controller.IndexOf('resourceSettings.TryApply(') -gt $controller.IndexOf('contentUpdate.Run()') -or
     $endpoint -notmatch 'string\.IsNullOrWhiteSpace\(input\) \? BuiltAddress : input' -or
     $endpoint -notmatch 'Addressables\.InternalIdTransformFunc = transform' -or
     $updater -notmatch 'Addressables\.InitializeAsync\(false\)' -or
-    $settings -notmatch '\[SerializeField, InspectorName\("资源服务器地址"\)\]' -or
-    $settings -notmatch 'StartupResourceEndpoint\.TryApply\(resourceServerAddress, out error\)' -or
     $updater -match 'SelectResourceAddress|OnGUI|GUI\.TextField|addressVisible' -or
     $endpoint -match 'PlayerPrefs|PreferenceKey|SavedAddress') {
     throw 'The Inspector address must apply before initialization without runtime input or saved overrides.'

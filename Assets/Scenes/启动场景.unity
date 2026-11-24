@@ -310,7 +310,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619642ab318b4e56ae48f30e63974cbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceServerAddress: http://192.168.31.126:18761/StandaloneWindows64
+  resourceServerAddress: 
+  resourceServers:
+  - id: ae626ea8657b4358b71624f9d0e33500
+    name: "\u8FDC\u7A0B\u4E91\u7AEF"
+    address: http://47.93.78.106:18761/StandaloneWindows64
+  - id: 2512801c3cd44344919c89f98436a6a0
+    name: "\u539F\u6709\u8D44\u6E90\u670D"
+    address: http://192.168.31.126:18761/StandaloneWindows64
+  selectedServerId: ae626ea8657b4358b71624f9d0e33500
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0

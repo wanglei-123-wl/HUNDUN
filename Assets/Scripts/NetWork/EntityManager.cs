@@ -396,7 +396,7 @@ public partial class EntityManager : MonoBehaviour, IPlayerBattleSyncModule, IBa
             }
         }
 
-        bool requireViews = WorldEntryLoadingView.ActiveWorldEntry != null;
+        bool requireViews = WorldEntryLoadingView.ActiveWorldEntry != null || message.reason == "map_transfer";
         if (requireViews && unavailablePrefabIds.Count != 0)
             return BattleSyncApplyResult.RetryableFailure;
 

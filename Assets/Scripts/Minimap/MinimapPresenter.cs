@@ -25,6 +25,13 @@ namespace Game.Minimap
         private string currentMapId;
         private float pixelsPerMeter;
 
+        public string GetMapDisplayName(string sceneId, string mapId) => catalog?.Find(sceneId, mapId)?.displayName;
+
+        public bool IsPreparedForMap(string sceneId, string mapId) => isActiveAndEnabled
+            && currentMap != null && currentSceneId == sceneId && currentMapId == mapId
+            && mapImage != null && mapImage.texture == currentMap.texture && pixelsPerMeter > 0f
+            && content != null && content.activeInHierarchy;
+
         private void LateUpdate()
         {
             if (!session.TryGetMinimapPose(out string sceneId, out string mapId,

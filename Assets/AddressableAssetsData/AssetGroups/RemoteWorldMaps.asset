@@ -17,8 +17,28 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 0d4e56b889849424f81d59470f70c2a2
   m_SerializeEntries:
+  - m_GUID: 0d0bcec673ee4857840140f171219c38
+    m_Address: game/map-traversal/map_007
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15b4b1c0cd4d404ba85060076489f560
+    m_Address: game/map-traversal/map_009
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 17b750e1bf31ef84c9b65794a1a464f0
     m_Address: game/scene/world008
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2093cd39f2e54ba2b1713d5c4e6fbb13
+    m_Address: game/map-traversal/map_demo_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31a523593b94400b803649f52d7c7b69
+    m_Address: game/map-traversal/map_001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -37,28 +57,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e51ccfdf0c7168a40b1c2c369dd341c2
-    m_Address: game/scene/world009
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e9e2f14fa033997459961bd9c3e9792e
-    m_Address: game/scene/world006
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2093cd39f2e54ba2b1713d5c4e6fbb13
-    m_Address: game/map-traversal/map_demo_1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 31a523593b94400b803649f52d7c7b69
-    m_Address: game/map-traversal/map_001
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d2f38d8e8e294779a1591eb783f4b800
-    m_Address: game/map-traversal/map_005
+  - m_GUID: 7559987530f24633a5b456f35b540b17
+    m_Address: game/map-traversal/map_010
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -67,23 +67,35 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0d0bcec673ee4857840140f171219c38
-    m_Address: game/map-traversal/map_007
+  - m_GUID: a6e827adb0a0e4244b02d64365068086
+    m_Address: game/scene/map001
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - required-game-content
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2f38d8e8e294779a1591eb783f4b800
+    m_Address: game/map-traversal/map_005
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dbb47aa9d87ae7745aef58d322aa95df
+    m_Address: game/scene/demo1-map
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - required-game-content
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e07cd550f60a4abab49aa88ec8ca3b07
     m_Address: game/map-traversal/map_008
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 15b4b1c0cd4d404ba85060076489f560
-    m_Address: game/map-traversal/map_009
+  - m_GUID: e51ccfdf0c7168a40b1c2c369dd341c2
+    m_Address: game/scene/world009
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7559987530f24633a5b456f35b540b17
-    m_Address: game/map-traversal/map_010
+  - m_GUID: e9e2f14fa033997459961bd9c3e9792e
+    m_Address: game/scene/world006
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

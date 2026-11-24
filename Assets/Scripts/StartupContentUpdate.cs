@@ -17,15 +17,12 @@ public sealed class StartupContentUpdate : MonoBehaviour
     private GameObject retryButton;
     private bool failed;
     private bool retryRequested;
-    private AsyncOperationHandle<TMP_FontAsset> fontHandle;
     private AsyncOperationHandle<ItemDefinitionTable> itemTableHandle;
 
     private void OnDestroy()
     {
         if (itemTableHandle.IsValid())
             Addressables.Release(itemTableHandle);
-        if (fontHandle.IsValid())
-            Addressables.Release(fontHandle);
     }
 
     public IEnumerator Run()
@@ -40,10 +37,10 @@ public sealed class StartupContentUpdate : MonoBehaviour
             retryButton.SetActive(false);
             SetProgress(0f);
 
-            yield return UpdateTrialContent();
+            yield return UpdateGameContent();
             if (!failed)
             {
-                SetStatus("资源已就绪");
+                SetStatus(StartupUiText.Ready);
                 SetProgress(1f);
                 yield break;
             }
@@ -54,196 +51,137 @@ public sealed class StartupContentUpdate : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateTrialContent()
+    private IEnumerator UpdateGameContent()
     {
-        RemoteItemIconCache.Clear();
-        SetStatus("Checking resources");
-        AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator> initialize =
-            Addressables.InitializeAsync(false);
-        yield return initialize;
-        bool initialized = initialize.Status == AsyncOperationStatus.Succeeded;
-        Addressables.Release(initialize);
+        // Release references from a previous attempt before a catalog replacement.
+        // These are in-memory handles, not the downloaded files in the disk cache.
+        ReleaseAttemptContent();
+        SetStatus(StartupUiText.CheckingResources);
+        var initialize = Addressables.InitializeAsync(false);
+        bool initialized;
+        try
+        {
+            yield return initialize;
+            initialized = initialize.Status == AsyncOperationStatus.Succeeded;
+        }
+        finally { if (initialize.IsValid()) Addressables.Release(initialize); }
         if (!initialized)
         {
-            Fail("Resource catalog initialization failed");
+            Fail(StartupUiText.InitializationFailed);
             yield break;
         }
 
-        SetStatus("Checking catalog");
-        var check = Addressables.CheckForCatalogUpdates(false);
-        yield return check;
-        bool checkedCatalog = check.Status == AsyncOperationStatus.Succeeded;
-        string[] catalogs = checkedCatalog ? check.Result.ToArray() : null;
-        Addressables.Release(check);
-        if (!checkedCatalog)
+        SetStatus(StartupUiText.CheckingCatalog);
+        var catalogSync = new StartupCatalogSynchronization(Application.isEditor);
+        yield return catalogSync.Run();
+        if (!catalogSync.Succeeded)
         {
-            Fail("检查远程目录失败");
+            Debug.LogError("[StartupContentUpdate] " + catalogSync.Error);
+            Fail(catalogSync.FailureStage == "changed" ? StartupUiText.CatalogChanged
+                : catalogSync.FailureStage == "update" ? StartupUiText.CatalogUpdateFailed : StartupUiText.CatalogCheckFailed);
+            yield break;
+        }
+        Debug.Log("[StartupContentUpdate] Catalog check complete; remoteCatalogs=" + catalogSync.CatalogCount
+            + " editorAssetDatabase=" + catalogSync.SkippedEditorAssetDatabase);
+
+        StartupResourceDownloadPlan plan = null;
+        try
+        {
+            plan = StartupResourceDownloadPlan.Create(Addressables.ResourceLocators);
+            if (!Application.isEditor && plan.RemoteBundles.Count == 0)
+                throw new System.InvalidOperationException("The Player catalog contains no remote resource bundles.");
+        }
+        catch (System.Exception error)
+        {
+            Debug.LogError("[StartupContentUpdate] Full download plan failed: " + error);
+            Fail(StartupUiText.RequiredContentMissing);
+        }
+        if (failed) yield break;
+
+        SetStatus(StartupUiText.CalculatingResources);
+        var allResources = new StartupResourceDownloadOperation(plan.DownloadLocations, (downloaded, total) =>
+        {
+            SetStatus(StartupUiText.DownloadingResources + FormatBytes(downloaded) + " / " + FormatBytes(total));
+            SetProgress(total > 0 ? (float)((double)downloaded / total) : 1f);
+        });
+        Debug.Log("[StartupContentUpdate] Full download plan: remoteBundles=" + plan.RemoteBundles.Count
+            + " requiredAddresses=" + plan.RequiredAddressCount);
+        yield return allResources.Run();
+        if (!allResources.Succeeded)
+        {
+            Debug.LogError("[StartupContentUpdate] " + allResources.Error);
+            Fail(StartupUiText.ResourcesDownloadFailed);
             yield break;
         }
 
-        if (catalogs.Length > 0)
+        var cacheVerification = new StartupResourceCacheVerification(plan, (checkedBundles, total) =>
         {
-            SetStatus("Updating catalog");
-            var update = Addressables.UpdateCatalogs(catalogs, false);
-            yield return update;
-            bool updated = update.Status == AsyncOperationStatus.Succeeded;
-            Addressables.Release(update);
-            if (!updated)
-            {
-                Fail("更新资源目录失败");
-                yield break;
-            }
-        }
-
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        GrassRenderDiagnostics.LogCatalog(catalogs);
-#endif
-        if (!fontHandle.IsValid())
-            fontHandle = Addressables.LoadAssetAsync<TMP_FontAsset>(
-                RemoteGameContent.BootstrapFontAddress);
-        yield return fontHandle;
-        if (fontHandle.Status != AsyncOperationStatus.Succeeded || fontHandle.Result == null)
+            SetStatus(StartupUiText.CheckingCache + " " + checkedBundles + " / " + total);
+            SetProgress(total > 0 ? (float)checkedBundles / total : 1f);
+        });
+        yield return cacheVerification.Run();
+        if (!cacheVerification.Succeeded)
         {
-            Addressables.Release(fontHandle);
-            fontHandle = default;
-            Fail("Bootstrap font unavailable");
+            Debug.LogError("[StartupContentUpdate] " + cacheVerification.Error);
+            Fail(StartupUiText.CacheCheckFailed);
             yield break;
         }
-        statusText.font = fontHandle.Result;
-        retryText.font = fontHandle.Result;
+        Debug.Log("[StartupContentUpdate] Full resource cache verified; downloadedBytes=" + allResources.PendingBytes);
 
-        string[] requiredAddresses =
+        SetStatus(StartupUiText.CalculatingFont);
+        yield return GameFontService.Load();
+        if (!GameFontService.IsReady)
         {
-            RemoteGameContent.LoginSceneAddress,
-            RemoteGameContent.WorldSceneAddress,
-            RemoteGameContent.DemoMapSceneAddress,
-            RemoteGameContent.Map001SceneAddress,
-            RemoteGameContent.ItemTableAddress
-        };
-        var gameLocations = Addressables.LoadResourceLocationsAsync(
-            RemoteGameContent.RequiredContentLabel);
-        yield return gameLocations;
-        bool hasGameContent = gameLocations.Status == AsyncOperationStatus.Succeeded
-            && gameLocations.Result != null
-            && gameLocations.Result.Count == requiredAddresses.Length;
-        Addressables.Release(gameLocations);
-        if (!hasGameContent)
-        {
-            Fail("登录、公共游戏场景、两张地图或物品总表未登记到远程目录");
+            Fail(StartupUiText.FontLoadFailed);
             yield break;
         }
-
-        foreach (string address in requiredAddresses)
-        {
-            var locations = Addressables.LoadResourceLocationsAsync(address);
-            yield return locations;
-            bool available = locations.Status == AsyncOperationStatus.Succeeded
-                && locations.Result != null && locations.Result.Count > 0;
-            Addressables.Release(locations);
-            if (!available)
-            {
-                Fail("必需的远程资源不存在: " + address);
-                yield break;
-            }
-        }
-
-        SetStatus("计算物品目录下载量");
-        var tableSize = Addressables.GetDownloadSizeAsync(RemoteGameContent.ItemTableAddress);
-        yield return tableSize;
-        bool tableSized = tableSize.Status == AsyncOperationStatus.Succeeded;
-        long tableBytes = tableSized ? tableSize.Result : 0L;
-        Addressables.Release(tableSize);
-        if (!tableSized)
-        {
-            Fail("物品目录不存在");
-            yield break;
-        }
-
-        if (tableBytes > 0L)
-        {
-            var tableDownload = Addressables.DownloadDependenciesAsync(
-                RemoteGameContent.ItemTableAddress, false);
-            while (!tableDownload.IsDone)
-            {
-                SetStatus("下载物品目录 " + FormatBytes(tableDownload.GetDownloadStatus().DownloadedBytes)
-                    + " / " + FormatBytes(tableBytes));
-                yield return null;
-            }
-            bool tableDownloaded = tableDownload.Status == AsyncOperationStatus.Succeeded;
-            Addressables.Release(tableDownload);
-            if (!tableDownloaded)
-            {
-                Fail("物品目录下载失败");
-                yield break;
-            }
-        }
-
-        if (itemTableHandle.IsValid())
-            Addressables.Release(itemTableHandle);
-        itemTableHandle = Addressables.LoadAssetAsync<ItemDefinitionTable>(
-            RemoteGameContent.ItemTableAddress);
+        SetStatus(StartupUiText.CalculatingTable);
+        itemTableHandle = Addressables.LoadAssetAsync<ItemDefinitionTable>(RemoteGameContent.ItemTableAddress);
         yield return itemTableHandle;
-        if (itemTableHandle.Status != AsyncOperationStatus.Succeeded
-            || itemTableHandle.Result == null)
+        if (itemTableHandle.Status != AsyncOperationStatus.Succeeded || itemTableHandle.Result == null)
         {
-            Fail("物品总表加载失败");
+            Fail(StartupUiText.ItemTableLoadFailed);
             yield break;
         }
-
         ItemDefinitionTable requiredItemIcons = itemTableHandle.Result;
         List<string> addresses = requiredItemIcons.GetRequiredRemoteIconAddresses();
         if (addresses.Count == 0)
         {
-            Fail("必需的远程图标地址未配置");
+            Fail(StartupUiText.RequiredIconsMissing);
             yield break;
         }
-
-        var keys = new List<object> { RemoteGameContent.RequiredContentLabel };
-        keys.AddRange(addresses);
-        IEnumerable downloadKeys = keys;
-        SetStatus("计算资源下载量");
-        var size = Addressables.GetDownloadSizeAsync(downloadKeys);
-        yield return size;
-        bool sized = size.Status == AsyncOperationStatus.Succeeded;
-        long bytes = sized ? size.Result : 0L;
-        Addressables.Release(size);
-        if (!sized)
-        {
-            Fail("计算图标资源下载量失败");
-            yield break;
-        }
-
-        if (bytes > 0L)
-        {
-            var download = Addressables.DownloadDependenciesAsync(
-                downloadKeys, Addressables.MergeMode.Union, false);
-            while (!download.IsDone)
-            {
-                long downloaded = download.GetDownloadStatus().DownloadedBytes;
-                SetStatus("下载资源 " + FormatBytes(downloaded) + " / " + FormatBytes(bytes));
-                SetProgress((float)((double)downloaded / bytes));
-                yield return null;
-            }
-
-            bool downloadedSuccessfully = download.Status == AsyncOperationStatus.Succeeded;
-            Addressables.Release(download);
-            if (!downloadedSuccessfully)
-            {
-                Fail("资源下载失败");
-                yield break;
-            }
-        }
-
-        SetStatus("加载图标");
+        SetStatus(StartupUiText.LoadingIcons);
         yield return RemoteItemIconCache.Load(addresses);
         if (!requiredItemIcons.AreRequiredRemoteIconsLoaded(out string missingItemId))
-            Fail("必需的远程图标加载失败: " + missingItemId);
+        {
+            Fail(StartupUiText.RequiredIconLoadFailed);
+            Debug.LogWarning("[StartupContentUpdate] Missing item icon: " + missingItemId);
+            yield break;
+        }
+
+        SetStatus(StartupUiText.CheckingCatalog);
+        yield return catalogSync.ConfirmBeforeLogin();
+        if (!catalogSync.Succeeded)
+        {
+            Debug.LogWarning("[StartupContentUpdate] " + catalogSync.Error);
+            Fail(catalogSync.FailureStage == "changed" ? StartupUiText.CatalogChanged : StartupUiText.CatalogCheckFailed);
+            yield break;
+        }
+        Debug.Log("[StartupContentUpdate] Startup resources match the confirmed server catalogs; login may open.");
+    }
+
+    private void ReleaseAttemptContent()
+    {
+        RemoteItemIconCache.Clear();
+        GameFontService.Release();
+        if (itemTableHandle.IsValid()) Addressables.Release(itemTableHandle);
+        itemTableHandle = default;
     }
 
     private void Fail(string message)
     {
         failed = true;
-        SetStatus(message + "，请重试");
+        SetStatus(message + StartupUiText.RetrySuffix);
         Debug.LogWarning("[StartupContentUpdate] " + message);
     }
 
@@ -276,6 +214,7 @@ public sealed class StartupContentUpdate : MonoBehaviour
         var canvasObject = new GameObject("资源更新显示", typeof(RectTransform),
             typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
         var canvas = canvasObject.GetComponent<Canvas>();
+        canvasObject.transform.SetParent(transform, false);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 100;
         var scaler = canvasObject.GetComponent<CanvasScaler>();
@@ -308,13 +247,14 @@ public sealed class StartupContentUpdate : MonoBehaviour
             new Vector2(0f, 0f), new Vector2(0f, 1f), Vector2.zero, Vector2.zero);
         progressFill.gameObject.AddComponent<Image>().color = new Color(0.88f, 0.69f, 0.34f, 1f);
 
-        retryButton = CreateButton("重试", panel, new Vector2(0f, -122f),
+        retryButton = CreateButton(StartupUiText.Retry, panel, new Vector2(0f, -122f),
             () => retryRequested = true);
 
         if (FindObjectOfType<EventSystem>() == null)
         {
-            new GameObject("资源更新输入", typeof(EventSystem),
+            var input = new GameObject("资源更新输入", typeof(EventSystem),
                 typeof(StandaloneInputModule));
+            input.transform.SetParent(transform, false);
         }
     }
 

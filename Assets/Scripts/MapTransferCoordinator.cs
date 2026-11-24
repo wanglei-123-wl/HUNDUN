@@ -8,11 +8,13 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 [DisallowMultipleComponent]
 public sealed class MapTransferCoordinator : MonoBehaviour
 {
-    private enum TransferState { Idle, Requested, Preparing, AwaitingResult, Committed }
+    private enum TransferState { Idle, CheckingResources, Requested, Preparing, AwaitingResult, Committed }
 
     private const float RequestTimeoutSeconds = 5f;
     private const float PreparationTimeoutSeconds = 25f;
     private const float ResultTimeoutSeconds = 10f;
+    private const float ResourceCheckTimeoutSeconds = 10f;
+    private const string MissingResources = "地图资源不完整，请重启游戏完成更新后重试";
 
     private GameSession session;
     private NetworkManager network;
@@ -31,7 +33,14 @@ public sealed class MapTransferCoordinator : MonoBehaviour
     private float deadline;
     private int retries;
     private Coroutine preload;
-    private AsyncOperationHandle dependencies;
+    private AsyncOperationHandle<long> dependencies;
+    private MapTransferStatusView statusView;
+    private string preparationFailure;
+    private bool recoveryStatus;
+
+    public bool CanCompletePresentation => statusView != null && statusView.IsVisible && statusView.MinimumDisplayElapsed;
+
+    public void ReportPreparationStatus(string message) => ShowStatus(message);
 
     public void Initialize(GameSession owner)
     {
@@ -60,13 +69,17 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         commitHandler = handler;
         if (handler == null && state != TransferState.Idle
             && state != TransferState.Committed)
-            RecoverUncertain("Transfer destination handler was removed.");
+        {
+            if (state == TransferState.CheckingResources)
+                AbortPreflight("传送已取消");
+            else RecoverUncertain("Transfer destination handler was removed.");
+        }
         BindPanel();
     }
 
     public void CompleteCommittedTransfer()
     {
-        if (state != TransferState.Committed)
+        if (state != TransferState.Committed || !CanCompletePresentation)
             return;
         ClearPending();
         BindPanel();
@@ -90,6 +103,8 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         if (network != null)
             network.OnDisconnected -= HandleDisconnected;
         ClearPending();
+        if (statusView != null) statusView.Release();
+        statusView = null;
         dispatcher = null;
         network = null;
         session = null;
@@ -106,6 +121,13 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         if (session == null || network == null)
             return;
 
+        if (state == TransferState.Idle && recoveryStatus && session.IsWorldReady
+            && network.IsConnected && !network.SceneOperationsPaused && CanCompletePresentation)
+        {
+            statusView.Hide();
+            recoveryStatus = false;
+        }
+
         if (state == TransferState.Idle)
             BindPanel();
         if (state == TransferState.Idle || state == TransferState.Committed)
@@ -113,16 +135,24 @@ public sealed class MapTransferCoordinator : MonoBehaviour
 
         if (!network.IsConnected || network.ConnectionEpoch != connectionEpoch)
         {
-            ClearPending();
+            ClearPending(false);
+            ShowFailure("服务器连接已变化，请等待重新连接后重试", true);
             BindPanel();
+            GameNoticeService.Show("服务器连接已变化，请等待重新连接后重试");
             return;
         }
         if (Time.realtimeSinceStartup < deadline)
             return;
 
+        if (state == TransferState.CheckingResources)
+        {
+            AbortPreflight("地图资源检查超时，请重试");
+            return;
+        }
         if (state == TransferState.Preparing)
         {
             StopPreload();
+            preparationFailure = "地图资源检查超时，请重试";
             SendReady(false);
             return;
         }
@@ -157,6 +187,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         }
 
         bool available = commitHandler != null && state == TransferState.Idle
+            && (statusView == null || !statusView.IsVisible)
             && session.IsWorldReady && network != null && network.IsConnected
             && !network.SceneOperationsPaused
             && !string.IsNullOrWhiteSpace(session.SceneSessionId);
@@ -170,25 +201,28 @@ public sealed class MapTransferCoordinator : MonoBehaviour
     private void BeginTransfer(MapTransferRoute route)
     {
         if (state != TransferState.Idle || commitHandler == null
+            || (statusView != null && statusView.IsVisible)
             || route == null || string.IsNullOrWhiteSpace(route.routeId)
             || route.routeId.Length > 64
             || session == null || !session.IsWorldReady || network == null
             || !network.IsConnected || string.IsNullOrWhiteSpace(session.SceneSessionId))
             return;
 
+        if (statusView == null) statusView = MapTransferStatusView.Create(transform);
+        statusView.BeginDestination(route.sceneId, route.mapId);
+        recoveryStatus = false;
         if (!WorldMapSceneCatalog.TryGetAddress(route.sceneId, route.mapId, out _))
         {
+            ShowFailure("目标地图暂不可用", false);
             GameNoticeService.Show("目标地图暂不可用");
             return;
         }
         if (session.IsCurrentMap(route.sceneId, route.mapId))
         {
+            ShowFailure("已在当前地图，无法传送", false);
             GameNoticeService.Show("已在当前地图，无法传送");
             return;
         }
-        if (!session.TryPauseForMapTransfer())
-            return;
-
         destinationSceneId = route.sceneId;
         destinationMapId = route.mapId;
         request = new MapTransferRequest
@@ -198,17 +232,51 @@ public sealed class MapTransferCoordinator : MonoBehaviour
             sceneSessionId = session.SceneSessionId
         };
         connectionEpoch = network.ConnectionEpoch;
+        state = TransferState.CheckingResources;
+        deadline = Time.realtimeSinceStartup + ResourceCheckTimeoutSeconds;
+        BindPanel();
+        ShowStatus("正在检查地图资源，请稍后");
+        preload = StartCoroutine(CheckBeforeTransfer());
+    }
+
+    private IEnumerator CheckBeforeTransfer()
+    {
+        if (!TryBeginCacheCheck())
+        {
+            AbortPreflight(MissingResources);
+            yield break;
+        }
+        yield return dependencies;
+        bool cached = dependencies.Status == AsyncOperationStatus.Succeeded && dependencies.Result == 0;
+        ReleaseDependencies();
+        preload = null;
+        if (state != TransferState.CheckingResources) yield break;
+        if (!cached)
+        {
+            AbortPreflight(MissingResources);
+            yield break;
+        }
+        if (session == null || !session.IsWorldReady || network == null || !network.IsConnected
+            || network.ConnectionEpoch != connectionEpoch || session.SceneSessionId != request.sceneSessionId
+            || network.SceneOperationsPaused || commitHandler == null || !session.TryPauseForMapTransfer())
+        {
+            AbortPreflight("当前无法传送，请稍后重试");
+            yield break;
+        }
+
         state = TransferState.Requested;
         retries = 0;
         deadline = Time.realtimeSinceStartup + RequestTimeoutSeconds;
         BindPanel();
+        ShowStatus("正在请求传送，请稍后");
         if (!network.Send(request))
         {
             session.ResumeAfterMapTransferFailure(null);
-            ClearPending();
+            ClearPending(false);
+            ShowFailure("传送请求发送失败，请重试", false);
             BindPanel();
             GameNoticeService.Show("传送请求发送失败");
-            return;
+            yield break;
         }
 
         if (panel != null)
@@ -217,7 +285,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
 
     private void HandlePrepare(string json)
     {
-        if (state == TransferState.Idle || state == TransferState.Committed
+        if (state == TransferState.Idle || state == TransferState.CheckingResources || state == TransferState.Committed
             || network == null || network.ConnectionEpoch != connectionEpoch)
             return;
 
@@ -249,28 +317,44 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         transferId = message.transferId;
         state = TransferState.Preparing;
         deadline = Time.realtimeSinceStartup + PreparationTimeoutSeconds;
-        preload = StartCoroutine(PreloadDestination(destinationAddress));
+        ShowStatus("正在准备地图，请稍后");
+        preload = StartCoroutine(PreloadDestination());
     }
 
-    private IEnumerator PreloadDestination(string address)
+    private bool TryBeginCacheCheck()
     {
         try
         {
-            dependencies = Addressables.DownloadDependenciesAsync(address);
+            var locations = MapTransferResourcePreflight.Resolve(destinationSceneId, destinationMapId,
+                Addressables.ResourceLocators);
+            dependencies = Addressables.GetDownloadSizeAsync((IEnumerable)locations);
+            return true;
         }
         catch (Exception error)
         {
-            Debug.LogWarning("Map dependencies could not be requested: " + error, this);
+            Debug.LogWarning("Map cache check failed: " + error, this);
+            return false;
+        }
+    }
+
+    private IEnumerator PreloadDestination()
+    {
+        // The startup scene owns downloads. A cache loss during the handshake
+        // cancels the reservation rather than starting a long network download.
+        if (!TryBeginCacheCheck())
+        {
             preload = null;
+            preparationFailure = MissingResources;
             SendReady(false);
             yield break;
         }
 
         yield return dependencies;
-        bool loaded = dependencies.Status == AsyncOperationStatus.Succeeded;
+        bool loaded = dependencies.Status == AsyncOperationStatus.Succeeded && dependencies.Result == 0;
         if (!loaded)
             Debug.LogWarning("Map dependencies failed to load: "
                 + dependencies.OperationException, this);
+        if (!loaded) preparationFailure = MissingResources;
         ReleaseDependencies();
         preload = null;
         if (state != TransferState.Preparing
@@ -293,6 +377,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
             loaded = loaded
         };
         state = TransferState.AwaitingResult;
+        ShowStatus(loaded ? "正在等待传送，请稍后" : "正在取消传送，请稍后");
         retries = 0;
         deadline = Time.realtimeSinceStartup + ResultTimeoutSeconds;
         if (network == null || !network.Send(ready))
@@ -301,7 +386,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
 
     private void HandleResult(string json)
     {
-        if (state == TransferState.Idle || state == TransferState.Committed
+        if (state == TransferState.Idle || state == TransferState.CheckingResources || state == TransferState.Committed
             || network == null || network.ConnectionEpoch != connectionEpoch)
             return;
 
@@ -326,10 +411,13 @@ public sealed class MapTransferCoordinator : MonoBehaviour
                 return;
             }
 
-            ClearPending();
+            string failure = result.errorCode == "client_load_failed" && preparationFailure != null
+                ? preparationFailure : DescribeFailure(result.errorCode);
+            ClearPending(false);
+            ShowFailure(failure, false);
             session?.ResumeAfterMapTransferFailure(result.movementControl);
             BindPanel();
-            GameNoticeService.Show(DescribeFailure(result.errorCode));
+            GameNoticeService.Show(failure);
             return;
         }
 
@@ -347,18 +435,20 @@ public sealed class MapTransferCoordinator : MonoBehaviour
 
         StopPreload();
         state = TransferState.Committed;
+        ShowStatus("正在进入地图，请稍后");
         BindPanel();
         try { commitHandler(result); }
         catch (Exception error)
         {
             Debug.LogError("Map transfer destination failed: " + error, this);
+            NotifyWorldRecovery();
             session?.RecoverWorldSession("map_transfer_commit_failed");
         }
     }
 
     private void HandleError(string json)
     {
-        if (state == TransferState.Idle || state == TransferState.Committed)
+        if (state == TransferState.Idle || state == TransferState.CheckingResources || state == TransferState.Committed)
             return;
         ServerErrorMessage error;
         try { error = JsonUtility.FromJson<ServerErrorMessage>(json); }
@@ -370,23 +460,30 @@ public sealed class MapTransferCoordinator : MonoBehaviour
 
     private void HandleDisconnected(string reason)
     {
+        bool interrupted = state != TransferState.Idle;
         if (panel != null)
             panel.Hide();
-        ClearPending();
+        ClearPending(!interrupted);
+        if (interrupted) ShowFailure("传送失败，服务器连接中断，正在等待重新连接", true);
         BindPanel();
+        if (interrupted) GameNoticeService.Show("传送失败，服务器连接失败，请等待重新连接");
     }
 
     private void RecoverUncertain(string reason)
     {
         Debug.LogWarning(reason, this);
-        ClearPending();
+        ClearPending(false);
+        ShowFailure("传送未完成，正在重新连接，请稍后", true);
+        GameNoticeService.Show("传送未完成，正在重新连接，请稍后");
         session?.RecoverWorldSession("map_transfer_uncertain");
         BindPanel();
     }
 
-    private void ClearPending()
+    private void ClearPending(bool hideStatus = true)
     {
         StopPreload();
+        if (hideStatus && statusView != null) statusView.Hide();
+        preparationFailure = null;
         request = null;
         ready = null;
         transferId = null;
@@ -395,6 +492,36 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         destinationAddress = null;
         connectionEpoch = 0;
         state = TransferState.Idle;
+    }
+
+    private void AbortPreflight(string message)
+    {
+        ClearPending(false);
+        ShowFailure(message, false);
+        BindPanel();
+        GameNoticeService.Show(message);
+    }
+
+    private void ShowStatus(string message)
+    {
+        if (statusView == null) statusView = MapTransferStatusView.Create(transform);
+        statusView.Show(message);
+    }
+
+    private void ShowFailure(string message, bool recovering)
+    {
+        if (statusView == null) statusView = MapTransferStatusView.Create(transform);
+        recoveryStatus = recovering;
+        statusView.ShowFailure(message, recovering);
+    }
+
+    public void NotifyWorldRecovery(string message = null)
+    {
+        if (state == TransferState.Idle) return;
+        ClearPending(false);
+        ShowFailure(message ?? "地图传送未完成，正在重新连接，请稍后", true);
+        BindPanel();
+        GameNoticeService.Show("地图传送未完成，正在重新连接，请稍后");
     }
 
     private void StopPreload()
@@ -418,11 +545,11 @@ public sealed class MapTransferCoordinator : MonoBehaviour
     {
         switch (errorCode)
         {
-            case "too_far": return "请靠近传送员";
-            case "player_dead": return "死亡状态无法传送";
+            case "too_far": return "请靠近传送点";
+            case "player_dead": return "死亡时无法传送";
             case "player_airborne": return "落地后再传送";
             case "route_unavailable":
-            case "wrong_source_map": return "路线暂不可用，请重新打开菜单";
+            case "wrong_source_map": return "路线暂不可用，请重新选择";
             case "client_load_failed": return "目标地图资源加载失败";
             case "preparation_expired": return "传送准备超时，请重试";
             default: return "传送失败，请稍后重试";

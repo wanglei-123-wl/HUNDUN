@@ -106,6 +106,7 @@ public partial class GameSession : MonoBehaviour
     private MapTransferCoordinator mapTransferCoordinator;
     private MapTransferResult pendingMapTransfer;
     private Coroutine mapTransferLoadCoroutine;
+    private Coroutine mapTransferCompletionCoroutine;
     private AsyncOperationHandle<SceneInstance> mapTransferSceneOperation;
     private Scene mapTransferSourceScene;
     private float mapTransferSnapshotDeadline;
@@ -172,7 +173,11 @@ public partial class GameSession : MonoBehaviour
         mapId = null;
         positionXZ = default;
         yaw = 0f;
-        if (!IsWorldReady || worldRecoveryPending || mapTransferPaused
+        bool preparingTransfer = pendingMapTransfer != null
+            && sceneId == pendingMapTransfer.sceneId && activeMapId == pendingMapTransfer.mapId
+            && IsMapTraversalReady(sceneId, activeMapId);
+        if ((!IsWorldReady && !preparingTransfer) || worldRecoveryPending
+            || (mapTransferPaused && !preparingTransfer)
             || WorldEntryLoadingView.ActiveWorldEntry != null
             || string.IsNullOrEmpty(activeMapId)
             || localPlayerRootObject == null || !localPlayerRootObject.activeInHierarchy)
@@ -383,6 +388,8 @@ public partial class GameSession : MonoBehaviour
 
     private void BeginWorldRecovery(string reason)
     {
+        mapTransferCoordinator?.NotifyWorldRecovery(reason == "map_transfer_snapshots_incomplete"
+            ? "地图准备超时，玩家、怪物、场景或小地图尚未就绪，正在重新连接" : null);
         Debug.LogWarning("Recovering world session with a new connection. reason="
             + (reason ?? string.Empty));
         worldRecoveryPending = true;
@@ -1754,45 +1761,8 @@ public partial class GameSession : MonoBehaviour
                 return;
             }
 
-            pendingMapTransfer = null;
-            mapTraversalWaitingTransferReady = null;
-            mapTransferSnapshotDeadline = 0f;
-            enterWorldConfirmed = true;
-            mapTransferPaused = false;
-            if (!networkManager.SetSceneOperationsPaused(context.ConnectionEpoch, false))
-            {
-                RecoverWorldSession("map_transfer_input_resume_failed");
-                return;
-            }
-            if (!localPlayerDead && inputWasEnabledForTransfer)
-                transferInput.SetInputEnabled(true);
-            if (mapTransferSourceScene.IsValid() && mapTransferSourceScene.isLoaded
-                && mapTransferSourceScene != SceneManager.GetActiveScene())
-            {
-                Scene oldMap = mapTransferSourceScene;
-                AsyncOperation unload = SceneManager.UnloadSceneAsync(oldMap);
-                if (unload == null)
-                {
-                    RecoverWorldSession("map_transfer_source_unload_failed");
-                    return;
-                }
-                unload.completed += _ =>
-                {
-                    if (this == null || !sessionStarted || worldRecoveryPending
-                        || networkManager == null || !networkManager.IsConnected
-                        || networkManager.ConnectionEpoch != context.ConnectionEpoch)
-                        return;
-                    if (localPlayerRootObject == null || localPlayerInputController == null)
-                        RecoverWorldSession("map_transfer_local_player_unavailable");
-                    else if (oldMap.isLoaded)
-                        RecoverWorldSession("map_transfer_source_unload_failed");
-                    else
-                        mapTransferCoordinator?.CompleteCommittedTransfer();
-                };
-            }
-            else
-                mapTransferCoordinator?.CompleteCommittedTransfer();
-            mapTransferSourceScene = default;
+            if (mapTransferCompletionCoroutine == null)
+                mapTransferCompletionCoroutine = StartCoroutine(CompleteMapTransferPresentation(context, transfer));
             return;
         }
         if (!sessionStarted || enterWorldConfirmed || networkManager == null
@@ -1809,6 +1779,11 @@ public partial class GameSession : MonoBehaviour
 
     private void CancelMapTransferLoad()
     {
+        if (mapTransferCompletionCoroutine != null)
+        {
+            StopCoroutine(mapTransferCompletionCoroutine);
+            mapTransferCompletionCoroutine = null;
+        }
         mapTraversal.CancelPending();
         mapTraversalWaitingTransferReady = null;
         if (mapTransferLoadCoroutine != null)
@@ -1832,6 +1807,81 @@ public partial class GameSession : MonoBehaviour
                 && completed.IsValid())
                 Addressables.Release(completed);
         };
+    }
+
+    private IEnumerator CompleteMapTransferPresentation(BattleSyncReadyContext context, MapTransferResult transfer)
+    {
+        // Keep movement paused until the destination is visible and the minimum display time has elapsed.
+        var minimap = FindObjectOfType<Game.Minimap.MinimapPresenter>(true);
+        var cameraFollow = FindObjectOfType<ThirdPersonCameraFollow>();
+        while (pendingMapTransfer == transfer && sessionStarted && !worldRecoveryPending && !returningToLogin)
+        {
+            if (networkManager == null || !networkManager.IsConnected
+                || networkManager.ConnectionEpoch != context.ConnectionEpoch
+                || networkManager.SceneSessionId != transfer.sceneSessionId)
+            {
+                RecoverWorldSession("map_transfer_connection_changed");
+                yield break;
+            }
+
+            bool sceneReady = mapTransferLoadCoroutine == null
+                && IsMapTraversalReady(transfer.sceneId, transfer.mapId);
+            bool snapshotsReady = battleSyncRuntime?.SessionState?.IsReady == true;
+            bool playerReady = HasPreparedLocalCharacter(cameraFollow);
+            bool minimapReady = minimap != null && minimap.IsPreparedForMap(transfer.sceneId, transfer.mapId);
+            if (sceneReady && snapshotsReady && playerReady && minimapReady
+                && mapTransferCoordinator?.CanCompletePresentation == true)
+            {
+                Scene oldMap = mapTransferSourceScene;
+                if (oldMap.IsValid() && oldMap.isLoaded && oldMap != SceneManager.GetActiveScene())
+                {
+                    AsyncOperation unload = SceneManager.UnloadSceneAsync(oldMap);
+                    if (unload == null)
+                    {
+                        RecoverWorldSession("map_transfer_source_unload_failed");
+                        yield break;
+                    }
+                    yield return unload;
+                    if (pendingMapTransfer != transfer || worldRecoveryPending || returningToLogin) yield break;
+                    if (oldMap.isLoaded)
+                    {
+                        RecoverWorldSession("map_transfer_source_unload_failed");
+                        yield break;
+                    }
+                    mapTransferSourceScene = default;
+                    // Unloading can span frames; recheck the destination and connection before revealing it.
+                    continue;
+                }
+                break;
+            }
+
+            mapTransferCoordinator?.ReportPreparationStatus(!sceneReady ? "正在准备地图和寻路数据"
+                : !snapshotsReady ? "正在同步玩家、怪物、掉落和战斗状态"
+                : !playerReady ? "正在准备角色和相机"
+                : !minimapReady ? "正在准备小地图" : "地图准备完成，即将抵达");
+            yield return null;
+        }
+        if (pendingMapTransfer != transfer || !sessionStarted || worldRecoveryPending || returningToLogin) yield break;
+        if (networkManager == null || !networkManager.IsConnected
+            || networkManager.ConnectionEpoch != context.ConnectionEpoch
+            || networkManager.SceneSessionId != transfer.sceneSessionId
+            || !HasPreparedLocalCharacter(cameraFollow)
+            || !networkManager.SetSceneOperationsPaused(context.ConnectionEpoch, false))
+        {
+            RecoverWorldSession("map_transfer_input_resume_failed");
+            yield break;
+        }
+
+        pendingMapTransfer = null;
+        mapTraversalWaitingTransferReady = null;
+        mapTransferSnapshotDeadline = 0f;
+        mapTransferSourceScene = default;
+        enterWorldConfirmed = true;
+        mapTransferPaused = false;
+        mapTransferCompletionCoroutine = null;
+        if (!localPlayerDead && inputWasEnabledForTransfer)
+            localPlayerInputController.SetInputEnabled(true);
+        mapTransferCoordinator?.CompleteCommittedTransfer();
     }
 
     private void HandleMapTransferCommitted(MapTransferResult result)

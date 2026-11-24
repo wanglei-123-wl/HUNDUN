@@ -3,7 +3,7 @@ $root = Split-Path $PSScriptRoot -Parent
 $unity = 'C:\Program Files\Unity 2022.3.62f1\Editor\Data'
 $dotnet = Join-Path $unity 'NetCoreRuntime/dotnet.exe'
 $compiler = Join-Path $unity 'DotNetSdkRoslyn/csc.dll'
-$original = Join-Path $root 'Library/Bee/artifacts/1900b0aP.dag/Assembly-CSharp.rsp'
+$original = Join-Path $root 'Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp'
 $transfer = 'Assets/Scripts/MapTransferCoordinator.cs'
 $interaction = 'Assets/Scripts/MapTeleporterInteraction.cs'
 if (-not (Test-Path -LiteralPath $dotnet) -or
@@ -52,6 +52,13 @@ try {
     }
     if (-not $hasInteraction) {
         $lines.Add('"' + $interaction + '"')
+    }
+    foreach ($source in @('Assets/Scripts/MapTransferStatusView.cs',
+        'Assets/Scripts/MapTransferResourcePreflight.cs',
+        'Assets/Scripts/LoginScripts/LoadingBackgroundSlideshow.cs')) {
+        if (-not ($lines | Where-Object { $_.Trim('"') -eq $source })) {
+            $lines.Add('"' + $source + '"')
+        }
     }
     $response = Join-Path $temporaryRoot 'Assembly-CSharp.rsp'
     [IO.File]::WriteAllLines($response, $lines,

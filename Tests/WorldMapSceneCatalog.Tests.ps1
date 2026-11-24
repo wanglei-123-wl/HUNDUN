@@ -48,24 +48,26 @@ foreach ($i in 5..10) {
 }
 
 $messages = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/NetWork/NetMessages.cs') -Raw
-$group = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AssetGroups/RemoteGameContent.asset') -Raw
+$group = $remoteMaps
 $migration = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Item/Editor/UsedGameContentMigration.cs') -Raw
 $updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
 $integration = Get-Content -LiteralPath (Join-Path $root 'Assets/Editor/Map001IntegrationSetup.cs') -Raw
 $demoGuid = [regex]::Match(
     (Get-Content -LiteralPath (Join-Path $root 'Assets/Scenes/Demo 1 Map.unity.meta') -Raw),
-    '(?m)^guid: ([0-9a-f]{32})$').Groups[1].Value
+    '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
 $villageGuid = [regex]::Match(
     (Get-Content -LiteralPath (Join-Path $root 'Assets/Scenes/Map001 Gameplay.unity.meta') -Raw),
-    '(?m)^guid: ([0-9a-f]{32})$').Groups[1].Value
+    '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
+
+if (!$demoGuid -or !$villageGuid) { throw 'Map scene GUIDs must resolve before checking group ownership.' }
 
 if ($messages -notmatch '(?s)public class EnterWorldResult.*?public string sceneId;\s+public string mapId;\s+public float x;' -or
     $group -notmatch "(?s)m_GUID: $demoGuid\r?\n\s+m_Address: game/scene/demo1-map.*?required-game-content" -or
     $group -notmatch "(?s)m_GUID: $villageGuid\r?\n\s+m_Address: game/scene/map001.*?required-game-content" -or
     $migration -notmatch 'EnsureEntry\(settings, remoteGroup, DemoMapScene, RemoteGameContent.DemoMapSceneAddress\)' -or
     $migration -notmatch 'remoteGroup.entries.Count != 5' -or
-    $updater -notmatch 'gameLocations.Result.Count == requiredAddresses.Length' -or
-    $updater -notmatch 'Addressables.LoadResourceLocationsAsync\(address\)' -or
+    $updater -notmatch 'StartupResourceDownloadPlan.Create\(Addressables.ResourceLocators\)' -or
+    $updater -notmatch 'if \(!allResources.Succeeded\)' -or
     $integration -match 'RemoveAssetEntry\(AssetDatabase.AssetPathToGUID\(DemoMapPath\)\)') {
     throw 'The enter-world map field or remote map resources are not configured correctly.'
 }

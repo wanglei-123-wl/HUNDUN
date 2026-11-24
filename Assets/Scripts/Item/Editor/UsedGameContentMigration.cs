@@ -43,6 +43,10 @@ namespace Game.Items.Editor
                     throw new InvalidOperationException("Leave Play mode before building content.");
 
                 var settings = AddressableAssetSettingsDefaultObject.Settings;
+                if (settings != null && settings.FindGroup("RemoteGameFonts") != null)
+                    throw new InvalidOperationException(
+                        "The phased font migration is already applied. This legacy all-in-one tool "
+                        + "would restore the full font to the local group; use the phased migration workflow.");
                 var iconGroup = settings == null ? null : settings.FindGroup("RemoteTrialOnly");
                 if (iconGroup == null || settings.DefaultGroup == null)
                     throw new InvalidOperationException("Existing Addressables groups are missing.");

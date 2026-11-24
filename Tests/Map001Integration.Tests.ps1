@@ -3,16 +3,21 @@ $root = Split-Path $PSScriptRoot -Parent
 $original = Get-Content -LiteralPath (Join-Path $root 'Assets/Map001/map001.unity') -Raw
 $gameplay = Get-Content -LiteralPath (Join-Path $root 'Assets/Scenes/Map001 Gameplay.unity') -Raw
 $shell = Get-Content -LiteralPath (Join-Path $root 'Assets/Scenes/WorldShell.unity') -Raw
-$group = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AssetGroups/RemoteGameContent.asset') -Raw
+$group = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AssetGroups/RemoteWorldMaps.asset') -Raw
 $navigation = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/RemoteGameContent.cs') -Raw
 $loader = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/WorldMapLayerLoader.cs') -Raw
 $migration = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Item/Editor/UsedGameContentMigration.cs') -Raw
 $oldMapGuid = [regex]::Match(
     (Get-Content -LiteralPath (Join-Path $root 'Assets/Scenes/Demo 1 Map.unity.meta') -Raw),
-    '(?m)^guid: ([0-9a-f]{32})$').Groups[1].Value
+    '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
 $mapGuid = [regex]::Match(
     (Get-Content -LiteralPath (Join-Path $root 'Assets/Scenes/Map001 Gameplay.unity.meta') -Raw),
-    '(?m)^guid: ([0-9a-f]{32})$').Groups[1].Value
+    '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
+
+$original = $original.Replace("`r`n", "`n")
+$gameplay = $gameplay.Replace("`r`n", "`n")
+$shell = $shell.Replace("`r`n", "`n")
+if (!$mapGuid -or !$oldMapGuid) { throw 'Map scene GUIDs must resolve before checking group ownership.' }
 
 if ($original -notmatch '(?m)^  m_Name: Main Camera$' -or
     $gameplay -match '(?m)^  m_Name: Main Camera$' -or

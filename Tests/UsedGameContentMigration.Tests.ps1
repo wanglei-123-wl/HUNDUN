@@ -21,8 +21,13 @@ foreach ($token in @(
     'EditorBuildSettings.scenes = new[]',
     'AddressableAssetSettings.BuildPlayerContent(out result)'
     'VerifyBuiltContent()'
+    'settings.FindGroup("RemoteGameFonts") != null'
 )) {
     if (-not $source.Contains($token)) { throw "Migration guard is missing: $token" }
+}
+if ($source.IndexOf('settings.FindGroup("RemoteGameFonts") != null') -gt
+    $source.IndexOf('EnsureEntry(settings, localGroup, ChineseFont')) {
+    throw 'The legacy migration must stop before it can undo the phased font ownership.'
 }
 if ($source -match 'AssetDatabase\.GetAllAssetPaths\(\).*CreateOrMoveEntry' -or
     $updater -notmatch 'keys\.AddRange\(addresses\)' -or

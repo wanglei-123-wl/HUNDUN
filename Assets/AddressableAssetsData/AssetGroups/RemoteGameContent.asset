@@ -29,18 +29,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - required-game-content
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dbb47aa9d87ae7745aef58d322aa95df
-    m_Address: game/scene/demo1-map
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - required-game-content
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a6e827adb0a0e4244b02d64365068086
-    m_Address: game/scene/map001
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - required-game-content
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: af3898f55a5d9e34391d67f4ba65976f
     m_Address: game/scene/world
     m_ReadOnly: 0
