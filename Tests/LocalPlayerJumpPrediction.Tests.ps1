@@ -144,10 +144,12 @@ namespace UnityEngine
     public struct AnimatorStateInfo
     {
         public int shortNameHash;
-        public bool IsTag(string value) { return false; }
+        public string Tag;
+        public bool IsTag(string value) { return Tag == value; }
     }
     public class Animator
     {
+        public bool isActiveAndEnabled = true;
         public AnimatorControllerParameter[] parameters = new AnimatorControllerParameter[0];
         public bool IsMoving;
         public bool AttackTriggered;

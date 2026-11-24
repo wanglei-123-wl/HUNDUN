@@ -23,6 +23,7 @@ namespace UnityEngine
     {
         public static bool LeftHeld, RightHeld, LeftDown, RightDown, LeftUp, RightUp;
         public static float MouseX, MouseY;
+        public static Vector2 mouseScrollDelta;
         public static bool GetMouseButton(int index) { return index == 0 ? LeftHeld : RightHeld; }
         public static bool GetMouseButtonDown(int index) { return index == 0 ? LeftDown : RightDown; }
         public static bool GetMouseButtonUp(int index) { return index == 0 ? LeftUp : RightUp; }
@@ -41,7 +42,11 @@ namespace UnityEngine
         public float magnitude { get { return (float)Math.Sqrt(x * x + y * y); } }
     }
 }
-public static class GameplayUiInputGuard { public static bool BlocksGameplayInput; }
+public static class GameplayUiInputGuard
+{
+    public static bool BlocksGameplayInput;
+    public static bool BlocksCameraInput => BlocksGameplayInput;
+}
 public sealed class CameraSampleHarness
 {
     public float mouseXSpeed = 2f, mouseYSpeed = 1.5f;
@@ -51,6 +56,8 @@ public sealed class CameraSampleHarness
     private int lastSampledInputFrame = -1;
     public bool HasTarget = true, Captured;
     public float CameraYaw { get { return yaw; } }
+    public float CameraPitch => pitch;
+    public float ReadScroll() => ReadScrollInput();
     public bool CharacterLookActive { get { return rightDragging && !GameplayUiInputGuard.BlocksGameplayInput; } }
     private object GetFollowTarget() { return HasTarget ? new object() : null; }
     private void SetCursorCaptured(bool value) { Captured = value; }
@@ -93,12 +100,18 @@ public static class CameraMovementInputSyncTests
         UnityEngine.Time.frameCount = 4;
         GameplayUiInputGuard.BlocksGameplayInput = true;
         UnityEngine.Input.LeftDown = false;
+        UnityEngine.Input.MouseX = 100;
+        UnityEngine.Input.MouseY = 100;
+        UnityEngine.Input.mouseScrollDelta = new Vector2(0, 10);
+        float previousPitch = camera.CameraPitch;
         camera.SampleInput();
-        Check(camera.CameraYaw == 16f && !camera.CharacterLookActive && !camera.Captured,
+        Check(camera.CameraYaw == 16f && camera.CameraPitch == previousPitch
+            && camera.ReadScroll() == 0 && !camera.CharacterLookActive && !camera.Captured,
             "Blocking gameplay UI must stop camera drag without changing the view.");
 
         UnityEngine.Time.frameCount = 5;
         GameplayUiInputGuard.BlocksGameplayInput = false;
+        Check(camera.ReadScroll() == 10, "World scroll must still be available after UI releases input.");
         UnityEngine.Input.LeftHeld = false;
         UnityEngine.Input.RightUp = false;
         camera.HasTarget = false;

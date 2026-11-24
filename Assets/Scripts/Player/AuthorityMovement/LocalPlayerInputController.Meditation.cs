@@ -165,8 +165,9 @@ public sealed partial class LocalPlayerInputController
                 && meditationAnimator.GetNextAnimatorStateInfo(0).IsTag(MeditationTag));
     }
 
-    private bool IsMeditationActionBlocked() =>
-        isActiveAndEnabled && inputEnabled && IsMeditationBlockingInput();
+    private bool IsLocalPlayerActionBlocked() =>
+        isActiveAndEnabled && inputEnabled && (IsMeditationBlockingInput()
+            || predictedMotor?.BlocksActionsForPotion == true);
 
     private void ClearMeditationRequest()
     {

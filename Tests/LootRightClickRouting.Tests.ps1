@@ -108,7 +108,7 @@ namespace UnityEngine.EventSystems
         public bool IsPointerOverGameObject() => PointerOverUi;
     }
 }
-public static class GameplayUiInputGuard { public static bool BlocksGameplayInput; }
+public static class GameplayUiInputGuard { public static bool BlocksWorldPointerInput; }
 public sealed class LocalPlayerProvider
 {
     public static LocalPlayerProvider Instance;
@@ -209,11 +209,11 @@ Click-Loot
 Check ($runtime.Requests -eq $before) `
     'Right click over UI must not send a pickup.'
 [UnityEngine.EventSystems.EventSystem]::current.PointerOverUi = $false
-[GameplayUiInputGuard]::BlocksGameplayInput = $true
+[GameplayUiInputGuard]::BlocksWorldPointerInput = $true
 Click-Loot
 Check ($runtime.Requests -eq $before) `
     'Right click during blocked gameplay must not send a pickup.'
-[GameplayUiInputGuard]::BlocksGameplayInput = $false
+[GameplayUiInputGuard]::BlocksWorldPointerInput = $false
 
 Set-Buttons $false $true $true
 Click-Loot

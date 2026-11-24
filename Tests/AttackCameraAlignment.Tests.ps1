@@ -163,8 +163,9 @@ public static class AttackCameraAlignmentTests
         camera.AlignWithAttackFacing(90);
         float previousYaw = camera.Yaw;
         camera.Tick(blocked: true);
+        Check(camera.Pending && Near(camera.Yaw, previousYaw), "UI must hold the view without discarding the existing alignment.");
         camera.Tick();
-        Check(!camera.Pending && Near(camera.Yaw, previousYaw), "Blocking UI must cancel pending automatic rotation.");
+        Check(camera.Pending && !Near(camera.Yaw, previousYaw), "Existing camera alignment must resume after leaving UI.");
         camera.Character.rotation = Quaternion.Euler(0, 180, 0);
         camera.AlignWithAttackFacing(90);
         camera.Tick(moving: true, forward: true);

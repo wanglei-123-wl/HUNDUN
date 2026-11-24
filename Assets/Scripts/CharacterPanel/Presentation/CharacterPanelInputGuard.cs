@@ -10,31 +10,27 @@ namespace Game.CharacterPanel.Presentation
 
         private static CharacterPanelInputGuard active;
         private readonly CharacterPanelPointerCapture capture = new CharacterPanelPointerCapture();
-        private int sampledFrame = -1;
-        private bool blockedThisFrame;
 
         public static bool BlocksGameplayInput =>
             active != null && active.SampleInput();
+
+        public static bool PointerOnPanel => active != null
+            && active.panelToggle != null && active.panelToggle.IsOpen && active.IsPointerOverPanel();
 
         private void OnEnable()
         {
             active = this;
             capture.Reset();
-            sampledFrame = -1;
         }
 
         private void OnDisable()
         {
             if (active == this) active = null;
             capture.Reset();
-            sampledFrame = -1;
         }
 
         private bool SampleInput()
         {
-            if (sampledFrame == Time.frameCount) return blockedThisFrame;
-
-            sampledFrame = Time.frameCount;
             bool open = panelToggle != null && panelToggle.IsOpen;
             bool overPanel = open && IsPointerOverPanel();
             int held = 0;
@@ -48,8 +44,7 @@ namespace Game.CharacterPanel.Presentation
                 if (Input.GetMouseButtonUp(button)) released |= mask;
             }
 
-            blockedThisFrame = capture.Sample(open, overPanel, held, pressed, released);
-            return blockedThisFrame;
+            return capture.Sample(open, overPanel, held, pressed, released, Time.frameCount);
         }
 
         private bool IsPointerOverPanel()

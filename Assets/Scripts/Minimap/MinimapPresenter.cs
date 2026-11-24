@@ -32,6 +32,14 @@ namespace Game.Minimap
             && mapImage != null && mapImage.texture == currentMap.texture && pixelsPerMeter > 0f
             && content != null && content.activeInHierarchy;
 
+        private void Awake()
+        {
+            // The viewport mask also owns pointer input. Map/marker graphics
+            // remain display-only, and hiding content releases this hit area.
+            Graphic hitArea = viewport == null ? null : viewport.GetComponent<Graphic>();
+            if (hitArea != null) hitArea.raycastTarget = true;
+        }
+
         private void LateUpdate()
         {
             if (!session.TryGetMinimapPose(out string sceneId, out string mapId,

@@ -63,12 +63,14 @@ Assert-Match $guard 'pointerEventSystem\.RaycastAll\(pointerEventData, pointerHi
     'The existing input guard must detect UI under the pointer.')
 Assert-Match $guard 'hit\.module is GraphicRaycaster' (
     'Only actual UI graphics must block gameplay.')
-Assert-Match $guard 'uiCapture\.Sample\(overUi, overUi, held, pressed, released\)' (
+Assert-Match $guard 'uiCapture\.Sample\(uiOpen, uiOpen, held, pressed, released, Time.frameCount\)' (
     'UI drags must stay captured after leaving the panel.')
-Assert-Match $camera 'uiBlocked = GameplayUiInputGuard\.BlocksGameplayInput' (
+Assert-Match $camera 'uiBlocked = GameplayUiInputGuard\.BlocksCameraInput' (
     'Camera rotation must respect UI blocking.')
-Assert-Match $movement 'uiBlocked = GameplayUiInputGuard\.BlocksGameplayInput' (
-    'Player movement and attacks must respect UI blocking.')
+Assert-Match $movement 'gameplayPaused = GameplayUiInputGuard\.BlocksWorldActions' (
+    'Only world-action locks may stop existing movement and attacks.')
+Assert-Match $movement 'pointerBlocked = GameplayUiInputGuard\.BlocksWorldPointerInput' (
+    'UI pointer input must be consumed separately from ongoing world actions.')
 
 Add-Type -TypeDefinition $captureSource -IgnoreWarnings | Out-Null
 $capture = [Game.CharacterPanel.Presentation.CharacterPanelPointerCapture]::new()

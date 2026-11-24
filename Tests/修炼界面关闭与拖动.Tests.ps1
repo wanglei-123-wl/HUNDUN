@@ -22,8 +22,8 @@ $guid = ([regex]::Match($meta, 'guid: ([0-9a-f]{32})')).Groups[1].Value
 $handle = Block 1 '359960275'
 $dragComponent = Block 114 '860000000000400020'
 $parent = Block 224 '112115725'
-$parts = @('1581756385', '904205821', '1478558016',
-    '359960276', '1625952859')
+$parts = @('1581756385', '904205821', '1266172303',
+    '359960276', '1625952859', '1548782251', '1012737364', '605858914')
 Assert-True ($guid -ne '' -and
     $handle.Contains('component: {fileID: 860000000000400020}') -and
     $dragComponent.Contains("guid: $guid") -and
@@ -37,8 +37,8 @@ foreach ($id in $parts) {
         "Cultivation part $id must move with the drag area."
 }
 Assert-True ($parent.IndexOf('- {fileID: 359960276}') -lt
-    $parent.IndexOf('- {fileID: 1478558016}') -and
-    $parent.IndexOf('- {fileID: 1478558016}') -lt
+    $parent.IndexOf('- {fileID: 1266172303}') -and
+    $parent.IndexOf('- {fileID: 1266172303}') -lt
     $parent.IndexOf('- {fileID: 1625952859}')) `
     'Navigation and close buttons must raycast above the transparent drag area.'
 $controller = Block 114 '860000000000500005'
@@ -152,7 +152,7 @@ namespace UnityEngine.EventSystems
         public object pressEventCamera;
     }
 }
-public static class GameplayUiInputGuard { public static bool IsEditingText; }
+public static class GameplayUiInputGuard { public static bool IsEditingText; public static bool BlocksWindowShortcuts => IsEditingText; }
 '@
 $body = $source -replace '(?m)^using [^\r\n]+;\r?\n', ''
 $toggleBody = $toggleSource -replace '(?m)^using [^\r\n]+;\r?\n', ''

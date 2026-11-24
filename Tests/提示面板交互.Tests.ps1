@@ -163,7 +163,7 @@ $scene = Get-Content -LiteralPath (
     Join-Path $root 'Assets/Scenes/WorldShell.unity') -Raw
 $meta = Get-Content -LiteralPath (
     Join-Path $root 'Assets/Scripts/UI/提示面板交互.cs.meta') -Raw
-$guid = [regex]::Match($meta, '(?m)^guid: ([0-9a-f]{32})$').Groups[1].Value
+$guid = [regex]::Match($meta, '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
 $component = [regex]::Match($scene,
     '(?s)--- !u!114 &860000000000300001\r?\nMonoBehaviour:.*?(?=--- !u!)').Value
 $panelBlock = [regex]::Match($scene,

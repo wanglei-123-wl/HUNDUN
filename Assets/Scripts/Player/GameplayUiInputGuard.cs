@@ -3,7 +3,6 @@ using Game.CharacterPanel.Presentation;
 using Game.Chat.UI;
 using Game.Friend.UI;
 using Game.Inventory;
-using Game.Inventory.Presentation.V2;
 using Game.PlayerTrade.Presentation;
 using TMPro;
 using UnityEngine;
@@ -22,47 +21,95 @@ public static class GameplayUiInputGuard
         new CharacterPanelPointerCapture();
     private static readonly HashSet<GameObject> modalDialogs =
         new HashSet<GameObject>();
+    private static readonly HashSet<GameObject> worldLockDialogs =
+        new HashSet<GameObject>();
     private static readonly List<RaycastResult> pointerHits =
         new List<RaycastResult>();
-    private static InventoryPanelView sampledPanel;
-    private static PlayerTradeMarketToggleController sampledMarket;
     private static EventSystem pointerEventSystem;
     private static PointerEventData pointerEventData;
-    private static int sampledFrame = -1;
-    private static bool sampledMarketVisible;
-    private static bool sampledModalVisible;
-    private static bool inventoryBlockedThisFrame;
-    private static bool marketBlockedThisFrame;
-    private static bool modalBlockedThisFrame;
-    private static bool uiBlockedThisFrame;
-    private static EventSystem sampledEventSystem;
+    private static int capturedMouseButtons;
+    private static int keyboardFrame = -1;
+    private static bool keyboardBlockedThisFrame;
+    private static bool previouslyEditingText;
+    private static int textPointerPressFrame = -1;
+    private static int textClickSampleFrame = -1;
 
-    public static void RegisterModal(GameObject dialog)
+    public static void RegisterModal(GameObject dialog, bool blocksWorldActions = false)
     {
-        if (dialog != null) modalDialogs.Add(dialog);
+        if (dialog == null) return;
+        modalDialogs.Add(dialog);
+        if (blocksWorldActions) worldLockDialogs.Add(dialog);
     }
 
     public static void UnregisterModal(GameObject dialog)
     {
-        if (dialog != null) modalDialogs.Remove(dialog);
+        if (dialog == null) return;
+        modalDialogs.Remove(dialog);
+        worldLockDialogs.Remove(dialog);
     }
 
-    public static bool BlocksGameplayInput
+    // Ordinary windows own UI input; they do not pause an existing world action.
+    public static bool BlocksWorldActions
     {
         get
         {
-            if (WorldEntryLoadingView.ActiveWorldEntry != null)
-                return true;
+            if (WorldEntryLoadingView.ActiveWorldEntry != null) return true;
+            foreach (GameObject dialog in worldLockDialogs)
+                if (dialog != null && dialog.activeInHierarchy) return true;
+            return false;
+        }
+    }
+    public static bool BlocksGameplayInput => BlocksWorldPointerInput;
+    public static bool BlocksCameraInput => BlocksWorldPointerInput;
+    public static bool BlocksWorldPointerInput =>
+        BlocksWorldActions || ConsumesPointerInput || BlocksWorldKeyboardInput;
 
+    public static bool ConsumesPointerInput
+    {
+        get
+        {
             bool characterBlocked = CharacterPanelInputGuard.BlocksGameplayInput;
             bool panelBlocked = SamplePanels();
-            return characterBlocked || panelBlocked || IsEditingText
-                || InventoryDiscardConfirmationView.BlocksGameplayInput;
+            return characterBlocked || panelBlocked;
         }
     }
 
-    public static bool BlocksWindowShortcuts =>
-        WorldEntryLoadingView.ActiveWorldEntry != null || IsEditingText;
+    public static int CapturedMouseButtons
+    {
+        get
+        {
+            SamplePanels();
+            return capturedMouseButtons;
+        }
+    }
+
+    public static bool IsWorldMouseButtonHeld(int button) =>
+        !BlocksWorldActions && Input.GetMouseButton(button)
+        && (CapturedMouseButtons & (1 << button)) == 0;
+
+    public static bool BlocksWorldKeyboardInput
+    {
+        get
+        {
+            if (Input.GetMouseButtonDown(0) && textClickSampleFrame != Time.frameCount)
+            {
+                textClickSampleFrame = Time.frameCount;
+                SamplePanels();
+            }
+            bool editing = IsEditingText || textPointerPressFrame == Time.frameCount;
+            if (keyboardFrame != Time.frameCount)
+            {
+                keyboardFrame = Time.frameCount;
+                // The key that submits/closes a text field still belongs to UI.
+                keyboardBlockedThisFrame = editing || previouslyEditingText;
+            }
+            else keyboardBlockedThisFrame |= editing;
+            previouslyEditingText = editing;
+            return keyboardBlockedThisFrame;
+        }
+    }
+
+    public static bool BlocksWindowShortcuts => BlocksWorldActions || BlocksWorldKeyboardInput;
 
     public static bool IsEditingText =>
         WorldChatPanelController.IsChatInputFocused
@@ -83,6 +130,7 @@ public static class GameplayUiInputGuard
 
     private static bool SamplePanels()
     {
+        if (Input.GetMouseButtonDown(0)) textClickSampleFrame = Time.frameCount;
         InventoryPanelView panel = InventoryPanelView.ActivePanel;
         PlayerTradeMarketToggleController market =
             PlayerTradeMarketToggleController.ActiveMarket;
@@ -98,19 +146,6 @@ public static class GameplayUiInputGuard
                 break;
             }
         }
-        if (sampledFrame == Time.frameCount && sampledPanel == panel
-            && sampledMarket == market && sampledMarketVisible == marketVisible
-            && sampledModalVisible == modalVisible
-            && sampledEventSystem == eventSystem)
-            return inventoryBlockedThisFrame || marketBlockedThisFrame
-                || modalBlockedThisFrame || uiBlockedThisFrame;
-
-        sampledFrame = Time.frameCount;
-        sampledPanel = panel;
-        sampledMarket = market;
-        sampledMarketVisible = marketVisible;
-        sampledModalVisible = modalVisible;
-        sampledEventSystem = eventSystem;
         bool inventoryOpen = panel != null && panel.isActiveAndEnabled;
         RectTransform hitArea = inventoryOpen
             ? panel.GetComponent<RectTransform>()
@@ -119,7 +154,8 @@ public static class GameplayUiInputGuard
             && RectTransformUtility.RectangleContainsScreenPoint(
                 hitArea, Input.mousePosition);
         bool overMarket = false;
-        bool overUi = false;
+        bool overModal = false;
+        bool overUi = CharacterPanelInputGuard.PointerOnPanel || overInventory;
 
         pointerHits.Clear();
         if (eventSystem != null)
@@ -138,13 +174,32 @@ public static class GameplayUiInputGuard
                 if (hit.gameObject == null || !(hit.module is GraphicRaycaster))
                     continue;
                 overUi = true;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    TMP_InputField textInput = hit.gameObject.GetComponentInParent<TMP_InputField>();
+                    InputField legacyInput = hit.gameObject.GetComponentInParent<InputField>();
+                    // TMP may only set isFocused during LateUpdate. Consume the
+                    // click/typing frame as soon as its UI hit is known.
+                    if ((textInput != null && textInput.isActiveAndEnabled)
+                        || (legacyInput != null && legacyInput.isActiveAndEnabled))
+                        textPointerPressFrame = Time.frameCount;
+                }
                 Transform hitTransform = hit.gameObject.transform;
                 if (inventoryOpen && hitTransform.IsChildOf(panel.transform))
                     overInventory = true;
                 if (marketVisible && hitTransform.IsChildOf(market.MarketRoot))
                     overMarket = true;
+                if (modalVisible && !overModal)
+                    foreach (GameObject dialog in modalDialogs)
+                        if (dialog != null && dialog.activeInHierarchy
+                            && hitTransform.IsChildOf(dialog.transform))
+                        {
+                            overModal = true;
+                            break;
+                        }
                 if ((!inventoryOpen || overInventory)
-                    && (!marketVisible || overMarket))
+                    && (!marketVisible || overMarket)
+                    && (!modalVisible || overModal))
                     break;
             }
         }
@@ -160,17 +215,20 @@ public static class GameplayUiInputGuard
             if (Input.GetMouseButtonUp(button)) released |= mask;
         }
 
-        inventoryBlockedThisFrame =
+        bool inventoryBlockedThisFrame =
             inventoryCapture.Sample(inventoryOpen, overInventory,
-                held, pressed, released);
-        marketBlockedThisFrame =
+                held, pressed, released, Time.frameCount);
+        bool marketBlockedThisFrame =
             marketCapture.Sample(marketVisible, overMarket,
-                held, pressed, released);
-        modalBlockedThisFrame =
-            modalCapture.Sample(modalVisible, modalVisible,
-                held, pressed, released);
-        uiBlockedThisFrame =
-            uiCapture.Sample(overUi, overUi, held, pressed, released);
+                held, pressed, released, Time.frameCount);
+        bool modalBlockedThisFrame =
+            modalCapture.Sample(modalVisible, overModal,
+                held, pressed, released, Time.frameCount);
+        bool uiOpen = overUi || BlocksWorldKeyboardInput;
+        bool uiBlockedThisFrame =
+            uiCapture.Sample(uiOpen, uiOpen, held, pressed, released, Time.frameCount);
+        capturedMouseButtons = inventoryCapture.CapturedButtonsThisFrame | marketCapture.CapturedButtonsThisFrame
+            | modalCapture.CapturedButtonsThisFrame | uiCapture.CapturedButtonsThisFrame;
         return inventoryBlockedThisFrame || marketBlockedThisFrame
             || modalBlockedThisFrame || uiBlockedThisFrame;
     }

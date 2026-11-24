@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -33,6 +34,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private uint repeatingAttackCompletionCount;
     private long repeatingAttackConnectionEpoch;
     private string repeatingAttackSceneSessionId;
+    private readonly HashSet<KeyCode> worldMovementKeys = new HashSet<KeyCode>();
+    private readonly HashSet<KeyCode> uiMovementKeys = new HashSet<KeyCode>();
 
     private static readonly int MeditatingParameter = Animator.StringToHash("IsMeditating");
     private static readonly int SeatedLoopState = Animator.StringToHash("Base Layer.打坐中");
@@ -64,24 +67,26 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         }
         cameraFollow?.SampleInput();
 
-        bool gameplayBlocked = GameplayUiInputGuard.BlocksGameplayInput;
+        if (predictedMotor?.BlocksActionsForPotion == true)
+        {
+            HoldMovementForPotion(MovementNow);
+            return;
+        }
+
+        bool gameplayBlocked = GameplayUiInputGuard.BlocksWorldActions;
+        bool pointerBlocked = GameplayUiInputGuard.BlocksWorldPointerInput;
+        bool keyboardBlocked = GameplayUiInputGuard.BlocksWorldKeyboardInput;
         PlayerInputKeys heldKeys = ReadKeys();
         PlayerInputActions heldActions = ReadHeldActions();
-        bool jumpRequested = Input.GetKeyDown(KeyCode.Space);
-        // Manual input always takes ownership from an outstanding attack intent.
-        // Check before reading new attacks so a new command can replace the old one.
-        if (gameplayBlocked || (Input.anyKeyDown && !Input.GetMouseButtonDown(0)) || HasDirectionalInput(heldKeys)
-            || HasBothMouseButtons(heldActions) || Input.mouseScrollDelta.sqrMagnitude > 0f
-            || (cameraFollow != null && cameraFollow.CharacterLookActive))
-            CancelCombatIntent();
-        else if (Input.GetMouseButtonDown(0))
-            combatController?.CancelCombatApproach();
-        if (!gameplayBlocked && rollDirection == PlayerInputKeys.None && !IsRollAnimationPlaying())
+        bool jumpRequested = !keyboardBlocked && WorldKeyActive(KeyCode.Space, pressedThisFrame: true);
+        HandleManualCombatCancellation(gameplayBlocked, keyboardBlocked, pointerBlocked,
+            heldKeys, heldActions, jumpRequested);
+        if (!gameplayBlocked && !keyboardBlocked && rollDirection == PlayerInputKeys.None && !IsRollAnimationPlaying())
             ApplyMeditationInput(Input.GetKeyDown(KeyCode.Q), heldKeys, heldActions, jumpRequested);
 
         heldKeys = FilterMeditationKeys(heldKeys);
         heldActions = FilterMeditationActions(heldActions);
-        PlayerInputKeys taps = jumpRequested ? PlayerInputKeys.None : ReadDirectionalKeys(pressedThisFrame: true);
+        PlayerInputKeys taps = jumpRequested || keyboardBlocked ? PlayerInputKeys.None : ReadDirectionalKeys(pressedThisFrame: true);
         UpdateRollInput(FilterMeditationKeys(taps), Time.unscaledTimeAsDouble,
             !gameplayBlocked && !IsMeditationBlockingInput());
         gameplayBlocked |= IsMeditationBlockingInput()
@@ -89,19 +94,23 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (gameplayBlocked) CancelCombatIntent();
         if (gameplayBlocked)
         {
+            ClearPendingGameplayInput();
+        }
+        else if (pointerBlocked)
+        {
             pendingMouseLeftDown = false;
-            pendingJumpPressed = false;
             trackingMouseLeftClick = false;
             suppressLeftClickAttack = false;
             mouseLeftDragDistance = 0f;
+            rightClickTarget = default;
         }
 
         basicAttackMovementGate.Observe(
             IsMovingForBasicAttack(heldKeys, heldActions), Time.unscaledTime);
 
-        HandleTargetRightClick(gameplayBlocked);
+        HandleTargetRightClick(gameplayBlocked || pointerBlocked);
 
-        if (!gameplayBlocked && Input.GetMouseButtonDown(0))
+        if (!gameplayBlocked && !pointerBlocked && Input.GetMouseButtonDown(0))
         {
             trackingMouseLeftClick = true;
             suppressLeftClickAttack = false;
@@ -115,7 +124,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (trackingMouseLeftClick && Input.GetMouseButton(0) && Input.GetMouseButton(1))
             suppressLeftClickAttack = true;
 
-        if (!gameplayBlocked && trackingMouseLeftClick && Input.GetMouseButtonUp(0))
+        if (!gameplayBlocked && !pointerBlocked && trackingMouseLeftClick && Input.GetMouseButtonUp(0))
         {
             pendingMouseLeftDown |= !suppressLeftClickAttack
                 && mouseLeftDragDistance <= MouseClickDragThreshold
@@ -135,43 +144,43 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
             && !predictedMotor.BlocksMovementForAttack())
             combatController?.CompleteApproachSkill(CurrentClientTick);
 
-        if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha1))
+        if (!gameplayBlocked && !keyboardBlocked && Input.GetKeyDown(KeyCode.Alpha1))
         {
             ResolveCombatController();
             combatController?.TrySendSkillSlotCast(1, CurrentClientTick);
         }
 
-        if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha2))
+        if (!gameplayBlocked && !keyboardBlocked && Input.GetKeyDown(KeyCode.Alpha2))
         {
             ResolveCombatController();
             combatController?.TrySendSkillSlotCast(2, CurrentClientTick);
         }
 
-        if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha3))
+        if (!gameplayBlocked && !keyboardBlocked && Input.GetKeyDown(KeyCode.Alpha3))
         {
             ResolveCombatController();
             combatController?.TrySendSkillSlotCast(3, CurrentClientTick);
         }
 
-        if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha4))
+        if (!gameplayBlocked && !keyboardBlocked && Input.GetKeyDown(KeyCode.Alpha4))
         {
             ResolveCombatController();
             combatController?.TrySendSkillSlotCast(4, CurrentClientTick);
         }
 
-        if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha5))
+        if (!gameplayBlocked && !keyboardBlocked && Input.GetKeyDown(KeyCode.Alpha5))
         {
             ResolveCombatController();
             combatController?.TrySendSkillSlotCast(5, CurrentClientTick);
         }
 
-        if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha6))
+        if (!gameplayBlocked && !keyboardBlocked && Input.GetKeyDown(KeyCode.Alpha6))
         {
             ResolveCombatController();
             combatController?.TrySendSkillSlotCast(6, CurrentClientTick);
         }
 
-        if (!gameplayBlocked && Input.GetKeyDown(KeyCode.Alpha7))
+        if (!gameplayBlocked && !keyboardBlocked && Input.GetKeyDown(KeyCode.Alpha7))
         {
             ResolveCombatController();
             combatController?.TrySendSkillSlotCast(7, CurrentClientTick);
@@ -183,6 +192,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
     private void OnDisable()
     {
+        worldMovementKeys.Clear();
+        uiMovementKeys.Clear();
         cameraFollow?.SetForwardMovement(false);
         CancelCombatIntent();
         EndMeditation();
@@ -243,7 +254,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.FlushLocalMovement = FlushMovement;
-            NetworkManager.Instance.LocalPlayerActionBlocked = IsMeditationActionBlocked;
+            NetworkManager.Instance.LocalPlayerActionBlocked = IsLocalPlayerActionBlocked;
             if (movementControl?.IsValidFor(NetworkManager.Instance.SceneSessionId) == true)
                 predictedMotor.ApplyMovementSettings(movementControl);
         }
@@ -252,6 +263,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
 
     public void SetInputEnabled(bool enabled, bool resetSequence = false)
     {
+        worldMovementKeys.Clear();
+        uiMovementKeys.Clear();
         inputEnabled = enabled;
         pendingMouseLeftDown = false;
         pendingJumpPressed = false;
@@ -298,6 +311,31 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         {
             combatController = gameObject.AddComponent<LocalPlayerCombatController>();
         }
+    }
+
+    internal bool PlayPotionAnimation()
+    {
+        if (!isActiveAndEnabled || !inputEnabled || movementControl == null
+            || NetworkManager.Instance?.MovementReady != true
+            || NetworkManager.Instance.SceneOperationsPaused || IsMeditationBlockingInput()
+            || predictedMotor?.CanPlayGroundActionAnimation(PredictedCharacterMotor.PotionTrigger) != true)
+            return false;
+
+        // Commit the last movement segment and stop before arming the local
+        // action lock, so the server cannot continue the previous walk/turn.
+        if (!StopMovementForMeditation()) return false;
+        HoldMovementForPotion(MovementNow);
+        return predictedMotor.PlayGroundActionAnimation(PredictedCharacterMotor.PotionTrigger);
+    }
+
+    private void ClearPendingGameplayInput()
+    {
+        pendingMouseLeftDown = false;
+        pendingJumpPressed = false;
+        trackingMouseLeftClick = false;
+        suppressLeftClickAttack = false;
+        mouseLeftDragDistance = 0f;
+        rightClickTarget = default;
     }
 
     private void HandleTargetRightClick(bool uiBlocked)
@@ -400,7 +438,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private void ApplyCombatApproachInput(PlayerInputFrame input)
     {
         if (combatController == null || !combatController.HasCombatApproach) return;
-        if (GameplayUiInputGuard.BlocksGameplayInput || IsMeditationBlockingInput()
+        if (GameplayUiInputGuard.BlocksWorldActions || IsMeditationBlockingInput()
+            || predictedMotor.BlocksActionsForPotion
             || rollDirection != PlayerInputKeys.None || IsRollAnimationPlaying())
         {
             CancelCombatIntent();
@@ -425,6 +464,20 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         repeatingAttackConnectionEpoch = 0;
         repeatingAttackSceneSessionId = null;
         combatController?.CancelCombatApproach(reason);
+    }
+
+    private void HandleManualCombatCancellation(bool gameplayBlocked, bool keyboardBlocked, bool pointerBlocked,
+        PlayerInputKeys heldKeys, PlayerInputActions heldActions, bool jumpRequested)
+    {
+        // Only a world command replaces an existing intent. UI shortcuts,
+        // typing, scrolling and clicking must not cancel ongoing combat.
+        if (gameplayBlocked || (!keyboardBlocked && (jumpRequested || SkillKeyPressed() || Input.GetKeyDown(KeyCode.Q)))
+            || HasDirectionalInput(heldKeys) || HasBothMouseButtons(heldActions)
+            || (!pointerBlocked && Input.mouseScrollDelta.sqrMagnitude > 0f)
+            || (cameraFollow != null && cameraFollow.CharacterLookActive))
+            CancelCombatIntent();
+        else if (!pointerBlocked && Input.GetMouseButtonDown(0))
+            combatController?.CancelCombatApproach();
     }
 
     private void RecordBasicAttackRequest()
@@ -472,21 +525,22 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private PlayerInputFrame CreateInputFrame()
     {
         bool meditationBlocked = IsMeditationBlockingInput();
+        bool potionBlocked = predictedMotor?.BlocksActionsForPotion == true;
         AnimatorStateInfo rollState = ReadRollAnimatorState();
         bool rollPlaying = rollState.IsTag(RollTag);
         bool rollBlocking = rollPlaying || rollDirection != PlayerInputKeys.None;
-        bool gameplayPaused = GameplayUiInputGuard.BlocksGameplayInput;
-        bool rollMoving = rollPlaying && rollDirection != PlayerInputKeys.None && !gameplayPaused
+        bool gameplayPaused = GameplayUiInputGuard.BlocksWorldActions;
+        bool rollMoving = rollPlaying && rollDirection != PlayerInputKeys.None && !gameplayPaused && !potionBlocked
             && rollState.normalizedTime < RollBrakingStartNormalizedTime;
-        bool uiBlocked = gameplayPaused || rollBlocking || meditationBlocked;
+        bool actionsBlocked = gameplayPaused || rollBlocking || meditationBlocked || potionBlocked;
         PlayerInputKeys keys = rollMoving ? rollDirection | PlayerInputKeys.Shift
-            : uiBlocked ? PlayerInputKeys.None : FilterMeditationKeys(ReadKeys());
-        PlayerInputActions actions = uiBlocked ? PlayerInputActions.None : FilterMeditationActions(ReadHeldActions());
+            : actionsBlocked ? PlayerInputKeys.None : FilterMeditationKeys(ReadKeys());
+        PlayerInputActions actions = actionsBlocked ? PlayerInputActions.None : FilterMeditationActions(ReadHeldActions());
         basicAttackMovementGate.Observe(
             IsMovingForBasicAttack(keys, actions), Time.unscaledTime);
 
-        bool repeatAttack = !uiBlocked && CanRepeatBasicAttack();
-        if (!uiBlocked && (pendingMouseLeftDown || repeatAttack)
+        bool repeatAttack = !actionsBlocked && CanRepeatBasicAttack();
+        if (!actionsBlocked && ((pendingMouseLeftDown && !GameplayUiInputGuard.BlocksWorldPointerInput) || repeatAttack)
             && basicAttackMovementGate.CanAttack(Time.unscaledTime)
             && predictedMotor.CanStartBasicAttack)
         {
@@ -494,8 +548,8 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         }
 
         pendingMouseLeftDown = false;
-        bool movementLocked = meditationBlocked || predictedMotor.BlocksMovementForAttack(actions);
-        bool jumpPressed = !uiBlocked && !movementLocked && pendingJumpPressed;
+        bool movementLocked = meditationBlocked || potionBlocked || predictedMotor.BlocksMovementForAttack(actions);
+        bool jumpPressed = !actionsBlocked && !movementLocked && pendingJumpPressed;
         pendingJumpPressed = false;
 
         if (movementLocked)
@@ -528,7 +582,7 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
     private float ReadMovementYaw() => cameraFollow == null
         ? transform.eulerAngles.y : cameraFollow.ReadMovementYaw();
 
-    private static PlayerInputKeys ReadDirectionalKeys(bool pressedThisFrame)
+    private PlayerInputKeys ReadDirectionalKeys(bool pressedThisFrame)
     {
         PlayerInputKeys keys = PlayerInputKeys.None;
         if (DirectionKeyActive(KeyCode.W, KeyCode.UpArrow, pressedThisFrame)) keys |= PlayerInputKeys.W;
@@ -538,24 +592,46 @@ public sealed partial class LocalPlayerInputController : MonoBehaviour
         return keys;
     }
 
-    private static bool DirectionKeyActive(KeyCode key, KeyCode arrow, bool pressedThisFrame) =>
-        pressedThisFrame ? Input.GetKeyDown(key) || Input.GetKeyDown(arrow)
-            : Input.GetKey(key) || Input.GetKey(arrow);
+    private bool DirectionKeyActive(KeyCode key, KeyCode arrow, bool pressedThisFrame) =>
+        WorldKeyActive(key, pressedThisFrame) | WorldKeyActive(arrow, pressedThisFrame);
 
-    private static PlayerInputKeys ReadKeys()
+    private bool WorldKeyActive(KeyCode key, bool pressedThisFrame = false)
+    {
+        if (!Input.GetKey(key))
+        {
+            worldMovementKeys.Remove(key);
+            uiMovementKeys.Remove(key);
+            return false;
+        }
+        if (GameplayUiInputGuard.BlocksWorldKeyboardInput && !worldMovementKeys.Contains(key))
+            uiMovementKeys.Add(key);
+        if (uiMovementKeys.Contains(key)) return false;
+        worldMovementKeys.Add(key);
+        return !pressedThisFrame || Input.GetKeyDown(key);
+    }
+
+    private static bool SkillKeyPressed()
+    {
+        return Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2)
+            || Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Alpha4)
+            || Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Alpha6)
+            || Input.GetKeyDown(KeyCode.Alpha7);
+    }
+
+    private PlayerInputKeys ReadKeys()
     {
         PlayerInputKeys keys = ReadDirectionalKeys(pressedThisFrame: false);
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        if (WorldKeyActive(KeyCode.LeftShift) | WorldKeyActive(KeyCode.RightShift))
             keys |= PlayerInputKeys.Shift;
-        if (Input.GetKey(KeyCode.Space)) keys |= PlayerInputKeys.Space;
+        if (WorldKeyActive(KeyCode.Space)) keys |= PlayerInputKeys.Space;
         return keys;
     }
 
     private static PlayerInputActions ReadHeldActions()
     {
         PlayerInputActions actions = PlayerInputActions.None;
-        if (Input.GetMouseButton(0)) actions |= PlayerInputActions.MouseLeftHeld;
-        if (Input.GetMouseButton(1)) actions |= PlayerInputActions.MouseRightHeld;
+        if (GameplayUiInputGuard.IsWorldMouseButtonHeld(0)) actions |= PlayerInputActions.MouseLeftHeld;
+        if (GameplayUiInputGuard.IsWorldMouseButtonHeld(1)) actions |= PlayerInputActions.MouseRightHeld;
         return actions;
     }
 

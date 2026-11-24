@@ -26,6 +26,7 @@ namespace UnityEngine
         public bool activeInHierarchy;
         public object component;
         public T GetComponent<T>() where T : class { return component as T; }
+        public T GetComponentInParent<T>() where T : class { return component as T; }
     }
     public class Behaviour
     {
@@ -102,6 +103,7 @@ namespace Game.CharacterPanel.Presentation
     public static class CharacterPanelInputGuard
     {
         public static bool BlocksGameplayInput;
+        public static bool PointerOnPanel;
     }
 }
 namespace Game.Chat.UI
@@ -162,6 +164,9 @@ function Assert-Blocked([bool]$expected, [string]$message) {
     [UnityEngine.Time]::frameCount++
     $actual = [GameplayUiInputGuard]::BlocksGameplayInput
     if ($actual -ne $expected) { throw $message }
+    if ([GameplayUiInputGuard]::BlocksWorldActions -ne ($null -ne [WorldEntryLoadingView]::ActiveWorldEntry)) {
+        throw 'Ordinary UI and text focus must not become world-action locks.'
+    }
 }
 
 $eventSystem = [UnityEngine.EventSystems.EventSystem]::new()
@@ -178,11 +183,18 @@ $dialog = [UnityEngine.GameObject]::new()
 [GameplayUiInputGuard]::RegisterModal($dialog)
 Assert-Blocked $false 'A hidden dialog must not block gameplay.'
 $dialog.activeInHierarchy = $true
-Assert-Blocked $true 'An open modal dialog must block gameplay.'
+Assert-Blocked $false 'An ordinary dialog must allow world camera input outside its actual UI.'
+$dialogHit = [UnityEngine.EventSystems.RaycastResult]::new()
+$dialogHit.gameObject = [UnityEngine.GameObject]::new()
+$dialogHit.gameObject.transform.parent = $dialog.transform
+$dialogHit.module = [UnityEngine.UI.GraphicRaycaster]::new()
+$eventSystem.hits.Add($dialogHit)
+Assert-Blocked $true 'Hovering a real dialog graphic must consume pointer and camera input.'
 [UnityEngine.Input]::held = 1
 [UnityEngine.Input]::pressed = 1
 Assert-Blocked $true 'Pressing a dialog must capture the pointer.'
 $dialog.activeInHierarchy = $false
+$eventSystem.hits.Clear()
 [UnityEngine.Input]::pressed = 0
 Assert-Blocked $true 'Closing a dialog during a press must retain the capture.'
 [UnityEngine.Input]::held = 0
@@ -192,12 +204,30 @@ Assert-Blocked $true 'Dialog release must remain blocked for that frame.'
 Assert-Blocked $false 'World input must resume after the dialog release.'
 [GameplayUiInputGuard]::UnregisterModal($dialog)
 
+$hardDialog = [UnityEngine.GameObject]::new()
+[GameplayUiInputGuard]::RegisterModal($hardDialog, $true)
+Assert-Blocked $false 'An inactive loading dialog must not lock the world.'
+$hardDialog.activeInHierarchy = $true
+[UnityEngine.Time]::frameCount++
+if (-not [GameplayUiInputGuard]::BlocksWorldActions -or
+    -not [GameplayUiInputGuard]::BlocksWorldPointerInput -or
+    -not [GameplayUiInputGuard]::BlocksCameraInput -or
+    -not [GameplayUiInputGuard]::BlocksWindowShortcuts) {
+    throw 'Visible map loading must lock world actions, clicks, camera and shortcuts even without a raycaster.'
+}
+$hardDialog.activeInHierarchy = $false
+Assert-Blocked $false 'Hiding a hard loading dialog must release the world lock.'
+$hardDialog.activeInHierarchy = $true
+[GameplayUiInputGuard]::UnregisterModal($hardDialog)
+Assert-Blocked $false 'Unregistering loading must release both pointer and action registration.'
+
 [Game.Chat.UI.WorldChatPanelController]::IsChatInputFocused = $true
 Assert-Blocked $true 'Focused chat must block gameplay.'
 if (-not [GameplayUiInputGuard]::IsEditingText) {
     throw 'Focused world chat must block panel shortcuts.'
 }
 [Game.Chat.UI.WorldChatPanelController]::IsChatInputFocused = $false
+Assert-Blocked $true 'The chat submit/blur frame must still consume UI keyboard input.'
 Assert-Blocked $false 'Gameplay must resume when chat loses focus.'
 
 [Game.Chat.UI.PrivateChatPanelController]::IsChatInputFocused = $true
@@ -206,6 +236,7 @@ if (-not [GameplayUiInputGuard]::IsEditingText) {
     throw 'Focused private chat must block panel shortcuts.'
 }
 [Game.Chat.UI.PrivateChatPanelController]::IsChatInputFocused = $false
+Assert-Blocked $true 'The private chat blur frame must still consume UI keyboard input.'
 Assert-Blocked $false 'Gameplay must resume when private chat loses focus.'
 
 [Game.Friend.UI.FriendSearchPanelController]::IsSearchInputFocused = $true
@@ -214,6 +245,7 @@ if (-not [GameplayUiInputGuard]::IsEditingText) {
     throw 'Focused friend search must block panel shortcuts.'
 }
 [Game.Friend.UI.FriendSearchPanelController]::IsSearchInputFocused = $false
+Assert-Blocked $true 'The search submit frame must still consume UI keyboard input.'
 Assert-Blocked $false 'Gameplay must resume when friend search loses focus.'
 
 $selected = [UnityEngine.GameObject]::new()
@@ -226,6 +258,7 @@ if (-not [GameplayUiInputGuard]::IsEditingText) {
     throw 'A focused TMP input must block panel shortcuts.'
 }
 $tmp.isFocused = $false
+Assert-Blocked $true 'The input blur frame must remain consumed.'
 Assert-Blocked $false 'A selected but unfocused TMP input must not block movement.'
 if ([GameplayUiInputGuard]::IsEditingText) {
     throw 'An unfocused TMP input must allow panel shortcuts.'
@@ -237,6 +270,7 @@ if (-not [GameplayUiInputGuard]::IsEditingText) {
     throw 'A focused legacy input must block panel shortcuts.'
 }
 $selected.component.isActiveAndEnabled = $false
+Assert-Blocked $true 'The final text-input frame must remain consumed.'
 Assert-Blocked $false 'A disabled input must not keep blocking movement.'
 $eventSystem.currentSelectedGameObject = $null
 
@@ -357,4 +391,28 @@ if ($scene -notmatch '(?s)--- !u!1 &1523190445\r?\n(?:(?!--- !u!).)*m_IsActive: 
     throw 'Market must remain hidden by its active state on startup.'
 }
 
-Write-Output 'PASS: UI raycast, text focus, panel shortcuts, canvas configuration and pointer capture.'
+$eventSystem.hits.Clear()
+$uiHit.gameObject.component = $null
+$eventSystem.hits.Add($uiHit)
+[UnityEngine.Input]::held = 3
+[UnityEngine.Input]::pressed = 0
+[UnityEngine.Input]::released = 0
+[UnityEngine.Time]::frameCount++
+if (-not [GameplayUiInputGuard]::BlocksCameraInput -or
+    -not [GameplayUiInputGuard]::IsWorldMouseButtonHeld(0) -or
+    -not [GameplayUiInputGuard]::IsWorldMouseButtonHeld(1)) {
+    throw 'Hovering UI must freeze camera input while preserving pre-existing world mouse movement.'
+}
+
+$pendingText = [TMPro.TMP_InputField]::new()
+$pendingText.isFocused = $false
+$uiHit.gameObject.component = $pendingText
+[UnityEngine.Input]::held = 1
+[UnityEngine.Input]::pressed = 1
+[UnityEngine.Time]::frameCount++
+if (-not [GameplayUiInputGuard]::BlocksWorldKeyboardInput -or
+    -not [GameplayUiInputGuard]::BlocksWindowShortcuts -or
+    [GameplayUiInputGuard]::BlocksWorldActions) {
+    throw 'The first keyboard consumer must capture a text-field click before camera sampling or TMP focus, without pausing world actions.'
+}
+Write-Output 'PASS: UI raycast, text focus, first-click capture, panel shortcuts and pointer ownership.'

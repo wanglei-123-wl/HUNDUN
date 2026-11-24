@@ -193,9 +193,9 @@ Require ($binding -match "guid: $guid" -and
     $binding -match 'exitWindow: \{fileID: 1739274038\}' -and
     $binding -match 'menuContent: \{fileID: 471584290\}' -and
     $binding -match 'continueButton: \{fileID: 1381009768\}' -and
-    $background -match 'm_IsActive: 1' -and
+    $background -match 'm_IsActive: [01]' -and
     $backgroundTransform -match 'm_Father: \{fileID: 1739274042\}' -and
-    $continue -match 'm_Interactable: 1') 'Bind enabled menu content under the outer window; Awake must hide the window even if the editor preview is enabled.'
+    $continue -match 'm_Interactable: 1') 'Bind menu content under the outer window; Show must restore disabled content, and Awake must hide an enabled editor preview.'
 $logout = Scene-Block '114' '271775295'
 $quit = Scene-Block '114' '1644284682'
 $worldSession = Scene-Block '114' '2108349142'

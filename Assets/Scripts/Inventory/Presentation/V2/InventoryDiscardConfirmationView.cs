@@ -68,6 +68,7 @@ namespace Game.Inventory.Presentation.V2
             SetConfirmEnabled(false);
             gameObject.SetActive(true);
             openView = this;
+            GameplayUiInputGuard.RegisterModal(gameObject);
         }
 
         public void SetConfirmEnabled(bool enabled)
@@ -93,6 +94,7 @@ namespace Game.Inventory.Presentation.V2
 
         public void Hide()
         {
+            GameplayUiInputGuard.UnregisterModal(gameObject);
             if (openView == this) openView = null;
             identity = null;
             pending = false;
@@ -101,6 +103,7 @@ namespace Game.Inventory.Presentation.V2
 
         public void Dispose()
         {
+            GameplayUiInputGuard.UnregisterModal(gameObject);
             if (openView == this) openView = null;
             if (this != null) Destroy(gameObject);
         }
@@ -112,6 +115,7 @@ namespace Game.Inventory.Presentation.V2
 
         private void OnDisable()
         {
+            GameplayUiInputGuard.UnregisterModal(gameObject);
             if (openView == this) openView = null;
         }
 

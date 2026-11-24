@@ -124,6 +124,11 @@ public sealed partial class LocalPlayerInputController
     private bool UpdateMovement(PlayerInputFrame input, long now)
     {
         if (predictedMotor == null || movementControl == null) return false;
+        if (predictedMotor.BlocksActionsForPotion)
+        {
+            HoldMovementForPotion(now);
+            return false;
+        }
 
         bool manualSlideInput = CanSlideForInput(input);
         Vector3 manualDirection = manualSlideInput ? predictedMotor.MovementDirection(input) : Vector3.zero;
@@ -464,11 +469,35 @@ public sealed partial class LocalPlayerInputController
     {
         if (movementControl == null || !inputEnabled) return true;
         long now = MovementNow;
+        if (predictedMotor?.BlocksActionsForPotion == true)
+        {
+            HoldMovementForPotion(now);
+            return true;
+        }
         if (!AdvanceMovement(now)) return false;
         if (lastSent == null && !IsActive) return true;
         if (lastSent != null && lastSent.Position == transform.position
             && Mathf.Abs(Mathf.DeltaAngle(lastSent.yaw, transform.eulerAngles.y)) < .001f) return true;
         return Report("heartbeat", now);
+    }
+
+    private void HoldMovementForPotion(long now)
+    {
+        CancelCombatIntent();
+        ClearPendingGameplayInput();
+        ResetRollInput();
+        ClearGroundSlide();
+        cameraFollow?.SetForwardMovement(false);
+        movementFlags &= ~(DirectionFlags | TurnFlags);
+        travelDirection = Vector3.zero;
+        traversalStopPending = false;
+        blockedTraversalDirection = Vector3.zero;
+        lookTargetTracked = false;
+        // Discard elapsed potion time rather than simulating it on resume.
+        stepAt = now;
+        predictedMotor.SetLocalMotion(Vector3.zero, predictedMotor.Velocity.y, predictedMotor.IsGrounded);
+        basicAttackMovementGate.Observe(false, Time.unscaledTime);
+        predictedMotor.RefreshMovementAnimation();
     }
 
     private bool Report(string kind, long now, Vector3? horizontal = null)
@@ -526,7 +555,7 @@ public sealed partial class LocalPlayerInputController
         var network = NetworkManager.Instance;
         if (network != null && network.FlushLocalMovement == FlushMovement)
             network.FlushLocalMovement = null;
-        if (network != null && network.LocalPlayerActionBlocked == IsMeditationActionBlocked)
+        if (network != null && network.LocalPlayerActionBlocked == IsLocalPlayerActionBlocked)
             network.LocalPlayerActionBlocked = null;
     }
 }

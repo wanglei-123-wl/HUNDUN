@@ -347,7 +347,7 @@ public class NetworkManager
     public bool Send<T>(T message)
     {
         bool transferRequest = message is MapTransferRequest;
-        bool playerOperation = message is MovementReferencedRequest
+        bool playerOperation = message is MovementReferencedRequest || message is MovementEventRequest
             || message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto;
         if (playerOperation && AreLocalPlayerActionsBlocked)
             return false;
@@ -455,7 +455,7 @@ public class NetworkManager
 
     internal bool SendMovementEvent(MovementEventRequest message)
     {
-        if (!MovementReady || sceneOperationsPaused || localPlayerActionsBlocked)
+        if (!MovementReady || sceneOperationsPaused || AreLocalPlayerActionsBlocked)
             return false;
         message.sceneSessionId = SceneSessionId;
         message.movementEpoch = movementEpoch;

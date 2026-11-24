@@ -69,7 +69,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     public float CharacterLookYaw => characterLookYaw;
     internal bool IsRightMouseDragging => rightDragging;
     public bool CharacterLookActive =>
-        rightDragging && !GameplayUiInputGuard.BlocksGameplayInput;
+        rightDragging && !GameplayUiInputGuard.BlocksCameraInput;
     public float CameraYaw => yaw;
 
     private void Start()
@@ -145,7 +145,13 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     private void UpdateFacingAlignment(Transform character, bool moving, bool manualOrbit, bool uiBlocked,
         bool automaticallyAvoidingObstacle)
     {
-        if (manualOrbit || uiBlocked || moving || automaticallyAvoidingObstacle)
+        if (uiBlocked)
+        {
+            movementAlignVelocity = 0f;
+            attackAlignVelocity = 0f;
+            return;
+        }
+        if (manualOrbit || moving || automaticallyAvoidingObstacle)
         {
             attackFacingYaw = null;
             attackAlignVelocity = 0f;
@@ -153,7 +159,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
 
         // Automatic detours may turn the model while forward input stays held.
         // Keep the observation angle and discard recentering momentum until the detour ends.
-        if (manualOrbit || uiBlocked || automaticallyAvoidingObstacle)
+        if (manualOrbit || automaticallyAvoidingObstacle)
         {
             movementAlignVelocity = 0f;
             return;
@@ -189,7 +195,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
             return;
 
         lastSampledInputFrame = Time.frameCount;
-        bool uiBlocked = GameplayUiInputGuard.BlocksGameplayInput;
+        bool uiBlocked = GameplayUiInputGuard.BlocksCameraInput;
         bool leftHeld = !uiBlocked && Input.GetMouseButton(0);
         bool rightHeld = !uiBlocked && Input.GetMouseButton(1);
         Vector2 mouseDelta = uiBlocked ? Vector2.zero
@@ -248,6 +254,9 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         }
     }
 
+    private float ReadScrollInput() =>
+        GameplayUiInputGuard.BlocksCameraInput ? 0f : Input.mouseScrollDelta.y;
+
     private void LateUpdate()
     {
         Transform activeFollowTarget = GetFollowTarget();
@@ -277,9 +286,9 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         bool manualOrbit = leftDragging || rightDragging;
         Vector3 followPosition = activeFollowTarget.position;
 
-        bool uiBlocked = GameplayUiInputGuard.BlocksGameplayInput;
+        bool uiBlocked = GameplayUiInputGuard.BlocksCameraInput;
         UpdateFacingAlignment(activeRotationTarget, moving, manualOrbit, uiBlocked, automaticallyAvoidingObstacle);
-        float scroll = uiBlocked ? 0f : Input.mouseScrollDelta.y;
+        float scroll = ReadScrollInput();
         if (Mathf.Abs(scroll) > 0.001f)
             desiredDistance = Mathf.Clamp(desiredDistance - scroll * zoomSpeed, minDistance, maxDistance);
 

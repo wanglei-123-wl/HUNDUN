@@ -30,7 +30,7 @@ namespace Game.Minimap {
 }
 public static class GameplayUiInputGuard {
     public static bool Blocked;
-    public static void RegisterModal(object root) { Blocked=true; }
+    public static void RegisterModal(object root, bool blocksWorldActions = false) { if (!blocksWorldActions) throw new System.Exception("Transfer status must retain its world lock."); Blocked=true; }
     public static void UnregisterModal(object root) { Blocked=false; }
 }
 '@

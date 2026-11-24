@@ -1973,12 +1973,12 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1548782251}
   - {fileID: 1012737364}
   - {fileID: 1581756385}
   - {fileID: 904205821}
-  - {fileID: 1266172303}
   - {fileID: 359960276}
+  - {fileID: 1548782251}
+  - {fileID: 1266172303}
   - {fileID: 1625952859}
   - {fileID: 605858914}
   m_Father: {fileID: 0}
@@ -44823,9 +44823,12 @@ MonoBehaviour:
   movableParts:
   - {fileID: 1581756385}
   - {fileID: 904205821}
-  - {fileID: 0}
+  - {fileID: 1266172303}
   - {fileID: 359960276}
   - {fileID: 1625952859}
+  - {fileID: 1548782251}
+  - {fileID: 1012737364}
+  - {fileID: 605858914}
 --- !u!1 &860000000000500001
 GameObject:
   m_ObjectHideFlags: 0

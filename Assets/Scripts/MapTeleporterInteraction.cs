@@ -24,7 +24,7 @@ public sealed class MapTeleporterInteraction : MonoBehaviour
         if (pendingTeleporter == null && !pressed)
             return;
 
-        if (session == null || !session.IsWorldReady || GameplayUiInputGuard.BlocksGameplayInput
+        if (session == null || !session.IsWorldReady || GameplayUiInputGuard.BlocksWorldPointerInput
             || Input.GetMouseButton(0) || (panel != null && panel.IsOpen))
         {
             pendingTeleporter = null;

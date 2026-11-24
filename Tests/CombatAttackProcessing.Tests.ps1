@@ -109,6 +109,7 @@ public sealed class CombatBusinessHarness
     private readonly string activeSceneId = "world_001";
     private readonly int eventDeduplicationCapacity = 2048;
     public event Action<CombatEventMessage> CombatEventApplied;
+    public event Action<CombatEventMessage> MonsterHitConfirmed;
     public event Action<string, string> CombatRevisionGapDetected;
     public int Published { get; private set; }
     public CombatEventMessage LastPublished { get; private set; }

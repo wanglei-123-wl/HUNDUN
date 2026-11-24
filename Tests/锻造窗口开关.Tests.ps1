@@ -31,6 +31,7 @@ namespace UnityEngine
 public static class GameplayUiInputGuard
 {
     public static bool IsEditingText;
+    public static bool BlocksWindowShortcuts => IsEditingText;
 }
 '@
 Add-Type -TypeDefinition ($source + "`n" + $stubs) -IgnoreWarnings | Out-Null

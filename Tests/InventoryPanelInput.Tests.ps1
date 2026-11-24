@@ -10,7 +10,7 @@ function Assert-Equal([bool]$actual, [bool]$expected, [string]$message) {
 $capture = [Game.CharacterPanel.Presentation.CharacterPanelPointerCapture]::new()
 Assert-Equal ($capture.Sample($false, $false, 0, 0, 0)) $false 'Closed inventory must allow world input.'
 Assert-Equal ($capture.Sample($true, $false, 0, 0, 0)) $false 'Outside inventory must allow world input.'
-Assert-Equal ($capture.Sample($true, $true, 0, 0, 0)) $true 'Hovering inventory must block keyboard and camera input.'
+Assert-Equal ($capture.Sample($true, $true, 0, 0, 0)) $true 'Hovering inventory must consume pointer and camera input.'
 Assert-Equal ($capture.Sample($true, $true, 1, 1, 0)) $true 'Category button press must be captured.'
 Assert-Equal ($capture.Sample($true, $false, 1, 0, 0)) $true 'Dragging outside inventory must remain blocked.'
 Assert-Equal ($capture.Sample($false, $false, 0, 0, 1)) $true 'Closing on release must not trigger world attack.'
@@ -54,14 +54,17 @@ Assert-Equal ($marketCapture.Sample($true, $true, 1, 1, 0)) $true 'Market scroll
 Assert-Equal ($marketCapture.Sample($true, $false, 1, 0, 0)) $true 'Market drag outside must remain captured.'
 Assert-Equal ($marketCapture.Sample($true, $false, 0, 0, 1)) $true 'Market release frame must remain blocked.'
 Assert-Equal ($marketCapture.Sample($true, $false, 0, 0, 0)) $false 'World input resumes after market release.'
-foreach ($path in @(
-    'Assets/Scripts/Player/AuthorityMovement/LocalPlayerInputController.cs',
-    'Assets/Scripts/Player/ThirdPersonCameraFollow.cs',
-    'Assets/Scripts/Loot/Interaction/LootClickBridge.cs'
-)) {
+$guardConsumers = @{
+    'Assets/Scripts/Player/AuthorityMovement/LocalPlayerInputController.cs' = @('BlocksWorldActions', 'BlocksWorldKeyboardInput', 'BlocksWorldPointerInput')
+    'Assets/Scripts/Player/ThirdPersonCameraFollow.cs' = @('BlocksCameraInput')
+    'Assets/Scripts/Loot/Interaction/LootClickBridge.cs' = @('BlocksWorldPointerInput')
+}
+foreach ($path in $guardConsumers.Keys) {
     $source = Get-Content (Join-Path $root $path) -Raw
-    if ($source -notmatch 'GameplayUiInputGuard.BlocksGameplayInput') {
-        throw "$path must use the shared gameplay input guard."
+    foreach ($property in $guardConsumers[$path]) {
+        if (!$source.Contains('GameplayUiInputGuard.' + $property)) {
+            throw "$path must use the shared $property policy."
+        }
     }
 }
 

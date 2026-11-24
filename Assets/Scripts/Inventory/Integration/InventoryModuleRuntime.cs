@@ -145,8 +145,8 @@ namespace Game.Inventory
             LocalPlayerProvider provider = LocalPlayerProvider.Instance;
             if (provider != null && provider.PlayerTransform != null)
             {
-                provider.PlayerTransform.GetComponent<PredictedCharacterMotor>()
-                    ?.PlayGroundActionAnimation("UsePotion");
+                provider.PlayerTransform.GetComponent<LocalPlayerInputController>()
+                    ?.PlayPotionAnimation();
             }
         }
 

@@ -80,7 +80,7 @@ public sealed class MapTransferStatusView : MonoBehaviour
         label.richText = false;
         label.text = "正在前往" + (destinationName ?? "目标地图") + "……\n" + message;
         gameObject.SetActive(true);
-        GameplayUiInputGuard.RegisterModal(gameObject);
+        GameplayUiInputGuard.RegisterModal(gameObject, blocksWorldActions: true);
     }
 
     public void ShowFailure(string message, bool recovering)

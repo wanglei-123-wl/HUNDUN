@@ -30,7 +30,7 @@ public sealed class LootClickBridge : MonoBehaviour
             return;
         }
 
-        if (GameplayUiInputGuard.BlocksGameplayInput)
+        if (GameplayUiInputGuard.BlocksWorldPointerInput)
         {
             return;
         }

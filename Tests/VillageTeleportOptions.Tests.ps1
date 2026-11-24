@@ -14,9 +14,9 @@ $destinations = @(
     }
 )
 $departures = @(
-    foreach ($entry in [regex]::Matches($fields[2].Value, '(?m)^  - name: "([^"]+)"\r?\n    sceneId: (\w+)\r?\n    mapId: (\w+)\r?\n    allowedRoutes:\r?\n((?:    - sceneId: \w+\r?\n(?:      routeId: \w+\r?\n)?)+)')) {
+    foreach ($entry in [regex]::Matches($fields[2].Value, '(?m)^  - name: "([^"]+)"\r?\n    sceneId: (\w+)\r?\n    mapId: (\w+)\r?\n    allowedRoutes:\r?\n((?:    - sceneId: \w+\r?\n(?:      routeId: *\w*\r?\n)?)+)')) {
         $allowed = @(
-            foreach ($route in [regex]::Matches($entry.Groups[4].Value, '(?m)^    - sceneId: (\w+)\r?\n(?:      routeId: (\w+)\r?\n)?')) {
+            foreach ($route in [regex]::Matches($entry.Groups[4].Value, '(?m)^    - sceneId: (\w+)\r?\n(?:      routeId: *(\w*)\r?\n)?')) {
                 @{ sceneId = $route.Groups[1].Value; routeId = $route.Groups[2].Value }
             }
         )

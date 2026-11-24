@@ -53,7 +53,13 @@ public static class MonsterTargetingController
     public static bool IsValidTarget(CombatTargetSelection target) =>
         target.IsValid && !Dead.Contains(target.TargetTransform);
 }
-public static class GameplayUiInputGuard { public static bool BlocksGameplayInput; }
+public static class GameplayUiInputGuard
+{
+    public static bool BlocksGameplayInput;
+    public static bool BlocksWorldActions;
+    public static bool BlocksCameraInput => BlocksGameplayInput;
+    public static bool BlocksWorldPointerInput => BlocksCameraInput;
+}
 public sealed class ThirdPersonCameraFollow
 {
     public bool CharacterLookActive;

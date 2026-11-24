@@ -25,6 +25,9 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
     private const string GroundedParameter = "IsGrounded";
     private const string JumpParameter = "Jump";
     private const string LocomotionTag = "Locomotion";
+    internal const string PotionTrigger = "UsePotion";
+    private static readonly int PotionState = Animator.StringToHash("\u5403\u836f\u52a8\u753b");
+    private const float PotionEnterTimeout = 0.75f;
 
     private CharacterController controller;
     private Vector3 velocity;
@@ -37,6 +40,9 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
     private bool hasJumpParameter;
     private bool running;
     private string groundActionTrigger;
+    private bool potionRequested;
+    private bool potionEntered;
+    private float potionRequestedAt;
     private bool authoritativeAttackLocked;
     private bool attackAnimationLocked;
     private bool attackStateEntered;
@@ -71,7 +77,34 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
     private bool AttackMovementLocked => authoritativeAttackLocked || attackAnimationLocked
         || Time.unscaledTime < attackMovementUnlockTime;
     private bool CanStartPredictedAttack => animator != null && hasAttackTriggerParameter
-        && !authoritativeAttackLocked && !attackAnimationLocked;
+        && !authoritativeAttackLocked && !attackAnimationLocked && !BlocksActionsForPotion;
+
+    internal bool BlocksActionsForPotion
+    {
+        get
+        {
+            if (animator == null || !animator.isActiveAndEnabled)
+            {
+                ResetGroundActionTrigger();
+                return false;
+            }
+
+            // Include both blends: input is locked before the trigger is
+            // consumed and until the outgoing potion state has fully left.
+            if (animator.GetCurrentAnimatorStateInfo(0).shortNameHash == PotionState
+                || (animator.IsInTransition(0)
+                    && animator.GetNextAnimatorStateInfo(0).shortNameHash == PotionState))
+            {
+                potionEntered = true;
+                return true;
+            }
+
+            if (potionEntered || (potionRequested
+                && Time.unscaledTime - potionRequestedAt >= PotionEnterTimeout))
+                ResetGroundActionTrigger();
+            return potionRequested;
+        }
+    }
 
     private void Awake()
     {
@@ -196,9 +229,10 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
         }
     }
 
-    internal bool PlayGroundActionAnimation(string triggerName)
+    internal bool CanPlayGroundActionAnimation(string triggerName)
     {
-        if (animator == null || !grounded || AttackMovementLocked
+        if (animator == null || !animator.isActiveAndEnabled || !grounded || AttackMovementLocked
+            || BlocksActionsForPotion
             || string.IsNullOrWhiteSpace(triggerName)
             || !animator.GetCurrentAnimatorStateInfo(0).IsTag(LocomotionTag)
             || (animator.IsInTransition(0)
@@ -215,17 +249,30 @@ public sealed partial class PredictedCharacterMotor : MonoBehaviour
                 continue;
             }
 
-            ResetGroundActionTrigger();
-            groundActionTrigger = triggerName;
-            animator.SetTrigger(triggerName);
             return true;
         }
 
         return false;
     }
 
+    internal bool PlayGroundActionAnimation(string triggerName)
+    {
+        if (!CanPlayGroundActionAnimation(triggerName)) return false;
+        ResetGroundActionTrigger();
+        groundActionTrigger = triggerName;
+        if (triggerName == PotionTrigger)
+        {
+            potionRequested = true;
+            potionRequestedAt = Time.unscaledTime;
+        }
+        animator.SetTrigger(triggerName);
+        return true;
+    }
+
     private void ResetGroundActionTrigger()
     {
+        potionRequested = false;
+        potionEntered = false;
         if (groundActionTrigger != null)
         {
             if (animator != null)

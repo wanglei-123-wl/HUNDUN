@@ -80,7 +80,7 @@ $controller.Toggle()
 Assert-True ($controller.gameObject.setActiveCalls -eq 0) `
     'A misbound controller must never disable its own host.'
 
-$guid = [regex]::Match($meta, '(?m)^guid: ([0-9a-f]{32})$').Groups[1].Value
+$guid = [regex]::Match($meta, '(?m)^guid: ([0-9a-f]{32})\r?$').Groups[1].Value
 Assert-True ($guid.Length -eq 32) 'Toggle script GUID must exist.'
 $worldHost = Scene-Block '1' '860000000000500001'
 $worldToggle = Scene-Block '114' '860000000000500004'
