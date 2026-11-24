@@ -27,8 +27,9 @@ namespace UnityEngine
         public bool Active = true;
         public void SetActive(bool value) { Active = value; }
     }
-    public static class Debug { public static void Log(string message) {} }
+    public static class Debug { public static void Log(string message) {} public static void LogWarning(string message,object context) {} }
 }
+public static class WorldEntryLoadingView { public static object ActiveWorldEntry; }
 public enum BattleSyncApplyResult { Applied, AlreadyApplied, IgnoredStale, IgnoredWrongScene, RetryableFailure, InvalidMessage }
 public enum BattleSyncSnapshotRoutingMode { LegacySelfRegistered, CoordinatorOwned }
 public sealed class BattleSyncModuleSessionContext
@@ -39,6 +40,7 @@ public sealed class BattleSyncModuleSessionContext
 }
 public sealed class MonsterStateDto
 {
+    public object path;
     public string monsterInstanceId, monsterId, state;
     public long spawnGeneration, aoiRevision;
     public long combatRevision;
@@ -47,6 +49,8 @@ public sealed class MonsterStateDto
 }
 public sealed class MonsterSnapshotMessageDto
 {
+    public string reason;
+
     public string sceneId;
     public long serverTime, serverTick;
     public MonsterStateDto[] monsters;
@@ -80,11 +84,13 @@ public sealed class MonsterNetworkView
 {
     public bool enabled = true;
     public int CurrentHp, MaxHp, HealthUpdates;
+    public bool IsTargetable => enabled && CurrentHp > 0;
     public int DeathSignals;
     public bool ApplyState(MonsterViewState state) { return true; }
     public bool PlayAction(MonsterActionData action) { return true; }
     public void ApplyHealth(int hp, int maxHp) { CurrentHp = hp; MaxHp = maxHp; HealthUpdates++; }
     public void BootstrapState(string state) { if (state == "Dead") DeathSignals++; }
+    public void SetMovementPath(object path,long time) {}
     public void StopNetworkInterpolation() { }
     public void ClearPendingSnapshots() { }
 }
@@ -117,6 +123,7 @@ public sealed class CombatStateStore
 }
 public sealed class MonsterSnapshotManager
 {
+    private static bool CanPlayPath(MonsterClientEntry e,string s) => e.networkView.CurrentHp > 0 && (s == "Chase" || s == "Return" || s == "Patrol");
     private sealed class MonsterClientEntry
     {
         public UnityEngine.GameObject gameObject;
@@ -175,6 +182,8 @@ public sealed class MonsterSnapshotManager
             state = source.state, aoiRevision = source.aoiRevision, hp = source.hp, maxHp = source.maxHp
         };
     }
+    private static bool HasRequiredMonsterComponents(UnityEngine.GameObject go) => true;
+    private UnityEngine.GameObject FindPrefabById(string id) => null;
     private MonsterClientEntry SpawnMonster(MonsterSnapshotItem item)
     {
         SpawnCount++;

@@ -89,6 +89,8 @@ namespace Game.Client.BattleSync
             public const byte Return = 5;
             public const byte Landing = 6;
             public const byte Dead = 7;
+            public const byte Patrol = 8;
+            public const byte Hover = 9;
         }
 
         public static class Limits

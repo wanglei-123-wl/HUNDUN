@@ -82,7 +82,9 @@ internal static class StateFrameArrayParserTests
         Reject(Sample.Replace(Player, Player.Replace(",729,5]", ",9223372036854775808,5]")),
             "players[0][11]");
         Reject(Sample.Replace(Monster, Monster.Replace(",3,85,", ",256,85,")), "monsters[0][5]");
-        Reject(Sample.Replace(Monster, Monster.Replace(",3,85,", ",8,85,")), "monsters[0][5]");
+        Accept(Sample.Replace(Monster, Monster.Replace(",3,85,", ",8,85,")));
+        Accept(Sample.Replace(Monster, Monster.Replace(",3,85,", ",9,85,")));
+        Reject(Sample.Replace(Monster, Monster.Replace(",3,85,", ",10,85,")), "monsters[0][5]");
         Reject(Sample.Replace(Monster, Monster.Replace(",80,3,3]", ",-1,3,3]")),
             "monsters[0][7]");
         Reject(Sample.Replace("\"serverTime\":1784713000100",

@@ -178,7 +178,7 @@ namespace Game.Client.BattleSync.Protocol
                     return false;
                 }
                 if ((values[6] & BattleSyncProtocolConstants.StateFlags.MovementState) != 0
-                    && values[5] > 7)
+                    && values[5] > BattleSyncProtocolConstants.MonsterAiStates.Hover)
                 {
                     error = FieldError("monsters", index, 5, "Monster AI state is outside the known range.")
                         .WithContext(sceneId, frameSequence);
@@ -298,7 +298,7 @@ namespace Game.Client.BattleSync.Protocol
             {
                 if (!TryInteger(row[index++], IntegerWidth.Byte, out long ai)
                     || !TryInteger(row[index++], IntegerWidth.UShort, out long flags)
-                    || (flags & BattleSyncProtocolConstants.StateFlags.MovementState) != 0 && ai > 7) return false;
+                    || (flags & BattleSyncProtocolConstants.StateFlags.MovementState) != 0 && ai > BattleSyncProtocolConstants.MonsterAiStates.Hover) return false;
                 fields.aiState = (int)ai; fields.flags = (int)flags;
             }
             if (combat)

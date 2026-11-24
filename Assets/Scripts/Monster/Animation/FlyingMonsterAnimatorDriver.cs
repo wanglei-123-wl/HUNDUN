@@ -78,6 +78,7 @@ public class FlyingMonsterAnimatorDriver : MonoBehaviour, IMonsterAnimatorDriver
                 PlayState(TakeOffStateHash);
                 break;
 
+            case "patrol":
             case "chase":
             case "chasing":
             case "return":
@@ -86,6 +87,12 @@ public class FlyingMonsterAnimatorDriver : MonoBehaviour, IMonsterAnimatorDriver
             case "flying":
                 SetLocomotion(MonsterLocomotionMode.Flying);
                 SetMoveSpeed(1f);
+                PlayState(FlyingStateHash);
+                break;
+
+            case "hover":
+                SetLocomotion(MonsterLocomotionMode.Flying);
+                SetMoveSpeed(0f);
                 PlayState(FlyingStateHash);
                 break;
 

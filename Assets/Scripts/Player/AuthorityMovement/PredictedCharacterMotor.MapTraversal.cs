@@ -4,6 +4,8 @@ using UnityEngine;
 public sealed partial class PredictedCharacterMotor
 {
     private const int TraversalSearchIterations = 10;
+    // Gate treats clearance up to 10 cm as grounded for a natural fall report.
+    private const double GroundContactRecoveryDistance = 0.1;
     private Vector3 groundSlideAttempt;
     internal Vector3 GroundSlideBlockNormal { get; private set; }
 
@@ -146,7 +148,29 @@ public sealed partial class PredictedCharacterMotor
             collisions = onGround || displacement.y < 0f ? CollisionFlags.Below
                 : displacement.y > 0f ? CollisionFlags.Above : CollisionFlags.None;
         }
+        else if (onGround && actualValid && (collisions & CollisionFlags.Below) == 0 &&
+            TryRecoverGroundContact(query, from, actual, radius, height, out Vector3 supported))
+        {
+            if (supported.y != actual.y) SetTransform(supported, transform.rotation);
+            collisions |= CollisionFlags.Below;
+        }
         return collisions;
+    }
+
+    private static bool TryRecoverGroundContact(MapTraversalQuery query, Vector3 from, Vector3 actual,
+        float radius, float height, out Vector3 supported)
+    {
+        supported = actual;
+        if (!query.TryGetStandingHeight(actual.x, actual.z, radius, height, out double standingY) ||
+            System.Math.Abs(actual.y - standingY) > GroundContactRecoveryDistance ||
+            !query.TryGetStandingHeight(from.x, from.z, radius, height, out double previousStandingY) ||
+            previousStandingY - standingY > GroundContactRecoveryDistance ||
+            query.HasCollisionAlongSegment(actual.x, actual.y, actual.z, actual.x, standingY, actual.z,
+                radius, height))
+            return false;
+
+        supported.y = (float)standingY;
+        return true;
     }
 
     private float GroundProbeExtraDrop(MapTraversalQuery query, Vector3 from, Vector3 target)

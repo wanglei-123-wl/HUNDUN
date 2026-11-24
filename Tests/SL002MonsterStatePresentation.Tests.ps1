@@ -51,6 +51,8 @@ public sealed class MonsterViewState
     public Vector3 position;
     public Quaternion rotation;
     public Vector3 velocity;
+    public bool preserveTransform, preservePresentation;
+    public float moveSpeed;
     public MonsterLocomotionMode locomotionMode;
     public int hp, maxHp;
 }
@@ -67,6 +69,8 @@ public sealed class MonsterNetworkView
         LastState = state;
         return true;
     }
+    public void SetMovementPath(object path,long time) {}
+    public void CorrectMovementPath(Vector3 p,long time) {}
     public void BootstrapState(string state)
     {
         if (state == "Dead") DeathSignals++;
@@ -78,6 +82,8 @@ public sealed class DecodedMonsterState
     public bool HasPosition, HasAiState, HasHp, HasCombatRevision;
     public float X, Y, Z, YawDegrees;
     public byte AiState;
+    public bool HasPathUpdate;
+    public object Path;
     public int Hp;
     public long CombatRevision;
 }
@@ -140,6 +146,7 @@ public sealed class MonsterSnapshotManager
             networkView = view, lastServerState = state, lastAiState = state
         };
     }
+    private static bool IsAttackState(string s) => s == "Attack";
 __DYNAMIC__
 __RESOLVE_AI__
 __RESOLVE_MOVEMENT__

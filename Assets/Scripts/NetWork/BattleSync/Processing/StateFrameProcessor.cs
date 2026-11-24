@@ -83,6 +83,19 @@ namespace Game.Client.BattleSync
             if ((monsterSyncVersion == 0 && message.monsterDeltas.Length != 0)
                 || (monsterSyncVersion < 2 && message.monsterPaths.Length != 0))
                 return BattleSyncApplyResult.InvalidMessage;
+            // Validate the complete packet before applying any entity or advancing a baseline.
+            if (monsterSyncVersion < 3)
+            {
+                foreach (CompactMonsterStateDto row in message.monsters)
+                    if ((row.flags & BattleSyncProtocolConstants.StateFlags.MovementState) != 0
+                        && row.aiState >= BattleSyncProtocolConstants.MonsterAiStates.Patrol)
+                        return BattleSyncApplyResult.InvalidMessage;
+                foreach (MonsterStateDelta delta in message.monsterDeltas)
+                    if ((delta.mask & MonsterStateDelta.Behavior) != 0
+                        && (delta.fields.flags & BattleSyncProtocolConstants.StateFlags.MovementState) != 0
+                        && delta.fields.aiState >= BattleSyncProtocolConstants.MonsterAiStates.Patrol)
+                        return BattleSyncApplyResult.InvalidMessage;
+            }
             if(message.frameSequence<=highestFrameSequence)return BattleSyncApplyResult.IgnoredStale;
 
             DecodedPlayerState[] players=new DecodedPlayerState[message.players.Length];

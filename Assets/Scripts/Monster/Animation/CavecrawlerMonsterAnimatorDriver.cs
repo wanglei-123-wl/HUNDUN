@@ -73,6 +73,7 @@ public sealed class CavecrawlerMonsterAnimatorDriver : MonoBehaviour, IMonsterAn
             case "attack":
                 PlayAction(0, 1f);
                 break;
+            case "patrol":
             case "chase":
             case "chasing":
             case "return":

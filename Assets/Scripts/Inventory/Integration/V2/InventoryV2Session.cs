@@ -17,7 +17,7 @@ namespace Game.Inventory.Integration.V2
     public sealed class InventoryV2Session : IDisposable
     {
         private const float RequestTimeoutSeconds = 10f;
-        private const float MinimumSnapshotRequestInterval = 1f;
+        private const float MinimumSnapshotRequestInterval = 1.2f;
         private readonly NetworkManager network;
         private readonly NetMessageDispatcher dispatcher;
         private readonly InventoryPanelView panel;
@@ -54,6 +54,7 @@ namespace Game.Inventory.Integration.V2
         private long pendingSequence;
         private float requestStartedAt;
         private float lastRequestAt = float.NegativeInfinity;
+        private bool snapshotRateLimitRetried;
         private InventoryOwnershipSnapshot snapshot;
         private InventoryEquipmentIntent pendingOperation;
         private long pendingOperationSequence;
@@ -191,7 +192,8 @@ namespace Game.Inventory.Integration.V2
             worldDropOperationSessionId = null;
             nextWorldDropOperationSequence = 0;
             itemUseOperationSessionId = null;
-            pendingSequence = 0;
+            CompleteSnapshotRequest();
+            lastRequestAt = float.NegativeInfinity;
             pendingOperation = null;
             pendingOperationSequence = 0;
             pendingUnequipTarget = -1;
@@ -261,6 +263,11 @@ namespace Game.Inventory.Integration.V2
             long sequence = ++nextSequence;
             if (!network.Send(new InventoryV2SnapshotRequestDto(sequence)))
             {
+                if (snapshotRateLimitRetried)
+                {
+                    CompleteSnapshotRequest();
+                    refreshAfterPending = false;
+                }
                 panel.SetLoading(false);
                 Debug.LogWarning("V2 inventory snapshot request could not be sent.");
                 ShowNotice("背包请求发送失败，请稍后重试");
@@ -270,7 +277,7 @@ namespace Game.Inventory.Integration.V2
             refreshAfterPending = false;
             lastRequestAt = Time.unscaledTime;
             requestStartedAt = Time.unscaledTime;
-            if (IsOpen) panel.SetLoading(true);
+            if (IsOpen && (!snapshotRateLimitRetried || snapshot == null)) panel.SetLoading(true);
             Debug.Log("[InventorySnapshot][TX] protocol=V2 requestSequence=" + sequence);
         }
 
@@ -910,7 +917,7 @@ namespace Game.Inventory.Integration.V2
             if (pendingSequence != 0
                 && Time.unscaledTime - requestStartedAt >= RequestTimeoutSeconds)
             {
-                pendingSequence = 0;
+                CompleteSnapshotRequest();
                 panel.SetLoading(false);
                 Debug.LogWarning("V2 inventory snapshot request timed out.");
                 ShowNotice("背包加载超时，请稍后重试");
@@ -975,7 +982,7 @@ namespace Game.Inventory.Integration.V2
             {
                 if (requested)
                 {
-                    pendingSequence = 0;
+                    CompleteSnapshotRequest();
                     panel.SetLoading(false);
                     ShowResultNotice(header.message, "背包加载失败，请稍后重试");
                 }
@@ -985,7 +992,7 @@ namespace Game.Inventory.Integration.V2
             }
             if (requested && !header.success)
             {
-                pendingSequence = 0;
+                CompleteSnapshotRequest();
                 panel.SetLoading(false);
                 ShowResultNotice(header.message, "背包加载失败，请稍后重试");
                 RefreshIfNeeded();
@@ -995,7 +1002,7 @@ namespace Game.Inventory.Integration.V2
             {
                 if (requested)
                 {
-                    pendingSequence = 0;
+                    CompleteSnapshotRequest();
                     panel.SetLoading(false);
                     ShowNotice("背包角色信息不匹配，请重新连接");
                 }
@@ -1009,7 +1016,7 @@ namespace Game.Inventory.Integration.V2
             {
                 if (requested)
                 {
-                    pendingSequence = 0;
+                    CompleteSnapshotRequest();
                     panel.SetLoading(false);
                     ShowNotice("背包场景信息不匹配，请重新连接");
                 }
@@ -1022,7 +1029,7 @@ namespace Game.Inventory.Integration.V2
             {
                 if (requested)
                 {
-                    pendingSequence = 0;
+                    CompleteSnapshotRequest();
                     panel.SetLoading(false);
                     ShowNotice("背包数据已变化，请稍后刷新");
                 }
@@ -1040,7 +1047,8 @@ namespace Game.Inventory.Integration.V2
                 equipmentPanel?.Render(next);
                 panel.SetLoading(false);
                 snapshot = next;
-                pendingSequence = 0;
+                if (pendingSequence != 0)
+                    CompleteSnapshotRequest();
                 try { presenter.PersistLayout(); }
                 catch (Exception storageError)
                 {
@@ -1072,7 +1080,7 @@ namespace Game.Inventory.Integration.V2
                 }
                 if (requested)
                 {
-                    pendingSequence = 0;
+                    CompleteSnapshotRequest();
                     panel.SetLoading(false);
                 }
                 Debug.LogError("V2 inventory snapshot could not be displayed: " + exception.Message);
@@ -1907,6 +1915,13 @@ namespace Game.Inventory.Integration.V2
             ServerErrorMessage error;
             try { error = JsonUtility.FromJson<ServerErrorMessage>(json); }
             catch (Exception) { return; }
+            if (error != null && pendingSequence != 0 && error.requestSequence == pendingSequence
+                && error.requestMsgId == InventoryV2Protocol.Snapshot
+                && error.errorCode == "inventory_snapshot_rate_limited")
+            {
+                HandleSnapshotRateLimit();
+                return;
+            }
             if (error != null && MovementReferenceError.DidNotExecute(error.errorCode)
                 && pendingWorldDrop != null && error.requestSequence == pendingWorldDrop.Sequence
                 && error.requestMsgId == (pendingWorldDrop.IsStack
@@ -1949,6 +1964,30 @@ namespace Game.Inventory.Integration.V2
                 RefreshIfNeeded();
             if (mayHaveConsumed)
                 applyJingjieBalance?.Invoke(null, null);
+        }
+
+        private void HandleSnapshotRateLimit()
+        {
+            lastRequestAt = Time.unscaledTime;
+            if (snapshotRateLimitRetried)
+            {
+                CompleteSnapshotRequest();
+                refreshAfterPending = false;
+                panel.SetLoading(false);
+                ShowNotice("背包刷新过于频繁，请稍后重试");
+                return;
+            }
+
+            pendingSequence = 0;
+            snapshotRateLimitRetried = true;
+            refreshAfterPending = true;
+            if (snapshot != null) panel.SetLoading(false);
+        }
+
+        private void CompleteSnapshotRequest()
+        {
+            pendingSequence = 0;
+            snapshotRateLimitRetried = false;
         }
 
         private void ApplyItemUseManaIfPresent(

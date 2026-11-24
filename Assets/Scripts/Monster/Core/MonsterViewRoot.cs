@@ -95,6 +95,7 @@ public class MonsterViewRoot : MonoBehaviour
 
     private void ApplyPresentationState(MonsterViewState state)
     {
+        if (state.preservePresentation) return;
         animatorDriver?.SetLocomotion(state.locomotionMode);
         animatorDriver?.SetMoveSpeed(state.moveSpeed);
     }

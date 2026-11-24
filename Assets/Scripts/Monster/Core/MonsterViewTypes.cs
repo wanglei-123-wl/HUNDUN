@@ -18,6 +18,7 @@ public struct MonsterViewState
     public Quaternion rotation;
     public Vector3 velocity;
     public bool preserveTransform;
+    public bool preservePresentation;
     [Range(0f, 1f)] public float moveSpeed;
     public MonsterLocomotionMode locomotionMode;
     public int hp;

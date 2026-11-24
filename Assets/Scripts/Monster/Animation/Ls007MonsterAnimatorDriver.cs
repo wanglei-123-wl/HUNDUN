@@ -73,6 +73,7 @@ public sealed class Ls007MonsterAnimatorDriver : MonoBehaviour, IMonsterAnimator
             case "attack":
                 PlayAction(0, 1f);
                 break;
+            case "patrol":
             case "chase":
             case "chasing":
             case "return":

@@ -117,7 +117,7 @@ namespace Game.Client.BattleSync
             {error="Compact monster state is invalid.";return false;}
             ushort flags=(ushort)source.flags;
             bool hasAi=Has(flags,BattleSyncProtocolConstants.StateFlags.MovementState);
-            if(hasAi&&source.aiState>7){error="Compact monster AI state is invalid.";return false;}
+            if(hasAi&&source.aiState>BattleSyncProtocolConstants.MonsterAiStates.Hover){error="Compact monster AI state is invalid.";return false;}
             state=new DecodedMonsterState(source.netId,source.visibilityRevision,flags,
                 Has(flags,BattleSyncProtocolConstants.StateFlags.Position),source.x*PositionScale,
                 source.y*PositionScale,source.z*PositionScale,source.yaw*YawScale,

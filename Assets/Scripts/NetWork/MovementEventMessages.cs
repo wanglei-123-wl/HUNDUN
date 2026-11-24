@@ -21,7 +21,7 @@ public sealed class MovementEventPolicy
 {
     public const int Version = 2;
     public const int BroadcastVersion = 2;
-    public const int MonsterSyncVersion = 2;
+    public const int MonsterSyncVersion = 3;
     public const string IncompatibleServerMessage =
         "游戏服务器的移动或怪物同步协议版本不匹配，请确认客户端与服务端版本配套。";
     public int version, heartbeatIntervalMs, maxEventsPerSecond, movingTimeoutMs, controlTimeoutMs;

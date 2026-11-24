@@ -73,6 +73,7 @@ public sealed class MarhomorphMonsterAnimatorDriver : MonoBehaviour, IMonsterAni
             case "attack":
                 PlayAction(0, 1f);
                 break;
+            case "patrol":
             case "chase":
             case "chasing":
             case "return":

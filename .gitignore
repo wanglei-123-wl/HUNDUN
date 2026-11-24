@@ -56,3 +56,6 @@ Desktop.ini
 
 # Asset Store Tools
 [Aa]ssets/AssetStoreTools*
+
+# Handwritten executable protocol regression project.
+!Tests/MonsterPatrolProtocol.Tests.csproj

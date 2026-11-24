@@ -349,15 +349,21 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
             }
         }
         else if (state.HasAiState) entry.unknownAiFrames = 0;
+        bool behaviorChanged=state.HasAiState&&!unknownAi
+            &&!string.Equals(entry.lastAiState,aiState,StringComparison.OrdinalIgnoreCase);
+        if(behaviorChanged)entry.networkView.SetMovementPath(null,serverTime);
         localStateSequence++;
         MonsterViewState viewState=new MonsterViewState{entityId=state.EntityId,stateSequence=localStateSequence,
             position=position,rotation=rotation,velocity=Vector3.zero,
             preserveTransform=!state.HasPosition,
+            preservePresentation=!state.HasAiState || unknownAi,
+            moveSpeed=string.Equals(aiState,"Hover",StringComparison.OrdinalIgnoreCase) ? 0f
+                : ResolveLocomotionMode(aiState)==MonsterLocomotionMode.Flying ? 1f : 0f,
             locomotionMode=ResolveLocomotionMode(aiState),
             hp=entry.networkView.CurrentHp,maxHp=entry.networkView.MaxHp};
         if(!entry.networkView.ApplyState(viewState))return BattleSyncApplyResult.IgnoredStale;
-        if(state.HasAiState&&state.AiState==7&&!string.Equals(entry.lastAiState,"Dead",StringComparison.OrdinalIgnoreCase))
-            entry.networkView.BootstrapState("Dead");
+        if(behaviorChanged&&!IsAttackState(aiState))
+            entry.networkView.BootstrapState(aiState);
         if(state.HasAiState&&!unknownAi)entry.lastAiState=aiState;
         if(state.HasHp&&state.HasCombatRevision&&combatStateStore!=null)
         {
@@ -379,12 +385,13 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
 
     private static bool CanPlayPath(MonsterClientEntry entry,string state) =>
         entry.networkView.CurrentHp > 0 && (string.Equals(state,"Chase",StringComparison.OrdinalIgnoreCase)
-            || string.Equals(state,"Return",StringComparison.OrdinalIgnoreCase));
+            || string.Equals(state,"Return",StringComparison.OrdinalIgnoreCase)
+            || string.Equals(state,"Patrol",StringComparison.OrdinalIgnoreCase));
 
     private static string ResolveAiState(byte value)
     {
         switch(value){case 1:return "Idle";case 2:return "TakeOff";case 3:return "Chase";
-            case 4:return "Attack";case 5:return "Return";case 6:return "Landing";case 7:return "Dead";default:return "Unknown";}
+            case 4:return "Attack";case 5:return "Return";case 6:return "Landing";case 7:return "Dead";case 8:return "Patrol";case 9:return "Hover";default:return "Unknown";}
     }
 
     private static MonsterSnapshotItem ConvertMonster(MonsterStateDto item)
@@ -641,9 +648,11 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         }
 
         ApplyStoredCombatState(item.monsterInstanceId, entry, spawnGeneration);
-        if (!created && string.Equals(item.state, "Dead", StringComparison.OrdinalIgnoreCase)
-            && !string.Equals(entry.lastServerState, "Dead", StringComparison.OrdinalIgnoreCase))
-            entry.networkView.BootstrapState("Dead");
+        if (!created && !IsAttackState(item.state)
+            && !string.Equals(entry.lastAiState, item.state, StringComparison.OrdinalIgnoreCase))
+            entry.networkView.BootstrapState(item.state);
+        if (!string.Equals(entry.lastAiState,item.state,StringComparison.OrdinalIgnoreCase)
+            || !CanPlayPath(entry, item.state)) entry.networkView.SetMovementPath(null, 0);
 
         bool animatorApplied = true;
         if (!created && IsAttackState(item.state)
@@ -863,7 +872,8 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
             position = new Vector3(item.x, item.y, item.z),
             rotation = Quaternion.Euler(0f, item.rotY, 0f),
             velocity = Vector3.zero,
-            moveSpeed = locomotionMode == MonsterLocomotionMode.Flying ? 1f : 0f,
+            moveSpeed = locomotionMode == MonsterLocomotionMode.Flying
+                && !string.Equals(item.state,"Hover",StringComparison.OrdinalIgnoreCase) ? 1f : 0f,
             locomotionMode = locomotionMode,
             hp = item.hp,
             maxHp = item.maxHp
@@ -953,6 +963,8 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
             case "takingoff":
             case "take_off":
                 return MonsterLocomotionMode.TakingOff;
+            case "patrol":
+            case "hover":
             case "fly":
             case "flying":
             case "chase":
