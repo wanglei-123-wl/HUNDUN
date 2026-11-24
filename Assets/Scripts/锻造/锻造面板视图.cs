@@ -496,6 +496,9 @@ namespace Game.Forging.Presentation
         {
             if (recipe?.materials == null)
                 return string.Empty;
+            InventoryOwnershipSnapshot bag = inventory?.CurrentSnapshot;
+            long character = session?.LocalCharacterDbId ?? 0;
+            bool hasCurrentBag = character > 0 && bag?.CharacterDbId == character;
             var lines = new List<string>();
             foreach (锻造材料需求 material in recipe.materials)
             {
@@ -507,23 +510,29 @@ namespace Game.Forging.Presentation
                         out ItemDefinition item)
                     && !string.IsNullOrWhiteSpace(item.DisplayName))
                     name = item.DisplayName;
-                string balance = string.Empty;
+                string required = material.count.ToString(CultureInfo.InvariantCulture);
                 if (material.isCurrency)
                 {
                     long amount = 0;
-                    bool available = inventory?.CurrentSnapshot != null
-                        && inventory.CurrentSnapshot.CharacterDbId
-                            == (session?.LocalCharacterDbId ?? 0)
-                        && inventory.CurrentSnapshot.Wallets.TryGetValue(
-                            material.itemId, out amount);
-                    balance = "（钱包 "
+                    bool available = hasCurrentBag
+                        && bag.Wallets.TryGetValue(material.itemId, out amount);
+                    lines.Add(name + " x" + required + "（钱包 "
                         + (available
                             ? amount.ToString(CultureInfo.InvariantCulture)
-                            : "--") + "）";
+                            : "--") + "）");
+                    continue;
                 }
-                lines.Add(name + " x"
-                    + material.count.ToString(CultureInfo.InvariantCulture)
-                    + balance);
+
+                if (!hasCurrentBag || !bag.TryGetItemCount(material.itemId, out long owned))
+                {
+                    lines.Add(name + "(--/" + required + ")");
+                    continue;
+                }
+
+                string color = owned >= material.count ? "#237444" : "#B3262D";
+                lines.Add(name + "(<color=" + color + ">"
+                    + owned.ToString(CultureInfo.InvariantCulture) + "/" + required
+                    + "</color>)");
             }
             return string.Join("\n", lines);
         }
