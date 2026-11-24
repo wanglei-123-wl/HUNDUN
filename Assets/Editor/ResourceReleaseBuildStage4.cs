@@ -38,6 +38,13 @@ public static class ResourceReleaseBuildStage4
     public static void BuildQueuedRequest()
     {
         Require(Application.isBatchMode, "This entry is for batch builds only.");
+        const string batchRequest = "ResourceReleaseBuildStage4.batch-request.json";
+        if (File.Exists(batchRequest))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(RequestPath));
+            Require(!File.Exists(RequestPath), "Another release request is pending.");
+            File.Copy(batchRequest, RequestPath, false);
+        }
         var request = JObject.Parse(File.ReadAllText(RequestPath));
         string id = (string)request["requestId"];
         Require(Guid.TryParseExact(id, "N", out _), "Invalid release request ID.");

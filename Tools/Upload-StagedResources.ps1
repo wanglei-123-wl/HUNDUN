@@ -27,6 +27,8 @@ if ($startup.status -ne 'succeeded' -or !$startup.allPublishedBundlesIncluded -o
     !$startup.allNewBackgroundsIncluded -or $startup.releaseId -ne $releaseId) {
     throw 'Startup download verification is missing or failed.'
 }
+if ($startup.PSObject.Properties.Name -contains 'allRequiredStartupAssetsIncluded' -and
+    !$startup.allRequiredStartupAssetsIncluded) { throw 'Required new resources are missing from startup downloads.' }
 if ((Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $startup.manifestSha256) {
     throw 'Release manifest changed after startup verification.'
 }
@@ -75,4 +77,4 @@ $receipt = [ordered]@{releaseId=$releaseId; status='staged'; stagedAtUtc=[DateTi
     publicCatalogChanged=$false; requiresMatchingClient=$true}
 [IO.File]::WriteAllText((Join-Path $release 'staged-upload-success.json'), ($receipt|ConvertTo-Json),[Text.UTF8Encoding]::new($false))
 Write-Host "STAGED_UPLOAD_OK - verified at ${SshTarget}:$staging" -ForegroundColor Green
-Write-Host 'Live resources were not switched. Publish together with the matching updated client.'
+Write-Host 'Live resources were not switched. Publish after matching client compatibility has been verified.'

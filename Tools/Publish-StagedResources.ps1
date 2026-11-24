@@ -17,7 +17,13 @@ foreach($proof in @(@{path=$client.summaryPath;hash=$client.summarySha256},@{pat
     if((Get-FileHash -LiteralPath $proof.path -Algorithm SHA256).Hash.ToLowerInvariant() -ne $proof.hash){throw ('Matching client proof changed: '+$proof.path)}
 }
 $summary=Get-Content -LiteralPath $client.summaryPath -Raw -Encoding UTF8|ConvertFrom-Json
-if($summary.status -ne 'completed' -or $summary.releaseId -ne $id -or !$summary.binaryRequiredTypesVerified -or !$summary.pairedBootstrapVerified){throw 'Verified matching client build required.'}
+if($summary.status -ne 'completed' -or !$summary.binaryRequiredTypesVerified -or !$summary.pairedBootstrapVerified){throw 'Verified matching client build required.'}
+if($summary.releaseId -ne $id){
+    if(!$client.compatibilityPath -or (Get-FileHash -LiteralPath $client.compatibilityPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $client.compatibilitySha256){throw 'Resource-only release requires a verified client compatibility proof.'}
+    $compatibility=Get-Content -LiteralPath $client.compatibilityPath -Raw -Encoding UTF8|ConvertFrom-Json
+    if($compatibility.status -ne 'succeeded' -or $compatibility.resourceReleaseId -ne $id -or $compatibility.baseClientReleaseId -ne $summary.releaseId -or !$compatibility.existingClientSupported -or !$compatibility.runtimeScriptsUnchanged -or !$compatibility.localBundlesIdentical){throw 'Existing client is not compatible with this resource release.'}
+    if((Get-FileHash -LiteralPath (Join-Path $release 'release-manifest.json') -Algorithm SHA256).Hash.ToLowerInvariant() -ne $compatibility.manifestSha256){throw 'Resource manifest changed after client compatibility verification.'}
+}
 $manifestPath=Join-Path $release 'release-manifest.json'
 $manifest=Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8|ConvertFrom-Json
 $source=Get-Content -LiteralPath (Join-Path $release 'Upload-Source.json') -Raw -Encoding UTF8|ConvertFrom-Json
