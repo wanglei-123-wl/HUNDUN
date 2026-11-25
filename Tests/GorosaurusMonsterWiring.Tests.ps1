@@ -29,7 +29,7 @@ $states = @{
 }
 $clips = @{
     Idle = '91e4b0da3a2af354593c748ea3a3aba6'
-    Walk = '28013b6fb3d2b9446940f08e059d460b'
+    Walk = 'cf752ee0c9c5ef447b82d146f4dbd3f1'
     Attack = '0fa8814a92667774f9a8230cfb688561'
     Death = '64cebaed51ff9334fbb79ffc0e1ff59a'
 }
@@ -47,7 +47,7 @@ $edges = @(
     @{ From = 'Walk'; To = 'Attack'; Parameter = 'Attack'; Mode = 1; Exit = 0 },
     @{ From = 'Walk'; To = 'Idle'; Parameter = 'IsMoving'; Mode = 2; Exit = 0 },
     @{ From = 'Attack'; To = 'Idle'; Parameter = 'IsMoving'; Mode = 2; Exit = 1 },
-    @{ From = 'Attack'; To = 'Walk'; Parameter = 'IsMoving'; Mode = 1; Exit = 1 }
+    @{ From = 'Attack'; To = 'Walk'; Parameter = 'IsMoving'; Mode = 1; Exit = 0 }
 )
 foreach ($edge in $edges) {
     $source = $docs[$states[$edge.From]]
@@ -59,7 +59,7 @@ foreach ($edge in $edges) {
             $body -match "m_HasExitTime: $($edge.Exit)\b") {
             $connected = $true
             if ($edge.Exit -eq 1) {
-                Require ($body -match 'm_ExitTime: 0.95') 'Attacks must finish before returning to locomotion.'
+                Require ($body -match 'm_ExitTime: 0.95') 'Stationary attacks must finish before returning to idle.'
             }
         }
     }
@@ -77,9 +77,10 @@ $folder = 'Assets/Monsters Full Pack Vol 1/Monsters Pack Vol 1/Gorosaurus/FBX Fi
 foreach ($file in @('Gorosaurus@3HitComboAttack.FBX.meta', 'Gorosaurus@death.FBX.meta')) {
     Require ((Read-Asset ($folder + $file)) -match 'loopTime: 0') "$file must not loop."
 }
-foreach ($file in @('Gorosaurus@Idle.FBX.meta', 'Gorosaurus@Walk_RM.FBX.meta')) {
+foreach ($file in @('Gorosaurus@Idle.FBX.meta', 'Gorosaurus@Walk.FBX.meta')) {
     Require ((Read-Asset ($folder + $file)) -match 'loopTime: 1') "$file must loop."
 }
+Require ((Read-Asset ($folder + 'Gorosaurus@Walk.FBX.meta')) -match 'loopBlendPositionXZ: 1') 'Walking must use the in-place clip.'
 
 $prefabPath = 'Assets/预制体/怪物预制体/金魔兽.prefab'
 $prefab = Read-Asset $prefabPath
