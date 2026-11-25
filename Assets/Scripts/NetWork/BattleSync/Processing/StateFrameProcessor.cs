@@ -180,7 +180,7 @@ namespace Game.Client.BattleSync
             if (paths != null && paths.TryGetValue(row.netId,out MonsterPathUpdate path))
                 state = state.WithPath(path.path);
             if (delta != null)
-                state = state.WithChangedGroups(delta.mask | (state.HasPathUpdate ? MonsterStateDelta.Position : 0));
+                state = state.WithChangedGroups(delta.mask);
             BattleSyncApplyResult result = monsterModule.ApplyMonsterDynamicState(state,message.serverTick,message.serverTime);
             if (result == BattleSyncApplyResult.Applied || result == BattleSyncApplyResult.AlreadyApplied)
             {

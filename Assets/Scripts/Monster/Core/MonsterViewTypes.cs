@@ -19,6 +19,11 @@ public struct MonsterViewState
     public Vector3 velocity;
     public bool preserveTransform;
     public bool preservePresentation;
+    public long serverTime;
+    public bool useTimedMovement;
+    public bool allowGroundPrediction;
+    public bool resetMovement;
+    public bool finishMovement;
     [Range(0f, 1f)] public float moveSpeed;
     public MonsterLocomotionMode locomotionMode;
     public int hp;

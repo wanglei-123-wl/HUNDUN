@@ -91,6 +91,7 @@ public sealed class MonsterNetworkView
     public void ApplyHealth(int hp, int maxHp) { CurrentHp = hp; MaxHp = maxHp; HealthUpdates++; }
     public void BootstrapState(string state) { if (state == "Dead") DeathSignals++; }
     public void SetMovementPath(object path,long time) {}
+    public bool IsFinishingMovement => false;
     public void StopNetworkInterpolation() { }
     public void ClearPendingSnapshots() { }
 }

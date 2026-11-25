@@ -52,6 +52,8 @@ public sealed class MonsterViewState
     public Quaternion rotation;
     public Vector3 velocity;
     public bool preserveTransform, preservePresentation;
+    public long serverTime;
+    public bool useTimedMovement, allowGroundPrediction, resetMovement, finishMovement;
     public float moveSpeed;
     public MonsterLocomotionMode locomotionMode;
     public int hp, maxHp;
@@ -61,18 +63,25 @@ public sealed class MonsterNetworkView
     public int CurrentHp = 100;
     public int MaxHp = 100;
     public int DeathSignals;
+    public int ArrivalSignals;
+    public string PendingRestingState;
+    public string BootstrappedState;
+    public bool IsFinishingMovement => PendingRestingState != null;
     public MonsterLocomotionMode LastLocomotionMode;
     public MonsterViewState LastState;
     public bool ApplyState(MonsterViewState state)
     {
+        if (state.resetMovement) PendingRestingState = null;
         LastLocomotionMode = state.locomotionMode;
         LastState = state;
         return true;
     }
     public void SetMovementPath(object path,long time) {}
     public void CorrectMovementPath(Vector3 p,long time) {}
+    public void FinishMovement(long time, string state) { ArrivalSignals++; PendingRestingState = state; }
     public void BootstrapState(string state)
     {
+        BootstrappedState = state;
         if (state == "Dead") DeathSignals++;
     }
 }
@@ -115,6 +124,8 @@ public sealed class MonsterSnapshotManager
         public string lastAiState;
         public int unknownAiFrames;
         public long lastUnknownAiRepairTick;
+        public long lastAttackServerTick, lastMotionServerTick;
+        public bool isFlyingModel;
     }
     private readonly Dictionary<string, MonsterClientEntry> monsters =
         new Dictionary<string, MonsterClientEntry>();
@@ -128,6 +139,7 @@ public sealed class MonsterSnapshotManager
     public event Action<string> MonsterSnapshotRepairRequested;
     public int RepairCount;
     public string GetAiState(string id) { return monsters[id].lastAiState; }
+    public void SetLastAttackTick(string id, long tick) { monsters[id].lastAttackServerTick = tick; }
     public void SetCombatState(CombatStateData state, long generation)
     {
         combatStateStore = new CombatStateStore { State = state };
@@ -191,6 +203,23 @@ $manager.ApplyMonsterDynamicState($state, 4, 4) | Out-Null
 if ($view.LastLocomotionMode -ne [MonsterLocomotionMode]::Landing) {
     throw 'AI-free frames must preserve the last AI locomotion.'
 }
+
+$turn = [DecodedMonsterState]::new()
+$turn.EntityId = 'sl002'
+$turn.HasPosition = $true
+$turn.HasAiState = $true
+$turn.AiState = 8
+$manager.SetLastAttackTick('sl002', 100)
+$manager.ApplyMonsterDynamicState($turn, 99, 9900) | Out-Null
+if (-not $view.LastState.preserveTransform -or $manager.GetAiState('sl002') -ne 'Landing') {
+    throw 'An older patrol frame must not restart motion after an attack event.'
+}
+$manager.ApplyMonsterDynamicState($turn, 101, 10100) | Out-Null
+if ($view.LastState.preserveTransform -or -not $view.LastState.useTimedMovement -or
+    $view.LastState.serverTime -ne 10100 -or $manager.GetAiState('sl002') -ne 'Patrol') {
+    throw 'A current movement frame must resume timed patrol after the attack.'
+}
+$manager.SetLastAttackTick('sl002', 0)
 $state.HasAiState = $true
 $state.AiState = 3
 $manager.ApplyMonsterDynamicState($state, 5, 5) | Out-Null
@@ -231,4 +260,37 @@ if ($manager.ApplyMonsterDynamicState($state, 11, 11) -ne [BattleSyncApplyResult
     throw 'Mismatched combat generation must not update the monster presentation.'
 }
 
-Write-Output 'PASS: monster compact movement persists and death routes once to the visual driver.'
+$manager = [MonsterSnapshotManager]::new()
+$view = [MonsterNetworkView]::new()
+$manager.AddMonster('sl002', $view, 'Patrol')
+$state = [DecodedMonsterState]::new()
+$state.EntityId = 'sl002'
+$state.HasAiState = $true
+$state.AiState = 1
+$manager.ApplyMonsterDynamicState($state, 1, 1000) | Out-Null
+if ($view.PendingRestingState -ne 'Idle' -or $view.BootstrappedState -or
+    -not $view.LastState.finishMovement -or -not $view.LastState.preserveTransform -or -not $view.LastState.preservePresentation) {
+    throw 'Patrol must finish at the last known position before playing Idle when the stop has no position group.'
+}
+$state.HasPosition = $true
+$manager.ApplyMonsterDynamicState($state, 2, 1500) | Out-Null
+if ($view.ArrivalSignals -ne 1 -or -not $view.LastState.preservePresentation -or $view.LastState.resetMovement) {
+    throw 'Repeated Idle state must leave its pending final movement in control.'
+}
+$state.AiState = 8
+$manager.ApplyMonsterDynamicState($state, 3, 2000) | Out-Null
+if ($view.IsFinishingMovement -or $view.BootstrappedState -ne 'Patrol') {
+    throw 'A new patrol must cancel the deferred Idle.'
+}
+$state.AiState = 9
+$manager.ApplyMonsterDynamicState($state, 4, 2500) | Out-Null
+if ($view.PendingRestingState -ne 'Hover' -or $view.BootstrappedState -ne 'Patrol') {
+    throw 'A flying patrol must finish its final movement before switching to Hover.'
+}
+$state.AiState = 7
+$manager.ApplyMonsterDynamicState($state, 5, 3000) | Out-Null
+if ($view.IsFinishingMovement -or $view.DeathSignals -ne 1) {
+    throw 'Death must interrupt a patrol arrival immediately.'
+}
+
+Write-Output 'PASS: monster compact movement, deferred Idle and Hover, and immediate death.'

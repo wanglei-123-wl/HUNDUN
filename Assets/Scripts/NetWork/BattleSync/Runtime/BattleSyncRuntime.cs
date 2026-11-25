@@ -526,7 +526,7 @@ namespace Game.Client.BattleSync
                         characterDbId, message.actionSequence, message.eventId);
                 else if (message.source.entityType == BattleSyncProtocolConstants.EntityTypes.Monster)
                     monsterSnapshotModule?.TryPlayAttack(
-                        message.source.entityId, message.actionSequence, message.eventId);
+                        message.source.entityId, message.actionSequence, message.eventId, message.serverTick);
             }
             catch (Exception exception)
             {

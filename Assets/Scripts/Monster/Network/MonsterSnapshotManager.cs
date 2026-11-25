@@ -19,6 +19,9 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         public string lastAiState;
         public long lastAttackActionSequence;
         public long lastAttackEventId;
+        public long lastAttackServerTick;
+        public long lastMotionServerTick;
+        public bool isFlyingModel;
         public int unknownAiFrames;
         public long lastUnknownAiRepairTick;
     }
@@ -51,6 +54,7 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
 
     [Header("Combat")]
     [SerializeField] private CombatStateStore combatStateStore;
+    private GameSession gameSession;
 
     private readonly Dictionary<string, MonsterClientEntry> monsters =
         new Dictionary<string, MonsterClientEntry>();
@@ -281,7 +285,7 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         return true;
     }
 
-    public bool TryPlayAttack(string monsterInstanceId, long actionSequence, long eventId)
+    public bool TryPlayAttack(string monsterInstanceId, long actionSequence, long eventId, long serverTick = 0)
     {
         if (string.IsNullOrEmpty(monsterInstanceId)
             || !monsters.TryGetValue(monsterInstanceId, out MonsterClientEntry entry)
@@ -305,6 +309,9 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         })) return false;
         if (actionSequence > 0) entry.lastAttackActionSequence = actionSequence;
         if (eventId > 0) entry.lastAttackEventId = eventId;
+        entry.lastAttackServerTick = Math.Max(entry.lastAttackServerTick, serverTick);
+        if (serverTick <= 0 || serverTick >= entry.lastMotionServerTick)
+            entry.networkView.StopMovement();
         return true;
     }
 
@@ -351,20 +358,39 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         else if (state.HasAiState) entry.unknownAiFrames = 0;
         bool behaviorChanged=state.HasAiState&&!unknownAi
             &&!string.Equals(entry.lastAiState,aiState,StringComparison.OrdinalIgnoreCase);
-        if(behaviorChanged)entry.networkView.SetMovementPath(null,serverTime);
+        bool alongGroundOrAir = CanPlayPath(entry, aiState);
+        bool moveInAir = aiState is "TakeOff" or "Landing";
+        bool patrolArrival = behaviorChanged && IsResting(aiState)
+            && string.Equals(entry.lastAiState, "Patrol", StringComparison.OrdinalIgnoreCase);
+        bool beforeAttack = serverTick > 0 && serverTick <= entry.lastAttackServerTick
+            && (alongGroundOrAir || moveInAir || patrolArrival);
+        if (beforeAttack) behaviorChanged = false;
+        patrolArrival = patrolArrival && !beforeAttack;
+        // The authoritative state changes now. The animator switches when the displayed position arrives.
+        bool finishingPatrol = !behaviorChanged && entry.networkView.IsFinishingMovement && IsResting(aiState);
+        bool hasPosition = state.HasPosition && !beforeAttack && !(finishingPatrol && unknownAi);
+        if (hasPosition || behaviorChanged) entry.lastMotionServerTick = Math.Max(entry.lastMotionServerTick, serverTick);
+        if(behaviorChanged && !patrolArrival)entry.networkView.SetMovementPath(null,serverTime);
         localStateSequence++;
         MonsterViewState viewState=new MonsterViewState{entityId=state.EntityId,stateSequence=localStateSequence,
             position=position,rotation=rotation,velocity=Vector3.zero,
-            preserveTransform=!state.HasPosition,
-            preservePresentation=!state.HasAiState || unknownAi,
+            preserveTransform=!hasPosition,
+            preservePresentation=!state.HasAiState || unknownAi || beforeAttack || patrolArrival || finishingPatrol,
+            serverTime=serverTime,
+            useTimedMovement=!unknownAi && (alongGroundOrAir || moveInAir),
+            allowGroundPrediction=!entry.isFlyingModel && alongGroundOrAir,
+            resetMovement=!patrolArrival && !finishingPatrol && (behaviorChanged || (unknownAi && entry.unknownAiFrames == 1)),
+            finishMovement=patrolArrival,
             moveSpeed=string.Equals(aiState,"Hover",StringComparison.OrdinalIgnoreCase) ? 0f
                 : ResolveLocomotionMode(aiState)==MonsterLocomotionMode.Flying ? 1f : 0f,
             locomotionMode=ResolveLocomotionMode(aiState),
             hp=entry.networkView.CurrentHp,maxHp=entry.networkView.MaxHp};
         if(!entry.networkView.ApplyState(viewState))return BattleSyncApplyResult.IgnoredStale;
-        if(behaviorChanged&&!IsAttackState(aiState))
+        if(patrolArrival)
+            entry.networkView.FinishMovement(serverTime, aiState);
+        else if(behaviorChanged&&!IsAttackState(aiState))
             entry.networkView.BootstrapState(aiState);
-        if(state.HasAiState&&!unknownAi)entry.lastAiState=aiState;
+        if(state.HasAiState&&!unknownAi&&!beforeAttack)entry.lastAiState=aiState;
         if(state.HasHp&&state.HasCombatRevision&&combatStateStore!=null)
         {
             bool revisionGap=combatStateStore.TryGetState("monster",state.EntityId,out CombatStateData current)
@@ -376,12 +402,16 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
                 && revisionGap)
                 CombatRevisionGapDetected?.Invoke(state.EntityId);
         }
+        if (beforeAttack || unknownAi) return BattleSyncApplyResult.Applied;
         if (state.HasPathUpdate || !CanPlayPath(entry,aiState))
             entry.networkView.SetMovementPath(CanPlayPath(entry,aiState) ? state.Path : null,serverTime);
         else if (state.HasPosition)
             entry.networkView.CorrectMovementPath(position,serverTime);
         return BattleSyncApplyResult.Applied;
     }
+
+    private static bool IsResting(string state) => string.Equals(state, "Idle", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(state, "Hover", StringComparison.OrdinalIgnoreCase);
 
     private static bool CanPlayPath(MonsterClientEntry entry,string state) =>
         entry.networkView.CurrentHp > 0 && (string.Equals(state,"Chase",StringComparison.OrdinalIgnoreCase)
@@ -625,6 +655,7 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         }
 
         bool created = false;
+        bool interruptedArrival = false;
         if (!monsters.TryGetValue(item.monsterInstanceId, out MonsterClientEntry entry)
             || entry == null || entry.networkView == null || entry.gameObject == null)
         {
@@ -643,13 +674,14 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
         }
         else
         {
+            interruptedArrival = entry.networkView.IsFinishingMovement;
             if (!entry.networkView.ApplyState(BuildViewState(item)))
                 return null;
         }
 
         ApplyStoredCombatState(item.monsterInstanceId, entry, spawnGeneration);
         if (!created && !IsAttackState(item.state)
-            && !string.Equals(entry.lastAiState, item.state, StringComparison.OrdinalIgnoreCase))
+            && (interruptedArrival || !string.Equals(entry.lastAiState, item.state, StringComparison.OrdinalIgnoreCase)))
             entry.networkView.BootstrapState(item.state);
         if (!string.Equals(entry.lastAiState,item.state,StringComparison.OrdinalIgnoreCase)
             || !CanPlayPath(entry, item.state)) entry.networkView.SetMovementPath(null, 0);
@@ -812,6 +844,13 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
 
         networkView.RebindAnimator();
         networkView.Initialize(BuildViewState(item));
+        bool isFlyingModel = instance.GetComponentInChildren<FlyingMonsterAnimatorDriver>(true) != null;
+        if (prefab != null && !isFlyingModel && instance.TryGetComponent(out CapsuleCollider body)
+            && instance.TryGetComponent(out MonsterTransformInterpolator interpolator))
+        {
+            if (gameSession == null) gameSession = FindObjectOfType<GameSession>();
+            interpolator.BindGroundPrediction(GetCurrentPredictionMap, body);
+        }
         networkView.BootstrapState(
             snapshotRoutingMode == BattleSyncSnapshotRoutingMode.CoordinatorOwned
                 && IsAttackState(item.state) ? "Flying" : item.state);
@@ -820,10 +859,17 @@ public class MonsterSnapshotManager : MonoBehaviour, IMonsterBattleSyncModule, I
             gameObject = instance,
             networkView = networkView,
             lastServerState = "",
-            lastAiState = item.state
+            lastAiState = item.state,
+            isFlyingModel = isFlyingModel
         };
         monsters[item.monsterInstanceId] = entry;
         return entry;
+    }
+
+    private Game.Client.MapTraversal.MapTraversalQuery GetCurrentPredictionMap()
+    {
+        var map = gameSession != null ? gameSession.CurrentMapTraversal : null;
+        return map != null && string.Equals(map.SceneId, activeSceneId, StringComparison.Ordinal) ? map : null;
     }
 
     private static bool HasRequiredMonsterComponents(GameObject prefab)

@@ -52,7 +52,8 @@ internal sealed class PatrolProtocolTests : IBattleSyncClock,IBattleSyncTranspor
         Check(processor.Process(1,Frame(2,0,",\"monsterDeltas\":[[501,3,1,4,90,2]]",""))==BattleSyncApplyResult.Applied
             &&!consumer.Last.HasAiState&&!consumer.Last.HasPosition&&consumer.Last.HasHp,"HP-only delta keeps behavior absent");
         Check(processor.Process(1,Frame(3,0,",\"monsterDeltas\":[[501,3,2,2,9,85]],\"monsterPaths\":[[501,3]]",""))==BattleSyncApplyResult.Applied
-            &&consumer.Last.AiState==9&&consumer.Last.HasPathUpdate&&consumer.Last.Path==null&&consumer.Last.Y==2,"Hover delta stops path at airborne height");
+            &&consumer.Last.AiState==9&&consumer.Last.HasPathUpdate&&consumer.Last.Path==null
+            &&!consumer.Last.HasPosition&&consumer.Last.Y==2,"Hover stops path without resampling the baseline position");
         int calls=consumer.Calls;
         Check(processor.Process(1,Frame(2,8))==BattleSyncApplyResult.IgnoredStale&&consumer.Calls==calls,"Old frame cannot resume patrol");
         Check(processor.Process(1,Frame(4,10))==BattleSyncApplyResult.InvalidMessage&&consumer.Calls==calls,"Unknown state rejected atomically");

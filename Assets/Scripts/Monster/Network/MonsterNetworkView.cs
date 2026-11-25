@@ -62,7 +62,7 @@ public class MonsterNetworkView : MonoBehaviour
         {
             receivedDeathState = true;
             SetDeathCollidersDisabled(true);
-            SetMovementPath(null, 0);
+            StopMovement();
         }
 
         ResolveViewRoot();
@@ -74,6 +74,19 @@ public class MonsterNetworkView : MonoBehaviour
 
     internal void CorrectMovementPath(Vector3 position,long serverTime) =>
         viewRoot?.TransformInterpolator?.CorrectMovementPath(position,serverTime);
+
+    internal bool IsFinishingMovement => viewRoot?.TransformInterpolator?.IsFinishingMovement == true;
+
+    internal void FinishMovement(long serverTime, string restingState)
+    {
+        MonsterTransformInterpolator interpolator = viewRoot?.TransformInterpolator;
+        if (interpolator == null)
+            BootstrapState(restingState);
+        else
+            interpolator.FinishMovement(serverTime, () => BootstrapState(restingState));
+    }
+
+    public void StopMovement() => viewRoot?.TransformInterpolator?.StopMovement();
 
     public bool ApplyState(MonsterViewState state)
     {
@@ -163,6 +176,7 @@ public class MonsterNetworkView : MonoBehaviour
         // Reconcile even unchanged HP so reinitializing a pooled view can
         // restore colliders after a death-only notification.
         SetDeathCollidersDisabled(receivedDeathState || (MaxHp > 0 && CurrentHp == 0));
+        if (healthChanged && MaxHp > 0 && CurrentHp == 0) StopMovement();
         if (healthChanged) OnHealthChanged?.Invoke(CurrentHp, MaxHp);
     }
 

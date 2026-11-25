@@ -17,7 +17,7 @@ $remoteClear = [regex]::Match($remote,
 $remoteAnimation = [regex]::Match($remote,
     '(?s)    private void ApplyAnimation\(string animName, bool restartAttack = false\).*?(?=    private void CacheAnimatorParameters)')
 $monsterMethod = [regex]::Match($monster,
-    '(?s)    public bool TryPlayAttack\(string monsterInstanceId, long actionSequence, long eventId\).*?(?=    public BattleSyncApplyResult ApplyMonsterDynamicState)')
+    '(?s)    public bool TryPlayAttack\(string monsterInstanceId, long actionSequence, long eventId, long serverTick = 0\).*?(?=    public BattleSyncApplyResult ApplyMonsterDynamicState)')
 $monsterState = [regex]::Match($monster,
     '(?s)    private MonsterClientEntry ApplyMonsterState\(MonsterSnapshotItem item, long\? spawnGeneration = null\).*?(?=    private void EnsureCombatStateSubscription)')
 if (-not $handler.Success -or -not $playerMethod.Success -or
@@ -82,6 +82,7 @@ namespace Game.Client.BattleSync
         public string eventType;
         public long actionSequence;
         public long eventId;
+        public long serverTick;
         public CombatEntityMessage source;
         public CombatEntityMessage target;
     }
@@ -109,6 +110,15 @@ namespace Game.Client.BattleSync
         private long lastAttackEventId;
         private bool hasReceivedState;
         private long lastServerTick;
+        private long lifeCombatRevision, lastRemoteRollId, meditationRevision;
+        private object movement;
+        private bool remoteMeditating, remoteRollPlaying;
+        public long VisibilityRevision { get; private set; }
+        public bool IsDead { get; private set; }
+        private void EndRemoteRoll() { remoteRollPlaying = false; }
+        private void SetRemoteMeditationPosture(bool active) { remoteMeditating = active; }
+        private void SetDeathCollidersDisabled(bool disabled) { }
+        private static class PlayerDeathAnimation { public static void SetDead(Animator animator, bool dead) { } }
         public int Animations => animator.TriggerCount;
 __REMOTE_INIT__
 __REMOTE__
@@ -134,9 +144,15 @@ __PLAYER__
     public sealed class MonsterNetworkView
     {
         public int Animations;
+        public int MovementStops;
+        public int CurrentHp = 100;
         public bool ThrowOnPlay;
         public long LastEventSequence;
         public bool ApplyState(object state) => true;
+        public void StopMovement() { MovementStops++; }
+        public void BootstrapState(string state) { }
+        public void SetMovementPath(object path, long time) { }
+        public bool IsFinishingMovement => false;
         public bool PlayAction(MonsterActionData action)
         {
             if (ThrowOnPlay) throw new InvalidOperationException("Visual failed.");
@@ -170,6 +186,7 @@ __PLAYER__
             public string lastAiState;
             public long lastAttackActionSequence;
             public long lastAttackEventId;
+            public long lastAttackServerTick, lastMotionServerTick;
         }
         private readonly Dictionary<string, MonsterClientEntry> monsters =
             new Dictionary<string, MonsterClientEntry>();
@@ -185,6 +202,7 @@ __PLAYER__
                 gameObject = new GameObject(), networkView = view, lastServerState = state
             };
         }
+        public void SetMotionTick(string id, long tick) { monsters[id].lastMotionServerTick = tick; }
         public void SetMode(BattleSyncSnapshotRoutingMode mode) { snapshotRoutingMode = mode; }
         public void SimulateState(string id, string state)
         {
@@ -197,6 +215,8 @@ __PLAYER__
             long? spawnGeneration = null) { }
         private static bool IsAttackState(string state) =>
             string.Equals(state, "Attack", StringComparison.OrdinalIgnoreCase);
+        private static bool CanPlayPath(MonsterClientEntry entry, string state) =>
+            entry.networkView.CurrentHp > 0 && (state == "Patrol" || state == "Chase" || state == "Return");
 __MONSTER__
 __MONSTER_STATE__
     }
@@ -266,12 +286,15 @@ Assert-True ($remoteView.Animations -eq 3) 'Local player source must not replay 
 $monsters.SimulateState('m1', 'Attack')
 Assert-True ($monsterView.Animations -eq 0) 'Coordinator-owned monster state must not trigger attack before the reliable event.'
 $runtimeView.Dispatch((New-Attack 'monster' 'm1' 1 201))
-Assert-True ($monsterView.Animations -eq 1) 'Monster source must use its existing action entry without a target.'
+Assert-True ($monsterView.Animations -eq 1 -and $monsterView.MovementStops -eq 1) 'Monster attack plays and cancels movement.'
 $monsters.SimulateState('m1', 'Attack')
 $runtimeView.Dispatch((New-Attack 'monster' 'm1' 1 202))
-Assert-True ($monsterView.Animations -eq 1) 'Monster state and duplicate action sequence must not replay the attack.'
-$runtimeView.Dispatch((New-Attack 'monster' 'm1' 2 203))
-Assert-True ($monsterView.Animations -eq 2 -and $monsterView.LastEventSequence -eq 2) 'Next monster action must use a separate increasing visual sequence.'
+Assert-True ($monsterView.Animations -eq 1 -and $monsterView.MovementStops -eq 1) 'Duplicate attack must not replay the attack or cancel movement again.'
+$monsters.SetMotionTick('m1', 40)
+$lateAttack = New-Attack 'monster' 'm1' 2 203
+$lateAttack.serverTick = 30
+$runtimeView.Dispatch($lateAttack)
+Assert-True ($monsterView.Animations -eq 2 -and $monsterView.LastEventSequence -eq 2 -and $monsterView.MovementStops -eq 1) 'Late attack still plays but must not cancel newer server movement.'
 
 $runtimeView.Dispatch((New-Attack 'monster' 'missing'))
 $runtimeView.Dispatch((New-Attack 'player' '999'))
