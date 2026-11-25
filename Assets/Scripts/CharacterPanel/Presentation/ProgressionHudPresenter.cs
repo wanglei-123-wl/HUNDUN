@@ -43,6 +43,7 @@ namespace Game.CharacterPanel.Presentation
         {
             if (subscribed || session == null) return;
             session.LocalProgressionSnapshotChanged += HandleProgressionSnapshotChanged;
+            session.LocalManaChanged += RenderMana;
             session.LocalWorldEntered += HandleWorldEntered;
             if (NetworkManager.Instance != null)
                 NetworkManager.Instance.OnDisconnected += HandleDisconnected;
@@ -55,6 +56,7 @@ namespace Game.CharacterPanel.Presentation
             if (session != null)
             {
                 session.LocalProgressionSnapshotChanged -= HandleProgressionSnapshotChanged;
+                session.LocalManaChanged -= RenderMana;
                 session.LocalWorldEntered -= HandleWorldEntered;
             }
             if (NetworkManager.Instance != null)
@@ -79,6 +81,7 @@ namespace Game.CharacterPanel.Presentation
 
         private void Refresh()
         {
+            RenderMana();
             Render(session != null ? session.LocalProgressionSnapshot : null);
         }
 
@@ -106,20 +109,6 @@ namespace Game.CharacterPanel.Presentation
 
             if (experienceFill != null)
                 experienceFill.fillAmount = cultivation.FillAmount;
-
-            bool mpValid = valid && result.maxMp >= 0 && result.currentMp >= 0
-                && result.currentMp <= result.maxMp;
-            if (mpText != null)
-                mpText.text = mpValid
-                    ? result.currentMp.ToString(CultureInfo.InvariantCulture) + "/"
-                        + result.maxMp.ToString(CultureInfo.InvariantCulture)
-                    : "--";
-
-            float mpProgress = mpValid && result.maxMp > 0
-                ? Mathf.Clamp01(result.currentMp / (float)result.maxMp)
-                : 0f;
-            if (mpFill != null)
-                mpFill.fillAmount = mpProgress;
 
             if (experienceText != null)
             {
@@ -154,6 +143,17 @@ namespace Game.CharacterPanel.Presentation
                     + " localCharacterDbId="
                     + (session == null ? 0 : session.LocalCharacterDbId));
             }
+        }
+
+        private void RenderMana()
+        {
+            int currentMp = 0, maxMp = 0;
+            bool available = session != null && session.TryGetLocalMana(out currentMp, out maxMp);
+            if (mpText != null)
+                mpText.text = available ? currentMp.ToString(CultureInfo.InvariantCulture) + "/"
+                    + maxMp.ToString(CultureInfo.InvariantCulture) : "--";
+            if (mpFill != null)
+                mpFill.fillAmount = available && maxMp > 0 ? Mathf.Clamp01(currentMp / (float)maxMp) : 0f;
         }
 
         private void Clear()

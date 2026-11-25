@@ -920,7 +920,7 @@ public sealed class LocalPlayerCombatController : MonoBehaviour
 
         GameSession session = FindObjectOfType<GameSession>();
         if (session == null || !session.ApplyItemUseMana(
-            currentMp, maxMp))
+            currentMp, maxMp, serverTime))
             return;
 
         lastSkillManaServerTick = serverTick;

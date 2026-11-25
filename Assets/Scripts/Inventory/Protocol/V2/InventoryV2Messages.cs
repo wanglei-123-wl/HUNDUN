@@ -187,12 +187,27 @@ namespace Game.Inventory.Protocol.V2
         public long equipmentRevision;
         public InventoryV2EquipmentDto[] equipmentItemChanges;
         public InventoryV2AttributeBonusDto attributeBonus;
+        public InventoryV2EquipmentCharacterStatsDto characterStats;
         public bool idempotentReplay;
         public bool requiresSnapshot;
         public string[] removedItemInstanceIds;
         public string errorCode;
         public string message;
         public long serverTime;
+    }
+
+    [Serializable]
+    public sealed class InventoryV2EquipmentCharacterStatsDto
+    {
+        public string sceneId;
+        public string sceneSessionId;
+        public int currentHp;
+        public int currentMp;
+        public int maxMp;
+        public string lifeState;
+        public long combatRevision;
+        public long attributeRevision;
+        public AttributeSnapshotFinal final;
     }
 
     [Serializable]

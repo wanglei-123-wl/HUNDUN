@@ -213,6 +213,18 @@ public class CombatStateStore : MonoBehaviour
         return true;
     }
 
+    public bool TryApplyEquipmentHealth(string sceneId, string entityId, int hp, int maxHp,
+        string lifeState, long combatRevision)
+    {
+        if (combatRevision <= 0 || maxHp <= 0 || hp < 0 || hp > maxHp
+            || (hp == 0 ? lifeState != "Dead" : lifeState != "Alive"))
+            return false;
+
+        return MergeEventHealth(sceneId,
+            new CombatEntityMessage { entityType = "player", entityId = entityId },
+            hp, maxHp, lifeState, combatRevision);
+    }
+
     public bool TryGetState(string entityType, string entityId, out CombatStateData state)
     {
         CombatEntityKey key = new CombatEntityKey(entityType, entityId);

@@ -4,6 +4,11 @@ $sessionSource = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/GameS
 $messages = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/NetWork/NetMessages.cs') -Raw
 $breakthrough = Get-Content -LiteralPath (
     Join-Path $root 'Assets/Scripts/CharacterPanel/Protocol/JingjieBreakthroughMessages.cs') -Raw
+$equipmentMessages = Get-Content (Join-Path $root 'Assets/Scripts/Inventory/Protocol/V2/InventoryV2Messages.cs') -Raw
+$equipmentStats = [regex]::Match($equipmentMessages,
+    '(?s)\[Serializable\]\s+public sealed class InventoryV2EquipmentCharacterStatsDto.*?(?=\[Serializable\]\s+internal sealed class InventorySnapshotEnvelope)')
+$combatStore = Get-Content (Join-Path $root 'Assets/Scripts/NetWork/CombatStateStore.cs') -Raw
+$combatStore = $combatStore -replace '(?m)^using [^;]+;\r?\n', ''
 
 $dto = [regex]::Match($messages,
     '(?s)\[Serializable\]\s+public sealed class AttributeSnapshotRequest.*?(?=\[Serializable\]\s+public class PlayerNetworkState)')
@@ -11,7 +16,7 @@ $fields = [regex]::Match($sessionSource,
     '(?s)    private long nextAttributeSnapshotSequence;.*?(?=    private long nextAttackModeRequestSequence;)')
 $handlers = [regex]::Match($sessionSource,
     '(?s)    private void FlushSnapshotRefreshes\(\).*?(?=    private void HandleBattleSyncReady\()')
-if (-not ($dto.Success -and $fields.Success -and $handlers.Success)) {
+if (-not ($dto.Success -and $fields.Success -and $handlers.Success -and $equipmentStats.Success)) {
     throw 'Could not find the production snapshot code.'
 }
 $breakthrough = $breakthrough -replace '(?m)^using [^\r\n]+;\r?\n', ''
@@ -34,6 +39,11 @@ namespace Game.Cultivation.Runtime {
     }
 }
 namespace UnityEngine {
+    public class MonoBehaviour {}
+    public static class Mathf {
+        public static int Max(int a, int b) => Math.Max(a, b);
+        public static int Clamp(int value, int min, int max) => Math.Clamp(value, min, max);
+    }
     public static class Time { public static float unscaledTime; }
     public static class Debug {
         public static void Log(string text) {}
@@ -50,8 +60,19 @@ public sealed class NetworkManager {
     public List<NetMessageBase> Sent { get; } = new();
     public bool Send(NetMessageBase request) { Sent.Add(request); return true; }
 }
+public sealed class CombatEntityMessage { public string entityType; public string entityId; }
+public sealed class CombatStateMessage {
+    public CombatEntityMessage entity;
+    public int hp, maxHp;
+    public string lifeState;
+    public long combatRevision, spawnGeneration;
+}
 public partial class GameSession {
     public bool IsWorldReady = true;
+    public string SceneSessionId = "scene-session-a";
+    private string sceneId = "world_001";
+    public long LocalEnterWorldCombatRevision = 7;
+    public bool IsLocalPlayerDead;
     private long localCharacterDbId = 42;
     private bool sessionStarted = true, gameSessionAccepted = true, returningToLogin;
     private NetworkManager networkManager = new();
@@ -62,13 +83,17 @@ public partial class GameSession {
     public ProgressionSnapshotResult LocalProgressionSnapshot { get; private set; }
     public event Action<AttributeSnapshotResult> LocalAttributeSnapshotChanged;
     public event Action<ProgressionSnapshotResult> LocalProgressionSnapshotChanged;
+    public event Action LocalManaChanged;
     public void ReceiveProgression(string json) => HandleProgressionSnapshotResult(json);
     public void ReceiveAttribute(string json) => HandleAttributeSnapshotResult(json);
     public void Flush() => FlushSnapshotRefreshes();
     public void Reset() { ResetAttributeSnapshot(); ResetProgressionSnapshot(); }
+    public bool ReceiveEquipment(string json, long serverTime, CombatStateStore store)
+        => ApplyEquipmentStats(localCharacterDbId, JsonUtility.FromJson<InventoryV2EquipmentCharacterStatsDto>(json), serverTime, store);
 }
 '@
-$source = $stubs + "`n" + $dto.Value + "`n" + $breakthrough + "`npublic partial class GameSession {`n" +
+$source = $stubs + "`n" + $dto.Value + "`n" + $breakthrough + "`n" + $combatStore +
+    "`nnamespace Game.Inventory.Protocol.V2 {`n" + $equipmentStats.Value + "`n}`npublic partial class GameSession {`n" +
     $fields.Value + $handlers.Value + "`n}"
 Add-Type -TypeDefinition $source -IgnoreWarnings | Out-Null
 
@@ -206,3 +231,55 @@ $owner.Reset()
 Assert-True ($null -eq $owner.LocalAttributeSnapshot -and $null -eq $owner.LocalProgressionSnapshot -and
     $owner.PendingAttribute -eq 0 -and $owner.PendingProgression -eq 0) 'A new session clears caches and pending requests.'
 Write-Output 'PASS: breakthrough attributes, consecutive realm growth, mana ordering and repair.'
+
+$equipmentOwner = [GameSession]::new()
+$store = [CombatStateStore]::new()
+$state = [CombatStateMessage]::new()
+$state.entity = [CombatEntityMessage]::new()
+$state.entity.entityType = 'player'
+$state.entity.entityId = '42'
+$state.hp = 300
+$state.maxHp = 400
+$state.lifeState = 'Alive'
+$state.combatRevision = 7
+Assert-True ($store.TryReplaceSnapshot('world_001', [CombatStateMessage[]]@($state))) 'Equipment combat fixture must load.'
+$equipmentOwner.RequestProgressionSnapshot()
+$pendingBeforeEquip = $equipmentOwner.PendingProgression
+$equipment = @{
+    sceneId = 'world_001'; sceneSessionId = 'scene-session-a'; lifeState = 'Alive'
+    currentHp = 300; currentMp = 120; maxMp = 250; attributeRevision = 5; combatRevision = 8
+    final = @{ maxHp = 500; attack = 60; defense = 45; magicAttack = 50; magicDefense = 35; critRateBps = 900; critDamageBps = 16500 }
+}
+$script:seenEquipmentSnapshot = $false
+$store.add_StateChanged([System.Action[CombatEntityKey, CombatStateData]]{
+    param($key, $changed)
+    $mp = 0
+    $maxMp = 0
+    if ($changed.CombatRevision -eq 8) {
+        $values = $equipmentOwner.LocalAttributeSnapshot.final
+        $script:seenEquipmentSnapshot = $equipmentOwner.TryGetLocalMana([ref]$mp, [ref]$maxMp) -and
+            $changed.Hp -eq 300 -and $changed.MaxHp -eq 500 -and $mp -eq 120 -and $maxMp -eq 250 -and
+            $values.attack -eq 60 -and $values.defense -eq 45 -and $values.magicAttack -eq 50 -and
+            $values.magicDefense -eq 35 -and $values.critRateBps -eq 900 -and $values.critDamageBps -eq 16500
+    }
+})
+$badScene = $equipment.Clone()
+$badScene.sceneSessionId = 'old-scene-session'
+Assert-True (-not $equipmentOwner.ReceiveEquipment(($badScene | ConvertTo-Json -Depth 5), 1000, $store)) 'An old scene session must not apply.'
+Assert-True ($equipmentOwner.ReceiveEquipment(($equipment | ConvertTo-Json -Depth 5), 1000, $store)) 'Full equipment snapshot must apply before progression has loaded.'
+Assert-True $script:seenEquipmentSnapshot 'At the HP change notification all of the matching resources and final attributes must already be available.'
+$oldProgression = Snapshot $pendingBeforeEquip 3 200
+$oldProgression.serverTime = 990
+$equipmentOwner.ReceiveProgression([UnityEngine.JsonUtility]::ToJson($oldProgression))
+Assert-True ($equipmentOwner.LocalProgressionSnapshot.currentMp -eq 120 -and $equipmentOwner.LocalProgressionSnapshot.maxMp -eq 250) 'An older progression response must preserve the equipment mana.'
+Assert-True ($equipmentOwner.ApplyItemUseMana(70, 250, 1020)) 'A newer spell or potion may change mana after equip.'
+$store.MergeEventHealth('world_001', $state.entity, 230, 500, 'Alive', 10) | Out-Null
+Assert-True ($equipmentOwner.ReceiveEquipment(($equipment | ConvertTo-Json -Depth 5), 1000, $store)) 'A repeated snapshot remains valid to parse.'
+Assert-True (-not $equipmentOwner.ApplyItemUseMana(120, 250, 1010)) 'A late spell or potion result must not roll mana back.'
+$health = $null
+Assert-True ($store.TryGetState('player', '42', [ref]$health) -and $health.Hp -eq 230 -and $health.CombatRevision -eq 10 -and
+    $equipmentOwner.LocalProgressionSnapshot.currentMp -eq 70) 'The newer hit and mana must both survive an earlier equipment snapshot.'
+$oldAttributes = Attributes 0 4 7 1025 10
+$equipmentOwner.ReceiveAttribute($oldAttributes)
+Assert-True ($equipmentOwner.LocalAttributeSnapshot.final.attack -eq 60) 'An older attribute query must not replace the stats from equipment.'
+Write-Output 'PASS: one equipment snapshot applies red, blue and all combat stats while preserving newer updates.'

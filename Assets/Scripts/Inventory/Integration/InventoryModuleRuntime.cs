@@ -128,7 +128,7 @@ namespace Game.Inventory
                 () => FindObjectOfType<GameSession>()?.LocalProgressionSnapshot != null,
                 panelView.GetComponent<InventorySelectedItemDetailPanel>(),
                 stackId => FindObjectOfType<GameSession>()?.TryLearnSkill(stackId) == true,
-                PlayLocalPotionAnimation);
+                PlayLocalPotionAnimation, ApplyEquipmentStats);
             quickbarSession = new QuickbarSession(networkManager, messageDispatcher,
                 () => v2Session?.CurrentSnapshot,
                 () => v2Session?.NotifyAuthoritativeInventoryChanged(),
@@ -535,11 +535,18 @@ namespace Game.Inventory
                 Debug.LogWarning("V2 item use HP was not applied; waiting for authoritative combat state.");
         }
 
-        private void ApplyItemUseMana(int currentMp, int maxMp)
+        private bool ApplyEquipmentStats(long characterDbId, InventoryV2EquipmentCharacterStatsDto stats,
+            long serverTime)
         {
             GameSession session = FindObjectOfType<GameSession>();
-            if (session == null || !session.ApplyItemUseMana(currentMp, maxMp))
-                Debug.LogWarning("V2 item use MP was not applied; requesting progression snapshot.");
+            return session != null && session.ApplyEquipmentStats(characterDbId, stats, serverTime,
+                FindObjectOfType<CombatStateStore>());
+        }
+
+        private void ApplyItemUseMana(int currentMp, int maxMp, long serverTime)
+        {
+            GameSession session = FindObjectOfType<GameSession>();
+            session?.ApplyItemUseMana(currentMp, maxMp, serverTime);
         }
 
         private void ApplyItemUseJingjieBalance(long? current, long? total)

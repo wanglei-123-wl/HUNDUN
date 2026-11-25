@@ -67,6 +67,7 @@ namespace Game.CharacterPanel.Presentation
             session.LocalWorldEntered += HandleWorldEntered;
             session.LocalAttributeSnapshotChanged += HandleAttributeSnapshotChanged;
             session.LocalProgressionSnapshotChanged += HandleProgressionSnapshotChanged;
+            session.LocalManaChanged += RenderMana;
             if (network != null) network.OnDisconnected += HandleDisconnected;
             if (stateStore != null) stateStore.StateChanged += HandleStateChanged;
             subscribed = true;
@@ -80,6 +81,7 @@ namespace Game.CharacterPanel.Presentation
             if (session != null) session.LocalAttributeSnapshotChanged -= HandleAttributeSnapshotChanged;
             if (session != null) session.LocalProgressionSnapshotChanged -=
                 HandleProgressionSnapshotChanged;
+            if (session != null) session.LocalManaChanged -= RenderMana;
             if (network != null) network.OnDisconnected -= HandleDisconnected;
             if (stateStore != null) stateStore.StateChanged -= HandleStateChanged;
             subscribed = false;
@@ -149,6 +151,7 @@ namespace Game.CharacterPanel.Presentation
                         session.LocalCharacterDbId.ToString(CultureInfo.InvariantCulture)),
                     state);
             RenderHealth();
+            RenderMana();
             RenderAttributes(session != null ? session.LocalAttributeSnapshot : null);
             RenderProgression(session != null ? session.LocalProgressionSnapshot : null);
             if (alchemyTitle != null || forgingTitle != null || comprehension != null)
@@ -215,17 +218,6 @@ namespace Game.CharacterPanel.Presentation
             if (realm != null)
                 realm.text = valid && !string.IsNullOrWhiteSpace(result.jingjieName)
                     ? result.jingjieName : "--";
-            bool manaValid = valid && result.currentMp >= 0
-                && result.maxMp >= result.currentMp;
-            if (mana != null)
-                mana.text = manaValid
-                    ? result.currentMp.ToString(CultureInfo.InvariantCulture) + "/"
-                        + result.maxMp.ToString(CultureInfo.InvariantCulture)
-                    : "--";
-            if (manaFill != null)
-                manaFill.fillAmount = manaValid && result.maxMp > 0
-                    ? Mathf.Clamp01(result.currentMp / (float)result.maxMp)
-                    : 0f;
             if (currentExperience != null)
                 currentExperience.text = requiredExperience == null
                     || requiredExperience == currentExperience
@@ -242,6 +234,17 @@ namespace Game.CharacterPanel.Presentation
         private static string FormatBps(int value)
         {
             return (value / 100m).ToString("0.##", CultureInfo.InvariantCulture) + "%";
+        }
+
+        private void RenderMana()
+        {
+            int currentMp = 0, maxMp = 0;
+            bool available = session != null && session.TryGetLocalMana(out currentMp, out maxMp);
+            if (mana != null)
+                mana.text = available ? currentMp.ToString(CultureInfo.InvariantCulture) + "/"
+                    + maxMp.ToString(CultureInfo.InvariantCulture) : "--";
+            if (manaFill != null)
+                manaFill.fillAmount = available && maxMp > 0 ? Mathf.Clamp01(currentMp / (float)maxMp) : 0f;
         }
 
         private void RenderHealth()

@@ -78,18 +78,37 @@ public sealed class GameSession
     public string LocalNickname = "测试昵称";
     public ProgressionSnapshotResult LocalProgressionSnapshot;
     public int Requests;
+    private int currentMp = -1;
+    private int maxMp;
     public event System.Action<ProgressionSnapshotResult> LocalProgressionSnapshotChanged;
+    public event System.Action LocalManaChanged;
     public event System.Action<long, long> LocalWorldEntered;
     public void RequestProgressionSnapshot() => Requests++;
+    public bool TryGetLocalMana(out int currentMp, out int maxMp)
+    {
+        currentMp = this.currentMp;
+        maxMp = this.maxMp;
+        return currentMp >= 0;
+    }
+    public void EmitMana(int current, int maximum)
+    {
+        currentMp = current;
+        maxMp = maximum;
+        LocalManaChanged?.Invoke();
+    }
     public void Emit(ProgressionSnapshotResult result)
     {
         LocalProgressionSnapshot = result;
+        if (result.success && result.characterDbId == LocalCharacterDbId)
+            EmitMana(result.currentMp, result.maxMp);
         LocalProgressionSnapshotChanged?.Invoke(result);
     }
     public void EnterWorld(long id)
     {
         LocalCharacterDbId = id;
         LocalProgressionSnapshot = null;
+        currentMp = -1;
+        maxMp = 0;
         LocalWorldEntered?.Invoke(1, id);
     }
 }
@@ -147,6 +166,9 @@ Invoke-Private $hud 'OnEnable'
 Assert-Text $realm '--' 'HUD must clear the editor placeholder before a snapshot.'
 Assert-Text $nickname '测试昵称' 'HUD nickname must share the character panel session.'
 if ($session.Requests -ne 1) { throw 'HUD must request missing progression data.' }
+$session.EmitMana(120, 250)
+Assert-Text $mana '120/250' 'A full equipment snapshot must update HUD mana while progression is still pending.'
+Assert-Text $realm '--' 'A resource update must not invent a progression snapshot.'
 
 $snapshot = [ProgressionSnapshotResult]::new()
 $snapshot.success = $true

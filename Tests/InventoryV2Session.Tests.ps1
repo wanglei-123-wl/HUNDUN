@@ -1,3 +1,5 @@
+param([switch]$EquipmentOnly)
+
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $paths = @(
@@ -21,6 +23,10 @@ $sources = "#define DEVELOPMENT_BUILD`n" + ($usings -join "`n") + "`n" +
 
 $stubs = @'
 public class NetMessageBase { public string msgId; public string type; }
+public sealed class AttributeSnapshotFinal
+{
+    public int maxHp, attack, defense, magicAttack, magicDefense, critRateBps, critDamageBps;
+}
 public class MovementReferencedRequest : NetMessageBase
 {
     public string sceneSessionId;
@@ -36,6 +42,7 @@ public sealed class ServerErrorMessage : NetMessageBase
     public string requestMsgId;
     public string errorCode;
     public string message;
+    public long requestSequence;
     public long expectedRequestSequence;
 }
 public sealed class NetworkManager
@@ -66,6 +73,12 @@ public sealed class NetMessageDispatcher
         if (handlers.TryGetValue(id, out var handler)) handler?.Invoke(json);
     }
 }
+public sealed class 技能注册表
+{
+    public sealed class Skill { public string 技能名称; }
+    public bool TryGet(string id, out Skill skill) { skill = null; return false; }
+}
+public sealed class RecipeSummary { public string recipeId; public string name; }
 namespace Game.PlayerTrade.Protocol
 {
     public sealed class PlayerTradeInventoryChangeDto
@@ -99,6 +112,8 @@ namespace Game.Forging.Runtime
     public sealed class 锻造会话运行时
     {
         public static 锻造会话运行时 Instance;
+        public bool IsCatalogCurrent;
+        public RecipeSummary[] Catalog;
         public bool HasUnresolvedLearn;
         public int LearnCount;
         public long LastStackId;
@@ -116,6 +131,7 @@ namespace Game.Forging.Runtime
 }
 namespace UnityEngine
 {
+    public static class Object { public static T FindObjectOfType<T>() where T : class => null; }
     public class Transform { }
     public static class Time { public static float unscaledTime; }
     public static class Debug
@@ -196,6 +212,8 @@ namespace Game.Cultivation.Protocol
 {
     public sealed class CultivationTechniqueDto
     {
+        public string techniqueId;
+        public string name;
         public CultivationLevelDto[] levels;
     }
     public sealed class CultivationLevelDto
@@ -206,10 +224,13 @@ namespace Game.Cultivation.Protocol
     public sealed class CultivationItemDefinitionDto
     {
         public string kind;
+        public string learnSkillId;
         public string learnTechniqueId;
         public string learnRecipeId;
+        public string learnForgingRecipeId;
         public string cooldownGroup;
         public bool HasUsablePillEffect;
+        public bool IsSkillBook => kind == "skillbook";
     }
     public sealed class CultivationItemCatalogResultDto
     {
@@ -286,6 +307,11 @@ namespace Game.Cultivation.Runtime
             technique = HasTechnique ? new object() : null;
             return item != null && technique != null;
         }
+        public bool TryGetItemByEquipmentId(string id, out Game.Cultivation.Protocol.CultivationItemDefinitionDto item)
+        {
+            item = null;
+            return false;
+        }
         public bool TryLearn(long stackId)
         {
             if (HasUnresolvedOperation || !HasTechnique) return false;
@@ -323,6 +349,7 @@ namespace Game.Alchemy.Runtime
     public sealed class AlchemySessionRuntime
     {
         public static AlchemySessionRuntime Instance;
+        public RecipeSummary[] Catalog;
         public bool IsCatalogCurrent = true;
         public bool IsSnapshotCurrent = true;
         public bool HasUnresolvedLearn;
@@ -379,6 +406,11 @@ namespace Game.Inventory.Integration.V2
 }
 namespace Game.Inventory.Presentation.V2
 {
+    internal static class InventoryItemAttributeText
+    {
+        public static string Format(Game.Cultivation.Protocol.CultivationItemDefinitionDto item, string learns = null)
+            => string.Empty;
+    }
     public sealed class InventorySelectedItemDetailPanel
     {
         public event System.Action<string> LearnRequested;
@@ -387,10 +419,13 @@ namespace Game.Inventory.Presentation.V2
         public int UseListenerCount => UseRequested?.GetInvocationList().Length ?? 0;
         public void TriggerLearn(string identity) => LearnRequested?.Invoke(identity);
         public void TriggerUse(string identity) => UseRequested?.Invoke(identity);
+        public void SetActionResolver(System.Func<string, (bool CanLearn, bool CanUse)> resolver) { }
+        public void SetAttributesResolver(System.Func<string, string> resolver) { }
     }
     public sealed class InventoryBagGridPresenter
     {
         public static Game.Inventory.Model.V2.InventoryOwnershipSnapshot LastRendered;
+        public Game.Inventory.Model.V2.InventoryOwnershipSnapshot PresentedSnapshot => LastRendered;
         public static int RenderCount;
         public static int PersistCount;
         public static InventoryBagGridPresenter LastCreated;
@@ -527,10 +562,16 @@ $items = [Game.Items.ItemDefinitionTable]::new()
 $equipmentSessionId = '0769791c-1234-4abc-8def-123456789abc'
 $nextEquipmentSessionId = 'b93152cd-6e21-4dc9-8da7-98cbda0832a1'
 $script:attributeRefreshCount = 0
+$script:equipmentStatUpdates = @()
 $attributeRefresh = [System.Action]{ $script:attributeRefreshCount++ }
+$applyEquipmentStats = [System.Func[long, Game.Inventory.Protocol.V2.InventoryV2EquipmentCharacterStatsDto, long, bool]]{
+    param($id, $stats, $serverTime)
+    $script:equipmentStatUpdates += @{ Id = $id; Stats = $stats; ServerTime = $serverTime }
+    return $true
+}
 $session = [Game.Inventory.Integration.V2.InventoryV2Session]::new(
     $network, $dispatcher, $panel, $items, $null, $null, $null, $null,
-    $null, $attributeRefresh, $null)
+    $null, $attributeRefresh, $null, $null, $null, $null, $null, $null, $applyEquipmentStats)
 $session.BeginSession(123, 'world_001', $equipmentSessionId)
 $push = '{"msgId":"inventory_snapshot_result","type":"inventory_snapshot_result","equipmentProtocolVersion":2,"equipmentCatalogVersion":2,"requestSequence":0,"success":true,"characterDbId":123,"capacity":60,"inventoryRevision":4,"equipmentRevision":0,"stackItems":[],"equipmentItems":[],"wallets":[],"attributeBonus":{"maxHp":0,"attack":0,"defense":0},"serverTime":1790470800000,"reason":"enter_world"}'
 $dispatcher.Dispatch($push)
@@ -553,7 +594,7 @@ $dispatcher.Dispatch($otherScene)
 Assert-True ($presenter::LastRendered.InventoryRevision -eq 5) 'Snapshot with another scene must not overwrite this character.'
 $dispatcher.Dispatch($response.Replace('"requestSequence":1', '"requestSequence":2'))
 Assert-True ($presenter::RenderCount -eq 3) 'Unmatched requested response must be ignored.'
-[UnityEngine.Time]::unscaledTime = 3
+[UnityEngine.Time]::unscaledTime = 3.25
 $session.RequestSnapshot()
 Assert-True ($network.Sent.Count -eq 2 -and $network.Sent[1] -match '"requestSequence":2') 'Next request must advance the session sequence.'
 $repair = $push.Replace('"inventoryRevision":4', '"inventoryRevision":6').Replace('"reason":"enter_world"', '"reason":"server_long_unacknowledged"')
@@ -609,19 +650,21 @@ function Get-SlotCode([string]$identity) {
 function Send-EquipmentResult(
     [long]$sequence, [string]$operation, [bool]$success,
     [long]$inventoryRevision, [long]$equipmentRevision,
-    [array]$changes, [string]$errorCode = ''
+    [array]$changes, [string]$errorCode = '', [hashtable]$stats = $null,
+    [string]$sessionId = $equipmentSessionId
 ) {
     $result = @{
         msgId = 'equipment_operation_result'; type = 'equipment_operation_result'
-        equipmentOperationSessionId = $equipmentSessionId
+        equipmentOperationSessionId = $sessionId
         requestSequence = $sequence; operation = $operation; success = $success
         characterDbId = 123; inventoryRevision = $inventoryRevision
         equipmentRevision = $equipmentRevision; equipmentItemChanges = $changes
         attributeBonus = @{ maxHp = 60; attack = 0; defense = 0 }
         requiresSnapshot = $false; errorCode = $errorCode; message = ''
         serverTime = 1790500000000
-    } | ConvertTo-Json -Depth 10 -Compress
-    $dispatcher.Dispatch($result)
+    }
+    if ($null -ne $stats) { $result.characterStats = $stats }
+    $dispatcher.Dispatch(($result | ConvertTo-Json -Depth 10 -Compress))
 }
 function Ring-Change([string]$id, [int]$slot) {
     return @{ itemInstanceId = $id; equipmentId = 'ring_xingyun_001'
@@ -636,24 +679,39 @@ Assert-True ($equipRequest.msgId -eq 'equipment_equip' -and
     $equipRequest.itemInstanceId -eq $ringA -and $equipRequest.targetSlotCode -eq 5 -and
     (Get-SlotCode $ringA) -eq 0 -and $equipmentView.Pending) 'Equip must wait for Gate before changing ownership.'
 $sentCount = $network.Sent.Count
+$equipStats = @{
+    sceneId = 'world_001'; sceneSessionId = '1327ef29-8f09-48db-8d71-dd1e9dfcf536'
+    currentHp = 300; currentMp = 120; maxMp = 250
+    lifeState = 'Alive'; combatRevision = 21; attributeRevision = 6
+    final = @{ maxHp = 500; attack = 60; defense = 45; magicAttack = 50; magicDefense = 35; critRateBps = 900; critDamageBps = 16500 }
+}
 $equipmentView.TriggerEquip("e:$ringA", 5)
 Assert-True ($network.Sent.Count -eq $sentCount) 'Pending equip must prevent duplicate requests.'
-Send-EquipmentResult $equipRequest.requestSequence 'equip' $false 10 2 @() 'equipment_slot_incompatible'
+Send-EquipmentResult $equipRequest.requestSequence 'equip' $false 10 2 @() 'equipment_slot_incompatible' $equipStats
 Assert-True ((Get-SlotCode $ringA) -eq 0 -and -not $equipmentView.Pending -and
     $network.Sent.Count -eq $sentCount -and
-    $script:attributeRefreshCount -eq 0) 'Failed equip must leave ownership and final attributes unchanged.'
+    $script:attributeRefreshCount -eq 0 -and $script:equipmentStatUpdates.Count -eq 0) 'Failed equip must leave ownership and character stats unchanged.'
 
 $equipmentView.TriggerEquip("e:$ringA", 5)
 $equipRequest = $network.Sent[-1] | ConvertFrom-Json
 Assert-True ($equipRequest.requestSequence -eq 2) `
     'A new equip after a failed result must use the next equipment sequence.'
-Send-EquipmentResult $equipRequest.requestSequence 'equip' $true 11 3 @((Ring-Change $ringA 5))
+Send-EquipmentResult $equipRequest.requestSequence 'equip' $true 11 3 @((Ring-Change $ringA 5)) -stats $equipStats -sessionId $nextEquipmentSessionId
+Assert-True ($equipmentView.Pending -and $script:equipmentStatUpdates.Count -eq 0) 'Another equipment session must not apply character stats or settle the pending operation.'
+Send-EquipmentResult $equipRequest.requestSequence 'equip' $true 11 3 @((Ring-Change $ringA 5)) -stats $equipStats
 Assert-True ((Get-SlotCode $ringA) -eq 5 -and (Get-SlotCode $ringB) -eq 6 -and
     $equipmentView.LastRendered.InventoryRevision -eq 11 -and -not $equipmentView.Pending -and
-    $script:attributeRefreshCount -eq 1) 'Successful equip must commit and refresh final attributes.'
-Send-EquipmentResult $equipRequest.requestSequence 'equip' $true 11 3 @((Ring-Change $ringA 5))
+    $script:attributeRefreshCount -eq 0) 'A full equipment result should apply without an attribute request.'
+$received = $script:equipmentStatUpdates[0].Stats
+Assert-True ($script:equipmentStatUpdates.Count -eq 1 -and $script:equipmentStatUpdates[0].Id -eq 123 -and
+    $received.currentHp -eq 300 -and $received.final.maxHp -eq 500 -and $received.currentMp -eq 120 -and
+    $received.maxMp -eq 250 -and $received.final.attack -eq 60 -and $received.final.defense -eq 45 -and
+    $received.final.magicAttack -eq 50 -and $received.final.magicDefense -eq 35 -and
+    $received.final.critRateBps -eq 900 -and $received.final.critDamageBps -eq 16500 -and
+    $received.attributeRevision -eq 6 -and $received.combatRevision -eq 21) 'Confirmed equip must forward the complete character stats.'
+Send-EquipmentResult $equipRequest.requestSequence 'equip' $true 11 3 @((Ring-Change $ringA 5)) -stats $equipStats
 Assert-True ($equipmentView.LastRendered.EquipmentRevision -eq 3 -and
-    $script:attributeRefreshCount -eq 1) 'Repeated success must not apply or refresh twice.'
+    $script:attributeRefreshCount -eq 0 -and $script:equipmentStatUpdates.Count -eq 1) 'Repeated success must not apply ownership or character stats twice.'
 
 $equipmentView.TriggerMove(5, 6, "e:$ringA")
 $moveRequest = $network.Sent[-1] | ConvertFrom-Json
@@ -665,7 +723,8 @@ Assert-True ($moveRequest.msgId -eq 'equipment_slot_move' -and
 Send-EquipmentResult $moveRequest.requestSequence 'slot_move' $true 11 4 @(
     (Ring-Change $ringA 6), (Ring-Change $ringB 5))
 Assert-True ((Get-SlotCode $ringA) -eq 6 -and (Get-SlotCode $ringB) -eq 5 -and
-    $equipmentView.LastRendered.InventoryRevision -eq 11) 'Both rings must swap atomically on success.'
+    $equipmentView.LastRendered.InventoryRevision -eq 11 -and
+    $script:equipmentStatUpdates.Count -eq 1 -and $script:attributeRefreshCount -eq 1) 'A swap without character stats must use the existing refresh.'
 
 $sentCount = $network.Sent.Count
 $equipmentView.TriggerMove(5, 7, "e:$ringB")
@@ -683,9 +742,21 @@ Assert-True ($unequipRequest.msgId -eq 'equipment_unequip' -and
     $unequipRequest.requestSequence -eq 5 -and
     $unequipRequest.slotCode -eq 6 -and (Get-SlotCode $ringA) -eq 6 -and
     $null -eq $bagView.BagAt(4)) 'Unequip must wait for Gate and not send the local bag index.'
-Send-EquipmentResult $unequipRequest.requestSequence 'unequip' $true 12 5 @((Ring-Change $ringA 0))
+$unequipStats = $equipStats.Clone()
+$unequipStats.final = $equipStats.final.Clone()
+$unequipStats.currentHp = 290
+$unequipStats.final.maxHp = 290
+$unequipStats.combatRevision = 24
+Send-EquipmentResult $unequipRequest.requestSequence 'unequip' $true 12 5 @((Ring-Change $ringA 0)) -stats $unequipStats
 Assert-True ((Get-SlotCode $ringA) -eq 0 -and (Get-SlotCode $ringB) -eq 5 -and
     $bagView.BagAt(4) -eq "e:$ringA") 'Successful unequip must put the instance at the chosen local bag position.'
+Assert-True ($script:equipmentStatUpdates.Count -eq 2 -and $script:equipmentStatUpdates[1].Stats.currentHp -eq 290 -and
+    $script:equipmentStatUpdates[1].Stats.final.maxHp -eq 290) 'Successful unequip must forward the clamped HP pair in the full snapshot.'
+if ($EquipmentOnly) {
+    $session.Dispose()
+    Write-Output 'PASS: equipment forwards full character stats exactly once and supports an older result format.'
+    return
+}
 
 $stackChange = [Game.Inventory.Protocol.V2.InventoryV2StackChangeDto]::new()
 $stackChange.stackId = 17

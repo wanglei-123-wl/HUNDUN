@@ -104,7 +104,7 @@ public partial class GameSession
         meditationCombatStore.MergeEventHealth(sceneId,
             new CombatEntityMessage { entityType = "player", entityId = id },
             vitals.currentHp, vitals.maxHp, "Alive", vitals.combatRevision);
-        ApplyItemUseMana(vitals.currentMp, vitals.maxMp);
+        ApplyItemUseMana(vitals.currentMp, vitals.maxMp, combatRevision: vitals.combatRevision);
         lastMeditationVitalsRevision = vitals.combatRevision;
     }
 }

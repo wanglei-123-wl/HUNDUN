@@ -9,6 +9,7 @@ using Game.CharacterPanel.Protocol;
 using Game.Cultivation.Runtime;
 using Game.Client.BattleSync;
 using Game.Client.MapTraversal;
+using Game.Inventory.Protocol.V2;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -132,6 +133,10 @@ public partial class GameSession : MonoBehaviour
     private bool breakthroughProgressionRefreshQueued;
     private long manaUpdateVersion;
     private long progressionRequestManaVersion;
+    private int currentLocalMp = -1;
+    private int maxLocalMp;
+    private long manaServerTime;
+    private long manaCombatRevision = -1;
     private long nextAttackModeRequestSequence;
     private long defaultAttackModeConnectionEpoch;
     private string defaultAttackModeSceneSessionId;
@@ -220,6 +225,7 @@ public partial class GameSession : MonoBehaviour
     public event System.Action<long, long> LocalWorldEntered;
     public event System.Action<AttributeSnapshotResult> LocalAttributeSnapshotChanged;
     public event System.Action<ProgressionSnapshotResult> LocalProgressionSnapshotChanged;
+    public event System.Action LocalManaChanged;
 
     public void Logout()
     {
@@ -1592,20 +1598,82 @@ public partial class GameSession : MonoBehaviour
             RefiningSessionRuntime.Instance?.RequestSnapshot();
     }
 
-    public bool ApplyItemUseMana(int currentMp, int maxMp)
+    public bool TryGetLocalMana(out int currentMp, out int maxMp)
     {
-        if (currentMp < 0 || maxMp < 0 || currentMp > maxMp)
-            return false;
-        if (LocalProgressionSnapshot == null)
-        {
-            RequestProgressionSnapshot();
-            return false;
-        }
+        currentMp = currentLocalMp;
+        maxMp = maxLocalMp;
+        return currentMp >= 0;
+    }
 
+    public bool ApplyItemUseMana(int currentMp, int maxMp, long serverTime = 0, long combatRevision = -1)
+    {
+        if (!StoreLocalMana(currentMp, maxMp, serverTime, combatRevision))
+            return false;
+
+        LocalManaChanged?.Invoke();
+        if (LocalProgressionSnapshot != null)
+            LocalProgressionSnapshotChanged?.Invoke(LocalProgressionSnapshot);
+        return true;
+    }
+
+    private bool StoreLocalMana(int currentMp, int maxMp, long serverTime, long combatRevision)
+    {
+        if (currentMp < 0 || maxMp < currentMp
+            || (combatRevision >= 0 && combatRevision < manaCombatRevision)
+            || (serverTime > 0 && serverTime < manaServerTime))
+            return false;
+
+        currentLocalMp = currentMp;
+        maxLocalMp = maxMp;
+        manaServerTime = System.Math.Max(manaServerTime, serverTime);
+        manaCombatRevision = System.Math.Max(manaCombatRevision, combatRevision);
         manaUpdateVersion++;
-        LocalProgressionSnapshot.currentMp = currentMp;
-        LocalProgressionSnapshot.maxMp = maxMp;
-        LocalProgressionSnapshotChanged?.Invoke(LocalProgressionSnapshot);
+        if (LocalProgressionSnapshot != null)
+        {
+            LocalProgressionSnapshot.currentMp = currentMp;
+            LocalProgressionSnapshot.maxMp = maxMp;
+        }
+        return true;
+    }
+
+    internal bool ApplyEquipmentStats(long characterDbId, InventoryV2EquipmentCharacterStatsDto stats,
+        long serverTime, CombatStateStore store)
+    {
+        if (!IsWorldReady || characterDbId <= 0 || characterDbId != localCharacterDbId || store == null
+            || stats?.final == null || string.IsNullOrWhiteSpace(stats.sceneSessionId)
+            || !string.Equals(stats.sceneSessionId, SceneSessionId, System.StringComparison.Ordinal)
+            || !string.Equals(stats.sceneId, sceneId, System.StringComparison.Ordinal)
+            || !string.Equals(stats.sceneId, store.ActiveSceneId, System.StringComparison.Ordinal)
+            || stats.attributeRevision < 0 || stats.combatRevision <= 0
+            || stats.combatRevision < LocalEnterWorldCombatRevision || serverTime <= 0
+            || stats.final.maxHp <= 0 || stats.currentHp < 0 || stats.currentHp > stats.final.maxHp
+            || (stats.currentHp == 0 ? stats.lifeState != "Dead" : stats.lifeState != "Alive")
+            || stats.currentMp < 0 || stats.maxMp < stats.currentMp)
+            return false;
+
+        bool acceptAttributes = IsAttributeSnapshotCurrent(stats.attributeRevision, stats.combatRevision);
+        if (acceptAttributes)
+            LocalAttributeSnapshot = new AttributeSnapshotResult
+            {
+                success = true,
+                characterDbId = characterDbId,
+                attributeRevision = stats.attributeRevision,
+                combatRevision = stats.combatRevision,
+                final = stats.final,
+                serverTime = serverTime
+            };
+
+        string entityId = characterDbId.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        bool playerAlreadyDead = IsLocalPlayerDead
+            || (store.TryGetState("player", entityId, out CombatStateData current) && current.Hp == 0);
+        bool canApplyResources = acceptAttributes && (!playerAlreadyDead || stats.lifeState == "Dead");
+        bool manaChanged = canApplyResources &&
+            StoreLocalMana(stats.currentMp, stats.maxMp, serverTime, stats.combatRevision);
+        if (canApplyResources)
+            store.TryApplyEquipmentHealth(stats.sceneId, entityId, stats.currentHp, stats.final.maxHp,
+                stats.lifeState, stats.combatRevision);
+        if (acceptAttributes) LocalAttributeSnapshotChanged?.Invoke(LocalAttributeSnapshot);
+        if (manaChanged) LocalManaChanged?.Invoke();
         return true;
     }
 
@@ -1649,16 +1717,18 @@ public partial class GameSession : MonoBehaviour
             Debug.LogWarning("Attribute snapshot failed: " + (result.errorCode ?? result.message));
             return;
         }
-        if (LocalAttributeSnapshot != null
-            && (result.attributeRevision < LocalAttributeSnapshot.attributeRevision
-                || (result.attributeRevision == LocalAttributeSnapshot.attributeRevision
-                    && result.combatRevision < LocalAttributeSnapshot.combatRevision))) return;
+        if (!IsAttributeSnapshotCurrent(result.attributeRevision, result.combatRevision)) return;
 
         if (result.serverTime >= breakthroughAttributeServerTime)
             breakthroughAttributeRefreshAt = float.PositiveInfinity;
         LocalAttributeSnapshot = result;
         LocalAttributeSnapshotChanged?.Invoke(result);
     }
+
+    private bool IsAttributeSnapshotCurrent(long attributeRevision, long combatRevision) =>
+        LocalAttributeSnapshot == null || attributeRevision > LocalAttributeSnapshot.attributeRevision
+        || (attributeRevision == LocalAttributeSnapshot.attributeRevision
+            && combatRevision >= LocalAttributeSnapshot.combatRevision);
 
     private void HandleProgressionSnapshotResult(string json)
     {
@@ -1696,17 +1766,20 @@ public partial class GameSession : MonoBehaviour
             return;
         }
 
-        if (LocalProgressionSnapshot != null && progressionRequestManaVersion != manaUpdateVersion)
+        bool manaChanged = progressionRequestManaVersion == manaUpdateVersion
+            && StoreLocalMana(result.currentMp, result.maxMp, result.serverTime, -1);
+        if (!manaChanged && TryGetLocalMana(out int currentMp, out int maxMp))
         {
-            if (result.maxMp != LocalProgressionSnapshot.maxMp)
+            if (result.maxMp != maxMp)
                 progressionRefreshQueued = true;
-            result.currentMp = LocalProgressionSnapshot.currentMp;
-            result.maxMp = LocalProgressionSnapshot.maxMp;
+            result.currentMp = currentMp;
+            result.maxMp = maxMp;
         }
         LocalProgressionSnapshot = result;
         Debug.Log("[ProgressionSnapshot][RX] requestSequence=" + result.requestSequence
             + " currentMp=" + result.currentMp
             + " maxMp=" + result.maxMp);
+        if (manaChanged) LocalManaChanged?.Invoke();
         LocalProgressionSnapshotChanged?.Invoke(result);
     }
 
@@ -1732,6 +1805,10 @@ public partial class GameSession : MonoBehaviour
         breakthroughProgressionRefreshQueued = false;
         manaUpdateVersion = 0;
         progressionRequestManaVersion = 0;
+        currentLocalMp = -1;
+        maxLocalMp = 0;
+        manaServerTime = 0;
+        manaCombatRevision = -1;
     }
 
     private void HandleBattleSyncReady(BattleSyncReadyContext context)

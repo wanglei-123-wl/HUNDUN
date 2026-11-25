@@ -143,6 +143,7 @@ public sealed class ProgressionSnapshotResult : NetMessageBase
     public long characterDbId;
     public int currentMp;
     public int maxMp;
+    public long serverTime;
     public string jingjieId;
     public int jingjieStage;
     public string jingjieName;

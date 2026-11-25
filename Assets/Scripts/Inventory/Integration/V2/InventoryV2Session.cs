@@ -30,8 +30,9 @@ namespace Game.Inventory.Integration.V2
         private readonly Func<long> clientTick;
         private readonly Func<long> combatRevision;
         private readonly Action<int, long> applyHealth;
+        private readonly Func<long, InventoryV2EquipmentCharacterStatsDto, long, bool> applyEquipmentStats;
         private readonly Action playPotionAnimation;
-        private readonly Action<int, int> applyMana;
+        private readonly Action<int, int, long> applyMana;
         private readonly Action<long?, long?> applyJingjieBalance;
         private readonly Func<bool> progressionReady;
         private readonly Action requestAttributeRefresh;
@@ -104,14 +105,15 @@ namespace Game.Inventory.Integration.V2
             InventoryPanelView panel, ItemDefinitionTable items, Transform equipmentRoot,
             Func<long> clientTick = null, Func<long> combatRevision = null,
             Action<int, long> applyHealth = null,
-            Action<int, int> applyMana = null,
+            Action<int, int, long> applyMana = null,
             Action requestAttributeRefresh = null,
             Action<string> showNotice = null,
             Action<long?, long?> applyJingjieBalance = null,
             Func<bool> progressionReady = null,
             InventorySelectedItemDetailPanel selectedDetailPanel = null,
             Func<long, bool> learnSkill = null,
-            Action playPotionAnimation = null)
+            Action playPotionAnimation = null,
+            Func<long, InventoryV2EquipmentCharacterStatsDto, long, bool> applyEquipmentStats = null)
         {
             this.network = network ?? throw new ArgumentNullException(nameof(network));
             this.dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
@@ -120,6 +122,7 @@ namespace Game.Inventory.Integration.V2
             this.clientTick = clientTick;
             this.combatRevision = combatRevision;
             this.applyHealth = applyHealth;
+            this.applyEquipmentStats = applyEquipmentStats;
             this.playPotionAnimation = playPotionAnimation;
             this.applyMana = applyMana;
             this.applyJingjieBalance = applyJingjieBalance;
@@ -1999,7 +2002,7 @@ namespace Game.Inventory.Integration.V2
                 || json.IndexOf("\"currentMp\"", StringComparison.Ordinal) < 0
                 || json.IndexOf("\"maxMp\"", StringComparison.Ordinal) < 0)
                 return;
-            applyMana(result.currentMp, result.maxMp);
+            applyMana(result.currentMp, result.maxMp, result.serverTime);
         }
 
         private void ApplyItemUseCooldown(string cooldownKey,
@@ -2184,8 +2187,13 @@ namespace Game.Inventory.Integration.V2
                 }
                 equipmentPanel?.Render(next);
                 snapshot = next;
+                bool appliedStats = result.characterStats != null
+                    && string.Equals(result.equipmentOperationSessionId, equipmentOperationSessionId,
+                        StringComparison.Ordinal)
+                    && applyEquipmentStats?.Invoke(result.characterDbId, result.characterStats, result.serverTime) == true;
                 RefreshIfNeeded();
-                requestAttributeRefresh?.Invoke();
+                if (!appliedStats)
+                    requestAttributeRefresh?.Invoke();
                 ShowNotice(intent.Kind == InventoryEquipmentOperationKind.Equip
                     ? "装备成功"
                     : intent.Kind == InventoryEquipmentOperationKind.Unequip
