@@ -2,6 +2,7 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $source = Get-Content -LiteralPath (
     Join-Path $root 'Assets/Scripts/Cultivation/Presentation/修炼界面拖动区域.cs') -Raw
+$sharedDragSource = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/UI/WindowDragHandle.cs') -Raw -Encoding UTF8
 $meta = Get-Content -LiteralPath (
     Join-Path $root 'Assets/Scripts/Cultivation/Presentation/修炼界面拖动区域.cs.meta') -Raw
 $toggleSource = Get-Content -LiteralPath (
@@ -31,16 +32,13 @@ Assert-True ($guid -ne '' -and
     (Block 222 '359960278').Contains('m_CullTransparentMesh: 0')) `
     'Cultivation drag area must receive pointer events.'
 foreach ($id in $parts) {
-    Assert-True ($dragComponent.Contains("- {fileID: $id}") -and
-        (Block 224 $id).Contains('m_Father: {fileID: 112115725}') -and
+    Assert-True ((Block 224 $id).Contains('m_Father: {fileID: 112115725}') -and
         $parent.Contains("- {fileID: $id}")) `
         "Cultivation part $id must move with the drag area."
 }
-Assert-True ($parent.IndexOf('- {fileID: 359960276}') -lt
-    $parent.IndexOf('- {fileID: 1266172303}') -and
-    $parent.IndexOf('- {fileID: 1266172303}') -lt
-    $parent.IndexOf('- {fileID: 1625952859}')) `
-    'Navigation and close buttons must raycast above the transparent drag area.'
+Assert-True ($dragComponent.Contains('panelRoot: {fileID: 112115725}') -and
+    -not $dragComponent.Contains('movableParts:')) `
+    'Drag must bind the cultivation root and discover all current children.'
 $controller = Block 114 '860000000000500005'
 Assert-True ($controller.Contains('cultivationWindow: {fileID: 112115721}') -and
     $controller.Contains('hudToggleButton: {fileID: 489239712}') -and
@@ -85,22 +83,55 @@ namespace UnityEngine
     public sealed class DisallowMultipleComponent : System.Attribute {}
     [System.AttributeUsage(System.AttributeTargets.Field)]
     public sealed class SerializeField : System.Attribute {}
+    [System.AttributeUsage(System.AttributeTargets.Field)]
+    public sealed class InspectorNameAttribute : System.Attribute
+    { public InspectorNameAttribute(string name) {} }
     public class GameObject
     {
         public bool activeSelf;
+        public Transform transform;
+        public object component;
+        public GameObject() { transform = new Transform { gameObject = this }; }
+        public T GetComponentInParent<T>() where T : class
+        {
+            for (Transform node = transform; node != null; node = node.parent)
+                if (node.gameObject?.component is T value) return value;
+            return null;
+        }
         public int setActiveCalls;
         public void SetActive(bool value) { activeSelf = value; setActiveCalls++; }
     }
     public class MonoBehaviour
     {
         public GameObject gameObject = new GameObject();
-        public Transform transform { get; set; }
+        public Transform transform {
+            get => gameObject.transform;
+            set { gameObject.transform = value; value.gameObject = gameObject; }
+        }
     }
-    public class Transform { public Transform parent { get; set; } }
+    public class Transform {
+        public GameObject gameObject;
+        private Transform parentValue;
+        private readonly System.Collections.Generic.List<Transform> children = new();
+        public Transform parent {
+            get => parentValue;
+            set { parentValue?.children.Remove(this); parentValue = value; value?.children.Add(this); }
+        }
+        public T GetComponent<T>() where T : class => gameObject?.component as T;
+        public int childCount => children.Count;
+        public Transform GetChild(int index) => children[index];
+        public bool IsChildOf(Transform target) {
+            for (Transform node = this; node != null; node = node.parent)
+                if (node == target) return true;
+            return false;
+        }
+    }
     public class RectTransform : Transform
     {
         public Vector2 anchoredPosition { get; set; }
     }
+    public enum RenderMode { ScreenSpaceOverlay, ScreenSpaceCamera, WorldSpace }
+    public class Canvas { public bool isRootCanvas = true; public RenderMode renderMode = RenderMode.ScreenSpaceOverlay; }
     public struct Vector2
     {
         public float x, y;
@@ -128,7 +159,8 @@ namespace UnityEngine
 }
 namespace UnityEngine.UI
 {
-    public sealed class Button { public readonly ClickEvent onClick = new ClickEvent(); }
+    public class Selectable {}
+    public sealed class Button : Selectable { public readonly ClickEvent onClick = new ClickEvent(); }
     public sealed class ClickEvent
     {
         private event System.Action listeners;
@@ -154,11 +186,12 @@ namespace UnityEngine.EventSystems
 }
 public static class GameplayUiInputGuard { public static bool IsEditingText; public static bool BlocksWindowShortcuts => IsEditingText; }
 '@
+$sharedDragBody = $sharedDragSource -replace '(?m)^using [^\r\n]+;\r?\n', ''
 $body = $source -replace '(?m)^using [^\r\n]+;\r?\n', ''
 $toggleBody = $toggleSource -replace '(?m)^using [^\r\n]+;\r?\n', ''
 Add-Type -TypeDefinition ("using UnityEngine;`nusing UnityEngine.EventSystems;`n" +
-    "using UnityEngine.UI;`nusing Game.Cultivation.Runtime;`nusing Game.Inventory;`nusing Game.UI.Notice;`n" +
-    $stubs + "`n" + $body + "`n" + $toggleBody) -IgnoreWarnings | Out-Null
+    "using UnityEngine.UI;`nusing Game.UI;`nusing Game.Cultivation.Runtime;`nusing Game.Inventory;`nusing Game.UI.Notice;`n" +
+    $stubs + "`n" + $sharedDragBody + "`n" + $body + "`n" + $toggleBody) -IgnoreWarnings | Out-Null
 
 function Pointer($pressed, [int]$x, [int]$y, $button) {
     $data = [UnityEngine.EventSystems.PointerEventData]::new()
@@ -180,6 +213,10 @@ function Assert-Positions($items, [int]$shiftX, [int]$shiftY) {
 $left = [UnityEngine.EventSystems.PointerEventData+InputButton]::Left
 $right = [UnityEngine.EventSystems.PointerEventData+InputButton]::Right
 $canvas = [UnityEngine.RectTransform]::new()
+$canvasObject = [UnityEngine.GameObject]::new()
+$canvasObject.transform = $canvas
+$canvas.gameObject = $canvasObject
+$canvasObject.component = [UnityEngine.Canvas]::new()
 $handleObject = [UnityEngine.GameObject]::new()
 $other = [UnityEngine.GameObject]::new()
 $drag = [Game.Cultivation.Presentation.修炼界面拖动区域]::new()
@@ -194,8 +231,7 @@ for ($i = 0; $i -lt 5; $i++) {
     $items += $item
 }
 $flags = [System.Reflection.BindingFlags]'Instance,NonPublic'
-$drag.GetType().GetField('movableParts', $flags).SetValue(
-    $drag, [UnityEngine.RectTransform[]]$items)
+$drag.GetType().GetField('panelRoot', $flags).SetValue($drag, $canvas)
 $drag.OnBeginDrag((Pointer $other 5 8 $left))
 $drag.OnDrag((Pointer $other 13 20 $left))
 Assert-Positions $items 0 0
@@ -208,6 +244,37 @@ Assert-Positions $items 8 12
 $drag.OnEndDrag((Pointer $handleObject 13 20 $left))
 $drag.OnDrag((Pointer $handleObject 20 30 $left))
 Assert-Positions $items 8 12
+
+# A newly added direct child must join the next drag without editing any list.
+$newPart = [UnityEngine.RectTransform]::new()
+$newPart.parent = $canvas
+$newPart.anchoredPosition = [UnityEngine.Vector2]::new(100, 200)
+$label = [UnityEngine.GameObject]::new()
+$label.transform.parent = $drag.transform
+$drag.OnBeginDrag((Pointer $label 0 0 $left))
+$drag.OnDrag((Pointer $label 4 6 $left))
+Assert-Positions $items 12 18
+Assert-True ($newPart.anchoredPosition.x -eq 104 -and $newPart.anchoredPosition.y -eq 206) `
+    'New window children and drag-handle labels must move with the panel.'
+$drag.GetType().GetMethod('OnDisable', $flags).Invoke($drag, @()) | Out-Null
+$drag.OnDrag((Pointer $label 30 40 $left))
+Assert-Positions $items 12 18
+
+$buttonInsideHandle = [UnityEngine.GameObject]::new()
+$buttonInsideHandle.transform.parent = $drag.transform
+$buttonInsideHandle.component = [UnityEngine.UI.Button]::new()
+$drag.OnBeginDrag((Pointer $buttonInsideHandle 0 0 $left))
+$drag.OnDrag((Pointer $buttonInsideHandle 15 20 $left))
+Assert-Positions $items 12 18
+$drag.GetType().GetField('panelRoot', $flags).SetValue($drag, [UnityEngine.RectTransform]::new())
+$drag.OnBeginDrag((Pointer $handleObject 0 0 $left))
+$drag.OnDrag((Pointer $handleObject 15 20 $left))
+Assert-Positions $items 12 18
+$drag.GetType().GetField('panelRoot', $flags).SetValue($drag, $null)
+$drag.OnBeginDrag((Pointer $handleObject 0 0 $left))
+$drag.OnDrag((Pointer $handleObject 2 3 $left))
+Assert-Positions $items 14 21
+$drag.OnEndDrag((Pointer $handleObject 2 3 $left))
 
 $toggle = [Game.Cultivation.Presentation.CultivationWindowToggle]::new()
 $window = [UnityEngine.GameObject]::new()

@@ -2,9 +2,11 @@
 param(
     [Parameter(Mandatory=$true)][string]$ReleaseDirectory,
     [string]$SshTarget = 'root@47.93.78.106',
-    [switch]$VerifyOnly
+    [switch]$VerifyOnly,
+    [switch]$VerifyRemoteOnly
 )
 $ErrorActionPreference = 'Stop'
+if ($VerifyOnly -and $VerifyRemoteOnly) { throw 'Choose local verification or remote verification, not both.' }
 $release = [IO.Path]::GetFullPath($ReleaseDirectory).TrimEnd('\','/')
 $releaseId = [IO.Path]::GetFileName($release)
 if ($releaseId -notmatch '^[a-f0-9]{32}$') { throw 'Invalid release directory ID.' }
@@ -61,16 +63,29 @@ Write-Host 'LOCAL_HASH_OK - payload and startup download verification passed.'
 Write-Host "Upload source: $payload"
 if ($VerifyOnly) { return }
 
-foreach ($program in @('ssh.exe','scp.exe')) { $null = Get-Command $program -ErrorAction Stop }
+$programs = @('ssh.exe')
+if (!$VerifyRemoteOnly) { $programs += 'scp.exe' }
+foreach ($program in $programs) { $null = Get-Command $program -ErrorAction Stop }
 function Invoke-Native([string]$Program, [string[]]$Arguments) {
     & $Program @Arguments
     if ($LASTEXITCODE -ne 0) { throw "$Program failed; upload stopped (exit $LASTEXITCODE)." }
 }
 $staging = "/srv/hundun-upload/$releaseId"
 $sshOptions = @('-o','ConnectTimeout=20','-o','ServerAliveInterval=15')
-Invoke-Native 'ssh.exe' ($sshOptions + @($SshTarget, "mkdir -p -- '$staging'"))
-Invoke-Native 'scp.exe' ($sshOptions + @('-r',$payload,$checksums,$manifestPath,$startupPath,"${SshTarget}:${staging}/"))
-$verifyCommand = "set -eu; test ! -L '$staging/RemotePayload'; test `"`$(realpath -m -- '$staging/RemotePayload')`" = '$staging/RemotePayload'; test -z `"`$(find '$staging/RemotePayload' -type l -print -quit)`"; test `"`$(find '$staging/RemotePayload' -type f | wc -l)`" -eq $($expected.Count); cd '$staging/RemotePayload'; sha256sum --strict -c '../SHA256SUMS'"
+if (!$VerifyRemoteOnly) {
+    Invoke-Native 'ssh.exe' ($sshOptions + @($SshTarget, "mkdir -p -- '$staging'"))
+    Invoke-Native 'scp.exe' ($sshOptions + @('-r',$payload,$checksums,$manifestPath,$startupPath,"${SshTarget}:${staging}/"))
+} else {
+    Write-Host 'REMOTE_VERIFY_ONLY - checking existing staged files; no files will be uploaded.'
+}
+# Pin the uploaded control files to this locally verified release before trusting
+# their payload hashes. This also makes verification safe to resume after SCP.
+$metadataChecks = foreach ($metadataPath in @($checksums,$manifestPath,$startupPath)) {
+    $metadataHash = (Get-FileHash -LiteralPath $metadataPath -Algorithm SHA256).Hash.ToLowerInvariant()
+    "'$metadataHash  $([IO.Path]::GetFileName($metadataPath))'"
+}
+$metadataCommand = "cd '$staging'; printf '%s\n' " + ($metadataChecks -join ' ') + ' | sha256sum --strict -c -; '
+$verifyCommand = "set -eu; $metadataCommand" + "test ! -L '$staging/RemotePayload'; test `"`$(realpath -m -- '$staging/RemotePayload')`" = '$staging/RemotePayload'; test -z `"`$(find '$staging/RemotePayload' -type l -print -quit)`"; test `"`$(find '$staging/RemotePayload' -type f | wc -l)`" -eq $($expected.Count); cd '$staging/RemotePayload'; sha256sum --strict -c '../SHA256SUMS'"
 Invoke-Native 'ssh.exe' ($sshOptions + @($SshTarget,$verifyCommand))
 $receipt = [ordered]@{releaseId=$releaseId; status='staged'; stagedAtUtc=[DateTime]::UtcNow.ToString('o');
     server=$SshTarget; serverDirectory=$staging; allRemoteFileHashesVerified=$true;

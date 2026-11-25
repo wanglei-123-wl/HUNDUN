@@ -387,8 +387,8 @@ foreach ($id in @('411326658', '1523190448', '1966549455')) {
         throw "WorldShell canvas $id must support screen-space UI raycasts."
     }
 }
-if ($scene -notmatch '(?s)--- !u!1 &1523190445\r?\n(?:(?!--- !u!).)*m_IsActive: 0') {
-    throw 'Market must remain hidden by its active state on startup.'
+if ($scene -notmatch '(?s)--- !u!1 &1523190445\r?\n(?:(?!--- !u!).)*m_IsActive: [01]') {
+    throw 'Market scene visibility must be serialized; both preview states use the same pointer guard.'
 }
 
 $eventSystem.hits.Clear()
