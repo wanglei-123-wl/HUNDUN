@@ -38,6 +38,7 @@ namespace UnityEngine
         public AnimatorControllerParameterType type;
     }
     public struct AnimatorStateInfo { public int fullPathHash; }
+    public struct Vector3 { public float x, y, z; }
     public class MonoBehaviour
     {
         protected T GetComponentInChildren<T>(bool includeInactive) where T : class { return null; }
@@ -75,11 +76,16 @@ namespace UnityEngine
         public void Rebind() { Resets++; CurrentState = 0; Bools.Clear(); }
         public void Update(float delta) {}
         public void SetBool(int hash, bool value) { Bools[hash] = value; }
+        public bool GetBool(int hash) => Bools.TryGetValue(hash, out bool value) && value;
         public void ResetTrigger(int hash) {}
         public void SetTrigger(int hash) { AttackTriggers++; }
     }
 }
 public enum MonsterLocomotionMode { Grounded, TakingOff, Flying, Landing }
+public sealed class MonsterTransformInterpolator
+{
+    public UnityEngine.Vector3 CurrentVelocity;
+}
 public sealed class MonsterNetworkView
 {
     public event Action<int, int> OnHealthChanged;
@@ -98,8 +104,8 @@ $networkField = $type.GetField('monsterNetworkView', $flags)
 $awake = $type.GetMethod('Awake', $flags)
 $enable = $type.GetMethod('OnEnable', $flags)
 $disable = $type.GetMethod('OnDisable', $flags)
+$update = $type.GetMethod('Update', $flags)
 $idle = [UnityEngine.Animator]::StringToHash('Base Layer.待机')
-$walk = [UnityEngine.Animator]::StringToHash('Base Layer.行走')
 $attack = [UnityEngine.Animator]::StringToHash('Base Layer.攻击')
 $moving = [UnityEngine.Animator]::StringToHash('IsMoving')
 $dead = [UnityEngine.Animator]::StringToHash('Dead')
@@ -107,9 +113,11 @@ $dead = [UnityEngine.Animator]::StringToHash('Dead')
 $animator = [UnityEngine.Animator]::new()
 $network = [MonsterNetworkView]::new()
 $driver = [GorosaurusMonsterAnimatorDriver]::new()
+$motion = [MonsterTransformInterpolator]::new()
 $animatorField.SetValue($driver, $animator)
 $networkField.SetValue($driver, $network)
 $awake.Invoke($driver, @()) | Out-Null
+$type.GetField('motion', $flags).SetValue($driver, $motion)
 $enable.Invoke($driver, @()) | Out-Null
 $driver.RebindAnimator()
 if ($animator.Resets -ne 1 -or $animator.CurrentState -ne $idle -or
@@ -118,12 +126,17 @@ if ($animator.Resets -ne 1 -or $animator.CurrentState -ne $idle -or
 }
 
 $driver.BootstrapState('chase')
-if ($animator.CurrentState -ne $walk -or -not $animator.Bools[$moving]) {
-    throw 'Chase must enter the moving state.'
+$update.Invoke($driver, @()) | Out-Null
+if ($animator.CurrentState -ne $idle -or $animator.Bools[$moving]) {
+    throw 'A stationary chase must remain idle.'
 }
+$velocity = [UnityEngine.Vector3]::new()
+$velocity.z = 1
+$motion.CurrentVelocity = $velocity
 $driver.BootstrapState('return')
-if ($animator.CurrentState -ne $walk) {
-    throw 'Return must use the moving state.'
+$update.Invoke($driver, @()) | Out-Null
+if (-not $animator.Bools[$moving]) {
+    throw 'Actual movement must drive the walk transition.'
 }
 $driver.SetLocomotion([MonsterLocomotionMode]::Grounded)
 if ($animator.Bools[$moving]) {
@@ -143,6 +156,17 @@ if ($animator.AttackTriggers -ne 1) {
     throw 'Action slot zero must trigger an attack.'
 }
 $animator.CurrentState = $attack
+$motion.CurrentVelocity = [UnityEngine.Vector3]::new()
+$driver.BootstrapState('chase')
+$update.Invoke($driver, @()) | Out-Null
+if ($animator.CurrentState -ne $attack -or $animator.Bools[$moving]) {
+    throw 'Stationary chase must leave the current attack playing.'
+}
+$motion.CurrentVelocity = $velocity
+$update.Invoke($driver, @()) | Out-Null
+if (-not $animator.Bools[$moving]) {
+    throw 'Actual movement must allow an immediate blend back to walking.'
+}
 $driver.PlayAction(0, 1)
 if ($animator.AttackReplays -ne 1 -or $animator.AttackTriggers -ne 1) {
     throw 'A second attack must restart the current attack animation.'

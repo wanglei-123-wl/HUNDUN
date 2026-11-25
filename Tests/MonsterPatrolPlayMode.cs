@@ -112,12 +112,23 @@ public static class MonsterPatrolPlayMode
         Check(!a.applyRootMotion,asset.Id+" network root motion disabled");
         a.cullingMode=AnimatorCullingMode.AlwaysAnimate;v.RebindAnimator();
         v.Initialize(new MonsterViewState{entityId=asset.Id,stateSequence=1,hp=100,maxHp=100,rotation=Quaternion.identity});
-        v.BootstrapState("Patrol");a.Update(.2f);int walk=a.GetCurrentAnimatorStateInfo(0).fullPathHash;
+        v.BootstrapState("Patrol");
+        if (Driver(v) is GorosaurusMonsterAnimatorDriver gorosaurus)
+        {
+            var motion = go.GetComponent<MonsterTransformInterpolator>();
+            typeof(MonsterTransformInterpolator).GetProperty("CurrentVelocity").SetValue(motion, Vector3.forward);
+            typeof(GorosaurusMonsterAnimatorDriver).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(gorosaurus, null);
+            a.Update(.1f);
+        }
+        a.Update(.2f);int walk=a.GetCurrentAnimatorStateInfo(0).fullPathHash;
         var clips=a.GetCurrentAnimatorClipInfo(0);Check(clips.Length>0&&clips[0].clip!=null,asset.Id+" patrol plays real motion clip");
         float t=a.GetCurrentAnimatorStateInfo(0).normalizedTime;
         v.ApplyState(new MonsterViewState{entityId=asset.Id,stateSequence=2,hp=90,maxHp=100,preserveTransform=true,preservePresentation=true});
         a.Update(.1f);Check(a.GetCurrentAnimatorStateInfo(0).fullPathHash==walk&&a.GetCurrentAnimatorStateInfo(0).normalizedTime>t,asset.Id+" HP update does not restart clip");
-        v.BootstrapState(Driver(v) is FlyingMonsterAnimatorDriver?"Hover":"Idle");a.Update(.2f);
+        v.BootstrapState(Driver(v) is FlyingMonsterAnimatorDriver?"Hover":"Idle");
+        if (Driver(v) is GorosaurusMonsterAnimatorDriver) a.Update(.1f);
+        a.Update(.2f);
         if(Driver(v) is FlyingMonsterAnimatorDriver)Check(a.GetCurrentAnimatorStateInfo(0).fullPathHash==walk&&a.GetInteger("LocomotionMode")==2,asset.Id+" hover stays airborne");
         else Check(a.GetCurrentAnimatorStateInfo(0).fullPathHash!=walk,asset.Id+" patrol stops to idle");
         v.BootstrapState("Dead");a.Update(.2f);a.Update(.2f);int dead=a.GetCurrentAnimatorStateInfo(0).fullPathHash;

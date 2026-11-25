@@ -40,6 +40,12 @@
 
 用 `pwsh -NoProfile -File Tests/Run-MonsterPositionPlaybackTests.ps1 -UnityEditorData '<Unity Editor>/Data'` 验证 500ms 样本、坡地、预测上限、转弯、停止、飞行和长间隔。攻击时序验证沿 `Tests/CombatAttackPresentation.Tests.ps1`。
 
+### 金魔兽行走与攻击衔接
+
+金魔兽（`Ls009`）的行走状态使用原地 `Walk`。旧 `Walk_RM` 在预制体关闭 Root Motion 时仍让模型根骨骼每轮向前约 5.44 米，动画回绕时复位。客户端驱动读取怪物位置插值的水平速度，在 0.10 米／秒开始行走，降到 0.05 米／秒以下停止行走。收到追击状态时，站在攻击距离内的怪物继续当前攻击动画，播完后回待机。真正开始走动时由状态机混合到行走，下一次有效攻击可重新起手，死亡即时打断。
+
+隔离 Unity 使用实际预制体、状态机、动画驱动和网络视图验证了站定与追击、原地行走、攻击后的待机、再次攻击及死亡。服务端坐标、命中、扣血、冷却和协议沿用现有逻辑。
+
 ## 修改位置
 
 网络模块：`MovementEventMessages`、`BattleSyncProtocolConstants`、`StateFrameArrayParser`、`CompactStateDecoder`、`StateFrameProcessor`。

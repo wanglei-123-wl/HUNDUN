@@ -2,11 +2,12 @@ using UnityEngine;
 
 public sealed class GorosaurusMonsterAnimatorDriver : MonoBehaviour, IMonsterAnimatorDriver
 {
+    private const float WalkStartSpeed = .10f;
+    private const float WalkStopSpeed = .05f;
     private static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
     private static readonly int AttackHash = Animator.StringToHash("Attack");
     private static readonly int DeadHash = Animator.StringToHash("Dead");
     private static readonly int IdleStateHash = Animator.StringToHash("Base Layer.待机");
-    private static readonly int WalkStateHash = Animator.StringToHash("Base Layer.行走");
     private static readonly int AttackStateHash = Animator.StringToHash("Base Layer.攻击");
 
     [SerializeField] private Animator animator;
@@ -16,11 +17,25 @@ public sealed class GorosaurusMonsterAnimatorDriver : MonoBehaviour, IMonsterAni
     private bool hasAttack;
     private bool hasDead;
     private bool isDead;
+    private bool allowWalk;
+    private MonsterTransformInterpolator motion;
 
     private void Awake()
     {
         ResolveAnimator();
+        motion = GetComponentInParent<MonsterTransformInterpolator>();
         CacheParameters();
+    }
+
+    private void Update()
+    {
+        if (!allowWalk || isDead || motion == null || animator == null || !hasIsMoving)
+            return;
+
+        // Chase also covers standing in range while the server waits for the next attack.
+        Vector3 velocity = motion.CurrentVelocity;
+        float threshold = animator.GetBool(IsMovingHash) ? WalkStopSpeed : WalkStartSpeed;
+        SetMoving(velocity.x * velocity.x + velocity.z * velocity.z >= threshold * threshold);
     }
 
     private void OnEnable()
@@ -80,12 +95,10 @@ public sealed class GorosaurusMonsterAnimatorDriver : MonoBehaviour, IMonsterAni
             case "returning":
             case "fly":
             case "flying":
-                SetMoving(true);
-                PlayState(WalkStateHash);
+                SetLocomotion(MonsterLocomotionMode.Flying);
                 break;
             default:
-                SetMoving(false);
-                PlayState(IdleStateHash);
+                SetLocomotion(MonsterLocomotionMode.Grounded);
                 break;
         }
     }
@@ -93,6 +106,7 @@ public sealed class GorosaurusMonsterAnimatorDriver : MonoBehaviour, IMonsterAni
     public void ResetView()
     {
         isDead = false;
+        allowWalk = false;
         if (animator == null)
         {
             return;
@@ -114,12 +128,13 @@ public sealed class GorosaurusMonsterAnimatorDriver : MonoBehaviour, IMonsterAni
 
     public void SetLocomotion(MonsterLocomotionMode mode)
     {
-        SetMoving(mode == MonsterLocomotionMode.Flying);
+        allowWalk = mode == MonsterLocomotionMode.Flying;
+        if (!allowWalk) SetMoving(false);
     }
 
     public void SetMoveSpeed(float normalizedSpeed)
     {
-        // The current dynamic snapshot can omit speed; locomotion is the stop/start signal.
+        // Walking follows the network interpolator's displayed movement.
     }
 
     public void PlayAction(int actionSlot, float actionSpeed)
@@ -128,6 +143,8 @@ public sealed class GorosaurusMonsterAnimatorDriver : MonoBehaviour, IMonsterAni
         {
             return;
         }
+
+        SetMoving(false);
 
         if (animator.HasState(0, AttackStateHash)
             && animator.GetCurrentAnimatorStateInfo(0).fullPathHash == AttackStateHash)
@@ -157,6 +174,7 @@ public sealed class GorosaurusMonsterAnimatorDriver : MonoBehaviour, IMonsterAni
         }
 
         SetMoving(false);
+        allowWalk = false;
         isDead = true;
         if (animator == null)
         {
