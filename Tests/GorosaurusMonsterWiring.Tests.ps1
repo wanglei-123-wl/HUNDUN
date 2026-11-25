@@ -29,7 +29,7 @@ $states = @{
 }
 $clips = @{
     Idle = '91e4b0da3a2af354593c748ea3a3aba6'
-    Walk = '28013b6fb3d2b9446940f08e059d460b'
+    Walk = 'cf752ee0c9c5ef447b82d146f4dbd3f1'
     Attack = '0fa8814a92667774f9a8230cfb688561'
     Death = '64cebaed51ff9334fbb79ffc0e1ff59a'
 }
@@ -77,7 +77,7 @@ $folder = 'Assets/Monsters Full Pack Vol 1/Monsters Pack Vol 1/Gorosaurus/FBX Fi
 foreach ($file in @('Gorosaurus@3HitComboAttack.FBX.meta', 'Gorosaurus@death.FBX.meta')) {
     Require ((Read-Asset ($folder + $file)) -match 'loopTime: 0') "$file must not loop."
 }
-foreach ($file in @('Gorosaurus@Idle.FBX.meta', 'Gorosaurus@Walk_RM.FBX.meta')) {
+foreach ($file in @('Gorosaurus@Idle.FBX.meta', 'Gorosaurus@Walk.FBX.meta')) {
     Require ((Read-Asset ($folder + $file)) -match 'loopTime: 1') "$file must loop."
 }
 
