@@ -38,7 +38,7 @@ namespace Game.Inventory.Protocol.V2
                 if (item == null || item.stackId <= 0 || item.count <= 0
                     || string.IsNullOrWhiteSpace(item.itemId) || !seenStacks.Add(item.stackId))
                     return Fail("Invalid or duplicate stack identity.", out error);
-                stacks.Add(new InventoryStackState(item.stackId, item.itemId, item.count, item.isBound));
+                stacks.Add(new InventoryStackState(item.stackId, item.itemId, item.count, item.isBound, item.remainingUses));
                 bagCount++;
             }
             foreach (InventoryV2EquipmentDto item in message.equipmentItems)

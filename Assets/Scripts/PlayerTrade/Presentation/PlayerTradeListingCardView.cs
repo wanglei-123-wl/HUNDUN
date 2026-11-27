@@ -75,7 +75,7 @@ namespace Game.PlayerTrade.Presentation
             PlayerTradeAssetDto asset = boundOrder.asset;
             int quantity = asset == null ? 1 : Mathf.Max(1, asset.quantity);
             if (quantityText != null)
-                quantityText.text = quantity.ToString(CultureInfo.InvariantCulture);
+                quantityText.text = FormatItemQuantity(asset, quantity);
             if (sellerText != null)
                 sellerText.text = string.IsNullOrWhiteSpace(boundOrder.sellerNickname)
                     ? "--" : boundOrder.sellerNickname;
@@ -131,7 +131,7 @@ namespace Game.PlayerTrade.Presentation
             PlayerTradeAssetDto asset = boundOrder.asset;
             int quantity = asset == null ? 1 : Mathf.Max(1, asset.quantity);
             if (quantityText != null)
-                quantityText.text = quantity.ToString(CultureInfo.InvariantCulture);
+                quantityText.text = FormatItemQuantity(asset, quantity);
             if (sellerText != null)
                 sellerText.text = string.IsNullOrWhiteSpace(boundOrder.status)
                     ? "--" : boundOrder.status;
@@ -214,6 +214,14 @@ namespace Game.PlayerTrade.Presentation
         {
             if (boundOrder != null && cancelRequested != null)
                 cancelRequested(this);
+        }
+
+        private static string FormatItemQuantity(PlayerTradeAssetDto asset, int quantity)
+        {
+            string count = quantity.ToString(CultureInfo.InvariantCulture);
+            return asset != null && asset.remainingUses > 0
+                ? count + " ·" + asset.remainingUses.ToString(CultureInfo.InvariantCulture) + "次"
+                : count;
         }
 
         private void ResolveReferences()

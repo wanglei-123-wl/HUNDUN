@@ -32,7 +32,43 @@ MonoBehaviour:
     DetailEntries: []
     WorldPrefab: {fileID: 0}
     PickupSound: {fileID: 0}
-  items: []
+  items:
+  - ItemId: huicheng_stone_01
+    EquipmentId:
+    EquipmentCategory: 0
+    DisplayName: "回城石"
+    Description: "传送到长风村的出生区。"
+    Icon: {fileID: 21300000, guid: 917502b0ae2a49a42a3362e803b03476, type: 3}
+    RemoteIconAddress:
+    Category: 2
+    LinkedSkillId:
+    Quality: 0
+    QualityColor: {r: 1, g: 1, b: 1, a: 1}
+    MaxStack: 1
+    IsCurrency: 0
+    DisplayCategory: 0
+    DetailText:
+    DetailEntries: []
+    WorldPrefab: {fileID: 949667627940910289, guid: 1f4e1cd68b6d2ce43a6063a59f8af985, type: 3}
+    PickupSound: {fileID: 0}
+  - ItemId: suiji_stone_01
+    EquipmentId:
+    EquipmentCategory: 0
+    DisplayName: "随机石"
+    Description: "随机传送到当前地图的安全位置。"
+    Icon: {fileID: 21300000, guid: b76d52a9aed027c4485df5b3cb11a849, type: 3}
+    RemoteIconAddress:
+    Category: 2
+    LinkedSkillId:
+    Quality: 0
+    QualityColor: {r: 1, g: 1, b: 1, a: 1}
+    MaxStack: 1
+    IsCurrency: 0
+    DisplayCategory: 0
+    DetailText:
+    DetailEntries: []
+    WorldPrefab: {fileID: 949667627940910289, guid: 1f4e1cd68b6d2ce43a6063a59f8af985, type: 3}
+    PickupSound: {fileID: 0}
   itemAssets:
   - {fileID: 11400000, guid: 435136ed4e09e234e8eb5d650bb41b78, type: 2}
   - {fileID: 11400000, guid: 902e887ab1a84d5e8287997a356283d7, type: 2}

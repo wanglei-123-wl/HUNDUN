@@ -346,7 +346,9 @@ public class NetworkManager
 
     public bool Send<T>(T message)
     {
-        bool transferRequest = message is MapTransferRequest;
+        bool transferRequest = message is MapTransferRequest ||
+            (message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto transferItem &&
+             !string.IsNullOrEmpty(transferItem.teleportRequestId));
         bool playerOperation = message is MovementReferencedRequest || message is MovementEventRequest
             || message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto;
         if (playerOperation && AreLocalPlayerActionsBlocked)
@@ -373,7 +375,22 @@ public class NetworkManager
         else if (message is RespawnRequest respawn)
             respawn.sceneSessionId = currentSceneSessionId;
         else if (message is Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto itemUse)
-            itemUse.sceneSessionId = currentSceneSessionId;
+        {
+            if (transferRequest && itemUse.movementEpoch > 0)
+            {
+                if (itemUse.sceneSessionId != currentSceneSessionId) return false;
+            }
+            else
+            {
+                itemUse.sceneSessionId = currentSceneSessionId;
+                if (transferRequest)
+                {
+                    if (!MovementReady) return false;
+                    itemUse.movementEpoch = movementEpoch;
+                    itemUse.movementSequence = movementSequence;
+                }
+            }
+        }
 
         if ((playerOperation || message is RespawnRequest) && string.IsNullOrEmpty(currentSceneSessionId))
             return false;

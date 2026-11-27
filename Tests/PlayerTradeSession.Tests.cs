@@ -114,6 +114,14 @@ internal static class PlayerTradeSessionTests
             "Claim uses the same sequence as create, buy and cancel.");
         PlayerTradeRequestSequence.Complete(claim, secondSession,
             claim.clientRequestId);
-        Console.WriteLine("PASS: trade session, shared sequence, retry identity and unknown-result recovery.");
+        var orders = UnityEngine.JsonUtility.FromJson<PlayerTradeOrderListResultDto>(
+            "{\"orders\":[{\"asset\":{\"itemId\":\"suiji_stone_01\",\"quantity\":1,\"remainingUses\":17}},{\"asset\":{\"itemId\":\"hp_potion_01\",\"quantity\":2}}]}");
+        var claims = UnityEngine.JsonUtility.FromJson<PlayerTradeClaimListResultDto>(
+            "{\"claims\":[{\"asset\":{\"itemId\":\"huicheng_stone_01\",\"quantity\":1,\"remainingUses\":50}}]}");
+        Check(orders.orders[0].asset.quantity == 1 && orders.orders[0].asset.remainingUses == 17 &&
+            orders.orders[1].asset.quantity == 2 && orders.orders[1].asset.remainingUses == 0 &&
+            claims.claims[0].asset.quantity == 1 && claims.claims[0].asset.remainingUses == 50,
+            "Trade order and claim assets must receive optional charges separately from quantity.");
+        Console.WriteLine("PASS: trade session, retry identity, unknown-result recovery and optional stone charges.");
     }
 }

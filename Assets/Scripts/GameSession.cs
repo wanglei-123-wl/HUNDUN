@@ -1986,6 +1986,8 @@ public partial class GameSession : MonoBehaviour
         }
 
         pendingMapTransfer = result;
+        if (result.itemUse != null)
+            FindObjectOfType<Game.Inventory.InventoryModuleRuntime>()?.ApplyTeleportStoneUse(result.itemUse);
         enterWorldConfirmed = false;
         mapTransferSnapshotDeadline = Time.realtimeSinceStartup
             + Mathf.Max(1f, mapTransferSnapshotTimeout);
@@ -1998,44 +2000,54 @@ public partial class GameSession : MonoBehaviour
     private IEnumerator LoadMapTransferDestination(
         MapTransferResult result, string mapAddress, long epoch)
     {
-        AsyncOperationHandle<SceneInstance> operation;
-        try
-        {
-            operation = RemoteGameContent.LoadMapSceneAsync(mapAddress);
-            mapTransferSceneOperation = operation;
-        }
-        catch (System.Exception error)
-        {
-            Debug.LogError("Map transfer load failed: " + error);
-            RecoverWorldSession("map_transfer_load_failed");
+        Scene destination = mapTransferSourceScene;
+        // Keep coroutine assignment and packet deferral ordered on same-map transfers.
+        yield return null;
+        if (pendingMapTransfer != result || networkManager == null || !networkManager.IsConnected ||
+            networkManager.ConnectionEpoch != epoch)
             yield break;
-        }
-
-        yield return operation;
-        if (pendingMapTransfer != result || networkManager == null
-            || !networkManager.IsConnected || networkManager.ConnectionEpoch != epoch
-            || messageDispatcher == null || messageDispatcher.HasDeferredWorldOverflow)
+        if (result.sceneId != sceneId || result.mapId != activeMapId)
         {
-            if (operation.Status == AsyncOperationStatus.Succeeded
-                && operation.Result.Scene.IsValid())
+            AsyncOperationHandle<SceneInstance> operation;
+            try
             {
-                SceneManager.UnloadSceneAsync(operation.Result.Scene);
-                mapTransferSceneOperation = default;
+                operation = RemoteGameContent.LoadMapSceneAsync(mapAddress);
+                mapTransferSceneOperation = operation;
             }
-            RecoverWorldSession("map_transfer_connection_changed");
-            yield break;
+            catch (System.Exception error)
+            {
+                Debug.LogError("Map transfer load failed: " + error);
+                RecoverWorldSession("map_transfer_load_failed");
+                yield break;
+            }
+
+            yield return operation;
+            if (pendingMapTransfer != result || networkManager == null
+                || !networkManager.IsConnected || networkManager.ConnectionEpoch != epoch
+                || messageDispatcher == null || messageDispatcher.HasDeferredWorldOverflow)
+            {
+                if (operation.Status == AsyncOperationStatus.Succeeded
+                    && operation.Result.Scene.IsValid())
+                {
+                    SceneManager.UnloadSceneAsync(operation.Result.Scene);
+                    mapTransferSceneOperation = default;
+                }
+                RecoverWorldSession("map_transfer_connection_changed");
+                yield break;
+            }
+
+            if (operation.Status != AsyncOperationStatus.Succeeded
+                || !operation.Result.Scene.IsValid())
+            {
+                Debug.LogError("Map transfer load failed: " + operation.OperationException);
+                if (operation.IsValid()) Addressables.Release(operation);
+                RecoverWorldSession("map_transfer_load_failed");
+                yield break;
+            }
+            destination = operation.Result.Scene;
         }
 
-        if (operation.Status != AsyncOperationStatus.Succeeded
-            || !operation.Result.Scene.IsValid())
-        {
-            Debug.LogError("Map transfer load failed: " + operation.OperationException);
-            if (operation.IsValid()) Addressables.Release(operation);
-            RecoverWorldSession("map_transfer_load_failed");
-            yield break;
-        }
-
-        if (!SceneManager.SetActiveScene(operation.Result.Scene)
+        if (!SceneManager.SetActiveScene(destination)
             || !networkManager.SetSceneSessionId(epoch, result.sceneSessionId)
             || !battleSyncRuntime.BeginMapTransfer(new BattleSyncEnterWorldContext(
                 epoch, result.sceneId, localCharacterDbId, result.snapshotRevision,
@@ -2060,7 +2072,7 @@ public partial class GameSession : MonoBehaviour
             ? Mathf.Clamp(result.self.hp, 0, LocalEnterWorldMaxHp) : -1;
         if (IsLocalPlayerDeadAtSpawn(result.self)) EnterLocalDeadState();
         if (localGroundRing != null)
-            localGroundRing.SetGroundScene(operation.Result.Scene);
+            localGroundRing.SetGroundScene(destination);
         LocalEnterWorldCombatRevision = result.self.combatRevision;
         PvpEnabled = result.pvpEnabled;
         SafeZoneBoundaryRenderer boundary =
@@ -2220,6 +2232,9 @@ public partial class GameSession : MonoBehaviour
             inputController.SetInputEnabled(true, resetSequence: true);
         }
     }
+
+    internal bool TryUseTeleportStone(Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto request) =>
+        mapTransferCoordinator != null && mapTransferCoordinator.TryUseStone(request);
 
     public bool TryPauseForMapTransfer()
     {

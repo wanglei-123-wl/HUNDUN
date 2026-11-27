@@ -731,7 +731,7 @@ namespace Game.Inventory.Integration.V2
                             return false;
                         }
                         stacks[change.stackId] = new InventoryStackState(
-                            change.stackId, change.itemId, change.count, change.isBound);
+                            change.stackId, change.itemId, change.count, change.isBound, change.remainingUses);
                         break;
 
                     case "stack_remove":
@@ -1180,7 +1180,9 @@ namespace Game.Inventory.Integration.V2
 
             foreach (InventoryStackState stack in presented.Stacks)
                 if (stack.Identity == identity && directory.TryGetItem(stack.ItemId, out var stackDefinition))
-                    return InventoryItemAttributeText.Format(stackDefinition, FindLearningTarget(stackDefinition, directory));
+                    return stack.RemainingUses > 0
+                        ? "剩余次数 " + stack.RemainingUses + "/50"
+                        : InventoryItemAttributeText.Format(stackDefinition, FindLearningTarget(stackDefinition, directory));
 
             foreach (InventoryEquipmentState equipment in presented.Equipment)
                 if (equipment.SlotCode == 0 && equipment.Identity == identity
@@ -1474,6 +1476,17 @@ namespace Game.Inventory.Integration.V2
                 var request = new InventoryV2ItemUseRequestDto(
                     itemUseOperationSessionId, sequence, snapshot.InventoryRevision,
                     stack.StackId, tick);
+                if (InventoryStackState.IsTeleportStone(stack.ItemId))
+                {
+                    if (UnityEngine.Object.FindObjectOfType<GameSession>()?.TryUseTeleportStone(request) != true)
+                    {
+                        ShowNotice("当前无法传送，请稍后重试");
+                        return false;
+                    }
+                    nextItemUseSequence = sequence;
+                    lastItemUseTick = tick;
+                    return true;
+                }
                 if (!network.Send(request))
                 {
                     Debug.LogWarning("V2 item use request could not be sent.");

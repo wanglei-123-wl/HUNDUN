@@ -35,15 +35,21 @@ namespace Game.Inventory.Model.V2
         public string ItemId { get; }
         public int Count { get; }
         public bool IsBound { get; }
+        public int RemainingUses { get; }
+        public int DisplayQuantity => RemainingUses > 0 ? RemainingUses : Count;
         public string Identity => "s:" + StackId.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-        public InventoryStackState(long stackId, string itemId, int count, bool isBound)
+        public InventoryStackState(long stackId, string itemId, int count, bool isBound, int remainingUses = 0)
         {
             StackId = stackId;
             ItemId = itemId;
             Count = count;
             IsBound = isBound;
+            RemainingUses = IsTeleportStone(itemId) && remainingUses == 0 ? 50 : remainingUses;
         }
+
+        internal static bool IsTeleportStone(string itemId) =>
+            itemId == "huicheng_stone_01" || itemId == "suiji_stone_01";
     }
 
     public sealed class InventoryEquipmentState

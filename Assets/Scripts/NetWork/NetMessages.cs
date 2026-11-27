@@ -596,6 +596,7 @@ public sealed class MapTransferReadyRequest : NetMessageBase
 [Serializable]
 public sealed class MapTransferResult : NetMessageBase
 {
+    public TeleportStoneUseReceipt itemUse;
     public bool success;
     public string errorCode;
     public string requestId;
@@ -613,6 +614,18 @@ public sealed class MapTransferResult : NetMessageBase
     public MapTransferSafeZone safeZone;
     public bool pvpEnabled;
     public long serverTime;
+}
+
+[Serializable]
+public sealed class TeleportStoneUseReceipt
+{
+    public string itemUseOperationSessionId;
+    public long requestSequence;
+    public long inventoryRevision;
+    public long stackId;
+    public string itemId;
+    public bool isBound;
+    public int remainingUses;
 }
 
 [Serializable]

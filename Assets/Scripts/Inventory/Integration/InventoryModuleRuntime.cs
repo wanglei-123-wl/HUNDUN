@@ -208,6 +208,22 @@ namespace Game.Inventory
             }
         }
 
+        internal void ApplyTeleportStoneUse(TeleportStoneUseReceipt result)
+        {
+            if (result == null || !TryInitialize()) return;
+            var change = new InventoryV2StackChangeDto
+            {
+                stackId = result.stackId,
+                itemId = result.itemId,
+                isBound = result.isBound,
+                previousCount = 1,
+                newCount = result.remainingUses == 0 ? 0 : 1,
+                remainingUses = result.remainingUses
+            };
+            v2Session.ApplyPickupDelta(result.inventoryRevision, new[] { change },
+                System.Array.Empty<InventoryV2EquipmentDto>(), System.Array.Empty<InventoryV2WalletChangeDto>());
+        }
+
         public void RequestSnapshot()
         {
             if (TryInitialize())

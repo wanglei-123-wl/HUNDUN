@@ -205,9 +205,11 @@ public sealed class 快捷栏图标显示控制器 :
             设置图标可见性(状态, icon != null);
             if (状态.数量 != null)
             {
-                状态.数量.text = slot != null && slot.count > 1
+                bool 显示数量 = slot != null && (slot.count > 1 ||
+                    (slot.count == 1 && InventoryStackState.IsTeleportStone(slot.itemId)));
+                状态.数量.text = 显示数量
                     ? slot.count.ToString() : string.Empty;
-                状态.数量.gameObject.SetActive(icon != null && slot.count > 1);
+                状态.数量.gameObject.SetActive(icon != null && 显示数量);
             }
         }
     }

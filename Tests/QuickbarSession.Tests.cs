@@ -255,6 +255,7 @@ internal static class QuickbarSessionTests
         session.Dispose();
 
         TestRateLimitAndInvalidLayout();
+        TestStoneCharges();
         TestAuthoritativeUseEligibility();
     }
 
@@ -283,6 +284,44 @@ internal static class QuickbarSessionTests
         usable = true;
         Check(session.TryAssign(1, 12345),
             "Quickbar did not allow an item authorized for use.");
+        session.Dispose();
+    }
+
+    private static void TestStoneCharges()
+    {
+        var network = new NetworkManager();
+        var dispatcher = new NetMessageDispatcher();
+        const string itemId = "suiji_stone_01";
+        static InventoryOwnershipSnapshot StoneInventory(long revision, int charges) =>
+            new InventoryOwnershipSnapshot(81, revision, 0, 40, 1, 1,
+                charges < 0 ? new List<InventoryStackState>() :
+                    new List<InventoryStackState> { new InventoryStackState(12345, itemId, 1, false, charges) },
+                new List<InventoryEquipmentState>(), new Dictionary<string, long>(),
+                new InventoryAttributeBonusState(0, 0, 0));
+        InventoryOwnershipSnapshot inventory = StoneInventory(10, 0);
+        var session = new QuickbarSession(network, dispatcher, () => inventory,
+            () => { }, new Game.Items.ItemDefinitionTable());
+        session.BeginSession(81, "018f0000-acde-7000-8000-000000000003", 1, 8);
+        session.Tick();
+        QuickbarSlotDto[] slots = Slots(4, 0, 1);
+        slots[3].itemId = itemId;
+        dispatcher.Dispatch(new QuickbarSnapshotResultDto
+        {
+            msgId = QuickbarProtocol.SnapshotResult,
+            characterDbId = 81, requestSequence = 1, success = true,
+            protocolVersion = 1, slotCount = 8, quickbarRevision = 0,
+            inventoryRevision = 10, slots = slots
+        });
+        Check(session.GetSlot(4).count == 50, "A fresh stone must show 50 uses on the quickbar.");
+        inventory = StoneInventory(11, 49);
+        session.Tick();
+        Check(session.GetSlot(4).count == 49, "The quickbar must read the changed stone charge.");
+        inventory = StoneInventory(12, 1);
+        session.Tick();
+        Check(session.GetSlot(4).count == 1, "The last use must stay in the quickbar.");
+        inventory = StoneInventory(13, -1);
+        session.Tick();
+        Check(session.GetSlot(4).stackId == 0, "The quickbar must clear the exhausted stone.");
         session.Dispose();
     }
 

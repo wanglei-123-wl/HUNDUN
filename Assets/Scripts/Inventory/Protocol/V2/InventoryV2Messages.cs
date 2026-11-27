@@ -35,6 +35,7 @@ namespace Game.Inventory.Protocol.V2
         public string itemId;
         public int count;
         public bool isBound;
+        public int remainingUses;
     }
 
     [Serializable]
@@ -45,6 +46,7 @@ namespace Game.Inventory.Protocol.V2
         public int previousCount;
         public int newCount;
         public bool isBound;
+        public int remainingUses;
     }
 
     [Serializable]
@@ -222,6 +224,9 @@ namespace Game.Inventory.Protocol.V2
     public sealed class InventoryV2ItemUseRequestDto : NetMessageBase
     {
         public string sceneSessionId;
+        public string teleportRequestId;
+        public long movementEpoch;
+        public long movementSequence;
         public string itemUseOperationSessionId;
         public long requestSequence;
         public long expectedInventoryRevision;

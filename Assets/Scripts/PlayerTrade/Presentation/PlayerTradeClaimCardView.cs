@@ -74,8 +74,7 @@ namespace Game.PlayerTrade.Presentation
             {
                 quantityText.text = isCurrency
                     ? "数量：--"
-                    : "数量：" + Mathf.Max(1, asset == null ? 1 : asset.quantity)
-                        .ToString(CultureInfo.InvariantCulture);
+                    : "数量：" + Mathf.Max(1, asset?.quantity ?? 1).ToString(CultureInfo.InvariantCulture);
             }
 
             if (amountText != null)
@@ -83,7 +82,9 @@ namespace Game.PlayerTrade.Presentation
                 amountText.text = isCurrency
                     ? "可领取：" + Math.Max(0L, boundClaim.remainingAmount)
                         .ToString(CultureInfo.InvariantCulture)
-                    : string.Empty;
+                    : asset != null && asset.remainingUses > 0
+                        ? "余" + asset.remainingUses.ToString(CultureInfo.InvariantCulture) + "次"
+                        : string.Empty;
             }
 
             if (reasonText != null)

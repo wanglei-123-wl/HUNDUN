@@ -467,7 +467,7 @@ namespace Game.Inventory.Integration.V2
                     }
                     else
                     {
-                        slot.count = stack.Count;
+                        slot.count = stack.DisplayQuantity;
                         slot.isBound = stack.IsBound;
                     }
                 }

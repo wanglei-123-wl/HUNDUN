@@ -274,6 +274,7 @@ namespace Game.PlayerTrade.Protocol
         public int enhanceLevel;
         public int durability;
         public int maximumStack;
+        public int remainingUses;
     }
 
     [Serializable]
@@ -306,6 +307,7 @@ namespace Game.PlayerTrade.Protocol
         public long stackId;
         public string itemId;
         public int count;
+        public int remainingUses;
         public bool isBound;
         public string itemInstanceId;
         public string equipmentId;

@@ -24,6 +24,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
     private Action<MapTransferResult> commitHandler;
     private TransferState state;
     private MapTransferRequest request;
+    private Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto stoneRequest;
     private MapTransferReadyRequest ready;
     private string transferId;
     private string destinationSceneId;
@@ -165,7 +166,8 @@ public sealed class MapTransferCoordinator : MonoBehaviour
 
         retries++;
         bool sent = state == TransferState.Requested
-            ? network.Send(request) : network.Send(ready);
+            ? stoneRequest != null ? network.Send(stoneRequest) : network.Send(request)
+            : network.Send(ready);
         if (!sent)
         {
             RecoverUncertain("Map transfer retry could not be sent.");
@@ -239,6 +241,34 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         preload = StartCoroutine(CheckBeforeTransfer());
     }
 
+    internal bool TryUseStone(Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto itemUse)
+    {
+        if (state != TransferState.Idle || commitHandler == null || session == null || network == null ||
+            !network.IsConnected || !session.TryPauseForMapTransfer())
+            return false;
+
+        itemUse.teleportRequestId = Guid.NewGuid().ToString("D");
+        stoneRequest = itemUse;
+        request = new MapTransferRequest
+        {
+            requestId = itemUse.teleportRequestId,
+            sceneSessionId = session.SceneSessionId
+        };
+        state = TransferState.Requested;
+        connectionEpoch = network.ConnectionEpoch;
+        retries = 0;
+        deadline = Time.realtimeSinceStartup + RequestTimeoutSeconds;
+        if (!network.Send(stoneRequest))
+        {
+            session.ResumeAfterMapTransferFailure(null);
+            ClearPending();
+            return false;
+        }
+        BindPanel();
+        ShowStatus("正在使用传送石，请稍后");
+        return true;
+    }
+
     private IEnumerator CheckBeforeTransfer()
     {
         if (!TryBeginCacheCheck())
@@ -303,6 +333,11 @@ public sealed class MapTransferCoordinator : MonoBehaviour
             return;
         }
 
+        if (stoneRequest != null)
+        {
+            destinationSceneId = message.sceneId;
+            destinationMapId = message.mapId;
+        }
         if (!Guid.TryParseExact(message.transferId, "D", out _)
             || message.expiresAt <= 0
             || message.sceneId != destinationSceneId
@@ -316,6 +351,11 @@ public sealed class MapTransferCoordinator : MonoBehaviour
 
         transferId = message.transferId;
         state = TransferState.Preparing;
+        if (stoneRequest != null && session.IsCurrentMap(message.sceneId, message.mapId))
+        {
+            SendReady(true);
+            return;
+        }
         deadline = Time.realtimeSinceStartup + PreparationTimeoutSeconds;
         ShowStatus("正在准备地图，请稍后");
         preload = StartCoroutine(PreloadDestination());
@@ -427,7 +467,12 @@ public sealed class MapTransferCoordinator : MonoBehaviour
             || string.IsNullOrWhiteSpace(result.sceneSessionId)
             || result.sceneSessionId == request.sceneSessionId
             || result.self == null || result.movementControl?.IsValidFor(result.sceneSessionId) != true
-            || result.snapshotRevision <= 0 || commitHandler == null)
+            || result.snapshotRevision <= 0 || commitHandler == null
+            || (stoneRequest != null && (result.itemUse == null
+                || result.itemUse.itemUseOperationSessionId != stoneRequest.itemUseOperationSessionId
+                || result.itemUse.requestSequence != stoneRequest.requestSequence
+                || result.itemUse.stackId != stoneRequest.stackId
+                || result.itemUse.remainingUses < 0 || result.itemUse.remainingUses >= 50)))
         {
             RecoverUncertain("Map transfer committed with incomplete destination data.");
             return;
@@ -485,6 +530,7 @@ public sealed class MapTransferCoordinator : MonoBehaviour
         if (hideStatus && statusView != null) statusView.Hide();
         preparationFailure = null;
         request = null;
+        stoneRequest = null;
         ready = null;
         transferId = null;
         destinationSceneId = null;
@@ -552,6 +598,8 @@ public sealed class MapTransferCoordinator : MonoBehaviour
             case "wrong_source_map": return "路线暂不可用，请重新选择";
             case "client_load_failed": return "目标地图资源加载失败";
             case "preparation_expired": return "传送准备超时，请重试";
+            case "unsafe_destination": return "没有找到安全的传送位置";
+            case "teleport_stone_unavailable": return "传送石已不可用，请刷新背包";
             default: return "传送失败，请稍后重试";
         }
     }

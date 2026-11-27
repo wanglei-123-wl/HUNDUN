@@ -123,7 +123,7 @@ namespace Game.Inventory.Model.V2
                     stacks.Remove(change.stackId);
                 else
                     stacks[change.stackId] = new InventoryStackState(change.stackId,
-                        change.itemId, change.newCount, change.isBound);
+                        change.itemId, change.newCount, change.isBound, change.remainingUses);
             }
 
             var seenEquipment = new HashSet<string>(StringComparer.Ordinal);

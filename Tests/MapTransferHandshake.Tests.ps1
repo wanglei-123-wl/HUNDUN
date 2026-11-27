@@ -25,6 +25,14 @@ using UnityEngine.AddressableAssets.ResourceLocators;
 using Game.UI.Notice;
 
 public class NetMessageBase { public string msgId; public string type; }
+namespace Game.Inventory.Protocol.V2 {
+    public sealed class InventoryV2ItemUseRequestDto : NetMessageBase {
+        public string teleportRequestId;
+        public string itemUseOperationSessionId;
+        public long requestSequence;
+        public long stackId;
+    }
+}
 public class PlayerNetworkState { public string characterId; }
 public class MovementReferencedRequest : NetMessageBase { public string sceneSessionId; }
 public class MovementEventControl {
@@ -239,7 +247,7 @@ function Assert-True($condition, [string]$message) {
 }
 function Emit-Result($dispatcher, $request, [bool]$success, [string]$transferId,
     [long]$nextSequence, [string]$scene = 'world_001', [string]$map = 'map_demo_1',
-    [string]$destinationSession = 'destination-session') {
+    [string]$destinationSession = 'destination-session', $itemUse = $null) {
     $payload = @{
         msgId = 'map_transfer_result'
         requestId = $request.requestId
@@ -252,6 +260,7 @@ function Emit-Result($dispatcher, $request, [bool]$success, [string]$transferId,
         movementControl = @{ epoch = $nextSequence; sceneSessionId = $(if ($success) { $destinationSession } else { $request.sceneSessionId }) }
         snapshotRevision = $(if ($success) { 2 } else { 0 })
         errorCode = $(if ($success) { '' } else { 'too_far' })
+        itemUse = $itemUse
     } | ConvertTo-Json -Compress -Depth 5
     $dispatcher.Emit('map_transfer_result', $payload)
 }
@@ -640,4 +649,29 @@ catch { $failed = $true }
 Assert-True $failed 'An address with the wrong resource type must fail instead of treating it as ready.'
 $h.Service.Shutdown()
 
-Write-Output 'PASS: map and traversal cache preflight, non-blocking cancellation, status, Gate handshake and repeated transfers.'
+$h = New-Harness
+$script:stoneResult = $null
+$h.Service.SetCommitHandler([Action[MapTransferResult]]{ param($result) $script:stoneResult = $result })
+$stone = [Game.Inventory.Protocol.V2.InventoryV2ItemUseRequestDto]@{
+    itemUseOperationSessionId = 'inventory-session'; requestSequence = 3; stackId = 71
+}
+$tryUse = $h.Service.GetType().GetMethod('TryUseStone',
+    [System.Reflection.BindingFlags]'Instance,NonPublic')
+Assert-True ($tryUse.Invoke($h.Service, @($stone))) 'A stone must start from the same item use operation.'
+$request = [MapTransferRequest]@{ requestId = $stone.teleportRequestId; sceneSessionId = $h.Owner.SceneSessionId }
+$id = [Guid]::NewGuid().ToString('D')
+Prepare $h $request $id 'world_002' 'map_001'
+$stoneReady = $h.Network.Sent.Count -eq 2 -and $h.Network.Sent[0] -eq $stone -and
+    $h.Network.Sent[1].loaded -and $h.Network.Sent[1].transferId -eq $id
+Assert-True $stoneReady 'A same-map stone must send item use followed immediately by ready.'
+$receipt = @{
+    itemUseOperationSessionId = 'inventory-session'; requestSequence = 3
+    inventoryRevision = 10; stackId = 71; itemId = 'suiji_stone_01'; remainingUses = 49
+}
+Emit-Result $h.Dispatcher $request $true $id 19 'world_002' 'map_001' 'stone-session' $receipt
+$stoneCommitted = $script:stoneResult.itemUse.remainingUses -eq 49 -and
+    $script:stoneResult.sceneSessionId -eq 'stone-session'
+Assert-True $stoneCommitted 'The same-map presentation must receive the charge receipt and new scene session together.'
+$h.Service.Shutdown()
+
+Write-Output 'PASS: map and traversal cache preflight, non-blocking cancellation, status, Gate handshake, repeated transfers and same-map stone use.'
