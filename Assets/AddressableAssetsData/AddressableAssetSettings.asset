@@ -42,7 +42,7 @@ MonoBehaviour:
   m_CustomContentStateBuildPath: "F:\\\u6E38\u620F\u9879\u76EE\\HUNDUN\\Build\\ResourceReleases\\f96e32b65901488e80636c8bea3829dc\\ContentState"
   m_ContentStateBuildPath: "F:\\\u6E38\u620F\u9879\u76EE\\HUNDUN\\Build\\ResourceReleases\\f96e32b65901488e80636c8bea3829dc\\ContentState"
   m_BuildAddressablesWithPlayerBuild: 2
-  m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
+  m_overridePlayerVersion: '0.1'
   m_GroupAssets:
   - {fileID: 11400000, guid: 65c95bbb7ce1f784f9100aa017269fa0, type: 2}
   - {fileID: 11400000, guid: 29b2c142c00fc834584d11f4e013c5f4, type: 2}
