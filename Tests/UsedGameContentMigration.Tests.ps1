@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $source = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Item/Editor/UsedGameContentMigration.cs') -Raw
-$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
+$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupContentUpdate.cs') -Raw
 $navigation = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/RemoteGameContent.cs') -Raw
 
 foreach ($token in @(

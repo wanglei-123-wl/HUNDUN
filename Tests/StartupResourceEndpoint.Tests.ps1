@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$url = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceUrl.cs') -Raw
-$endpoint = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceEndpoint.cs') -Raw
-$settings = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceServerSettings.cs') -Raw
+$url = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceUrl.cs') -Raw
+$endpoint = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceEndpoint.cs') -Raw
+$settings = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceServerSettings.cs') -Raw
 $stubs = @'
 namespace UnityEngine
 {
@@ -23,9 +23,19 @@ namespace UnityEngine
         public RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType loadType) {}
     }
     public static class Debug { public static void LogWarning(string message) {} }
+    public class TextAsset { public string text; }
+    public static class Resources { public static T Load<T>(string path) { return default(T); } }
     public static class JsonUtility
     {
         public static T FromJson<T>(string value) { return default(T); }
+    }
+}
+namespace QiDao.Bootstrap.CodeUpdate
+{
+    public class CodeUpdateConfiguration { public string manifestUrl; }
+    public static class CodeUpdateProtocol
+    {
+        public static System.Uri ManifestUri(CodeUpdateConfiguration config) { return new System.Uri(config.manifestUrl); }
     }
 }
 namespace UnityEngine.ResourceManagement.ResourceLocations

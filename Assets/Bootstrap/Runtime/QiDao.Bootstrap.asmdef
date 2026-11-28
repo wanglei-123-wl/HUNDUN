@@ -1,0 +1,21 @@
+{
+  "name": "QiDao.Bootstrap",
+  "rootNamespace": "",
+  "references": [
+    "QiDao.Contracts",
+    "Unity.Addressables",
+    "Unity.ResourceManager",
+    "Unity.TextMeshPro",
+    "UnityEngine.UI",
+    "Unity.Addressables.Editor"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

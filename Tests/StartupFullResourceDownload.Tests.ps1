@@ -74,6 +74,10 @@ public static class RemoteGameContent {
     public const string LoginSceneAddress="game/scene/login", WorldSceneAddress="game/scene/world",
         ItemTableAddress="game/items/table", BootstrapFontAddress="bootstrap/font/chinese";
 }
+public static class StartupTestAddresses {
+    public static IEnumerable<string> All => new[]{RemoteGameContent.LoginSceneAddress,RemoteGameContent.WorldSceneAddress,RemoteGameContent.ItemTableAddress,RemoteGameContent.BootstrapFontAddress}
+        .Concat(WorldMapSceneCatalog.GetAllResourceAddresses());
+}
 public sealed class TestLocator:IResourceLocator {
     public string LocatorId=>"test";public readonly Dictionary<object,IList<IResourceLocation>> Entries=new Dictionary<object,IList<IResourceLocation>>();
     public IEnumerable<object> Keys=>Entries.Keys;
@@ -93,7 +97,7 @@ public static class FullStartupBehaviorChecks {
         foreach(string key in required)locator.Add(key,Asset(key,common));return locator;
     }
     static void Drain(IEnumerator routine){int steps=0;while(routine.MoveNext()){Check(++steps<30,"download coroutine did not terminate");Addressables.Tick();}}
-    static bool Rejected(TestLocator locator) {try{StartupResourceDownloadPlan.Create(new[]{locator});return false;}catch(InvalidOperationException){return true;}}
+    static bool Rejected(TestLocator locator) {try{StartupResourceDownloadPlan.Create(new[]{locator},StartupTestAddresses.All);return false;}catch(InvalidOperationException){return true;}}
     public static int Run() {
         count=0;
         var shared=Bundle("shared.bundle");var map=Bundle("map.bundle");map.Dependencies.Add(shared);
@@ -102,7 +106,7 @@ public static class FullStartupBehaviorChecks {
         var direct=Bundle("direct-key.bundle");locator.Add("direct-key",direct);
         var local=new ResourceLocationBase("local","{RuntimePath}/local.bundle","bundles",typeof(IAssetBundleResource)){Data=new AssetBundleRequestOptions{Hash="local",BundleSize=1}};
         locator.Add("local",local);shared.Dependencies.Add(map);
-        var plan=StartupResourceDownloadPlan.Create(new[]{locator});
+        var plan=StartupResourceDownloadPlan.Create(new[]{locator},StartupTestAddresses.All);
         Check(plan.RemoteBundles.Count==4,"aliases, shared dependencies, cycles and future content must produce exactly four remote bundles");
         Check(plan.DownloadLocations.Count==1&&plan.DownloadLocations[0].Dependencies.Count==4,"size and download must share the complete dependency root, including direct bundle keys");
         Check(plan.RemoteBundles.Contains(future)&&plan.RemoteBundles.Contains(direct),"unlabelled resources and direct bundle keys were omitted");
@@ -119,8 +123,10 @@ public static class FullStartupBehaviorChecks {
         Check(object.ReferenceEquals(Addressables.LastDownload,plan.DownloadLocations)&&progress.Last()==100,"download scope and byte progress must match the plan");
         Addressables.Reset((long?)null);var failedSize=new StartupResourceDownloadOperation(plan.DownloadLocations,null);Drain(failedSize.Run());
         Check(!failedSize.Succeeded&&Addressables.Downloads==0&&Addressables.Releases==1,"size failure must block completion");
-        Addressables.Reset(100);Addressables.DownloadFails=true;var failed=new StartupResourceDownloadOperation(plan.DownloadLocations,null);Drain(failed.Run());
-        Check(!failed.Succeeded&&Addressables.Releases==2,"download failure must block completion and release handles");
+        Addressables.Reset(100,100,100);Addressables.DownloadFails=true;var failed=new StartupResourceDownloadOperation(plan.DownloadLocations,null);Drain(failed.Run());
+        Check(!failed.Succeeded&&Addressables.Downloads==2&&Addressables.Releases==5,"persistent download failure must stop after bounded retries and release all handles");
+        Addressables.Reset(100,0,0);Addressables.DownloadFails=true;var concurrent=new StartupResourceDownloadOperation(plan.DownloadLocations,null);Drain(concurrent.Run());
+        Check(concurrent.Succeeded&&Addressables.Downloads==1&&Addressables.Releases==4,"a competing client committing the same cache entry must allow normal verification to continue");
         Addressables.Reset(100,7);var incomplete=new StartupResourceDownloadOperation(plan.DownloadLocations,null);Drain(incomplete.Run());
         Check(!incomplete.Succeeded&&incomplete.Error.Contains("incomplete"),"a success response with missing cache bytes must not open login");
         Addressables.Reset(100,0);var retry=new StartupResourceDownloadOperation(plan.DownloadLocations,null);Drain(retry.Run());
@@ -135,8 +141,8 @@ public static class FullStartupBehaviorChecks {
 try {
     [IO.File]::WriteAllText($temporary,$harness,[Text.UTF8Encoding]::new($false))
     Add-Type -Path @($temporary,(Join-Path $root 'Assets/Scripts/WorldMapSceneCatalog.cs'),
-        (Join-Path $root 'Assets/Scripts/StartupResourceDownloadPlan.cs'),
-        (Join-Path $root 'Assets/Scripts/StartupResourceDownloadOperation.cs'))
+        (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceDownloadPlan.cs'),
+        (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceDownloadOperation.cs'))
     $assertions=[FullStartupBehaviorChecks]::Run()
     Write-Output "Full startup download behavior passed ($assertions assertions)."
 } finally {

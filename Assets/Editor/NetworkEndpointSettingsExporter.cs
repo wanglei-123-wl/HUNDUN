@@ -242,6 +242,9 @@ public sealed class NetworkEndpointSettingsBuildSync : IPreprocessBuildWithRepor
 
     public void OnPreprocessBuild(BuildReport report)
     {
+        // The isolated code fixture has no world/network scene and never ships.
+        // Production builds retain the original network settings validation.
+        if (HotUpdateCodeBuild.IsIsolatedAcceptanceBuild) return;
         if (!NetworkEndpointSettingsExporter.TrySync(out string error))
         {
             throw new BuildFailedException(error);

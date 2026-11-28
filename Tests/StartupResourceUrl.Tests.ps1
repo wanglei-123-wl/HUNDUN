@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$source = Join-Path $root 'Assets/Scripts/StartupResourceUrl.cs'
+$source = Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceUrl.cs'
 Add-Type -Path $source
 
 $built = 'http://127.0.0.1:18761/StandaloneWindows64'
@@ -49,9 +49,9 @@ foreach ($local in @(
     }
 }
 
-$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
-$controller = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupSceneController.cs') -Raw
-$endpoint = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceEndpoint.cs') -Raw
+$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupContentUpdate.cs') -Raw
+$controller = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupSceneController.cs') -Raw
+$endpoint = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceEndpoint.cs') -Raw
 if ($controller.IndexOf('resourceSettings.TryApply(') -lt 0 -or
     $controller.IndexOf('resourceSettings.TryApply(') -gt $controller.IndexOf('contentUpdate.Run()') -or
     $endpoint -notmatch 'string\.IsNullOrWhiteSpace\(input\) \? BuiltAddress : input' -or

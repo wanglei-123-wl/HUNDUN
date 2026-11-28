@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RPO_MonsterAnimation_shared
+  m_EditorClassIdentifier: 
+  m_GroupName: RPO_MonsterAnimation_shared
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d7e9a12d69123f0448d78c89d01eb54c
+  m_SerializeEntries:
+  - m_GUID: 5054bc6c760cc144e81a8505c9f04b1d
+    m_Address: rpo/5054bc6c760cc144e81a8505c9f04b1d
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 4429b918dfd660443ade0f4c180044c1, type: 2}
+    - {fileID: 11400000, guid: 2a45cc6eea047354a85e54d2fa4f54ae, type: 2}

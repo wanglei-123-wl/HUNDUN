@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RPO_MonsterArt_Ls007
+  m_EditorClassIdentifier: 
+  m_GroupName: RPO_MonsterArt_Ls007
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9f1408955c730f4458c4e4f47baf8754
+  m_SerializeEntries:
+  - m_GUID: 23cabf4e56fd437d9544af280a464452
+    m_Address: rpo/23cabf4e56fd437d9544af280a464452
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f2bdbbff2f547c0aea79ab4a9c4d53f
+    m_Address: rpo/2f2bdbbff2f547c0aea79ab4a9c4d53f
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59ba647d5167477e8f00d2458228e7a5
+    m_Address: rpo/59ba647d5167477e8f00d2458228e7a5
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d7db6b13c88437795968b6126efea60
+    m_Address: rpo/6d7db6b13c88437795968b6126efea60
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7088349cfa854096b5d3128a8a3a56cd
+    m_Address: rpo/7088349cfa854096b5d3128a8a3a56cd
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87290771a68e45db9163e0f7d492f13f
+    m_Address: rpo/87290771a68e45db9163e0f7d492f13f
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a11b2e4fd601b1e419e5f88a7be7e769, type: 2}
+    - {fileID: 11400000, guid: 9afb185193ec18d4cbc2fc8e96ecd98f, type: 2}

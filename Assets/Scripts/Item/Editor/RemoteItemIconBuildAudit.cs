@@ -71,7 +71,7 @@ namespace Game.Items.Editor
                     "Assets/AddressableAssetsData/AssetGroups/RemoteTrialOnly.asset",
                     "Assets/Scripts/Item/Config/ItemDefinition.cs",
                     "Assets/Scripts/Item/Config/RemoteItemIconCache.cs",
-                    "Assets/Scripts/StartupContentUpdate.cs",
+                    "Assets/Bootstrap/Runtime/StartupContentUpdate.cs",
                     "Assets/Scenes/启动场景.unity" };
                 foreach (string input in inputs)
                 {

@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$messages = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupUiText.cs') -Raw
+$messages = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Contracts/StartupUiText.cs') -Raw
 Add-Type -TypeDefinition $messages
 $required = @(
     [StartupUiText]::InitializationFailed + [StartupUiText]::RetrySuffix,
@@ -16,7 +16,8 @@ foreach ($message in $required) {
         }
     }
 }
-$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
+$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupContentUpdate.cs') -Raw
+$updater += Get-Content -Raw -LiteralPath (Join-Path $root 'Assets/Scripts/HotUpdate/GameStartupContent.cs')
 $service = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/GameFontService.cs') -Raw
 if ($updater -match 'AsyncOperationHandle<TMP_FontAsset>|statusText.font\s*=\s*fontHandle|retryText.font\s*=\s*fontHandle' -or
     $updater -notmatch 'statusText.font = TMP_Settings.defaultFontAsset' -or

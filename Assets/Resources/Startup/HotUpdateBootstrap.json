@@ -1,0 +1,8 @@
+{
+  "manifestUrl": "http://47.93.78.106:18761/client-hotupdate/windows-mono-v1/current.json",
+  "publicKeyXml": "<RSAKeyValue><Modulus>nznKLuK/hq1r8WiBj9UF5BFRoa6BACiBG6w7uk8hWkympRMmpRdcBN6N5iWS1P93KGyQ3FojsoKJ68yv/lAhvPKcwdesaU+t8qqiGFOT1D6vK93jrtCo6tTbIsjR43u1Uw1buzUpWsQdzxdnHdFszHCbTlflXRokUNoOrSJQm/4yMtTOXB2tZZMXFN3Q48ILD777F8cRJakBRoQRPOeyGBKJRWWTckMXchDCAuT14hNwGfwG0Kdzzxshect9asvJc5iDNbBlvJK4jk4K/VPnb7b1seqMAgoDOtl7tlBwPzUN99VlUhtkbiq18f8Y0preUn4Ghtj6pjhojJ91CMu/PQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>",
+  "bootstrapApiVersion": 1,
+  "unityVersion": "2022.3.62f1",
+  "maxCodeBytes": 67108864,
+  "requestTimeoutSeconds": 30
+}

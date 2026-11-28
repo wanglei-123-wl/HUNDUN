@@ -17,12 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: bee749b0010da2e468ba0b38afba77c7
   m_SerializeEntries:
-  - m_GUID: 0269f45342314524f9db6c7d23ede6b7
-    m_Address: game/items/table
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - required-game-content
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
     m_Address: game/scene/login
     m_ReadOnly: 0

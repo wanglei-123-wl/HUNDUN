@@ -32,11 +32,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1f4e1cd68b6d2ce43a6063a59f8af985
-    m_Address: game/shared/1f4e1cd68b6d2ce43a6063a59f8af985
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 42df2bce77beb604ca0235f736032b10
     m_Address: game/shared/42df2bce77beb604ca0235f736032b10
     m_ReadOnly: 0

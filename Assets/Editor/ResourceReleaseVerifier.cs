@@ -107,7 +107,8 @@ public static class ResourceReleaseVerifier
 
             var locator = JsonUtility.FromJson<ContentCatalogData>(File.ReadAllText(catalogPath)).CreateLocator();
             // Use the exact runtime startup planner, including newly added unlabelled dependencies.
-            var startupPlan = StartupResourceDownloadPlan.Create(new[] { locator });
+            var startupPlan = StartupResourceDownloadPlan.Create(new[] { locator },
+                QiDao.GameLogic.GameStartupContent.GetRequiredResourceAddresses());
             var startupBundles = new HashSet<string>(startupPlan.RemoteBundles
                 .Select(location => ResourceReleaseFiles.FindBundleName(location.InternalId, files.Keys)), StringComparer.Ordinal);
             var requiredStartupAssets = new JArray();

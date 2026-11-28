@@ -50,7 +50,7 @@ foreach ($i in 5..10) {
 $messages = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/NetWork/NetMessages.cs') -Raw
 $group = $remoteMaps
 $migration = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/Item/Editor/UsedGameContentMigration.cs') -Raw
-$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
+$updater = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupContentUpdate.cs') -Raw
 $integration = Get-Content -LiteralPath (Join-Path $root 'Assets/Editor/Map001IntegrationSetup.cs') -Raw
 $demoGuid = [regex]::Match(
     (Get-Content -LiteralPath (Join-Path $root 'Assets/Scenes/Demo 1 Map.unity.meta') -Raw),
@@ -66,7 +66,7 @@ if ($messages -notmatch '(?s)public class EnterWorldResult.*?public string scene
     $group -notmatch "(?s)m_GUID: $villageGuid\r?\n\s+m_Address: game/scene/map001.*?required-game-content" -or
     $migration -notmatch 'EnsureEntry\(settings, remoteGroup, DemoMapScene, RemoteGameContent.DemoMapSceneAddress\)' -or
     $migration -notmatch 'remoteGroup.entries.Count != 5' -or
-    $updater -notmatch 'StartupResourceDownloadPlan.Create\(Addressables.ResourceLocators\)' -or
+    $updater -notmatch 'StartupResourceDownloadPlan.Create\(Addressables.ResourceLocators,' -or
     $updater -notmatch 'if \(!allResources.Succeeded\)' -or
     $integration -match 'RemoveAssetEntry\(AssetDatabase.AssetPathToGUID\(DemoMapPath\)\)') {
     throw 'The enter-world map field or remote map resources are not configured correctly.'

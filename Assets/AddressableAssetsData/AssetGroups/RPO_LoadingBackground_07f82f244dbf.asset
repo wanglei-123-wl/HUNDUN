@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RPO_LoadingBackground_07f82f244dbf
+  m_EditorClassIdentifier: 
+  m_GroupName: RPO_LoadingBackground_07f82f244dbf
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bbabe0ca67311df42b53753a661f1217
+  m_SerializeEntries:
+  - m_GUID: 07f82f244dbf76549a93536ea8147c5d
+    m_Address: rpo/07f82f244dbf76549a93536ea8147c5d
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c3ec76f472700ce48b9135466a66e3af, type: 2}
+    - {fileID: 11400000, guid: a6a1a7ed27602fc48ad0c29cfdb7160c, type: 2}

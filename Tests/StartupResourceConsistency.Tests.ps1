@@ -90,7 +90,7 @@ public static class StartupConsistencyBehaviorChecks {
         foreach(string key in new[]{RemoteGameContent.LoginSceneAddress,RemoteGameContent.WorldSceneAddress,RemoteGameContent.ItemTableAddress,RemoteGameContent.BootstrapFontAddress}
             .Concat(WorldMapSceneCatalog.GetAllResourceAddresses()))
             locator.Add(key,new ResourceLocationBase(key,key,"assets",typeof(object),bundle));
-        return StartupResourceDownloadPlan.Create(new[]{locator});
+        return StartupResourceDownloadPlan.Create(new[]{locator},StartupTestAddresses.All);
     }
     public static int Run(){
         checks=0;
@@ -148,10 +148,10 @@ $temporary=Join-Path $root ('Temp/ConsistencyTests-'+[guid]::NewGuid().ToString(
 try {
     [IO.File]::WriteAllText($temporary,$baseHarness+[Environment]::NewLine+$extra,[Text.UTF8Encoding]::new($false))
     Add-Type -Path @($temporary,(Join-Path $root 'Assets/Scripts/WorldMapSceneCatalog.cs'),
-        (Join-Path $root 'Assets/Scripts/StartupResourceDownloadPlan.cs'),
-        (Join-Path $root 'Assets/Scripts/StartupResourceDownloadOperation.cs'),
-        (Join-Path $root 'Assets/Scripts/StartupCatalogSynchronization.cs'),
-        (Join-Path $root 'Assets/Scripts/StartupResourceCacheVerification.cs'))
+        (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceDownloadPlan.cs'),
+        (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceDownloadOperation.cs'),
+        (Join-Path $root 'Assets/Bootstrap/Runtime/StartupCatalogSynchronization.cs'),
+        (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceCacheVerification.cs'))
     $checks=[StartupConsistencyBehaviorChecks]::Run()
     Write-Output "Startup version synchronization and cache verification behaviors passed ($checks checks)."
 } finally {if(Test-Path -LiteralPath $temporary){Remove-Item -LiteralPath $temporary -Force}}

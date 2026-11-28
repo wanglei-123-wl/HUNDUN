@@ -51,7 +51,8 @@ public static class StartupFullResourceDownloadVerify
                 .Single(file => (string)file["relativePath"] == "catalog_0.1.json");
             Require(ResourceReleaseFiles.Hash(catalogPath) == (string)catalogFile["sha256"], "Release catalog changed.");
             var locator = JsonUtility.FromJson<ContentCatalogData>(File.ReadAllText(catalogPath)).CreateLocator();
-            var plan = StartupResourceDownloadPlan.Create(new[] { locator });
+            var plan = StartupResourceDownloadPlan.Create(new[] { locator },
+                QiDao.GameLogic.GameStartupContent.GetRequiredResourceAddresses());
             string remoteBase = ((string)manifest["remoteLoadPath"]).TrimEnd('/') + "/";
             var expected = ((JArray)manifest["files"]).OfType<JObject>()
                 .Where(file => ((string)file["relativePath"]).EndsWith(".bundle", StringComparison.Ordinal))

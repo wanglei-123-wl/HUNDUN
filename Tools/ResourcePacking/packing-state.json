@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "metadataMigrationCompleted": true,
+  "requiresNewResourceBaseline": true,
+  "resourceBuildReadinessVerified": false,
+  "readIntegrityRootCauseResolved": false,
+  "reason": "Current preflight: native Unity compilation, dependency references, grouping metadata and toolchain passed. Independent source SHA256 verification failed, including a texture used by a world map. Build held on file evidence; hardware diagnosis is not a build prerequisite and no specific root cause is established.",
+  "migrationReport": "Build/ResourcePackingOptimization/Stage2/Migration/source-commit-result.json",
+  "sourceReadReport": "F:\\游戏项目\\HUNDUN\\Build\\ReleasePreparation\\0.1.4_20261128_102140\\independent-full-file-verification.json",
+  "latestBuildBlocker": "F:\\游戏项目\\HUNDUN\\Build\\ReleasePreparation\\0.1.4_20261128_102140\\preflight-summary.json",
+  "latestEnvironmentEvidence": "Build/ResourcePackingOptimization/Stage4/memory-stability-diagnosis-summary.json",
+  "latestPreparationReport": "F:\\游戏项目\\HUNDUN\\Build\\ReleasePreparation\\0.1.4_20261128_102140\\preflight-summary.json"
+}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RPO_MonsterPrefab_Ls004
+  m_EditorClassIdentifier: 
+  m_GroupName: RPO_MonsterPrefab_Ls004
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0bd559389051f134ab5ca24aa29c24d0
+  m_SerializeEntries:
+  - m_GUID: 87b1635d988c1044a97b435dac097b36
+    m_Address: rpo/87b1635d988c1044a97b435dac097b36
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 288664ff2b6378b49b36ce4a1fb1c3ab, type: 2}
+    - {fileID: 11400000, guid: 6cf4c58da4163a8438b57ded958fbe6c, type: 2}

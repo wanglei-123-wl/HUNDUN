@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "implementationStatus": "implemented-stage-4",
+  "published": {
+    "keepSuccessfulVersionsPerCompatibilityChannel": 3,
+    "retiredVersionGraceDays": 7,
+    "graceStartsAt": "retiredAtUtc",
+    "keepCurrentVersionAlways": true,
+    "keepCompatibilityPinnedVersionsAlways": true
+  },
+  "staging": {
+    "keepLatestVerifiedCandidatePerCompatibilityChannel": 1,
+    "abandonedUploadGraceHours": 24,
+    "keepActiveUploadAndPublishOperationsAlways": true
+  },
+  "cleanup": {
+    "trigger": "after-successful-publish-and-public-verification",
+    "protectionOverridesDeletion": true,
+    "requirePreviewAndAuditLog": true,
+    "requireCompleteVerifiedReferenceInventory": true,
+    "requirePublishLockAndUnchangedActiveVersion": true,
+    "deleteSharedArtifactsOnlyWhenUnreferenced": true,
+    "unknownArtifactsAction": "keep-and-report",
+    "includeGameBackendDirectories": false,
+    "includeSigningPrivateKeys": false
+  },
+  "storage": {
+    "reuseIdenticalImmutableResourceContent": true,
+    "inheritAllHistoricalBundlesIntoNewRelease": false,
+    "requireFreeSpacePreflight": true,
+    "insufficientSpaceAction": "stop-with-required-and-available-bytes",
+    "evictProtectedVersionsToMakeSpace": false
+  },
+  "legacyChannel": {
+    "automaticDeletionEnabledInitially": false,
+    "enableOnlyAfterInventoryAndClientCompatibilityProtection": true
+  },
+  "localExecutionCopies": {
+    "includeInStage4RetentionWork": true,
+    "keepRunningProcessesAndRecoveryTargetsAlways": true
+  }
+}

@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RPO_ItemIcons_38727ab6d5b1
+  m_EditorClassIdentifier: 
+  m_GroupName: RPO_ItemIcons_38727ab6d5b1
+  m_Data:
+    m_SerializedData: []
+  m_GUID: cd43cde37e523654a952006ccb898cee
+  m_SerializeEntries:
+  - m_GUID: 07433a0c0f3fecd4daa0e60731fbfe89
+    m_Address: rpo/07433a0c0f3fecd4daa0e60731fbfe89
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 186366aa7c935b34ebaca5a01d0f52b9
+    m_Address: rpo/186366aa7c935b34ebaca5a01d0f52b9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3807a46d1426fa54da59367577b4ee0b
+    m_Address: rpo/3807a46d1426fa54da59367577b4ee0b
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42c2a1f7abc3ceb488d64892e952803f
+    m_Address: rpo/42c2a1f7abc3ceb488d64892e952803f
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 433977af320a0404f981e8134d9fd3da
+    m_Address: rpo/433977af320a0404f981e8134d9fd3da
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 652c5bca4f907cc4090778426db6f2d2
+    m_Address: rpo/652c5bca4f907cc4090778426db6f2d2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d957733485c4cb42b912c7812166c0d
+    m_Address: rpo/7d957733485c4cb42b912c7812166c0d
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8633a1278f158af43aa811b00ee21ff8
+    m_Address: rpo/8633a1278f158af43aa811b00ee21ff8
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9de589a78185eed4a8733c54972e303d
+    m_Address: rpo/9de589a78185eed4a8733c54972e303d
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a115dfbac5d0e32498a3486d3c7a8343
+    m_Address: rpo/a115dfbac5d0e32498a3486d3c7a8343
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4981a1b6f595544489e7e4a09e0e934
+    m_Address: rpo/b4981a1b6f595544489e7e4a09e0e934
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5ad504e364f896498556072208a934b
+    m_Address: rpo/c5ad504e364f896498556072208a934b
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d08d6f0c9eb58b746a066eaa4e228ff1
+    m_Address: rpo/d08d6f0c9eb58b746a066eaa4e228ff1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d82468a0ae951d144851c60a8cfdd147
+    m_Address: rpo/d82468a0ae951d144851c60a8cfdd147
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dba9488b48ad9ab40b0427990e7146b4
+    m_Address: rpo/dba9488b48ad9ab40b0427990e7146b4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcf48de1adc51154bba572e80a91c038
+    m_Address: rpo/dcf48de1adc51154bba572e80a91c038
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed3c563b51fa5934486e9459d61c3253
+    m_Address: rpo/ed3c563b51fa5934486e9459d61c3253
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3f15e2a4a9db8549ad88406176672f6
+    m_Address: rpo/f3f15e2a4a9db8549ad88406176672f6
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f42e4bbf5d71ae24a8dd74cdb8eb4459
+    m_Address: rpo/f42e4bbf5d71ae24a8dd74cdb8eb4459
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9b22984a5cab203419df1100e9ab1eee, type: 2}
+    - {fileID: 11400000, guid: d755d54ad68fc9a4f8264b311c0f2648, type: 2}

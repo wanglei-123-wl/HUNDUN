@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RPO_ItemIcons_484df6c8732c
+  m_EditorClassIdentifier: 
+  m_GroupName: RPO_ItemIcons_484df6c8732c
+  m_Data:
+    m_SerializedData: []
+  m_GUID: a26f70eac719a5c4c9138ee36469df7a
+  m_SerializeEntries:
+  - m_GUID: 024564af92d23c64997658d841306b6e
+    m_Address: rpo/024564af92d23c64997658d841306b6e
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0be4090c5e8237c45969c7dc28ddd27a
+    m_Address: rpo/0be4090c5e8237c45969c7dc28ddd27a
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3da573fd41178b14eb0f18fc7ee388d8
+    m_Address: rpo/3da573fd41178b14eb0f18fc7ee388d8
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a11383710fbc2c43b612788fb04c97b
+    m_Address: rpo/5a11383710fbc2c43b612788fb04c97b
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64228e31c67dc7144a2c51134e7f4b65
+    m_Address: rpo/64228e31c67dc7144a2c51134e7f4b65
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 670110b0d4240af41906a2d1a813bfd1
+    m_Address: rpo/670110b0d4240af41906a2d1a813bfd1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86fa9a69493d5a24899ca16046fa2a68
+    m_Address: rpo/86fa9a69493d5a24899ca16046fa2a68
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b36e3ebfb6e95dd4e9ecc6b7757c126d
+    m_Address: rpo/b36e3ebfb6e95dd4e9ecc6b7757c126d
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6e696e4241d243a4884839edbc8bfeb8, type: 2}
+    - {fileID: 11400000, guid: f9aa4208e2a30bd428ba472b169d8bc2, type: 2}

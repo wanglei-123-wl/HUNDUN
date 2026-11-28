@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RPO_MonsterArt_Ls008
+  m_EditorClassIdentifier: 
+  m_GroupName: RPO_MonsterArt_Ls008
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 5c4156510764e734e8b46c60143d241d
+  m_SerializeEntries:
+  - m_GUID: 2c46a2b50ff56264d81e3596ea4f5c19
+    m_Address: rpo/2c46a2b50ff56264d81e3596ea4f5c19
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b598a6d6e366c2b4697923164327b18d
+    m_Address: rpo/b598a6d6e366c2b4697923164327b18d
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe93d14fd65e3eb4a8384e7ccd9e97f7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 714931a2e4c7ef34b8674936a9049fbe, type: 2}
+    - {fileID: 11400000, guid: 67f33054019d654478db99e1ee7ec605, type: 2}

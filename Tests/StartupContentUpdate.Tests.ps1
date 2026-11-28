@@ -1,9 +1,10 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$source = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
-$synchronization = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupCatalogSynchronization.cs') -Raw
-$plan = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupResourceDownloadPlan.cs') -Raw
-$combined = $source + $synchronization + $plan
+$source = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupContentUpdate.cs') -Raw
+$synchronization = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupCatalogSynchronization.cs') -Raw
+$plan = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupResourceDownloadPlan.cs') -Raw
+$gameContent = Get-Content -Raw -LiteralPath (Join-Path $root 'Assets/Scripts/HotUpdate/GameStartupContent.cs')
+$combined = $source + $synchronization + $plan + $gameContent
 $settings = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AddressableAssetSettings.asset') -Raw
 $schema = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AssetGroups/Schemas/RemoteTrialOnly_BundledAssetGroupSchema.asset') -Raw
 $group = Get-Content -LiteralPath (Join-Path $root 'Assets/AddressableAssetsData/AssetGroups/RemoteTrialOnly.asset') -Raw
@@ -15,7 +16,7 @@ $required = @(
     'RemoteGameContent.BootstrapFontAddress',
     'Addressables.CheckForCatalogUpdates(false)',
     'Addressables.UpdateCatalogs(false, catalogs, false)',
-    'StartupResourceDownloadPlan.Create(Addressables.ResourceLocators)',
+    'StartupResourceDownloadPlan.Create(Addressables.ResourceLocators,',
     'RemoteGameContent.ItemTableAddress',
     'requiredItemIcons.GetRequiredRemoteIconAddresses()',
     'new StartupResourceDownloadOperation(plan.DownloadLocations',
@@ -36,19 +37,16 @@ $required = @(
 foreach ($token in $required) {
     if (-not $combined.Contains($token)) { throw "Startup updater is missing: $token" }
 }
-if ($source.IndexOf('yield return catalogSync.Run()') -gt
-    $source.IndexOf('GameFontService.Load()')) {
-    throw 'Refresh the catalog before loading the bootstrap font from an old cached catalog.'
-}
 if ($source.IndexOf('ReleaseAttemptContent();') -gt $source.IndexOf('yield return catalogSync.Run()') -or
-    $source.IndexOf('yield return cacheVerification.Run()') -gt $source.IndexOf('GameFontService.Load()') -or
-    $source.IndexOf('yield return catalogSync.ConfirmBeforeLogin()') -lt $source.IndexOf('RemoteItemIconCache.Load(addresses)')) {
-    throw 'Release previous handles before updates, validate cached bundles before loading assets, and confirm the server version before login.'
+    $source.IndexOf('yield return cacheVerification.Run()') -gt $source.IndexOf('yield return gameContent.PrepareContent(SetStatus)') -or
+    $source.IndexOf('yield return catalogSync.ConfirmBeforeLogin()') -lt $source.IndexOf('yield return gameContent.PrepareContent(SetStatus)')) {
+    throw 'Release previous handles before catalogs, verify cache before business assets, confirm the server catalog after preparation.'
 }
 if ($source -notmatch 'if \(!allResources.Succeeded\)(?s:.*?)Fail\(StartupUiText.ResourcesDownloadFailed\)' -or
-    $source -notmatch 'RemoteItemIconCache.Clear\(\)' -or
-    $source -match 'gameLocations.Result.Count == requiredAddresses.Length') {
-    throw 'Failed or incomplete full-resource downloads must stop startup; do not retain the fixed-map label boundary.'
+    $gameContent -notmatch 'RemoteItemIconCache.Clear\(\)' -or
+    $source -notmatch 'if \(!gameContent.Succeeded\)' -or
+    $source -match 'ItemDefinitionTable|RemoteGameContent|WorldMapSceneCatalog|GameFontService|RemoteItemIconCache') {
+    throw 'Bootstrap must fail closed and depend only on the startup contract, never business data types.'
 }
 
 if ($settings -notmatch '(?m)^  m_DisableCatalogUpdateOnStart: 1\r?$' -or

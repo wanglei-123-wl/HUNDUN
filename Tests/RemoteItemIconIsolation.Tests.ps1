@@ -14,7 +14,7 @@ if ($assetGuids.Count -ne 25 -or $groupEntries.Count -ne 23 -or
 }
 if ($scene -match 'requiredItemIcons: \{fileID: 11400000' -or
     $scene -match 'chineseFont: \{fileID: 11400000' -or
-    (Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw) -notmatch
+    (Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupContentUpdate.cs') -Raw) -notmatch
         'Addressables\.LoadAssetAsync<ItemDefinitionTable>\(') {
     throw 'Startup must load the item table by Addressables, not hold a local asset reference.'
 }

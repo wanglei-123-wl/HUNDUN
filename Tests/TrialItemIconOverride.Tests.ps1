@@ -214,13 +214,15 @@ if (-not [object]::ReferenceEquals($table.GetOrDefault($material.ItemId), $mater
 }
 
 $cache = Get-Content -LiteralPath (Join-Path $config 'RemoteItemIconCache.cs') -Raw
-$startup = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/StartupContentUpdate.cs') -Raw
+$startup = Get-Content -LiteralPath (Join-Path $root 'Assets/Bootstrap/Runtime/StartupContentUpdate.cs') -Raw
+$gameStartup = Get-Content -LiteralPath (Join-Path $root 'Assets/Scripts/HotUpdate/GameStartupContent.cs') -Raw
 if ($cache -notmatch 'locator.Keys' -or
     $cache -notmatch 'locator.Locate\(address, typeof\(Sprite\)' -or
     $cache -notmatch 'HasSpriteAddress\(LegacyAddress\)' -or
     $cache -notmatch 'Addressables.LoadAssetAsync<Sprite>\(address\)' -or
     $cache -notmatch 'Addressables.Release\(handle\)' -or
-    $startup -notmatch 'RemoteItemIconCache.Load\(addresses\)') {
+    $startup -notmatch 'gameContent.PrepareContent\(SetStatus\)' -or
+    $gameStartup -notmatch 'RemoteItemIconCache.Load\(addresses\)') {
     throw 'Remote asset discovery, lifetime or startup binding is missing.'
 }
 
